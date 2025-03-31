@@ -1,6 +1,6 @@
 ## Persona Parent
 ### Margit Ludwig 
-<img src="/Documents/Personas/pictures/margit.png" alt="[margit portrait photo]" style="height: 70px; width:70px;"/>
+<img src="/Documents/Personas/pictures/margit.png" alt="[margit portrait photo]" width="140" height="140" />
 
 | Age      | Profession | Location | Familiy |
 | -------- | -------    | -------- | ------- |

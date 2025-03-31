@@ -1,6 +1,6 @@
 ## Persona Student Girl
 ### Lina Willie
-<img src="/Documents/Personas/pictures/lina.png" alt="[lina portrait photo]" width="70" height="70" />
+<img src="/Documents/Personas/pictures/lina.png" alt="[lina portrait photo]" width="140" height="140" />
 
 | Age      | Profession | Location | Familiy |
 | -------- | -------    | -------- | ------- |
