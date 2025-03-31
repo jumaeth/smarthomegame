@@ -1,6 +1,6 @@
 ## Persona Student
 ### Franco Bianchi 
-<img src="/Documents/Personas/pictures/frano.png" alt="[franco portrait photo]" style="height: 70px; width:70px;"/>
+<img src="/Documents/Personas/pictures/franco.png" alt="[franco portrait photo]" style="height: 70px; width:70px;"/>
 
 | Age      | Profession | Location | Familiy |
 | -------- | -------    | -------- | ------- |
@@ -39,7 +39,7 @@ At school, he sometimes finds traditional lectures uninspiring but becomes fully
 
 
 
-### How She Interacts with the Software
+### How He Interacts with the Software
 
 Franco dives into the SmartEscapeRoom game with enthusiasm. He treats it like a mission, exploring every part of the virtual smart home and trying to unlock all the puzzles. He enjoys playing in a group, often taking the lead and explaining tricky parts to classmates.
 He appreciates that the game doesn’t lecture but lets him learn by doing—and the fact that it touches on real-world tech risks makes him feel like the topic matters. He’s also the type to finish the game and then Google more about how companies use his data online.
