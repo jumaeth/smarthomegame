@@ -1,6 +1,6 @@
 ## Persona Student
 ### Franco Bianchi 
-<img src="/Documents/Personas/pictures/frano.jpeg" alt="[margit portrait photo]" style="height: 70px; width:70px;"/>
+<img src="/Documents/Personas/pictures/frano.png" alt="[franco portrait photo]" style="height: 70px; width:70px;"/>
 
 | Age      | Profession | Location | Familiy |
 | -------- | -------    | -------- | ------- |
