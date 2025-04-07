@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import GameService from './GameService'
 
-function GameOverPage() {
+function OverPage() {
     const [gameOverMessage, setGameOverMessage] = useState("Gratulation, du hast gewonnen");
     const gameResetLabel = "Spiel zurücksetzen";
 
@@ -15,4 +15,4 @@ function GameOverPage() {
     )
 }
 
-export default GameOverPage
+export default GameOver
