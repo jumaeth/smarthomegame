@@ -1,54 +1,67 @@
-# React + TypeScript + Vite
+# SmartHomeEscape: A 2D Educational Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+SmartEscape is a **2D web-based game** built with **React**, **TypeScript**, and **Vite**. The game is designed to teach **children aged 14–16** how to use **protective data measures**.
 
-Currently, two official plugins are available:
+Players find themselves trapped inside a smart home filled with connected devices. To escape safely, they must navigate through rooms, interact with smart devices, and complete **minigames**. Each minigame helps the player learn how to set up smart home technology correctly, with a focus on **privacy** and **cybersecurity** best practices.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🏡 Explore different rooms of a smart home.
+- 🔒 Learn about privacy settings and security.
+- 🎮 Complete minigames to fix vulnerabilities.
+- 🚪 Escape the house by correctly securing the smart home.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+---
+
+## Setup Instructions
+
+### 1. Install Dependencies
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Run the Development Server
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npm run dev
 ```
+
+After starting, open your browser and go to `http://localhost:5173` to view the app.
+
+### 3. Build for Production
+
+```bash
+npm run build
+```
+
+This will generate a production-ready build in the `dist` folder.
+
+### 4. Preview the Production Build
+
+```bash
+npm run preview
+```
+
+This will locally preview the production build.
+
+---
+
+## Tech Stack
+
+- **React** – UI Library
+- **TypeScript** – Type Safety
+- **Vite** – Fast Build Tool
+- **TailwindCSS** (optional) – For easy and responsive styling
+- **React Context** – Game state management
+
+---
+
+## Project Status
+
+🚧 Currently in development.\
+🌟 Core focus: making learning about data protection **interactive, fun, and memorable** for teenagers.
+
+
