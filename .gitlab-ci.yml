@@ -18,6 +18,7 @@ before_script:
   - npm install
 
 lint-job:
+  stage: lint
   before_script:
     - npm install save-dev jest
     - npm install save-dev ts-jest @types/jest typescript
@@ -29,6 +30,7 @@ lint-job:
       - lint/
 
 test-job:
+  stage: test
   script:
     - echo "[JOB] Unit-tests"
     - npm test -- --passWithNoTests --testPathIgnorePatterns="IT"
@@ -37,6 +39,7 @@ test-job:
       - coverage/unit/
 
 build-job:
+  stage: build
   script:
     - echo "[JOB] Build"
     - npm run build
@@ -45,6 +48,7 @@ build-job:
       - build/
 
 integrationTest-job:
+  stage: integrationTest
   script:
     - echo "[JOB] Integration testing"
     - npm test -- --passWithNoTests --testPathPattern="IT"
