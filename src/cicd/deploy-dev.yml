@@ -1,0 +1,9 @@
+deploy-job:
+  stage: deploy
+  environment:
+    name: development
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
+  script:
+    - echo "[JOB] Deploy"
+    - echo "[NOT IMPLEMENTED] Deploy to dev-environment"

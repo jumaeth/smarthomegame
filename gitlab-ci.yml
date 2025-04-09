@@ -1,0 +1,55 @@
+image: node:23.11.0
+
+include: "src/cicd/deploy-dev.yml"
+
+variables:
+  DEV_BRANCH_NAME: "testing"
+  PROD_BRANCH_NAME: "production"
+
+stages:
+  - lint
+  - test
+  - build
+  - integrationTest
+  - end2end
+  - deploy
+
+before_script:
+  - npm install
+
+lint-job:
+  before-script:
+    - npm install save-dev jest
+    - npm install save-dev ts-jest @types/jest typescript
+  script:
+    - echo "[JOB] Linting"
+    - npm run lint
+  artifacts:
+    paths:
+      - lint/
+
+test-job:
+  script:
+    - echo "[JOB] Unit-tests"
+    - npm test -- --passWithNoTests --testPathIgnorePatterns="IT"
+  artifacts:
+    paths:
+      - coverage/unit/
+
+build-job:
+  script:
+    - echo "[JOB] Build"
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+
+integrationTest-job:
+  script:
+    - echo "[JOB] Integration testing"
+    - npm test -- --passWithNoTests --testPathPattern="IT"
+  artifacts:
+    paths:
+      - coverage/IT/
+  dependencies:
+    - build-job
