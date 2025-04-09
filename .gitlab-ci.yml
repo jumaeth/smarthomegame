@@ -18,7 +18,7 @@ before_script:
   - npm install
 
 lint-job:
-  before-script:
+  before_script:
     - npm install save-dev jest
     - npm install save-dev ts-jest @types/jest typescript
   script:
