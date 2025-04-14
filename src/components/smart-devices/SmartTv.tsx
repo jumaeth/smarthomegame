@@ -2,7 +2,7 @@ import {SmartDevice} from "./SmartDevice.tsx";
 import { Link } from 'react-router-dom';
 
 export const SmartTv = () => {
-    const smartDeviceTv = new SmartDevice("Smart TV",["Möchtest du die Spracherkennung aktivieren?", "Möchtest du die Kamera aktivieren?"]);
+    const smartDeviceTv = new SmartDevice("Smart TV",["Möchtest du die Spracherkennung aktivieren?", "Möchtest du die Kamera aktivieren?"],[false,false]);
     return (
         <div>
         <h1>
