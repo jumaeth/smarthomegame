@@ -20,12 +20,13 @@ export class SmartDevice{
       };
 
       const submitAnswer = () => {
-        console.log(this.answers)
         if (this.answers.every((val, i) => val === this.solutions[i])){
           console.log("Yay! answers are correct");
+          GameService.updateScore(2);
         }
         else{
           console.log("Oh No! your answers are not correct");
+          GameService.updateScore(-2);
         }
       };
         return (
