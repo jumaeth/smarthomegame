@@ -1,6 +1,6 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {ExampleComponent} from '../components/ExampleComponent';
-import {GameOver} from '../components/GameOver.tsx';
+import {GameOver} from '../components/GameOver';
 
 const AppRoutes = () => (
     <Router>
