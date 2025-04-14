@@ -8,8 +8,6 @@ const AppRoutes = () => (
     <Router>
         <Routes>
             <Route path="/example" element={<ExampleComponent/>}/>
-            <Route path="/smart-devices/smart-tv" element={<SmartTv/>}/>
-            <Route path="/living-room" element={<LivingRoom/>}/>
             <Route path="/game-over" element={<GameOver/>}/>
         </Routes>
     </Router>
