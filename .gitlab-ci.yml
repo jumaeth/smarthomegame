@@ -1,17 +1,15 @@
 image: node:23.11.0
 
-include: "src/cicd/deploy-dev.yml"
-
 variables:
-  DEV_BRANCH_NAME: "testing"
-  PROD_BRANCH_NAME: "production"
+  DEV_BRANCH_NAME: "development"
+  TEST_BRANCH_NAME: "main"
 
 stages:
   - lint
-  - test
+  - unitTest
   - build
   - integrationTest
-  - end2end
+  - systemTest
   - deploy
 
 before_script:
@@ -30,7 +28,7 @@ lint-job:
       - lint/
 
 test-job:
-  stage: test
+  stage: unitTest
   script:
     - echo "[JOB] Unit-tests"
     - npm test -- --passWithNoTests --testPathIgnorePatterns="IT"
@@ -43,9 +41,60 @@ build-job:
   script:
     - echo "[JOB] Build"
     - npm run build
+    - cp -r dist/ build/
+    - mkdir config
+    - cp pipeline/cd/nginxDevelopment.conf config/nginxDevelopment.conf
+    - cp pipeline/cd/nginxTesting.conf config/nginxTesting.conf
   artifacts:
     paths:
       - build/
+      - config/
+  after_script:
+    - ls -al
+
+build-dev-container-job:
+  stage: build
+  tags:
+    - dind
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
+  needs:
+    - build-job
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -f devEnvDockerfile --tag $CI_REGISTRY_IMAGE:dev_environment-latest .
+    - docker build -f pipeline/cd/nginxDevDockerfile --tag $CI_REGISTRY_IMAGE:custom_nginx_dev-latest .
+    - docker push $CI_REGISTRY_IMAGE:dev_environment-latest
+    - docker push $CI_REGISTRY_IMAGE:custom_nginx_dev-latest
+
+build-testing-container-job:
+  stage: build
+  tags:
+    - dind
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
+  needs:
+    - build-job
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -f testingEnvDockerfile --tag $CI_REGISTRY_IMAGE:testing_environment-latest .
+    - docker build -f pipeline/cd/nginxTestingDockerfile --tag $CI_REGISTRY_IMAGE:custom_nginx_testing-latest .
+    - docker push $CI_REGISTRY_IMAGE:testing_environment-latest
+    - docker push $CI_REGISTRY_IMAGE:custom_nginx_testing-latest
 
 integrationTest-job:
   stage: integrationTest
@@ -57,8 +106,6 @@ integrationTest-job:
       - coverage/IT/
   dependencies:
     - build-job
-
-
 
 system-test-job:
   stage: systemTest
