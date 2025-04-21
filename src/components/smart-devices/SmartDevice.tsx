@@ -1,37 +1,36 @@
 import GameService from "../GameService.tsx";
 
-export class SmartDevice{
-    name: string;
-    questions: string[];
-    solutions: boolean[];
-    answers: boolean[];
+export class SmartDevice {
+  name: string;
+  questions: string[];
+  solutions: boolean[];
+  answers: boolean[];
 
-    constructor(deviceName: string, questions : string[], solutions :boolean[]) {
-      this.name = deviceName;
-      this.questions = questions;
-      this.solutions = solutions;
-      this.answers = new Array(this.questions.length).fill(false);
-    }
+  constructor(deviceName: string, questions: string[], solutions: boolean[]) {
+    this.name = deviceName;
+    this.questions = questions;
+    this.solutions = solutions;
+    this.answers = new Array(this.questions.length).fill(false);
+  }
 
-    getQuestions(){
+  getQuestions() {
 
-      const handleAnswer = (i:number,answer:boolean) => {
-        this.answers[i]=answer
-      };
+    const handleAnswer = (i: number, answer: boolean) => {
+      this.answers[i] = answer
+    };
 
-      const submitAnswer = () => {
-        if (this.answers.every((val, i) => val === this.solutions[i])){
-          console.log("Yay! answers are correct");
-          GameService.updateScore(2);
-        }
-        else{
-          console.log("Oh No! your answers are not correct");
-          GameService.updateScore(-2);
-        }
-      };
-        return (
+    const submitAnswer = () => {
+      if (this.answers.every((val, i) => val === this.solutions[i])) {
+        console.log("Yay! answers are correct");
+        GameService.updateScore(2);
+      } else {
+        console.log("Oh No! your answers are not correct");
+        GameService.updateScore(-2);
+      }
+    };
+    return (
             <div className={this.name}>
-                <h2>{this.name}</h2>
+              <h3>{this.name}</h3>
               <ul>
                 {this.questions.map((q, i) => (
                         <li key={i}>
@@ -46,12 +45,9 @@ export class SmartDevice{
                           </label>
                         </li>
                 ))}
-                <button onClick={() =>
-                        submitAnswer()
-                }>Antwort abschicken
-                </button>
+                <button onClick={() => submitAnswer()}>Antwort abschicken</button>
               </ul>
             </div>
-        )
-    }
+    )
+  }
 }
