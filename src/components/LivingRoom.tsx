@@ -1,14 +1,12 @@
-import { Link } from 'react-router-dom';
+import {SmartTv} from "./smart-devices/SmartTv.tsx";
 
 export const LivingRoom = () => {
-    return (
-        <div>
+  return (
+          <div>
             <h1>
-                LivingRoom
+              LivingRoom
             </h1>
-            <Link to="/smart-devices/smart-tv">
-                <button>Smart TV öffnen</button>
-            </Link>
-        </div>
-    );
+            {<SmartTv/>}
+          </div>
+  );
 };

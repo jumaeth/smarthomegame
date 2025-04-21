@@ -1,5 +1,6 @@
 import {SmartDevice} from "./SmartDevice.tsx";
 import {useState} from "react";
+import "./Modal.css";
 
 export const SmartTv = () => {
   const [modal, setModal] = useState(false)
