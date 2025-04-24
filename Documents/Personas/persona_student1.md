@@ -6,10 +6,6 @@
 | -------- | -------    | -------- | ------- |
 | 14       | Student  | Aarau  | parents, older brother  |
 
-Age: 14
-Profession: Student
-Location: Aarau
-Family: parents, older brother
  
 ### Bio
 Lina is a curious and creative 14-year-old student from Aarau. She enjoys school, especially when lessons involve hands-on activities or digital tools. Outside of class, Lina spends a lot of time online — whether it’s watching tech videos, chatting with friends, or trying out new apps and games.
