@@ -1,4 +1,4 @@
-import GameService from "../GameService.tsx";
+import {GameService} from "../../services/GameService.ts"
 
 export class SmartDevice {
   name: string;

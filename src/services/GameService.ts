@@ -73,4 +73,13 @@ export class GameService {
   continueGame() {
     // this.navigate('/game/house');
   }
+
+  getRooms(){
+    return this.game.rooms
+  }
+
+  static updateScore (delta: number) {
+    console.log("Score has changed by " + delta)
+  }
+
 }
