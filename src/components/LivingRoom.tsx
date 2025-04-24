@@ -1,4 +1,5 @@
 import {SmartTv} from "./smart-devices/SmartTv.tsx";
+import {SmartLights} from "./smart-devices/SmartLights.tsx";
 
 export const LivingRoom = () => {
   return (
@@ -7,6 +8,7 @@ export const LivingRoom = () => {
               LivingRoom
             </h1>
             {<SmartTv/>}
+            {<SmartLights/>}
           </div>
   );
 };
