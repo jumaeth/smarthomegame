@@ -6,18 +6,16 @@ import {GameOver} from '../components/GameOver';
 import {GameWrapper} from "../components/GameWrapper.tsx";
 
 const AppRoutes = () => (
-    <Router>
-        <Routes>
-            <Route path="/example" element={<ExampleComponent/>}/>
+        <Router>
+          <Routes>
+
             <Route path="/game" element={<GameWrapper/>}>
-                <Route path="example" element={<ExampleComponent/>}/>
-                <Route path="game-over" element={<GameOver/>}/>
-                <Route path="living-room" element={<LivingRoom/>}/>
+              <Route path="living-room" element={<LivingRoom/>}/>
+              <Route path="game-over" element={<GameOver/>}/>
+              <Route path="house" element={<House/>}/>
             </Route>
-            <Route path="/house" element={<House/>}/>
-            <Route path="/game-over" element={<GameOver/>}/>
-        </Routes>
-    </Router>
+          </Routes>
+        </Router>
 );
 
 export default AppRoutes;
