@@ -10,8 +10,8 @@ export class GameService {
     constructor() {
         const rooms = [
             new Room("Living Room", "/game/living-room", "LivingRoomComponent", [
-                new SmartDevice("TV"),
-                new SmartDevice("Lamp"),
+                new SmartDevice("SmartTv"),
+                // new SmartDevice("SmartLights"),
             ]),
         ];
 
