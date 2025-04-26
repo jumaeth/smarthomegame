@@ -1,29 +1,57 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
 import AppRoutes from "./app/routes.tsx";
 
 function App() {
-
   return (
-          <>
-            <div>
-              <a href="https://vite.dev" target="_blank">
-                <img src={viteLogo} className="logo" alt="Vite logo"/>
-              </a>
-              <a href="https://react.dev" target="_blank">
-                <img src={reactLogo} className="logo react" alt="React logo"/>
-              </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className="card">
+          // ToDo Make actual header and footer
+          <div style={{paddingTop: "4rem", paddingBottom: "4rem"}}>
+            <header style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              backgroundColor: "#fde70e",
+              color: "black",
+              textAlign: "center",
+              zIndex: 1000,
+              height: "4rem",
+              display: "flex",
+              alignItems: "left",
+            }}>
+              <img
+                      src="https://www.fhnw.ch/logo/fhnw-logo-de.svg"
+                      alt="FHNW Logo"
+                      style={{
+                        position: "absolute",
+                        top: "0.5rem",
+                        left: "1rem",
+                        height: "3rem"
+                      }}
+              />
+            </header>
+
+            <main style={{minHeight: "100vh"}}>
               <AppRoutes/>
-            </div>
-            <p className="read-the-docs">
-              Click on the Vite and React logos to learn more
-            </p>
-          </>
-  )
+            </main>
+
+            <footer style={{
+              position: "fixed",
+              bottom: 0,
+              left: 0,
+              width: "100%",
+              backgroundColor: "#fde70e",
+              color: "black",
+              textAlign: "center",
+              zIndex: 1000,
+              height: "4rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+              <p>© 2025 FHNW Project</p>
+            </footer>
+          </div>
+  );
 }
 
-export default App
+export default App;
