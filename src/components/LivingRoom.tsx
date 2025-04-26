@@ -1,22 +1,31 @@
 import {SmartTv} from "./smart-devices/SmartTv.tsx";
 import {SmartLights} from "./smart-devices/SmartLights.tsx";
 import {ModalWrapperComponent} from "./ModalWrapperComponent.tsx";
+import {useGameService} from "../context/GameContext.tsx";
 
-export const LivingRoom = () => {
+export const LivingRoom = ({roomName}: { roomName: string }) => {
+  let isSmartTvCompleted: boolean = false;
+  let isSmartLightsCompleted: boolean = false;
+  const gameService = useGameService();
+
   const smartTvCallback = (isCompleted: boolean) => {
-    if (isCompleted) {
-      console.log("Smart Tv erfolgreich");
-    } else {
-      console.log("Smart Tv nicht bestanden.");
-    }
+    isSmartTvCompleted = isCompleted;
+    checkForCompletion();
   };
+
   const smartLightsCallback = (isCompleted: boolean) => {
-    if (isCompleted) {
-      console.log("SmartLights erfolgreich");
-    } else {
-      console.log("SmartLights nicht bestanden.");
-    }
+    isSmartLightsCompleted = isCompleted;
+    checkForCompletion();
   };
+
+  const checkForCompletion = () => {
+    if (isSmartTvCompleted && isSmartLightsCompleted) {
+      console.log("Living Room erfolgreich abgeschlossen!");
+      gameService.completeRoom(roomName)
+    } else {
+      console.log("Living Room nicht bestanden.");
+    }
+  }
   return (
           <div>
             <h1>
