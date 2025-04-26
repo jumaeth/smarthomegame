@@ -11,7 +11,7 @@ export class GameService {
         const rooms = [
             new Room("Living Room", "/game/living-room", "LivingRoomComponent", [
                 new SmartDevice("SmartTv"),
-                // new SmartDevice("SmartLights"),
+                new SmartDevice("SmartLights"),
             ]),
         ];
 
@@ -60,11 +60,11 @@ export class GameService {
 
     }
 
-  continueGame() {
-    // this.navigate('/game/house');
-  }
+    continueGame() {
+        // this.navigate('/game/house');
+    }
 
-  getRooms(){
-    return this.game.rooms
-  }
+    getRooms() {
+        return this.game?.rooms
+    }
 }
