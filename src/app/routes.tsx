@@ -11,7 +11,7 @@ const AppRoutes = () => (
 
             <Route path="/game" element={<GameWrapper/>}>
               <Route path="example" element={<ExampleComponent/>}/>
-              <Route path="/living-room" element={<LivingRoom/>}/>
+              <Route path="living-room" element={<LivingRoom/>}/>
               <Route path="game-over" element={<GameOver/>}/>
             </Route>
           </Routes>
