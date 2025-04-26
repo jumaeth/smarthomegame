@@ -1,26 +1,33 @@
-import {SmartDevice} from "./SmartDevice.tsx";
+import {MultipleChoiceComponent} from "../MultipleChoiceComponent.tsx";
 import "./Modal.css";
 
 export const SmartLights = () => {
+  const handleQuizCompletion = (isCompleted: boolean) => {
+    if (isCompleted) {
+      console.log("Quiz erfolgreich abgeschlossen!");
+    } else {
+      console.log("Quiz nicht bestanden.");
+    }
+  };
 
-  const smartDeviceTv = new SmartDevice("Smarte Lampe",
-          ["Möchtest du Bluetooth aktivieren?",
+  const smartDeviceLights = new MultipleChoiceComponent(
+          [
+            "Möchtest du Bluetooth aktivieren?",
             "Möchtest du Wifi aktivieren?",
             "Möchtest du den Energieverbrauch aufzeichnen?",
-            "Möchtest du die Verbindung mit der Smart App aktivieren?"], [true, true, false, false]);
+            "Möchtest du die Verbindung mit der Smart App aktivieren?",
+          ],
+          [true, true, false, false],
+          handleQuizCompletion
+  );
 
   return (
           <>
+            <h3>Smart Lights</h3>
             <div className="modal-content">
-              <h1>
-                {smartDeviceTv.name} Mission
-              </h1>
-              <h3>
-                beantworte die folgenden Fragen ...
-              </h3>
-              <ul>
-                {smartDeviceTv.getQuestions()}
-              </ul>
+              <h1>Smart Lights Mission</h1>
+              <h3>Beantworte die folgenden Fragen ...</h3>
+              <ul>{smartDeviceLights.getQuestions()}</ul>
             </div>
           </>
   );
