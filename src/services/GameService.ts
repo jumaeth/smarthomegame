@@ -51,7 +51,7 @@ export class GameService {
     reset(): boolean {
         // Reset game logic here
         this.game = null;
-        this.navigate('/game');
+        this.navigate('/');
         return true;
     }
 
@@ -61,7 +61,7 @@ export class GameService {
     }
 
     continueGame() {
-        // this.navigate('/game/house');
+        this.navigate('/game');
     }
 
     getRooms() {

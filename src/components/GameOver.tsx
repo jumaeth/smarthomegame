@@ -3,7 +3,7 @@ import {useGameService} from '../context/GameContext';
 
 export function GameOver() {
   const [gameOverMessage, setGameOverMessage] = useState("Gratulation, du hast gewonnen");
-  const gameResetLabel = "Spiel zurücksetzen";
+  const gameResetLabel = "Zur Homepage";
   const gameService = useGameService();
 
   return (
