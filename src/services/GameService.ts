@@ -60,7 +60,11 @@ export class GameService {
 
     }
 
-    continueGame() {
-        // this.navigate('/game/house');
-    }
+  continueGame() {
+    // this.navigate('/game/house');
+  }
+
+  getRooms(){
+    return this.game.rooms
+  }
 }
