@@ -1,13 +1,17 @@
 import {MultipleChoiceComponent} from "../MultipleChoiceComponent.tsx";
 import "./Modal.css";
 
-export const SmartLights = () => {
+type onCompletionCallback = (isCompleted: boolean) => void;
+
+export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
   const handleQuizCompletion = (isCompleted: boolean) => {
     if (isCompleted) {
       console.log("Quiz erfolgreich abgeschlossen!");
+      onCompletion(isCompleted);
     } else {
       console.log("Quiz nicht bestanden.");
     }
+
   };
 
   const smartDeviceLights = new MultipleChoiceComponent(
