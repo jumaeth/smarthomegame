@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {useGameService} from '../context/GameContext';
 
 export function GameOver() {
-  const [gameOverMessage, setGameOverMessage] = useState("Gratulation, du hast gewonnen");
+  const [gameOverMessage] = useState("Gratulation, du hast gewonnen");
   const gameResetLabel = "Zur Homepage";
   const gameService = useGameService();
 

@@ -8,6 +8,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({children}
   return <GameContext.Provider value={gameService}>{children}</GameContext.Provider>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useGameService = () => {
   const context = useContext(GameContext);
   if (!context) {

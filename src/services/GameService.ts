@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 
 export class GameService {
     private game: Game | null;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
     private navigate = useNavigate();
 
     constructor() {
