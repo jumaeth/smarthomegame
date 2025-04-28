@@ -111,6 +111,9 @@ build-testing-container-job:
 
 integrationTest-job:
   stage: integrationTest
+  before_script:
+    - npm install save-dev jest
+    - npm install save-dev ts-jest @types/jest typescript
   script:
     - echo "[JOB] Integration testing"
     - npm test -- --passWithNoTests --testPathPattern="IT"
@@ -122,6 +125,9 @@ integrationTest-job:
 
 system-test-job:
   stage: systemTest
+  before_script:
+    - npm install save-dev jest
+    - npm install save-dev ts-jest @types/jest typescript
   rules:
     - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   script:
