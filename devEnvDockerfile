@@ -1,0 +1,7 @@
+FROM docker:dind
+
+RUN mkdir -p /home/deploy/build \&& mkdir -p /home/deploy/config
+
+COPY ./build /home/deploy/build
+COPY ./pipeline/cd/nginxDevelopment.conf /home/deploy/config
+COPY ./pipeline/cd/nginxDevDockerfile /home/deploy/config
