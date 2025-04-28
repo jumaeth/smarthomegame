@@ -17,9 +17,6 @@ before_script:
 
 lint-job:
   stage: lint
-  before_script:
-    - npm install save-dev jest
-    - npm install save-dev ts-jest @types/jest typescript
   script:
     - echo "[JOB] Linting"
     - npm run lint
@@ -29,12 +26,28 @@ lint-job:
 
 test-job:
   stage: unitTest
+  before_script:
+    - npm install save-dev jest
+    - npm install save-dev ts-jest @types/jest typescript
   script:
     - echo "[JOB] Unit-tests"
     - npm test -- --passWithNoTests --testPathIgnorePatterns="IT"
   artifacts:
     paths:
       - coverage/unit/
+
+start-server-job:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH_NAME || $CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
+  before_script:
+    - apt update
+    - apt install -y python3-dev pipx
+    - pipx install python-openstackclient
+    - export PATH=$PATH:/root/.local/bin
+  script:
+    - . pipeline/cd/IP34-25bb_SmartHomeEscape-openrc.sh
+    - . pipeline/cd/server_running.sh  
 
 build-job:
   stage: build
@@ -114,20 +127,6 @@ system-test-job:
   script:
     - echo "[JOB] System tests"
     - echo "[NOT IMPLEMENTED] System tests using Selenium"
-
-
-start-server-job:
-  stage: deploy
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH_NAME || $CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
-  before_script:
-    - apt update
-    - apt install -y python3-dev pipx
-    - pipx install python-openstackclient
-    - export PATH=$PATH:/root/.local/bin
-  script:
-    - . pipeline/cd/IP34-25bb_SmartHomeEscape-openrc.sh
-    - . pipeline/cd/server_running.sh
 
 
 deploy-test-job:
