@@ -36,6 +36,19 @@ test-job:
     paths:
       - coverage/unit/
 
+start-server-job:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH_NAME || $CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
+  before_script:
+    - apt update
+    - apt install -y python3-dev pipx
+    - pipx install python-openstackclient
+    - export PATH=$PATH:/root/.local/bin
+  script:
+    - . pipeline/cd/IP34-25bb_SmartHomeEscape-openrc.sh
+    - . pipeline/cd/server_running.sh      
+
 build-job:
   stage: build
   script:
@@ -66,6 +79,7 @@ build-dev-container-job:
     - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
   needs:
     - build-job
+    - start-server-job
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
@@ -88,6 +102,7 @@ build-testing-container-job:
     - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   needs:
     - build-job
+    - start-server-job
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
@@ -115,19 +130,6 @@ system-test-job:
     - echo "[JOB] System tests"
     - echo "[NOT IMPLEMENTED] System tests using Selenium"
 
-
-start-server-job:
-  stage: deploy
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH_NAME || $CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
-  before_script:
-    - apt update
-    - apt install -y python3-dev pipx
-    - pipx install python-openstackclient
-    - export PATH=$PATH:/root/.local/bin
-  script:
-    - . pipeline/cd/IP34-25bb_SmartHomeEscape-openrc.sh
-    - . pipeline/cd/server_running.sh
 
 
 deploy-test-job:
