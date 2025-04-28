@@ -17,9 +17,6 @@ before_script:
 
 lint-job:
   stage: lint
-  before_script:
-    - npm install save-dev jest
-    - npm install save-dev ts-jest @types/jest typescript
   script:
     - echo "[JOB] Linting"
     - npm run lint
@@ -29,6 +26,9 @@ lint-job:
 
 test-job:
   stage: unitTest
+  before_script:
+    - npm install save-dev jest
+    - npm install save-dev ts-jest @types/jest typescript
   script:
     - echo "[JOB] Unit-tests"
     - npm test -- --passWithNoTests --testPathIgnorePatterns="IT"
@@ -113,6 +113,9 @@ build-testing-container-job:
 
 integrationTest-job:
   stage: integrationTest
+  before_script:
+    - npm install save-dev jest
+    - npm install save-dev ts-jest @types/jest typescript
   script:
     - echo "[JOB] Integration testing"
     - npm test -- --passWithNoTests --testPathPattern="IT"
