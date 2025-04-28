@@ -47,7 +47,7 @@ start-server-job:
     - export PATH=$PATH:/root/.local/bin
   script:
     - . pipeline/cd/IP34-25bb_SmartHomeEscape-openrc.sh
-    - . pipeline/cd/server_running.sh      
+    - . pipeline/cd/server_running.sh  
 
 build-job:
   stage: build
@@ -79,7 +79,6 @@ build-dev-container-job:
     - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
   needs:
     - build-job
-    - start-server-job
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
@@ -102,7 +101,6 @@ build-testing-container-job:
     - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   needs:
     - build-job
-    - start-server-job
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
@@ -127,12 +125,14 @@ integrationTest-job:
 
 system-test-job:
   stage: systemTest
+  before_script:
+    - npm install save-dev jest
+    - npm install save-dev ts-jest @types/jest typescript
   rules:
     - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   script:
     - echo "[JOB] System tests"
     - echo "[NOT IMPLEMENTED] System tests using Selenium"
-
 
 
 deploy-test-job:
