@@ -1,8 +1,8 @@
 import {Room} from "../objects/Room.ts";
-import {GameService} from "../services/GameService.ts";
+import {useGameService} from "../hooks/useGameService.tsx";
 
 export function FirstFloor() {
-  const gameService = new GameService;
+  const gameService = useGameService();
 
   const createRoomButton = (name: string, url: string, completed: boolean) => {
     const backgroundColor = completed ? 'green' : 'red';
@@ -14,7 +14,7 @@ export function FirstFloor() {
             </div>
     );
   };
-  const buttons = gameService.getRooms().map((room: Room) =>
+  const buttons = gameService.getRooms()?.map((room: Room) =>
           createRoomButton(room.name, room.url, room.completed)
   );
   return (

@@ -1,13 +1,12 @@
 import {Game} from "../objects/Game.ts";
 import {Room} from "../objects/Room.ts";
 import {SmartDevice} from "../objects/SmartDevice.ts";
-import {useNavigate} from "react-router-dom";
 
 export class GameService {
     private game: Game | null;
-    private navigate = useNavigate();
+    private navigate: (path: string) => void;
 
-    constructor() {
+    constructor(navigate: (path: string) => void) {
         const rooms = [
             new Room("Living Room", "/game/living-room", "LivingRoomComponent", [
                 new SmartDevice("SmartTv"),
@@ -16,6 +15,7 @@ export class GameService {
         ];
 
         this.game = new Game(rooms);
+        this.navigate = navigate;
         console.log(this.game);
     }
 
