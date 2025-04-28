@@ -17,6 +17,7 @@ function App() {
               height: "4rem",
               display: "flex",
               alignItems: "left",
+              padding: "0 1rem" // Padding hinzugefügt
             }}>
               <img
                       src="https://www.fhnw.ch/logo/fhnw-logo-de.svg"
@@ -30,7 +31,11 @@ function App() {
               />
             </header>
 
-            <main style={{minHeight: "100vh"}}>
+            <main style={{
+              minHeight: "100vh",
+              paddingTop: "4rem", // Platz für den Header
+              paddingBottom: "4rem" // Platz für den Footer
+            }}>
               <AppRoutes/>
             </main>
 
@@ -46,7 +51,8 @@ function App() {
               height: "4rem",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
+              padding: "0 1rem" // Padding hinzugefügt
             }}>
               <p>© 2025 FHNW Project</p>
             </footer>

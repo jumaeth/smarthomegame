@@ -26,10 +26,10 @@ export const ModalWrapperComponent = forwardRef(({content, openButton}: ModalWra
                       <div onClick={closeModal} className="overlay"></div>
                       <div className="modal-content">
                         {content}
+                        <button className="close-modal" onClick={closeModal}>
+                          Schließen
+                        </button>
                       </div>
-                      <button className="close-modal" onClick={closeModal}>
-                        Schließen
-                      </button>
                     </div>
             )}
           </>

@@ -33,7 +33,7 @@ body.active-modal {
   padding: 14px 28px;
   border-radius: 3px;
   width: 600px;
-  height: 600px;
+  height: 50%;
 }
 
 .close-modal {
