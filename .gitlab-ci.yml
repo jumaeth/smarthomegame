@@ -84,8 +84,7 @@ build-dev-container-job:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
   rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
   needs:
     - build-job
   before_script:
@@ -107,8 +106,7 @@ build-testing-container-job:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
   rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
-    - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   needs:
     - build-job
   before_script:
@@ -138,8 +136,7 @@ integrationTest-job:
 system-test-job:
   stage: systemTest
   rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
-    - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   before_script:
     - npm install save-dev jest
     - npm install save-dev ts-jest @types/jest typescript
@@ -154,8 +151,7 @@ deploy-test-job:
   environment:
     name: testing
   rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
-    - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   dependencies:
     - build-testing-container-job
     - system-test-job
@@ -234,8 +230,7 @@ deploy-dev-job:
   environment:
     name: development
   rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
   dependencies:
     - build-testing-container-job
     - start-server-job
