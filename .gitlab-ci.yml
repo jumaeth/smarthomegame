@@ -32,6 +32,8 @@ start-server-job:
 
 lint-job:
   stage: lint
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
   script:
     - echo "[JOB] Linting"
     - npm run lint
@@ -41,6 +43,8 @@ lint-job:
 
 test-job:
   stage: unitTest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
   before_script:
     - npm install save-dev jest
     - npm install save-dev ts-jest @types/jest typescript
@@ -53,6 +57,8 @@ test-job:
 
 build-job:
   stage: build
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
   script:
     - echo "[JOB] Build"
     - npm run build
@@ -78,6 +84,7 @@ build-dev-container-job:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
   rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
     - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
   needs:
     - build-job
@@ -100,6 +107,7 @@ build-testing-container-job:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
   rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
     - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   needs:
     - build-job
@@ -113,6 +121,8 @@ build-testing-container-job:
 
 integrationTest-job:
   stage: integrationTest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
   before_script:
     - npm install save-dev jest
     - npm install save-dev ts-jest @types/jest typescript
@@ -127,11 +137,12 @@ integrationTest-job:
 
 system-test-job:
   stage: systemTest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
+    - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   before_script:
     - npm install save-dev jest
     - npm install save-dev ts-jest @types/jest typescript
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   script:
     - echo "[JOB] System tests"
     - echo "[NOT IMPLEMENTED] System tests using Selenium"
@@ -143,6 +154,7 @@ deploy-test-job:
   environment:
     name: testing
   rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
     - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   dependencies:
     - build-testing-container-job
@@ -222,6 +234,7 @@ deploy-dev-job:
   environment:
     name: development
   rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
     - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
   dependencies:
     - build-testing-container-job
