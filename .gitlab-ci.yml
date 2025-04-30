@@ -6,6 +6,7 @@ variables:
   SCHEDULE: "schedule"
 
 stages:
+  - schedule
   - lint
   - unitTest
   - build
