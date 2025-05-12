@@ -1,4 +1,4 @@
-import {SmartDevice} from "./SmartDevice.ts";
+import {SmartDevice} from "./SmartDevice";
 
 export class Room {
   constructor(
