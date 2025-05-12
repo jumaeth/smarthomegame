@@ -7,16 +7,17 @@ export class GameService {
   private navigate: (path: string) => void;
 
   constructor(navigate: (path: string) => void) {
-    const rooms = [
+    this.game = new Game(this.setUpRooms());
+    this.navigate = navigate;
+  }
+
+  setUpRooms(): Room[] {
+    return [
       new Room("Living Room", "/game/living-room", "LivingRoomComponent", [
         new SmartDevice("SmartTv"),
         new SmartDevice("SmartLights"),
       ]),
     ];
-
-    this.game = new Game(rooms);
-    this.navigate = navigate;
-    console.log(this.game);
   }
 
   completeRoom(roomName: string) {
