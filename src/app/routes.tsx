@@ -1,6 +1,7 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {FirstFloor} from '../components/FirstFloor.tsx';
 import {LivingRoom} from '../components/LivingRoom.tsx';
+import {Kitchen} from '../components/Kitchen.tsx';
 import {GameOver} from '../components/GameOver';
 import {GameWrapper} from "../components/GameWrapper.tsx";
 import {FloorSelector} from "../components/FloorSelector.tsx";
@@ -14,6 +15,7 @@ const AppRoutes = () => (
             <Route path="/game" element={<GameWrapper/>}>
               <Route index element={<FloorSelector/>}/>
               <Route path="living-room" element={<LivingRoom/>}/>
+              <Route path="kitchen" element={<Kitchen/>}/>
               <Route path="game-over" element={<GameOver/>}/>
               <Route path="first-floor" element={<FirstFloor/>}/>
             </Route>
