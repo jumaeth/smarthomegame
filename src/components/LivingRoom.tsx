@@ -4,10 +4,13 @@ import {SmartLights} from "./smart-devices/SmartLights.tsx";
 import {ModalWrapperComponent} from "./ModalWrapperComponent.tsx";
 import {SmartDevice} from "../objects/SmartDevice.ts";
 import {useGameService} from "../hooks/useGameService.tsx";
+import {SecurityCamera} from "./smart-devices/SecurityCamera.tsx";
+import {Trans} from "@lingui/react/macro";
 
 export const LivingRoom = () => {
   const smartTvModalRef = useRef<{ closeModal: () => void }>(null);
   const smartLightsModalRef = useRef<{ closeModal: () => void }>(null);
+  const securityCameraModalRef = useRef<{ closeModal: () => void }>(null);
   const roomName = "Living Room"; //ToDo find better way to match with GameService
 
   const gameService = useGameService();
@@ -23,6 +26,12 @@ export const LivingRoom = () => {
   };
 
   const smartLightsCallback = (isCompleted: boolean) => {
+    isSmartLightsCompleted = isCompleted;
+    smartLightsModalRef.current?.closeModal();
+    checkForCompletion();
+  };
+
+  const securityCameraCallback = (isCompleted: boolean): void => {
     isSmartLightsCompleted = isCompleted;
     smartLightsModalRef.current?.closeModal();
     checkForCompletion();
@@ -52,6 +61,13 @@ export const LivingRoom = () => {
                             ref={smartLightsModalRef}
                             content={<SmartLights onCompletion={smartLightsCallback}/>}
                             openButton={<button>Smart Lights öffnen</button>}
+                    />
+            )}
+            {devices.includes("SecurityCamera") && (
+                    <ModalWrapperComponent
+                            ref={securityCameraModalRef}
+                            content={<SecurityCamera onCompletion={securityCameraCallback}/>}
+                            openButton={<button><Trans>Smart Lights öffnen</Trans></button>}
                     />
             )}
           </div>
