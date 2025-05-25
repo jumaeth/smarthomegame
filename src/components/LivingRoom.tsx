@@ -67,7 +67,7 @@ export const LivingRoom = () => {
                     <ModalWrapperComponent
                             ref={securityCameraModalRef}
                             content={<SecurityCamera onCompletion={securityCameraCallback}/>}
-                            openButton={<button><Trans>Smart Lights öffnen</Trans></button>}
+                            openButton={<button><Trans>Überwachungskamera öffnen</Trans></button>}
                     />
             )}
           </div>
