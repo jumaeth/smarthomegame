@@ -16,7 +16,6 @@ export const SmartKitchen = () => {
 
   return (
           <>
-            <h3>Smart Kitchen</h3>
               <CookingGameComponent
                       title="My Title"
                       description="My Description"

@@ -11,14 +11,23 @@ interface SpriteRender {
 export const SpriteRender = (props: SpriteRender) => {
   const spriteRef = useRef(null);
   const [texture, setTexture] = useState(Texture.EMPTY);
-  const [filter, setFilter] = useState<PIXI.Filter[] | undefined>(undefined);
-  const highlightAction = (content: RenderElement): PIXI.Filter | null => {
-    if (content instanceof ClickableElement) {
-      return content.mouseOver;
+  const [filter, setFilter] = useState<PIXI.Filter | undefined>(undefined);
+
+  const isInteractive = props.content instanceof ClickableElement;
+
+  const handleMouseOver = () => {
+    if (props.content instanceof ClickableElement){
+      setFilter(props.content.mouseOver);
     }
-    return null;
   };
 
+  const handlePointerDown = () => {
+    console.log("handlePointerDown");
+    if (props.content instanceof ClickableElement && typeof props.content.onclick === 'function') {
+      console.log("Doing onclick");
+      props.content.onclick();
+    }
+  };
 
 
   extend({
@@ -26,6 +35,8 @@ export const SpriteRender = (props: SpriteRender) => {
     Graphics,
     Sprite
   });
+
+
 
 
   useEffect(() => {
@@ -47,11 +58,10 @@ export const SpriteRender = (props: SpriteRender) => {
             x={props.content.xCoordinate}
             y={props.content.yCoordinate}
             filters={filter}
-            onMouseOver={() => {
-              const result = highlightAction(props.content);
-              setFilter(result ? [result] : undefined);
-            }}
+            onMouseOver={handleMouseOver}
             onMouseOut={()=>setFilter(undefined)}
+            onPointerDown={() => handlePointerDown()}
+            cursor={isInteractive ? 'pointer' : 'none'}
     />
 
   </>;
