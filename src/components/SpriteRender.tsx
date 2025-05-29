@@ -22,9 +22,7 @@ export const SpriteRender = (props: SpriteRender) => {
   };
 
   const handlePointerDown = () => {
-    console.log("handlePointerDown");
     if (props.content instanceof ClickableElement && typeof props.content.onclick === 'function') {
-      console.log("Doing onclick");
       props.content.onclick();
     }
   };
