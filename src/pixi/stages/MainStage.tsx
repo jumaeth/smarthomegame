@@ -2,9 +2,11 @@ import {Stage} from "@pixi/react";
 import {useCallback, useEffect, useState} from "react";
 import {calculateCanvasSize} from "@/utils/movment";
 import {MainContainer} from "@/pixi/container/MainContainer";
+import {IntroContainer} from "@/pixi/container/IntroContainer";
 
 export const MainStage = () => {
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
+  const [showIntro, setShowIntro] = useState(true);
 
   const updateCanvasSize = useCallback(() => {
     setCanvasSize(calculateCanvasSize());
@@ -20,7 +22,14 @@ export const MainStage = () => {
   return (
     <>
       <Stage width={canvasSize.width} height={canvasSize.height}>
-        <MainContainer canvasSize={canvasSize}/>
+        {showIntro ? (
+                <IntroContainer
+                        canvasSize={canvasSize}
+                        onStart={() => setShowIntro(false)}
+                />
+        ) : (
+                <MainContainer canvasSize={canvasSize} />
+        )}
       </Stage>
     </>
   );
