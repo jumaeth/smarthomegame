@@ -1,7 +1,7 @@
 import { Texture } from "pixi.js";
 import {Container, Sprite, useTick} from "@pixi/react";
 import {useCallback, useEffect, useRef} from "react";
-import {ANIMATION_SPEED, DEFAULT_POS_X, DEFAULT_POS_Y, MOVE_SPEED} from "@/pixi/constants/world-settings";
+import {ANIMATION_SPEED, MOVE_SPEED} from "@/pixi/constants/world-settings";
 import {useCharacterControls} from "@/hooks/character/useCharacterControls";
 import {Direction, Position} from "@/types/movement";
 import {calculateNewTarget, checkCanMove, handleCharacterMovement} from "@/utils/movment";
@@ -9,11 +9,13 @@ import {useCharacterAnimation} from "@/hooks/character/useCharacterAnimation";
 
 interface CharacterProps {
   texture: Texture;
-  onMove:(gridX: number, gridY: number) => void;
+  onMove:(pos: Position) => void;
+  collisionMap: number[];
+  spawnPosition: Position;
 }
 
-export const Character = ({texture, onMove}: CharacterProps) => {
-  const position = useRef({x: DEFAULT_POS_X, y: DEFAULT_POS_Y})
+export const Character = ({texture, onMove, collisionMap, spawnPosition}: CharacterProps) => {
+  const position = useRef<Position>({ ...spawnPosition });
   const targetPosition = useRef<Position | null>(null);
   const currentDirection = useRef<Direction | null>(null);
 
@@ -28,20 +30,28 @@ export const Character = ({texture, onMove}: CharacterProps) => {
     animationSpeed: ANIMATION_SPEED,
   })
 
-  useEffect(() => {
-    onMove(position.current.x, position.current.y)
-  }, [onMove]);
-
   const setNextTarget = useCallback((direction: Direction) => {
     if (targetPosition.current) return
     const {x, y} = position.current;
     currentDirection.current = direction;
     const newTarget = calculateNewTarget(x, y, direction);
 
-    if (checkCanMove(newTarget)) {
+    if (checkCanMove(newTarget, collisionMap)) {
       targetPosition.current = newTarget;
     }
-  }, [])
+  }, [collisionMap])
+
+  const teleportTo = useCallback((newPosition: Position) => {
+    if (newPosition) {
+      position.current = newPosition;
+      targetPosition.current = null;
+      isMoving.current = false;
+    }
+  }, []);
+
+  useEffect(() => {
+    teleportTo(spawnPosition)
+  }, [spawnPosition]);
 
   useTick((delta) => {
     const direction = getControlsDirection();
@@ -56,8 +66,7 @@ export const Character = ({texture, onMove}: CharacterProps) => {
       isMoving.current = true;
 
       if (completed) {
-        const {x, y} = position.current;
-        onMove(x, y)
+        onMove(position.current)
         targetPosition.current = null;
         isMoving.current = false;
       }

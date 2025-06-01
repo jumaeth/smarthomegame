@@ -1,6 +1,5 @@
 import {Direction, Position} from "@/types/movement";
 import {COLS, TILE_SIZE} from "@/pixi/constants/world-settings";
-import {LIVINGROOM_COL_MAP} from "@/pixi/constants/levels/livingroom-map";
 
 export const calculateCanvasSize = () => {
   const width = window.innerWidth;
@@ -19,17 +18,16 @@ export const calculateNewTarget = (
   }
 }
 
-export const checkCanMove = (target: Position) => {
+export const checkCanMove = (target: Position, collisionMap: number[]) => {
   const row = Math.floor(target.y / TILE_SIZE);
   const col = Math.floor(target.x / TILE_SIZE);
   const index = COLS * row + col;
 
-  // TODO: Change this for dynamic maps
-  if (index < 0 || index >= LIVINGROOM_COL_MAP.length) {
+  if (index < 0 || index >= collisionMap.length) {
     return false;
   }
 
-  return LIVINGROOM_COL_MAP[index] !== 1;
+  return collisionMap[index] !== 1;
 }
 
 const moveTowards = (current: number, target: number, maxStep: number) => {
