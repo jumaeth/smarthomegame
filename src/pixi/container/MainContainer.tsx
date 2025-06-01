@@ -13,6 +13,7 @@ import {getMapTransition, getSpawnForMap} from "@/utils/mapTransition";
 import {Position} from "@/types/movement";
 import {Door} from "@/pixi/levels/Door";
 import {DoorState} from "@/types/door";
+import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
 
 interface MainContainerProps {
   canvasSize: {
@@ -32,6 +33,10 @@ export const MainContainer = ({
                                 onMapChange,
                                 children
                               }: PropsWithChildren<MainContainerProps>) => {
+  const [inTransition, setInTransition] = useState(false);
+  const [pendingTransition, setPendingTransition] = useState<{to: MapKey, spawn: Position} | null>(null);
+
+  const [shouldSnapCamera, setShouldSnapCamera] = useState(false);
   /**
    * State to track the spawn position of the character.
    */
@@ -60,23 +65,30 @@ export const MainContainer = ({
     const transition = getMapTransition(map, tileX, tileY);
 
     if (transition) {
-      onMapChange(transition.to);
       const spawn = getSpawnForMap(transition.to, map);
-      if (spawn && spawn.pos) {
-        const newSpawnPosition = {
-          x: spawn.pos.x * TILE_SIZE,
-          y: spawn.pos.y * TILE_SIZE
-        }
-        setSpawnPosition(newSpawnPosition);
-        pos = newSpawnPosition;
-      } else {
-        const newSpawnPosition = {
-          x: DEFAULT_POS_X,
-          y: DEFAULT_POS_Y
-        }
-        setSpawnPosition(newSpawnPosition);
-        pos = newSpawnPosition;
-      }
+      setPendingTransition({
+        to: transition.to,
+        spawn: spawn?.pos
+                ? {x: spawn.pos.x * TILE_SIZE, y: spawn.pos.y * TILE_SIZE}
+                : {x: DEFAULT_POS_X, y: DEFAULT_POS_Y}
+      });
+      setInTransition(true);
+      // if (spawn && spawn.pos) {
+      //   const newSpawnPosition = {
+      //     x: spawn.pos.x * TILE_SIZE,
+      //     y: spawn.pos.y * TILE_SIZE
+      //   }
+      //   setSpawnPosition(newSpawnPosition);
+      //   pos = newSpawnPosition;
+      // } else {
+      //   const newSpawnPosition = {
+      //     x: DEFAULT_POS_X,
+      //     y: DEFAULT_POS_Y
+      //   }
+      //   setSpawnPosition(newSpawnPosition);
+      //   pos = newSpawnPosition;
+      // }
+      setShouldSnapCamera(true);
     }
     updateCharacterPosition(pos);
   };
@@ -93,7 +105,12 @@ export const MainContainer = ({
                       }}
               />
               {children}
-              <Camera characterPosition={characterPosition} canvasSize={canvasSize}>
+              <Camera key={map}
+                      characterPosition={characterPosition}
+                      canvasSize={canvasSize}
+                      shouldSnap={shouldSnapCamera}
+                      onSnapComplete={() => setShouldSnapCamera(false)}
+              >
                 <Level texture={levelTexture}/>
                 <Character
                         texture={characterTexture}
@@ -102,9 +119,23 @@ export const MainContainer = ({
                         spawnPosition={spawnPosition}
                 />
                 <LevelOverlay texture={overlayTexture} />
-                {/*TODO: Fix door texture alignement*/}
-                {/*<Door textures={doorTexture} state={DoorState.Closed}/>*/}
+                <Door textures={doorTexture} state={DoorState.Open}/>
               </Camera>
+              <TransitionOverlay
+                      width={canvasSize.width}
+                      height={canvasSize.height}
+                      inTransition={inTransition}
+                      onMidTransition={() => {
+                        if (pendingTransition) {
+                          onMapChange(pendingTransition.to);
+                          setSpawnPosition(pendingTransition.spawn);
+                          updateCharacterPosition(pendingTransition.spawn);
+                          setShouldSnapCamera(true);
+                          setPendingTransition(null);
+                        }
+                      }}
+                      onTransitionEnd={() => setInTransition(false)}
+              />
             </Container>
           </>
   );
