@@ -1,4 +1,4 @@
-import { CookingGameComponent } from "../CookingGameComponent.tsx";
+import { CookingGameComponent } from "../cookingGame/CookingGameComponent.tsx";
 import "./Modal.css";
 
 //type onCompletionCallback = (isCompleted: boolean) => void;
