@@ -3,7 +3,7 @@ import {Filter} from "pixi.js";
 
 export class ClickableElement extends RenderElement{
   mouseOver: Filter;
-  onclick: Function;
+  onclick: () => void;
 
   constructor(id: string,
               scale: number,
@@ -13,7 +13,7 @@ export class ClickableElement extends RenderElement{
               boundingBoxX: number = 0,
               boundingBoxY: number = 0,
               highlightFilter: Filter,
-              action: Function,
+              action: () => void,
   ) {
     super(id, scale, xCoordinate, yCoordinate, imagePath, boundingBoxX, boundingBoxY);
     this.mouseOver = highlightFilter;

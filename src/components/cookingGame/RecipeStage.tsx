@@ -29,7 +29,7 @@ export const RecipeStage = ({setStage, dimensions}) => {
   ];
 
 
-  const {textures, loaded, errors} = useLoadTextures(texturePaths);
+  const {textures} = useLoadTextures(texturePaths);
 
   //-----------------------text/typing-----------------------
 

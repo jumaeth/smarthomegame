@@ -1,7 +1,6 @@
 import {Application, extend} from '@pixi/react';
-import {AlphaFilter, Assets, Texture, TilingSprite} from "pixi.js";
+import {Assets, Texture, TilingSprite} from "pixi.js";
 import {useEffect, useRef, useState} from "react";
-import {ClickableElement} from "../../objects/ClickableElement.ts";
 import {GameStage} from "./GameStage.tsx";
 import {RecipeStage} from "./RecipeStage.tsx";
 import {IngredientsStage} from "./IngredientsStage.tsx";
@@ -22,9 +21,6 @@ export const CookingGameComponent = () => {
   const [isTextureLoaded, setIsTextureLoaded] = useState(false);
   const [notificationProperties, setNotificationProperties] = useState({x:0, y: 0, alpha: 0});
   const [initState, setInitState] = useState(true);
-
-  const restart = () => {setCurrentStage("game")};
-
 
   const stages = [
     "game", "recipe", "ingredients", "cook", "serve"

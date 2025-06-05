@@ -1,7 +1,6 @@
 import {ClickableElement} from "../../objects/ClickableElement.ts";
 import {AlphaFilter} from "pixi.js";
 import {SpriteRender} from "../SpriteRender.tsx";
-import {useState} from "react";
 export const GameStage = ({ setStage, dimensions, notificationProperties }) => {
 
   const highlightAlpha = 1.35;
@@ -28,8 +27,6 @@ export const GameStage = ({ setStage, dimensions, notificationProperties }) => {
   const pots               = new ClickableElement("pots", 0.15, dimensions.width*0.85, dimensions.height*0.32, "/cooking-sprites/pots.png", 100, 100, new AlphaFilter({ alpha: highlightAlpha }), () => setStage("cook"));
   const plate              = new ClickableElement("plate", 0.12, dimensions.width*0.85, dimensions.height*0.73, "/cooking-sprites/plate.png", 100, 100, new AlphaFilter({ alpha: highlightAlpha }), () => setStage("serve"));
 
-  //console.log(notificationProperties.alpha+ "/" + notificationProperties.x + "/" + notificationProperties.y);
-
   const renderElements = [
     recipe,
     ingredients,
@@ -39,11 +36,6 @@ export const GameStage = ({ setStage, dimensions, notificationProperties }) => {
     ...(notificationProperties.alpha !== 0 ? [notification] : [])
   ];
 
-
-  //console.log("rerender");
-  if(renderElements){
-    //console.log("Length: "+renderElements.length);
-  }
 
 
   return (
