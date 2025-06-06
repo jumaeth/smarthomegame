@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import {GameStage} from "./GameStage.tsx";
 import {RecipeStage} from "./RecipeStage.tsx";
 import {IngredientsStage} from "./IngredientsStage.tsx";
+import {CookingStage} from "./CookingStage.tsx";
 
 extend({
   TilingSprite
@@ -13,7 +14,7 @@ export const CookingGameComponent = () => {
 
   const customFont = new FontFace("micro5", "url(/fonts/micro5.ttf)");
   customFont.load().then(() => document.fonts.add(customFont));
-  const [nextStage, setNextStage] = useState(1);
+  const [nextStage, setNextStage] = useState(3);
   const [currentStage, setCurrentStage] = useState("game");
   const [texture, setTexture] = useState(Texture.EMPTY);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -60,17 +61,18 @@ export const CookingGameComponent = () => {
       switch (currentStage){
         case "game":
           if (initState){
-            setNotificationProperties({x: dimensions.width*0.23, y: dimensions.height*0.18, alpha: 1});
+            setNotificationProperties({x: 130, y: 35, alpha: 1});
             setInitState(false);
           }
           break;
         case "recipe":
-          setNotificationProperties({x: dimensions.width*0.22, y: dimensions.height*0.58, alpha: 1});          break;
+          setNotificationProperties({x: 125, y: 200, alpha: 1});
+          break;
         case "ingredients":
-          setNotificationProperties({x: dimensions.width*0.93, y: dimensions.height*0.18, alpha: 1});
+          setNotificationProperties({x: 515, y: 55, alpha: 1});
           break;
         case "cook":
-          setNotificationProperties({x: dimensions.width*0.96, y: dimensions.height*0.55, alpha: 1});
+          setNotificationProperties({x: 520, y: 200, alpha: 1});
           break;
         case "serve":
           setNotificationProperties({x: 0, y: 0, alpha: 0});
@@ -83,7 +85,7 @@ export const CookingGameComponent = () => {
     game: () => <GameStage setStage={secureSetStage}  dimensions={dimensions} notificationProperties={notificationProperties} />,
     recipe: () => <RecipeStage setStage={secureSetStage} dimensions={dimensions} />,
     ingredients: () => <IngredientsStage setStage={secureSetStage} dimensions={dimensions} />,
-    cook: () => <GameStage setStage={secureSetStage}  dimensions={dimensions} notificationProperties={notificationProperties} />,
+    cook: () => <CookingStage setStage={secureSetStage}  dimensions={dimensions}/>,
     serve: () => <GameStage setStage={secureSetStage}  dimensions={dimensions} notificationProperties={notificationProperties} />
   };
 
@@ -92,15 +94,14 @@ export const CookingGameComponent = () => {
               {(isTextureLoaded &&
                       <Application
                               width={dimensions.width}
-                              height={dimensions.height}
-                              resizeTo={containerRef}
+                              height={325}
                               backgroundColor={0xd87f20}>
                         {(
                                 <pixiTilingSprite
                                   texture={texture}
                                   eventMode={'none'}
                                   width={dimensions.width}
-                                  height={dimensions.height}
+                                  height={325}
                                   tilePosition={{x:0, y:0}}
                                   tileScale={0.3}
                                 />)}

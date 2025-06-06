@@ -8,7 +8,8 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
 
   const texturePaths: { [key: string]: string } = {
     recipeopen: "/cooking-sprites/recipeopen.png",
-    market: "/cooking-sprites/marketstand.png"
+    market: "/cooking-sprites/marketstand.png",
+    marketBackground: "/cooking-sprites/market_background.png",
   };
 
   const explanations = [
@@ -211,6 +212,8 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
                   <Button
                           x={dimensions.width * 0.7}
                           y={dimensions.height * 0.85}
+                          color={0xdcc08e}
+                          lineColor={0x5d3c1a}
                           width={90}
                           height={35}
                           label={"next"}
@@ -233,6 +236,8 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
                         key={i}
                         x={dimensions.width * 0.25}
                         y={dimensions.height * (0.3 + i * 0.2)}
+                        color={0xdcc08e}
+                        lineColor={0x5d3c1a}
                         width={dimensions.width * 0.5}
                         height={dimensions.height * 0.1}
                         label={buttonTexts[order[i]] || `Button ${i + 1}`}
@@ -285,6 +290,8 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
                         y={dimensions.height * 0.85}
                         width={dimensions.width * 0.2}
                         height={dimensions.height*0.1}
+                        color={0xdcc08e}
+                        lineColor={0x5d3c1a}
                         label={btnText}
                         action={action}
                 />}
@@ -307,14 +314,23 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
         )
       }else if(background === "market"){
         return (
+                <>
+                <pixiSprite
+                        eventMode={'static'}
+                        scale={0.6}
+                        texture={textures.marketBackground}
+                        x={0}
+                        y={-100}
+                />
                 <pixiSprite
                         anchor={0.5}
                         eventMode={'static'}
                         scale={0.45}
                         texture={textures.market}
-                        x={dimensions.width*0.5}
-                        y={dimensions.height*0.55}
+                        x={dimensions.width * 0.5}
+                        y={dimensions.height * 0.55}
                 />
+                </>
         )
       }
     }

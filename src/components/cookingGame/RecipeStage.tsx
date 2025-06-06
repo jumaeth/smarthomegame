@@ -70,13 +70,13 @@ export const RecipeStage = ({setStage, dimensions}) => {
                     eventMode={'static'}
                     scale={0.6}
                     texture={textures.recipeopen}
-                    x={dimensions.width*0.5}
-                    y={dimensions.height*0.68}
+                    x={273}
+                    y={220}
             />
             <pixiText
                     text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
-                    x={dimensions.width*0.15}
-                    y={dimensions.height*0.2}
+                    x={75}
+                    y={70}
                     style={{
                       fontFamily: 'micro5',
                       fontSize: 30,
@@ -87,8 +87,10 @@ export const RecipeStage = ({setStage, dimensions}) => {
             />
             {(showButton &&
               <Button
-                    x={dimensions.width*0.7}
-                    y={dimensions.height*0.85}
+                    x={370}
+                    y={275}
+                    color={0xdcc08e}
+                    lineColor={0x5d3c1a}
                     width={90}
                     height={35}
                     label={label}
