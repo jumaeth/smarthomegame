@@ -10,7 +10,7 @@ extend({
   Text
 });
 
-export const RecipeStage = ({setStage, dimensions}) => {
+export const RecipeStage = ({setStage}) => {
 
   const [text, setText] = useState('');
   const [showButton, setShowButton] = useState(false);

@@ -1,7 +1,7 @@
 import {ClickableElement} from "../../objects/ClickableElement.ts";
 import {AlphaFilter} from "pixi.js";
 import {SpriteRender} from "../SpriteRender.tsx";
-export const GameStage = ({ setStage, dimensions, notificationProperties }) => {
+export const GameStage = ({ setStage, notificationProperties }) => {
 
   const highlightAlpha = 1.35;
 

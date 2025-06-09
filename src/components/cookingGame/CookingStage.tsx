@@ -10,18 +10,18 @@ extend({
   Text
 });
 
-export const CookingStage = ({setStage, dimensions}) => {
+export const CookingStage = ({setStage}) => {
 
   const [showButton, setShowButton] = useState(false);
   const [page, setPage] = useState(1);
-  const [label, setLabel] = useState("next");
+  const [label] = useState("next");
   const [showInfo, setShowInfo] = useState(true);
   const [hoveredId, setHoveredId] = useState("");
   const [allHoverable, setAllHoverable] = useState(true);
   const [selected, setSelected] = useState("");
   const [infoText, setInfoText] = useState("");
   const [infoTitles, setInfoTitles] = useState("");
-  const [retry, setRetry] = useState(false);
+  const [setRetry] = useState(false);
 
   const instruction = "Alright, lets make a meal out of it. \n\n" +
           "Our smartkitchen can prepare all the ingredients but we have to chose the right machine to cook our dish"
@@ -72,13 +72,12 @@ export const CookingStage = ({setStage, dimensions}) => {
   const foodprocessor       = {id: "foodprocessor",scale: 0.11, x: 350, y: 105, texture: textures.foodprocessor, action: null};
   const microwave        = {id: "microwave",scale: 0.11, x: 185, y: 245, texture: textures.microwave, action: null};
   const steamer               = {id: "steamer",scale: 0.1, x: 350, y: 240, texture: textures.steamer, action: null};
-  const filter = new AlphaFilter({alpha: 1.35});
   const renderElements = [
           cookingfield, foodprocessor, microwave, steamer
   ]
 
 
-  const [hovered, setHovered] = useState(false);
+  const [hovered] = useState(false);
 
   const draw = useCallback((g) => {
     g.clear();

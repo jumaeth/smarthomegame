@@ -5,6 +5,7 @@ import {GameStage} from "./GameStage.tsx";
 import {RecipeStage} from "./RecipeStage.tsx";
 import {IngredientsStage} from "./IngredientsStage.tsx";
 import {CookingStage} from "./CookingStage.tsx";
+import {ServeStage} from "./ServeStage.tsx";
 
 extend({
   TilingSprite
@@ -14,7 +15,7 @@ export const CookingGameComponent = () => {
 
   const customFont = new FontFace("micro5", "url(/fonts/micro5.ttf)");
   customFont.load().then(() => document.fonts.add(customFont));
-  const [nextStage, setNextStage] = useState(3);
+  const [nextStage, setNextStage] = useState(1);
   const [currentStage, setCurrentStage] = useState("game");
   const [texture, setTexture] = useState(Texture.EMPTY);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -86,7 +87,7 @@ export const CookingGameComponent = () => {
     recipe: () => <RecipeStage setStage={secureSetStage} dimensions={dimensions} />,
     ingredients: () => <IngredientsStage setStage={secureSetStage} dimensions={dimensions} />,
     cook: () => <CookingStage setStage={secureSetStage}  dimensions={dimensions}/>,
-    serve: () => <GameStage setStage={secureSetStage}  dimensions={dimensions} notificationProperties={notificationProperties} />
+    serve: () => <ServeStage setStage={secureSetStage}  dimensions={dimensions}/>
   };
 
   return (
