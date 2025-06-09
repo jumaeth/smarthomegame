@@ -4,6 +4,7 @@ import {useCallback, useEffect, useState} from "react";
 import {Button} from "./Button.tsx";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
+import {data} from "react-router-dom";
 
 extend({
   Sprite,
@@ -21,7 +22,8 @@ export const CookingStage = ({setStage}) => {
   const [selected, setSelected] = useState("");
   const [infoText, setInfoText] = useState("");
   const [infoTitles, setInfoTitles] = useState("");
-  const [setRetry] = useState(false);
+  const [infoComment, setInfoComment] = useState("");
+  const [retry, setRetry] = useState(false);
 
   const instruction = "Alright, lets make a meal out of it. \n\n" +
           "Our smartkitchen can prepare all the ingredients but we have to chose the right machine to cook our dish"
@@ -41,11 +43,21 @@ export const CookingStage = ({setStage}) => {
 
   const criterias = [
     "Energy", "Permissions", "Time", "Handling"
-  ]
+  ];
+
+  const dataComments = [
+          "Integrated with energy monitoring system", // Cookingfield
+          "Stores user preferences and meal history", // Food Processor
+          "Tracks time and power settings",// Microwave
+          "Connects periodically to cloud for updates" //Steamer
+  ];
 
   const stars = [
-          [1,5,3,4], [1,2,3,4], [1,2,3,4], [1,2,3,4]
-  ]
+    [2, 4, 3, 4], // Cookingfield
+    [4, 2, 5, 4], // Food Processor
+    [3, 3, 5, 5], // Microwave
+    [4, 3, 2, 4]  // Steamer
+  ];
 
 
   const {textures} = useLoadTextures(texturePaths);
@@ -180,14 +192,20 @@ export const CookingStage = ({setStage}) => {
     }
   }, [hoveredId]);
 
+  useEffect(() => {
+    if(hoveredId !== ""){
+      const text = dataComments[devices.indexOf(hoveredId)];
+      setInfoComment(text.toUpperCase());
+    }
+  }, [hoveredId]);
+
   const endGame = () => {
-    console.log("endGame: "+selected+"/"+devices[3]);
     if (selected === devices[2]){
       setRetry(true);
-    }else{
+    }else if(!retry){
       setStage("game");
     }
-  }
+  };
 
 
   const instructionPage =  () => {
@@ -299,6 +317,21 @@ export const CookingStage = ({setStage}) => {
                            wordWrapWidth: 400,
                          }}
                          anchor={{ x: 0, y: 0 }}
+                        />
+                )}
+                {(showInfo &&
+                        <pixiText
+                                text={infoComment}
+                                x={30 + infoXOffset(hoveredId)}
+                                y={130 +infoYOffset(hoveredId)}
+                                style={{
+                                  fontFamily: 'micro5',
+                                  fontSize: 25,
+                                  fill: {color: 0x3f556b},
+                                  wordWrap: true,
+                                  wordWrapWidth: 250,
+                                }}
+                                anchor={{ x: 0, y: 0 }}
                         />
                 )}
               </>

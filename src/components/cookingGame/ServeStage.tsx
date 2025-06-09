@@ -23,7 +23,7 @@ export const ServeStage = ({setStage, dimensions}) => {
     recipeopen: "/cooking-sprites/recipeopen.png",
     tableBackground: "/cooking-sprites/table_background.png",
     placemat: "/cooking-sprites/placemat.png",
-    plate: "/cooking-sprites/single_plate.png",
+    plate: "/cooking-sprites/plate_with_food.png",
     cutlery: "/cooking-sprites/cutlery.png",
     glas: "/cooking-sprites/glas.png",
     napkin: "/cooking-sprites/napkin.png",
@@ -38,24 +38,33 @@ export const ServeStage = ({setStage, dimensions}) => {
     spoon: {x: 460, y: 50}
   });
 
-  const [markerPositions, setMarkerPositions] = useState([
+  type Marker = {
+    x: number;
+    y: number;
+    expecting: string | null;
+    alpha: number;
+    id: string;
+    filled: boolean;
+  };
+
+  const [markerPositions, setMarkerPositions] = useState<Marker[]>([
     { x: initialPositions.current.plate.x, y: initialPositions.current.plate.y, expecting: null, alpha: 1, id: "1", filled: false },
     { x: initialPositions.current.cutlery.x, y: initialPositions.current.cutlery.y, expecting: null, alpha: 1, id: "2", filled: false },
     { x: initialPositions.current.glas.x, y: initialPositions.current.glas.y, expecting: null, alpha: 1, id: "3", filled: false },
     { x: initialPositions.current.napkin.x, y: initialPositions.current.napkin.y, expecting: null, alpha: 1, id: "4", filled: false },
     { x: initialPositions.current.spoon.x, y: initialPositions.current.spoon.y, expecting: null, alpha: 1, id: "5", filled: false },
-    { x: 265, y: 220, expecting: "plate", alpha: 1, id: "plate", filled: false },
-    { x: 340, y: 230, expecting: "cutlery", alpha: 1, id: "cutlery", filled: false },
+    { x: 265, y: 225, expecting: "plate", alpha: 1, id: "plate", filled: false },
+    { x: 355, y: 230, expecting: "cutlery", alpha: 1, id: "cutlery", filled: false },
     { x: 355, y: 140, expecting: "glas", alpha: 1, id: "glas", filled: false },
     { x: 180, y: 220, expecting: "napkin", alpha: 1, id: "napkin", filled: false },
-    { x: 265, y: 140, expecting: "spoon", alpha: 1, id: "spoon", filled: false },
+    { x: 270, y: 170, expecting: "spoon", alpha: 1, id: "spoon", filled: false },
   ]);
 
-  const setMarkerAlpha = (id, alpha) => {
+  const setMarkerAlpha = (id : string, alpha: number) => {
     setMarkerPositions(prev => prev.map(m => m.id === id ? { ...m, alpha } : m));
   };
 
-  const setMarkerFilled = (id, filled) => {
+  const setMarkerFilled = (id: string, filled: boolean) => {
     setMarkerPositions(prev => prev.map(m => m.id === id ? { ...m, filled } : m));
   };
 
@@ -87,11 +96,11 @@ export const ServeStage = ({setStage, dimensions}) => {
     g.endFill();
   };
 
-  const plate = { id: "plate", scale: 0.11,  texture: textures.plate, x: initialPositions.current.plate.x, y: initialPositions.current.plate.y, anchor: {x: 0.4, y: 0.4} };
-  const cutlery = { id: "cutlery", scale: 0.09,  texture: textures.cutlery, x: initialPositions.current.cutlery.x, y: initialPositions.current.cutlery.y, anchor: {x: 0.4, y: 0.4} };
+  const plate = { id: "plate", scale: 0.1,  texture: textures.plate, x: initialPositions.current.plate.x, y: initialPositions.current.plate.y, anchor: {x: 0.4, y: 0.4} };
+  const cutlery = { id: "cutlery", scale: 0.08,  texture: textures.cutlery, x: initialPositions.current.cutlery.x, y: initialPositions.current.cutlery.y, anchor: {x: 0.4, y: 0.4} };
   const glas = { id: "glas", scale: 0.09, texture: textures.glas, x: initialPositions.current.glas.x, y: initialPositions.current.glas.y, anchor: {x: 0.4, y: 0.4} };
   const napkin = { id: "napkin", scale: 0.08,  texture: textures.napkin, x: initialPositions.current.napkin.x, y: initialPositions.current.napkin.y, anchor: {x: 0.5, y: 0.45} };
-  const spoon = { id: "spoon", scale: 0.08,  texture: textures.spoon, x: initialPositions.current.spoon.x, y: initialPositions.current.spoon.y, anchor: {x: 0.5, y: 0.38} };
+  const spoon = { id: "spoon", scale: 0.07,  texture: textures.spoon, x: initialPositions.current.spoon.x, y: initialPositions.current.spoon.y, anchor: {x: 0.45, y: 0.38} };
 
 
   const renderElements = [plate, cutlery, glas, napkin, spoon];
@@ -110,7 +119,6 @@ export const ServeStage = ({setStage, dimensions}) => {
     if (previousMarkerId) setMarkerFilled(previousMarkerId, false);
 
     setDragged(id);
-    e.stopPropagation();
     e.stopPropagation();
   };
 
