@@ -7,13 +7,14 @@ import {Button} from "./Button.tsx";
 
 extend({ Sprite, Text, Graphics });
 
-export const ServeStage = ({setStage, dimensions}) => {
+export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
   const [showButton, setShowButton] = useState(false);
   const [hovered, setHovered] = useState("");
   const [dragged, setDragged] = useState("");
   const [spriteToMarkerMap, setSpriteToMarkerMap] = useState({});
   const [lockedSprites, setLockedSprites] = useState({});
   const [page, setPage] = useState(1);
+  const [points, setPoints] = useState(100);
 
   const draggingRef = useRef(false);
 
@@ -159,6 +160,7 @@ export const ServeStage = ({setStage, dimensions}) => {
       }, 300);
     } else if (marker.expecting !== null) {
       sprite.tint = 0xff0000;
+      setPoints(prev => prev *0.8);
       setMarkerFilled(marker.id, false);
       setTimeout(() => sprite.tint = 0xffffff, 300);
     }
@@ -214,8 +216,6 @@ export const ServeStage = ({setStage, dimensions}) => {
   };
 
   useEffect(() => {
-    console.log("Check: " + Object.keys(lockedSprites).length + "/" + renderElements.length);
-
     if (Object.keys(lockedSprites).length === renderElements.length) {
       Object.values(spriteRefs.current).forEach(sprite => {
         if (sprite) {
@@ -232,6 +232,7 @@ export const ServeStage = ({setStage, dimensions}) => {
       }, 700);
 
       setTimeout(() => {
+        setTotalPoints(prev => prev + points);
         setStage("game");
       }, 1300);
     }

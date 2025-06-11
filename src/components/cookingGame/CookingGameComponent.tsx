@@ -11,7 +11,7 @@ extend({
   TilingSprite
 });
 
-export const CookingGameComponent = () => {
+export const CookingGameComponent = ({setCompleted, reload}) => {
 
   const customFont = new FontFace("micro5", "url(/fonts/micro5.ttf)");
   customFont.load().then(() => document.fonts.add(customFont));
@@ -22,7 +22,8 @@ export const CookingGameComponent = () => {
   const [dimensions, setDimensions] = useState({width: 0, height: 0});
   const [isTextureLoaded, setIsTextureLoaded] = useState(false);
   const [notificationProperties, setNotificationProperties] = useState({x:0, y: 0, alpha: 0});
-  const [initState, setInitState] = useState(true);
+  const initStateRef = useRef(true);
+  const [totalPoints, setTotalPoints] = useState(0);
 
   const stages = [
     "game", "recipe", "ingredients", "cook", "serve"
@@ -36,6 +37,14 @@ export const CookingGameComponent = () => {
       setCurrentStage(stage);
     }
   };
+
+  useEffect(() => {
+    if (reload){
+      setCurrentStage("game");
+      setNextStage(1);
+      initStateRef.current = true;
+    }
+  }, [reload]);
 
   useEffect(() => {
     if (texture === Texture.EMPTY) {
@@ -61,9 +70,11 @@ export const CookingGameComponent = () => {
     if(dimensions.width !== 0 && dimensions.height !== 0){
       switch (currentStage){
         case "game":
-          if (initState){
-            setNotificationProperties({x: 130, y: 35, alpha: 1});
-            setInitState(false);
+          if (initStateRef.current){
+            setTimeout(()=>{
+              setNotificationProperties({x: 130, y: 35, alpha: 1});
+              initStateRef.current = false;
+            },10);
           }
           break;
         case "recipe":
@@ -80,15 +91,24 @@ export const CookingGameComponent = () => {
           break;
       }
     }
-  }, [currentStage, dimensions]);
+  }, [currentStage, dimensions, initStateRef]);
 
   const stageMap = {
     game: () => <GameStage setStage={secureSetStage}  dimensions={dimensions} notificationProperties={notificationProperties} />,
-    recipe: () => <RecipeStage setStage={secureSetStage} dimensions={dimensions} />,
-    ingredients: () => <IngredientsStage setStage={secureSetStage} dimensions={dimensions} />,
-    cook: () => <CookingStage setStage={secureSetStage}  dimensions={dimensions}/>,
-    serve: () => <ServeStage setStage={secureSetStage}  dimensions={dimensions}/>
+    recipe: () => <RecipeStage setStage={secureSetStage} dimensions={dimensions} setTotalPoints={setTotalPoints}/>,
+    ingredients: () => <IngredientsStage setStage={secureSetStage} setTotalPoints={setTotalPoints} />,
+    cook: () => <CookingStage setStage={secureSetStage}  dimensions={dimensions} setTotalPoints={setTotalPoints}/>,
+    serve: () => <ServeStage setStage={secureSetStage}  dimensions={dimensions} setTotalPoints={setTotalPoints}/>
   };
+
+  useEffect(() => {
+    if (totalPoints / stages.length > 50){
+      setCompleted(true);
+    }else{
+      setCompleted(false);
+    }
+  }, [totalPoints]);
+
 
   return (
           <div ref={containerRef} className="h-[90%] mt-5">

@@ -10,7 +10,7 @@ extend({
   Text
 });
 
-export const RecipeStage = ({setStage}) => {
+export const RecipeStage = ({setStage, setTotalPoints}) => {
 
   const [text, setText] = useState('');
   const [showButton, setShowButton] = useState(false);
@@ -52,15 +52,17 @@ export const RecipeStage = ({setStage}) => {
   }, [page]);
 
   const action = () => {
-    if(page < pageTexts.length){
-      if(page === pageTexts.length-1){
+    if (page < pageTexts.length) {
+      if (page === pageTexts.length - 1) {
         setLabel("end");
       }
-      return setPage(page+1);
-    }else{
-      return setStage("game");
+      setPage(page + 1);
+    } else {
+      setTotalPoints(prev => prev + 100);
+      setStage("game");
     }
   };
+
 
 
   return (

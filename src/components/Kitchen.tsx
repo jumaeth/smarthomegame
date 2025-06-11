@@ -34,7 +34,7 @@ export const Kitchen = () => {
             {devices.includes("SmartKitchen") && (
                     <ModalWrapperComponent
                             ref={smartKitchenRef}
-                            content={<SmartKitchen onCompletion={smartKitchenCallback}/>}
+                            content={<SmartKitchen onCompletion={smartKitchenCallback} reload={true}/>}
                             openButton={<button>Smart Kitchen öffnen</button>}
                     />
             )}

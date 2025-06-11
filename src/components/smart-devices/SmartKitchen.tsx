@@ -1,9 +1,20 @@
 import { CookingGameComponent } from "../cookingGame/CookingGameComponent.tsx";
 import "./Modal.css";
+import {useEffect, useState} from "react";
 
 //type onCompletionCallback = (isCompleted: boolean) => void;
 
-export const SmartKitchen = () => {
+export const SmartKitchen = ({onCompletion, reload}) => {
+
+  const [completed, setCompleted] = useState(false);
+
+  useEffect(() => {
+    if(completed){
+      console.log("completed");
+      onCompletion(true);
+    }
+  }, [completed]);
+
   //{ onCompletion }: { onCompletion: onCompletionCallback }
   // const handleQuizCompletion = (isCompleted: boolean) => {
   //   if (isCompleted) {
@@ -17,8 +28,8 @@ export const SmartKitchen = () => {
   return (
           <>
               <CookingGameComponent
-                      title="My Title"
-                      description="My Description"
+                      setCompleted={setCompleted}
+                      reload={reload}
               />
           </>
   );

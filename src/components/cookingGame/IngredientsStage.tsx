@@ -3,7 +3,7 @@ import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {Button} from "./Button.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
 
-export const IngredientsStage = ({ setStage, dimensions }) => {
+export const IngredientsStage = ({ setStage, setTotalPoints }) => {
 
 
   const texturePaths: { [key: string]: string } = {
@@ -13,18 +13,20 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
   };
 
   const explanations = [
-          "This is the explanation on the first page that requires some explanation about the explanation",
-          "This is the page2 explanation which is an ultimate explanation explanation"
+          "Lets start by buying the needed ingredients. For a good pasta we need: \n\n\t1. Spaghetti\n\t2. Tomatoes\n\t3. Spices\n\t4. Cheese",
+          "You have to consider different criteria like cost, time and quality. \n\nBe careful with trading your " +
+          "personal information to get better results for the ingredients."
   ];
 
   const btnTexts = [
-    ["page1", "text2", "text3", "text4"],
-    ["page2", "text2", "text3", "text4"],
-    ["page3", "text2", "text3", "text4"]
+    ["Local supermarket, cash", "Grocery Delivery Service", "Special Italian Market", "Discounter, pay with card"],
+    ["Farmer shop at the farm", "Vegie subscription box", "Co-op Farmer store", "Market"],
+    ["From your own balcony", "Hyped Spice Startup", "Grandmas garden ", "Healthy food store"],
+    ["Drive to italy", 'Visit workshop at farm', "Visit supermarket (again)", 'From "parmesan.com"']
   ];
 
   const instructions = [
-          "instruction 1", "instruction 2", "instruction 3"
+          "Buy Spaghetti", "Buy Tomatoes", "Buy Spices", "Buy Cheese"
   ];
 
   const finalMessage = [
@@ -48,21 +50,31 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
   }
 
   const qualityPoints = [
-    [100,75, 50, 25],
-    [100,75, 50, 25],
-    [100,75, 50, 25]
+    [75,65, 100, 50], //Spaghetti
+    [100,75, 50, 25], //Tomato
+    [60,75, 75, 85], //Spices
+    [100,85, 75, 75] // Cheese
   ];
 
   const pricePoints = [
-    [100,75, 50, 25],
-    [100,75, 50, 25],
-    [100,75, 50, 25]
+    [75,65, 25, 85], //Spaghetti
+    [75,50, 75, 65], //Tomato
+    [100,50, 100, 50], //Spices
+    [75,85, 75, 75] // Cheese
   ];
 
   const timePoints = [
-    [100,75, 50, 25],
-    [100,75, 50, 25],
-    [100,75, 50, 25]
+    [50,75, 25, 100], //Spaghetti
+    [50,100, 75, 75], //Tomato
+    [100,75, 25, 65], //Spices
+    [0,50, 65, 75] // Cheese
+  ];
+
+  const privacyPoints = [
+    [0.2,0.05, 0.15, 0.15], //Spaghetti
+    [0.25,0.1, 0.2, 0.25], //Tomato
+    [0.25, 0.1, 0.25, 0.2], //Spices
+    [0.25,0.15, 0.2, 0.1] // Cheese
   ];
 
   const {textures, loaded} = useLoadTextures(texturePaths);
@@ -73,7 +85,8 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
   const [scores, setScores] = useState({
     quality: 0,
     time: 0,
-    price: 0
+    price: 0,
+    privacy: 0
   });
   const [calcFinished, setCalcFinished] = useState(false);
   const [instruction,setInstruction] = useState(instructions[0]);
@@ -101,7 +114,8 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
               ...prev,
               quality: prev.quality + qualityPoints[page - offset - 1][btnId],
               time: prev.time + timePoints[page - offset - 1][btnId],
-              price: prev.price + pricePoints[page - offset - 1][btnId]
+              price: prev.price + pricePoints[page - offset - 1][btnId],
+              privacy: prev.privacy + privacyPoints[page - offset - 1][btnId]
             }));
             if (page < offset + btnTexts.length) {
               setPage(page + 1);
@@ -142,7 +156,8 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
   const avgQuality = scores.quality / btnTexts.length;
   const avgTime = scores.time / btnTexts.length;
   const avgPrice = scores.price / btnTexts.length;
-  const avgTotal = (avgQuality + avgTime + avgPrice) / 3;
+  const avgTotal = (avgQuality + avgTime + avgPrice) / btnTexts.length;
+  const avgTotalWithPrivacy = avgTotal * scores.privacy;
 
   const choices = [
     threeOptionsEval(avgQuality),
@@ -165,7 +180,7 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
   const retry = () => {
     setButtonTexts(btnTexts[1]);
     setInstruction(instructions[0]);
-    setScores({ quality: 0, time: 0, price: 0 });
+    setScores({ quality: 0, time: 0, price: 0 , privacy: 0});
     setCalcFinished(false);
     setPage(3);
 
@@ -179,7 +194,10 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
     else if(choices[3] === 2){
       retry();
     }else{
-      return setStage("game");
+      return () => {
+        setTotalPoints(prev => prev+avgTotalWithPrivacy);
+        setStage("game");
+      }
     }
   };
 
@@ -198,8 +216,8 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
         return <>
           <pixiText
                   text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
-                  x={dimensions.width * 0.15}
-                  y={dimensions.height * 0.2}
+                  x={85}
+                  y={65}
                   style={{
                     fontFamily: 'micro5',
                     fontSize: 30,
@@ -210,8 +228,8 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
           />
           {showButton &&
                   <Button
-                          x={dimensions.width * 0.7}
-                          y={dimensions.height * 0.85}
+                          x={375}
+                          y={275}
                           color={0xdcc08e}
                           lineColor={0x5d3c1a}
                           width={90}
@@ -233,13 +251,13 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
       for (let i = 0; i < 4; i++) {
         btns.push(
                 <Button
-                        key={i}
-                        x={dimensions.width * 0.25}
-                        y={dimensions.height * (0.3 + i * 0.2)}
-                        color={0xdcc08e}
+                        key={btnTexts[i]}
+                        x={136}
+                        y={86 + (i * 60)}
+                        color={0xC4A484}
                         lineColor={0x5d3c1a}
-                        width={dimensions.width * 0.5}
-                        height={dimensions.height * 0.1}
+                        width={272}
+                        height={38}
                         label={buttonTexts[order[i]] || `Button ${i + 1}`}
                         action={btnAction(order[i])}
                 />
@@ -248,8 +266,8 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
       return <>
         {<pixiText
                 text={instruction.toUpperCase()}
-                x={dimensions.width*0.5}
-                y={dimensions.height*0.08}
+                x={272}
+                y={25}
                 style={{
                   fontFamily: 'micro5',
                   fontSize: 36,
@@ -273,8 +291,8 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
       return <>
         <pixiText
                 text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
-                x={dimensions.width * 0.15}
-                y={dimensions.height * 0.15}
+                x={85}
+                y={65}
                 style={{
                   fontFamily: 'micro5',
                   fontSize: 30,
@@ -286,14 +304,14 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
         {showButton &&
                 <Button
                         anchor={{x: 0.5, y:0.5}}
-                        x={dimensions.width * 0.4}
-                        y={dimensions.height * 0.85}
-                        width={dimensions.width * 0.2}
-                        height={dimensions.height*0.1}
+                        x={217}
+                        y={275}
+                        width={110}
+                        height={35}
                         color={0xdcc08e}
                         lineColor={0x5d3c1a}
                         label={btnText}
-                        action={action}
+                        action={action()}
                 />}
       </>
     }
@@ -308,8 +326,8 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
                         eventMode={'static'}
                         scale={0.6}
                         texture={textures.recipeopen}
-                        x={dimensions.width*0.5}
-                        y={dimensions.height*0.68}
+                        x={273}
+                        y={210}
                 />
         )
       }else if(background === "market"){
@@ -320,15 +338,15 @@ export const IngredientsStage = ({ setStage, dimensions }) => {
                         scale={0.6}
                         texture={textures.marketBackground}
                         x={0}
-                        y={-100}
+                        y={-200}
                 />
                 <pixiSprite
                         anchor={0.5}
                         eventMode={'static'}
                         scale={0.45}
                         texture={textures.market}
-                        x={dimensions.width * 0.5}
-                        y={dimensions.height * 0.55}
+                        x={272}
+                        y={170}
                 />
                 </>
         )

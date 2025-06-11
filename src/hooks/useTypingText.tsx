@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export const useTypingText = (fullText: string, speed: number = 50) => {
+export const useTypingText = (fullText: string = '', speed: number = 50) => {
   const [typedText, setTypedText] = useState('');
   const [typingDone, setTypingDone] = useState(false);
   const [showCursor, setShowCursor] = useState(true);

@@ -4,14 +4,13 @@ import {useCallback, useEffect, useState} from "react";
 import {Button} from "./Button.tsx";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
-import {data} from "react-router-dom";
 
 extend({
   Sprite,
   Text
 });
 
-export const CookingStage = ({setStage}) => {
+export const CookingStage = ({setStage, setTotalPoints}) => {
 
   const [showButton, setShowButton] = useState(false);
   const [page, setPage] = useState(1);
@@ -27,7 +26,6 @@ export const CookingStage = ({setStage}) => {
 
   const instruction = "Alright, lets make a meal out of it. \n\n" +
           "Our smartkitchen can prepare all the ingredients but we have to chose the right machine to cook our dish"
-
 
   const texturePaths: { [key: string]: string } = {
     recipeopen: "/cooking-sprites/recipeopen.png",
@@ -199,13 +197,36 @@ export const CookingStage = ({setStage}) => {
     }
   }, [hoveredId]);
 
+  const evaluatePoints = () => {
+    let points = 0;
+    if (selected != ""){
+      for (let i = 0; i < stars[devices.indexOf(selected)].length; i++) {
+        points += (stars[devices.indexOf(selected)][i]*20/criterias.length);
+      }
+    }else{
+      points = 0;
+    }
+    return points;
+  }
+
   const endGame = () => {
     if (selected === devices[2]){
       setRetry(true);
     }else if(!retry){
+      setRetry(false);
+      setTotalPoints(prev => prev + evaluatePoints());
       setStage("game");
     }
   };
+
+  useEffect(() => {
+    if (retry){
+      setRetry(false);
+      setSelected("");
+      setAllHoverable(true);
+      setPage(2);
+    }
+  }, [retry]);
 
 
   const instructionPage =  () => {
@@ -270,6 +291,7 @@ export const CookingStage = ({setStage}) => {
                 />
                 {renderElements.map((object) => (
                         <pixiSprite
+                                key={object.id}
                                 anchor={0.5}
                                 eventMode={'static'}
                                 scale={object.scale}
