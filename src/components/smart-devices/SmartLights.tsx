@@ -1,7 +1,6 @@
 import {MultipleChoiceComponent} from "../MultipleChoiceComponent.tsx";
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
-import "./Modal.css";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 

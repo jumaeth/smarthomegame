@@ -30,7 +30,7 @@ export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallb
   const [frame, setFrame] = useState(0);
 
   return (
-          <div className="bg-[#e37412]">
+          <div>
             <h1><Trans>Überwachungskamera</Trans></h1>
             <div className="modal-content">
               {frame == 0 && (
