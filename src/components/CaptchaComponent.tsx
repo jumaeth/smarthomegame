@@ -5,13 +5,14 @@ import Button from "@/components/ui-components/Button";
 
 type CaptchaProps = {
   pictureFolder: string;
-  solutions: boolean[];
+  solutions: (boolean | string)[];
   onComplete: (isCompleted: boolean) => void;
 };
 
 export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: CaptchaProps) => {
   const images = loadImagesFromFolder(pictureFolder);
   const imageList = Object.values(images);
+  const [feedbackMsg, setFeedbackMsg] = useState<string>("");
 
   const [displayedIndices, setDisplayedIndices] = useState<number[]>([]);
   const [score, setScore] = useState<number>(0);
@@ -22,14 +23,20 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
     setDisplayedIndices(Array.from({length: 9}, (_, i) => i));
   }, []);
 
+
   const handleImageClick = (gridIndex: number) => {
     if (isCompleted) return;
     const imageIndex = displayedIndices[gridIndex];
     if (imageIndex < solutions.length) {
       setScore(prevScore => prevScore + (solutions[imageIndex] ? 1 : -1));
+
+      if (solutions[imageIndex] !== true && solutions[imageIndex] !== false && typeof solutions[imageIndex] === "string") {
+        setFeedbackMsg(solutions[imageIndex].toString());
+      } else {
+        setFeedbackMsg("");
+      }
     }
 
-    // Replace clicked image with next available image
     setDisplayedIndices(prev => {
       const updated = [...prev];
       const nextImageIndex = Math.max(...prev) + 1;
@@ -68,6 +75,8 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
                         {score > 0 ? <Trans>Success!</Trans> : <Trans>Failed!</Trans>}
                       </div>
               )}
+
+              {feedbackMsg && <div className="text-red-600 text-sm mt-1">{feedbackMsg}</div>}
 
               <Button onClick={submitAnswer} disabled={isCompleted}>
                 <Trans>Antwort abschicken</Trans>

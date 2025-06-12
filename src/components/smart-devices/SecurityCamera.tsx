@@ -20,12 +20,35 @@ export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallb
       t`Möchtest du die Bilddaten zur Speicherung und Verarbeitung übermitteln?`,
       t`Möchtest du die Bilderkennung aktivieren?`
     ],
-    solutions: [true, true, false, false],
+    solutions: [
+      true,
+      true,
+      t`Das ist nich nötig und ein Risiko für deine Privatsphäre`,
+      t`Das ist nich nötig und ein Risiko für deine Privatsphäre`],
     handleCompletion: (isCorrect: boolean) => {
       console.log("Completed:", isCorrect);
       setFrame(1);
     },
   };
+
+  const CaptchaComponentProps = {
+    pictureFolder: "camera-placements",
+    solutions: [
+            true,
+      true,
+      true,
+      t`Das ist ein Schlechter Platz für eine Kamera weil Gründe`,
+      true,
+      t`Das ist ein Schlechter Platz für eine Kamera weil Gründe`,
+      true,
+      true,
+      t`Das ist ein Schlechter Platz für eine Kamera weil Gründe`,
+      t`Das ist ein Schlechter Platz für eine Kamera weil Gründe`,
+      true,
+      true,
+      true],
+    onComplete: handleQuizCompletion
+  }
 
   const [frame, setFrame] = useState(0);
 
@@ -51,9 +74,9 @@ export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallb
                           wieder
                           entfernen möchtest.</Trans></p>
                         <CaptchaComponent
-                                pictureFolder="camera-placements"
-                                solutions={[true, true, true, false, true, false, true, true, false, false, true, true, true]}
-                                onComplete={handleQuizCompletion}
+                                pictureFolder={CaptchaComponentProps.pictureFolder}
+                                solutions={CaptchaComponentProps.solutions}
+                                onComplete={CaptchaComponentProps.onComplete}
                         />
                       </>)}
             </div>
