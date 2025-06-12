@@ -3,11 +3,11 @@ import {useCallback, useEffect, useState} from "react";
 import {calculateCanvasSize} from "@/utils/movment";
 import {MainContainer} from "@/pixi/container/MainContainer";
 import {IntroContainer} from "@/pixi/container/IntroContainer";
-import {MapKey} from "@/types/maps";
+import {DeviceKey, MapKey} from "@/types/maps";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps";
 
 interface MainStageProps {
-  triggerOverlay: () => void;
+  triggerOverlay: (device :DeviceKey) => void;
 }
 
 export const MainStage = ({ triggerOverlay }: MainStageProps) => {
@@ -24,8 +24,8 @@ export const MainStage = ({ triggerOverlay }: MainStageProps) => {
     setCurrentMap(newMap);
   };
 
-  const handleMapOverlay = () => {
-    triggerOverlay();
+  const handleMapOverlay = (device : DeviceKey) => {
+    triggerOverlay(device);
   }
 
   useEffect(() => {

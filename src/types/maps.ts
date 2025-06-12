@@ -13,11 +13,17 @@ export type Transition = {
 
 export type Overlay = {
   pos: Position;
-  to: MapKey;
+  device: DeviceKey;
 }
 
 export type MapKey =
         | 'livingroom'
         | 'hallway'
         | 'kitchen'
+        ;
+
+export type DeviceKey=
+        | 'smartlights'
+        | 'securitycamera'
+        | 'smarttv'
         ;

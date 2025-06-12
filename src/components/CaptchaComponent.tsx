@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {Trans} from "@lingui/react/macro";
 import {loadImagesFromFolder} from "./loadImages";
+import Button from "@/components/ui-components/Button";
 
 type CaptchaProps = {
   pictureFolder: string;
@@ -68,17 +69,9 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
                       </div>
               )}
 
-              <button
-                      onClick={submitAnswer}
-                      disabled={isCompleted}
-                      className={`
-            px-4 py-2 rounded-md font-medium
-            ${isCompleted ? "bg-gray-300 text-gray-600" : "bg-blue-600 text-black hover:bg-blue-700"}
-            transition-colors duration-200
-          `}
-              >
+              <Button onClick={submitAnswer} disabled={isCompleted}>
                 <Trans>Antwort abschicken</Trans>
-              </button>
+              </Button>
 
               {!isCompleted && (
                       <div className="text-sm text-gray-600 mt-1">

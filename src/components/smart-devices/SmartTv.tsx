@@ -1,5 +1,6 @@
 import {MultipleChoiceComponent} from "../MultipleChoiceComponent.tsx";
 import "./Modal.css";
+import {t} from "@lingui/core/macro";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
@@ -13,11 +14,14 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
     }
   };
 
-  const smartDeviceTv = new MultipleChoiceComponent(
-          ["Möchtest du die Spracherkennung aktivieren?", "Möchtest du die Kamera aktivieren?"],
-          [false, false],
-          handleQuizCompletion
-  );
+  const MultipleChoiceProps = {
+    questions: [
+      t`Möchtest du die Spracherkennung aktivieren?`,
+      t`Möchtest du die Kamera aktivieren?`,
+    ],
+    solutions: [false, false],
+    onComplete: handleQuizCompletion,
+  };
 
   return (
           <>
@@ -25,7 +29,11 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
             <div className="modal-content">
               <h1>Smart TV Mission</h1>
               <h3>Beantworte die folgenden Fragen ...</h3>
-              <ul>{smartDeviceTv.getQuestions()}</ul>
+              <MultipleChoiceComponent
+                      questions={MultipleChoiceProps.questions}
+                      solutions={MultipleChoiceProps.solutions}
+                      onComplete={MultipleChoiceProps.onComplete}
+              />
             </div>
           </>
   );

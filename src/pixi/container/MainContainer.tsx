@@ -7,7 +7,7 @@ import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-se
 import {Camera} from "@/pixi/camera/Camera";
 import {LevelOverlay} from "@/pixi/levels/LevelOverlay";
 import {loadTexture} from "@/utils/loadTexture";
-import {MapKey} from "@/types/maps";
+import {DeviceKey, MapKey} from "@/types/maps";
 import {useLevelTextures} from "@/hooks/map/useLevelTextures";
 import {getMapTransition, getSpawnForMap} from "@/utils/mapTransition";
 import {Position} from "@/types/movement";
@@ -25,7 +25,7 @@ interface MainContainerProps {
   collisionMap: number[];
   onMapChange: (newMap: MapKey) => void;
   children?: React.ReactNode;
-  onMapOverlay?: () => void;
+  onMapOverlay: (device: DeviceKey) => void;
 }
 
 export const MainContainer = ({
@@ -97,7 +97,7 @@ export const MainContainer = ({
     const overlay = getMapOverlay(map, tileX, tileY);
 
     if (overlay){
-      onMapOverlay?.()
+      onMapOverlay?.(overlay.device);
     }
 
     updateCharacterPosition(pos);

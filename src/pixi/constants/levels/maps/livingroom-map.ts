@@ -18,5 +18,6 @@ export const LIVINGROOM_TRANSITIONS: Transition[] = [
 ];
 
 export const LIVINGROOM_OVERLAYS: Overlay[] = [
-  {pos: {x: 15, y: 6}, to: 'hallway'},
+  {pos: {x: 15, y: 6}, device: 'securitycamera'},
+  {pos: {x: 2, y: 3}, device: 'smartlights'},
 ];
