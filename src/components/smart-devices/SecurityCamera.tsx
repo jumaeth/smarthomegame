@@ -7,6 +7,7 @@ import {useState} from "react";
 type onCompletionCallback = (isCompleted: boolean) => void;
 
 export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
+  const [frame, setFrame] = useState(0);
   const handleQuizCompletion = (isCompleted: boolean) => {
     if (isCompleted) {
       onCompletion(isCompleted);
@@ -49,8 +50,6 @@ export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallb
       true],
     onComplete: handleQuizCompletion
   }
-
-  const [frame, setFrame] = useState(0);
 
   return (
           <div>
