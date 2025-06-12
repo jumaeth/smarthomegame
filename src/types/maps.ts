@@ -11,6 +11,11 @@ export type Transition = {
   to: MapKey;
 }
 
+export type Overlay = {
+  pos: Position;
+  to: MapKey;
+}
+
 export type MapKey =
         | 'livingroom'
         | 'hallway'

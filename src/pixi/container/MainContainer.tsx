@@ -14,6 +14,7 @@ import {Position} from "@/types/movement";
 import {Door} from "@/pixi/levels/Door";
 import {DoorState} from "@/types/door";
 import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
+import {getMapOverlay} from "@/utils/mapOverlay";
 
 interface MainContainerProps {
   canvasSize: {
@@ -24,6 +25,7 @@ interface MainContainerProps {
   collisionMap: number[];
   onMapChange: (newMap: MapKey) => void;
   children?: React.ReactNode;
+  onMapOverlay?: () => void;
 }
 
 export const MainContainer = ({
@@ -31,7 +33,8 @@ export const MainContainer = ({
                                 map,
                                 collisionMap,
                                 onMapChange,
-                                children
+                                children,
+                                onMapOverlay
                               }: PropsWithChildren<MainContainerProps>) => {
   const [inTransition, setInTransition] = useState(false);
   const [pendingTransition, setPendingTransition] = useState<{to: MapKey, spawn: Position} | null>(null);
@@ -90,6 +93,13 @@ export const MainContainer = ({
       // }
       setShouldSnapCamera(true);
     }
+
+    const overlay = getMapOverlay(map, tileX, tileY);
+
+    if (overlay){
+      onMapOverlay?.()
+    }
+
     updateCharacterPosition(pos);
   };
 
