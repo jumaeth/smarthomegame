@@ -36,3 +36,4 @@ dist-ssr
 /.vite/deps/react-router-dom.js.map
 /.vite/deps/react_jsx-dev-runtime.js
 /.vite/deps/react_jsx-dev-runtime.js.map
+/tsconfig.tsbuildinfo
