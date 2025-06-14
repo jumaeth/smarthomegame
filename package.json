@@ -11,6 +11,9 @@
     "test": "jest"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^7.1.1",
     "@pixi/assets": "^7.4.3",
     "@pixi/react": "^7.1.2",
     "@tailwindcss/vite": "^4.1.3",

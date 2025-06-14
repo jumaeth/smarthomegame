@@ -4,10 +4,12 @@ import {SmartLights} from "./smart-devices/SmartLights.tsx";
 import {ModalWrapperComponent} from "./ModalWrapperComponent.tsx";
 import {SmartDevice} from "@/objects/SmartDevice";
 import {useGameService} from "@/hooks/useGameService";
+import SmartHomeHub from "./smart-devices/SmartHomeHub";
 
 export const LivingRoom = () => {
   const smartTvModalRef = useRef<{ closeModal: () => void }>(null);
   const smartLightsModalRef = useRef<{ closeModal: () => void }>(null);
+  const smartHomeHubModalRef = useRef<{ closeModal: () => void }>(null);
   const roomName = "Living Room"; //ToDo find better way to match with GameService
 
   const gameService = useGameService();
@@ -15,6 +17,7 @@ export const LivingRoom = () => {
 
   let isSmartTvCompleted: boolean = false;
   let isSmartLightsCompleted: boolean = false;
+  let isSmartHomeHubCompleted: boolean = false;
 
   const smartTvCallback = (isCompleted: boolean) => {
     isSmartTvCompleted = isCompleted;
@@ -28,8 +31,16 @@ export const LivingRoom = () => {
     checkForCompletion();
   };
 
+  const smartHomeHubCallback = (isCompleted: boolean) => {
+    isSmartHomeHubCompleted = isCompleted;
+    smartHomeHubModalRef.current?.closeModal();
+    checkForCompletion();
+  };
+
   const checkForCompletion = () => {
-    if ((!devices.includes("SmartTv") || isSmartTvCompleted) && (!devices.includes("SmartLights") || isSmartLightsCompleted)) {
+    if ((!devices.includes("SmartTv") || isSmartTvCompleted) && 
+        (!devices.includes("SmartLights") || isSmartLightsCompleted) &&
+        (!devices.includes("SmartHomeHub") || isSmartHomeHubCompleted)) {
       console.log("Living Room erfolgreich abgeschlossen!");
       gameService.completeRoom(roomName);
     } else {
@@ -51,6 +62,13 @@ export const LivingRoom = () => {
                             ref={smartLightsModalRef}
                             content={<SmartLights onCompletion={smartLightsCallback}/>}
                             openButton={<button>Smart Lights öffnen</button>}
+                    />
+            )}
+            {devices.includes("SmartHomeHub") && (
+                    <ModalWrapperComponent
+                            ref={smartHomeHubModalRef}
+                            content={<SmartHomeHub onCompletion={smartHomeHubCallback}/>}
+                            openButton={<button>Smart Home Hub öffnen</button>}
                     />
             )}
           </div>
