@@ -18,7 +18,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
 
   const draggingRef = useRef(false);
 
-  const instruction = "We are nearly there! \n\nIn a final step we have to set the table and plate our meal.";
+  const instruction = "Wir sind fast fertig! \n\nAls letztes müssen wir den Tisch decken und unser Gericht servieren";
 
   const texturePaths = {
     recipeopen: "/cooking-sprites/recipeopen.png",
@@ -275,7 +275,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
                                 lineColor={0x5d3c1a}
                                 width={90}
                                 height={35}
-                                label={"next"}
+                                label={"Weiter"}
                                 action={pageUP}
                         />)}
               </>

@@ -15,7 +15,7 @@ export const RecipeStage = ({setStage, setTotalPoints}) => {
   const [text, setText] = useState('');
   const [showButton, setShowButton] = useState(false);
   const [page, setPage] = useState(1);
-  const [label, setLabel] = useState("next");
+  const [label, setLabel] = useState("weiter");
 
 
   const texturePaths: { [key: string]: string } = {
@@ -23,9 +23,9 @@ export const RecipeStage = ({setStage, setTotalPoints}) => {
   };
 
   const pageTexts = [
-          "Welcome Chef! \nToday we are cooking some pasta.\n\nLuckily, with the right configuration" +
-          " our smart kitchen will do the heavy work for us",
-          "We need to do the following steps: \n\n 1. Buy the ingredients \n 2. Prepare and cook the meal \n 3. Serve the meal"
+          "Wilkommen Chef! \nHeute kochen wir Pasta!\n\nZum Glück kann unsere Smartkitchen mit den richtigen " +
+          "Einstellungen die meiste Arbeit übernehmen.",
+          "Wir müssen folgende Schritte befolgen: \n\n 1. Zutaten einkaufen \n 2. Gericht vorbereiten und kochen \n 3. Gericht servieren"
   ];
 
 
@@ -54,7 +54,7 @@ export const RecipeStage = ({setStage, setTotalPoints}) => {
   const action = () => {
     if (page < pageTexts.length) {
       if (page === pageTexts.length - 1) {
-        setLabel("end");
+        setLabel("Ende");
       }
       setPage(page + 1);
     } else {

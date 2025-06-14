@@ -13,35 +13,35 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
   };
 
   const explanations = [
-          "Lets start by buying the needed ingredients. For a good pasta we need: \n\n\t1. Spaghetti\n\t2. Tomatoes\n\t3. Spices\n\t4. Cheese",
-          "You have to consider different criteria like cost, time and quality. \n\nBe careful with trading your " +
-          "personal information to get better results for the ingredients."
+    "Lass uns zuerst die benötigten Zutaten kaufen. Für gute Pasta brauchen wir: \n\n\t1. Spaghetti\n\t2. Tomaten\n\t3. Gewürze\n\t4. Käse",
+    "Du musst verschiedene Kriterien wie Kosten, Zeit und Qualität beachten. \n\nSei vorsichtig damit, deine Daten für " +
+    "bessere Resultate preiszugeben."
   ];
 
   const btnTexts = [
-    ["Local supermarket, cash", "Grocery Delivery Service", "Special Italian Market", "Discounter, pay with card"],
-    ["Farmer shop at the farm", "Vegie subscription box", "Co-op Farmer store", "Market"],
-    ["From your own balcony", "Hyped Spice Startup", "Grandmas garden ", "Healthy food store"],
-    ["Drive to italy", 'Visit workshop at farm', "Visit supermarket (again)", 'From "parmesan.com"']
+    ["Lokaler Supermarkt, bar", "Gemüse Lieferdienst", "Italien Fachhändler", "Discounter, mit Karte"],
+    ["Laden am Bauernhof", "Vegetarische box", "Co-op Bauernmarkt", "Markt"],
+    ["Eigener Balkon", "Gehyptes Gewürz Startup", "Omas Garten ", "Nachhaltiger Laden"],
+    ["Trip nach Italien", 'Workshop auf Bauernhof', "Im supermarkt (nochmal)", 'Von "parmesan.com"']
   ];
 
   const instructions = [
-          "Buy Spaghetti", "Buy Tomatoes", "Buy Spices", "Buy Cheese"
+    "Spaghetti kaufen", "Tomaten kaufen", "Gewürze kaufen", "Käse kaufen"
   ];
 
   const finalMessage = [
-          "Thanks for your help, lets see:\n\n- The ingredients have an",
-          "quality.\n- Shopping could be done", "\n- Your wallet", "your choices."
+    "Danke für deine Hilfe, mal sehen:\n\n- Die Zutaten haben eine",
+    "Qualität.\n- Der Einkauf war", "\n- Dein Portmonee", "deine Entscheidungen."
   ];
 
   const evalChoices = [
-          ["great", "average", "bad"],
-          ["quickly.", "slowly."],
-          ["was happy about", "couldn't complain about", "wouldn't agree"]
+    ["Super", "normale", "schlechte"],
+    ["schnell.", "langsam."],
+    ["war glücklich über", "nicht böse mit", "war nicht einverstanden mit"]
   ];
 
   const conclusion = [
-    "Great job", "Move on", "Try again"
+    "Super job", "Weiter", "Nochmals"
   ];
 
   function shuffledRange(n: number): number[] {
@@ -234,7 +234,7 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
                           lineColor={0x5d3c1a}
                           width={90}
                           height={35}
-                          label={"next"}
+                          label={"Weiter"}
                           action={action}
                   />}
         </>

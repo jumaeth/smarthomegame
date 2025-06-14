@@ -14,7 +14,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
 
   const [showButton, setShowButton] = useState(false);
   const [page, setPage] = useState(1);
-  const [label] = useState("next");
+  const [label] = useState("weiter");
   const [showInfo, setShowInfo] = useState(true);
   const [hoveredId, setHoveredId] = useState("");
   const [allHoverable, setAllHoverable] = useState(true);
@@ -24,8 +24,8 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
   const [infoComment, setInfoComment] = useState("");
   const [retry, setRetry] = useState(false);
 
-  const instruction = "Alright, lets make a meal out of it. \n\n" +
-          "Our smartkitchen can prepare all the ingredients but we have to chose the right machine to cook our dish"
+    const instruction = "Okay, lass uns ein Gericht daraus machen. \n\n" +
+          "Unsere Smartkitchen kann alle Zutaten vorbereiten aber wir müssen die richtige Maschine zum Kochen des Gerichts auswählen";
 
   const texturePaths: { [key: string]: string } = {
     recipeopen: "/cooking-sprites/recipeopen.png",
@@ -40,14 +40,14 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
   const devices = ["cookingfield", "foodprocessor", "microwave", "steamer"];
 
   const criterias = [
-    "Energy", "Permissions", "Time", "Handling"
+    "Energie", "Berechtigung", "Zeit", "Bedienung"
   ];
 
   const dataComments = [
-          "Integrated with energy monitoring system", // Cookingfield
-          "Stores user preferences and meal history", // Food Processor
-          "Tracks time and power settings",// Microwave
-          "Connects periodically to cloud for updates" //Steamer
+          "Integriert in energy monitoring system", // Cookingfield
+          "Speichert Vorlieben und gekochte Gerichte", // Food Processor
+          "Speichert zeit und verbrauchte Energie",// Microwave
+          "Verbindet reglemässig mit cloud für updates" //Steamer
   ];
 
   const stars = [
