@@ -1,43 +1,31 @@
 import {Stage} from "@pixi/react";
 import {useCallback, useEffect, useState} from "react";
 import {calculateCanvasSize} from "@/utils/movment";
-import {MainContainer} from "@/pixi/container/MainContainer";
-import {MapKey} from "@/types/maps";
-import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps";
+import {IntroContainer} from "@/pixi/container/IntroContainer";
 import {useNavigate} from "react-router-dom";
 
-export const FirstFloor = () => {
+export const IntroPage = () => {
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
-
-  const roomName = "hallway"; //ToDo find better way to match with GameService
-
-  const collisionMap = LEVEL_COLLISION_MAPS[roomName];
   const navigate = useNavigate();
-
 
   const updateCanvasSize = useCallback(() => {
     setCanvasSize(calculateCanvasSize());
   }, [])
 
-  const handleMapChange = (newMap: MapKey) => {
-    navigate(`/game/${newMap}`);
-  };
 
   useEffect(() => {
     window.addEventListener("resize", updateCanvasSize);
     return () => {
       window.removeEventListener("resize", updateCanvasSize);
     }
-  }, [updateCanvasSize, collisionMap])
+  }, [updateCanvasSize])
 
   return (
           <>
             <Stage width={canvasSize.width} height={canvasSize.height}>
-              <MainContainer
+              <IntroContainer
                       canvasSize={canvasSize}
-                      map={roomName}
-                      collisionMap={collisionMap}
-                      onMapChange={handleMapChange}
+                      onStart={() => navigate("/game/livingroom")}
               />
             </Stage>
           </>
