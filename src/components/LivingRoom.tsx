@@ -20,11 +20,11 @@ export const LivingRoom = () => {
   const gameService = useGameService();
   const devices = gameService.getDeviceForRoom(roomName).map((device: SmartDevice) => device.name);
 
-  let isSmartTvCompleted: boolean = false;
-  let isSmartLightsCompleted: boolean = false;
+  const [isSmartTvCompleted, setIsSmartTvCompleted] = useState(false);
+  const [isSmartLightsCompleted, setIsSmartLightsCompleted] = useState(false);
 
   const smartTvCallback = (isCompleted: boolean) => {
-    isSmartTvCompleted = isCompleted;
+    setIsSmartTvCompleted(isCompleted);
     setIsPaused(false);
     smartTvModalRef.current?.toggleModal();
     checkForCompletion();
@@ -38,7 +38,7 @@ export const LivingRoom = () => {
   }
 
   const smartLightsCallback = (isCompleted: boolean) => {
-    isSmartLightsCompleted = isCompleted;
+    setIsSmartLightsCompleted(isCompleted);
     setIsPaused(false);
     smartLightsModalRef.current?.toggleModal();
     checkForCompletion();

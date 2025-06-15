@@ -17,7 +17,7 @@ export const Kitchen = () => {
 
     const smartHomeHubModalRef = useRef<{ toggleModal: () => void }>(null);
     const devices = gameService.getDeviceForRoom(roomName).map((device: SmartDevice) => device.name);
-    let isSmartHomeHubCompleted: boolean = false;
+    const [isSmartHomeHubCompleted, setSmartHomeHubCompleted] = useState(false);
 
 
     const checkForCompletion = () => {
@@ -30,7 +30,7 @@ export const Kitchen = () => {
     };
 
     const smartHomeHubCallback = (isCompleted: boolean) => {
-        isSmartHomeHubCompleted = isCompleted;
+        setSmartHomeHubCompleted(isCompleted);
         setIsPaused(false);
         smartHomeHubModalRef.current?.toggleModal();
         checkForCompletion();
