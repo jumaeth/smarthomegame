@@ -1,5 +1,4 @@
-import {useCallback, useEffect, useRef, useState} from "react";
-import {SmartDevice} from "@/objects/SmartDevice";
+import {useCallback, useEffect,  useState} from "react";
 import {useGameService} from "@/hooks/useGameService";
 import {calculateCanvasSize} from "@/utils/movment.ts";
 import {MapKey} from "@/types/maps.ts";
@@ -8,17 +7,17 @@ import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 
 export const Kitchen = () => {
-  const smartTvModalRef = useRef<{ closeModal: () => void }>(null);
-  const smartLightsModalRef = useRef<{ closeModal: () => void }>(null);
+  // const smartTvModalRef = useRef<{ closeModal: () => void }>(null);
+  // const smartLightsModalRef = useRef<{ closeModal: () => void }>(null);
   const roomName = "kitchen"; //ToDo find better way to match with GameService
 
   const gameService = useGameService();
-  const devices = gameService.getDeviceForRoom(roomName).map((device: SmartDevice) => device.name);
+  // const devices = gameService.getDeviceForRoom(roomName).map((device: SmartDevice) => device.name);
 
 
-  const checkForCompletion = () => {
-    console.log("Not implemented yet");
-  };
+  // const checkForCompletion = () => {
+  //   console.log("Not implemented yet");
+  // };
 
   //Render Code
   //ToDo check to remove duplicated code in other rooms
@@ -31,6 +30,8 @@ export const Kitchen = () => {
 
 
   function handleMapChange(newMap: MapKey): boolean {
+    //Todo remove
+    console.log("Map changed to:", newMap);
     return gameService.leaveRoom(roomName);
   }
 

@@ -80,6 +80,7 @@ export const LivingRoom = () => {
 
 
   function handleMapChange(newMap: MapKey): boolean {
+    console.log(newMap); //ToDo remove
     return gameService.leaveRoom(roomName);
   }
 
