@@ -1,50 +1,61 @@
-type MultipleChoiceCallback = (isCompleted: boolean) => void;
+import { useState } from "react";
 
-export class MultipleChoiceComponent {
+type MultipleChoiceProps = {
   questions: string[];
   solutions: boolean[];
-  answers: boolean[];
-  onComplete: MultipleChoiceCallback;
+  onComplete: (isAllCorrect: boolean) => void;
+};
 
-  constructor(
-          questions: string[],
-          solutions: boolean[],
-          onComplete: MultipleChoiceCallback
-  ) {
-    this.questions = questions;
-    this.solutions = solutions;
-    this.answers = new Array(this.questions.length).fill(false);
-    this.onComplete = onComplete;
-  }
+export const MultipleChoiceComponent = ({
+                                          questions,
+                                          solutions,
+                                          onComplete,
+                                        }: MultipleChoiceProps) => {
+  const [answers, setAnswers] = useState<boolean[]>(
+          new Array(questions.length).fill(false)
+  );
+  const [submitted, setSubmitted] = useState(false);
 
-  getQuestions() {
-    const handleAnswer = (i: number, answer: boolean) => {
-      this.answers[i] = answer;
-    };
+  const handleAnswer = (i: number, value: boolean) => {
+    const next = [...answers];
+    next[i] = value;
+    setAnswers(next);
+  };
 
-    const submitAnswer = () => {
-      const isCorrect = this.answers.every((val, i) => val === this.solutions[i]);
-      console.log(isCorrect ? "Yay! answers are correct" : "Oh No! your answers are not correct");
-      this.onComplete(isCorrect); // Callback aufrufen
-    };
+  const submitAnswer = () => {
+    const isAllCorrect = answers.every((ans, i) => ans === solutions[i]);
+    setSubmitted(true);
+    onComplete(isAllCorrect);
+  };
 
-    return (
-            <div>
-              <ul>
-                {this.questions.map((q, i) => (
-                        <li key={i}>
-                          {q}
-                          <label className="switch">
+  return (
+          <div>
+            <ul>
+              {questions.map((q, i) => {
+                const isCorrect = answers[i] === solutions[i];
+                return (
+                        <li key={i} style={{ marginBottom: 8 }}>
+                          <label>
                             <input
                                     type="checkbox"
+                                    disabled={submitted}
+                                    checked={answers[i]}
                                     onChange={(e) => handleAnswer(i, e.target.checked)}
-                            />
+                            />{" "}
+                            {q}
                           </label>
+                          {submitted && (
+                                  <span style={{ marginLeft: 8 }}>
+                  {isCorrect ? "✅" : "❌"}
+                </span>
+                          )}
                         </li>
-                ))}
-                <button onClick={() => submitAnswer()}>Antwort abschicken</button>
-              </ul>
-            </div>
-    );
-  }
-}
+                );
+              })}
+            </ul>
+            {!submitted ? (
+                    <button onClick={submitAnswer}>Antwort abschicken</button>
+            ) : null}
+          </div>
+  );
+};

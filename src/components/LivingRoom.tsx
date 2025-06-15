@@ -6,8 +6,8 @@ import {SmartDevice} from "../objects/SmartDevice.ts";
 import {useGameService} from "../hooks/useGameService.tsx";
 
 export const LivingRoom = () => {
-  const smartTvModalRef = useRef<{ closeModal: () => void }>(null);
-  const smartLightsModalRef = useRef<{ closeModal: () => void }>(null);
+  const smartTvModalRef = useRef<{ closeModal: () => void } | null>(null);
+  const smartLightsModalRef = useRef<{ closeModal: () => void } | null>(null);
   const roomName = "Living Room"; //ToDo find better way to match with GameService
 
   const gameService = useGameService();
@@ -44,14 +44,14 @@ export const LivingRoom = () => {
                     <ModalWrapperComponent
                             ref={smartTvModalRef}
                             content={<SmartTv onCompletion={smartTvCallback}/>}
-                            openButton={<button>Smart TV öffnen</button>}
+                            openButton="Smart TV öffnen"
                     />
             )}
             {devices.includes("SmartLights") && (
                     <ModalWrapperComponent
                             ref={smartLightsModalRef}
                             content={<SmartLights onCompletion={smartLightsCallback}/>}
-                            openButton={<button>Smart Lights öffnen</button>}
+                            openButton="Smart Lights öffnen"
                     />
             )}
           </div>
