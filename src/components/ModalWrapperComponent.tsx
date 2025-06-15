@@ -17,7 +17,7 @@ export const ModalWrapperComponent = forwardRef(({content, onClose}: ModalWrappe
   }
 
   useImperativeHandle(ref, () => ({
-    closeModal: toggleModal,
+    toggleModal,
   }));
   return (
           <>

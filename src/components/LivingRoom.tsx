@@ -26,28 +26,28 @@ export const LivingRoom = () => {
   const smartTvCallback = (isCompleted: boolean) => {
     isSmartTvCompleted = isCompleted;
     setIsPaused(false);
-    smartTvModalRef.current?.closeModal();
+    smartTvModalRef.current?.toggleModal();
     checkForCompletion();
   };
 
   const openSmartTvModal = () => {
     if (smartTvModalRef.current) {
       setIsPaused(true)
-      smartTvModalRef.current.closeModal();
+      smartTvModalRef.current.toggleModal();
     }
   }
 
   const smartLightsCallback = (isCompleted: boolean) => {
     isSmartLightsCompleted = isCompleted;
     setIsPaused(false);
-    smartLightsModalRef.current?.closeModal();
+    smartLightsModalRef.current?.toggleModal();
     checkForCompletion();
   };
 
   const openSmartLightsModal = () => {
     if (smartLightsModalRef.current) {
       setIsPaused(true)
-      smartLightsModalRef.current.closeModal();
+      smartLightsModalRef.current.toggleModal();
     }
   }
 
