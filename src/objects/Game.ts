@@ -1,4 +1,4 @@
-import {Room} from "./Room.ts";
+import {Room} from "./Room";
 
 export class Game {
   constructor(public rooms: Room[],) {

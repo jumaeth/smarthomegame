@@ -2,29 +2,25 @@ import React, { forwardRef, useImperativeHandle, useState } from "react";
 
 type ModalWrapperProps = {
   content: React.ReactNode;
-  openButton: React.ReactNode;
+  onClose?: () => void;
 };
 
-export const ModalWrapperComponent = forwardRef<
-        { closeModal: () => void },
-        ModalWrapperProps
->(({ content, openButton }, ref) => {
+export const ModalWrapperComponent = forwardRef(({content, onClose}: ModalWrapperProps, ref) => {
   const [isOpen, setIsOpen] = useState(false);
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+  const toggleModal = () => setIsOpen(!isOpen);
 
-  useImperativeHandle(ref, () => ({ closeModal }));
+  function closeModal() {
+    setIsOpen(false);
+    if (onClose) {
+      onClose();
+    }
+  }
 
+  useImperativeHandle(ref, () => ({
+    closeModal: toggleModal,
+  }));
   return (
           <>
-            <button
-                    type="button"
-                    className="btn-modal"
-                    onClick={openModal}
-            >
-              {openButton}
-            </button>
-
             {isOpen && (
                     <div className="modal" role="dialog" aria-modal="true">
                       <div className="overlay" onClick={closeModal} />

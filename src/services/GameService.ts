@@ -1,70 +1,97 @@
-import {Game} from "../objects/Game.ts";
-import {Room} from "../objects/Room.ts";
-import {SmartDevice} from "../objects/SmartDevice.ts";
+import {Game} from "../objects/Game";
+import {Room} from "../objects/Room";
+import {SmartDevice} from "../objects/SmartDevice";
 
 export class GameService {
-    private game: Game | null;
-    private navigate: (path: string) => void;
+  private game: Game | null;
+  private navigate: (path: string) => void;
 
-    constructor(navigate: (path: string) => void) {
-        const rooms = [
-            new Room("Living Room", "/game/living-room", "LivingRoomComponent", [
-                new SmartDevice("SmartTv"),
-                new SmartDevice("SmartLights"),
-            ]),
-        ];
+  constructor(navigate: (path: string) => void) {
+    this.game = new Game(this.setUpRooms());
+    this.navigate = navigate;
+  }
 
-        this.game = new Game(rooms);
-        this.navigate = navigate;
-        console.log(this.game);
+  setUpRooms(): Room[] {
+    return [
+      new Room("livingroom", "/game/livingroom", "LivingRoomComponent", [
+        new SmartDevice("SmartTv"),
+        new SmartDevice("SmartLights"),
+      ]),
+      new Room("kitchen", "/game/kitchen", "KitchenComponent", []),
+    ];
+  }
+
+  completeRoom(roomName: string) {
+    if (!this.game) return;
+
+    const room = this.game.rooms.find((r) => r.name === roomName);
+    if (room) {
+      room.isCompleted = true;
+      if (this.checkGameCompletionConditions()) {
+        this.finishGame();
+      } else {
+        this.continueGame();
+      }
+    }
+  }
+
+  checkGameCompletionConditions(): boolean {
+    if (!this.game) {
+      return false
+    }
+    return this.game.rooms.every((room) => room.isCompleted);
+  }
+
+  getDeviceForRoom(roomName: string) {
+    if (!this.game) {
+      return [];
+    }
+    const room = this.game.rooms.find((room) => room.name === roomName);
+    return room ? room.devices : [];
+  }
+
+  reset(): boolean {
+    // Reset game logic here
+    this.game = null;
+    this.navigate('/');
+    return true;
+  }
+
+  finishGame() {
+    this.navigate('/game/game-over');
+
+  }
+
+  continueGame() {
+    this.navigate('/game');
+  }
+
+  getRooms() {
+    return this.game?.rooms
+  }
+
+  toogleRoomIsLocked(roomName: string) {
+
+    if (!this.game) {
+      return;
     }
 
-    completeRoom(roomName: string) {
-        if (!this.game) return;
-
-        const room = this.game.rooms.find((r) => r.name === roomName);
-        if (room) {
-            room.completed = true;
-            if (this.checkGameCompletionConditions()) {
-                this.finishGame();
-            } else {
-                this.continueGame();
-            }
-        }
-    }
-
-    checkGameCompletionConditions(): boolean {
-        if (!this.game) {
-            return false
-        }
-        return this.game.rooms.every((room) => room.completed);
-    }
-
-    getDeviceForRoom(roomName: string) {
-        if (!this.game) {
-            return [];
-        }
-        const room = this.game.rooms.find((room) => room.name === roomName);
-        return room ? room.devices : [];
-    }
-
-    reset(): boolean {
-        // Reset game logic here
-        this.game = null;
-        this.navigate('/');
-        return true;
-    }
-
-    finishGame() {
-        this.navigate('/game/game-over');
+    const room = this.game.rooms.find((r) => r.name === roomName);
+    if (room) {
+      room.isLocked = !room.isLocked;
 
     }
+  }
 
-    continueGame() {
-        this.navigate('/game');
+  leaveRoom(roomName: string):boolean {
+    if (!this.game) {
+      return false;
     }
 
-    getRooms() {
-        return this.game?.rooms
+    const room = this.game.rooms.find((r) => r.name === roomName);
+    if (room?.isLocked == false) {
+      this.navigate('/game');
     }
+    return true;
+  }
 }
