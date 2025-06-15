@@ -21,7 +21,12 @@ export const Kitchen = () => {
 
 
     const checkForCompletion = () => {
-        console.log("Not implemented yet");
+        if ((!devices.includes("SmartHomeHub") || isSmartHomeHubCompleted)) {
+            console.log("Kitchen erfolgreich abgeschlossen!");
+            gameService.completeRoom(roomName);
+        } else {
+            console.log("Kitchen nicht bestanden.");
+        }
     };
 
     const smartHomeHubCallback = (isCompleted: boolean) => {
