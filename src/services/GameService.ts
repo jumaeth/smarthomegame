@@ -17,7 +17,8 @@ export class GameService {
         new SmartDevice("SmartTv"),
         new SmartDevice("SmartLights"),
       ]),
-      new Room("kitchen", "/game/kitchen", "KitchenComponent", []),
+      new Room("kitchen", "/game/kitchen", "KitchenComponent", [
+        new SmartDevice("SmartHomeHub"),]),
     ];
   }
 

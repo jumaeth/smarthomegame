@@ -12,42 +12,42 @@ import {ModalWrapperComponent} from "@/components/ModalWrapperComponent.tsx";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 
 export const LivingRoom = () => {
-  const smartTvModalRef = useRef<{ closeModal: () => void }>(null);
-  const smartLightsModalRef = useRef<{ closeModal: () => void }>(null);
+  const smartTvModalRef = useRef<{ toggleModal: () => void }>(null);
+  const smartLightsModalRef = useRef<{ toggleModal: () => void }>(null);
   const roomName = "livingroom"; //ToDo find better way to match with GameService
   const [isPaused, setIsPaused] = useState(false);
 
   const gameService = useGameService();
   const devices = gameService.getDeviceForRoom(roomName).map((device: SmartDevice) => device.name);
 
-  let isSmartTvCompleted: boolean = false;
-  let isSmartLightsCompleted: boolean = false;
+  const [isSmartTvCompleted, setIsSmartTvCompleted] = useState(false);
+  const [isSmartLightsCompleted, setIsSmartLightsCompleted] = useState(false);
 
   const smartTvCallback = (isCompleted: boolean) => {
-    isSmartTvCompleted = isCompleted;
+    setIsSmartTvCompleted(isCompleted);
     setIsPaused(false);
-    smartTvModalRef.current?.closeModal();
+    smartTvModalRef.current?.toggleModal();
     checkForCompletion();
   };
 
   const openSmartTvModal = () => {
     if (smartTvModalRef.current) {
       setIsPaused(true)
-      smartTvModalRef.current.closeModal();
+      smartTvModalRef.current.toggleModal();
     }
   }
 
   const smartLightsCallback = (isCompleted: boolean) => {
-    isSmartLightsCompleted = isCompleted;
+    setIsSmartLightsCompleted(isCompleted);
     setIsPaused(false);
-    smartLightsModalRef.current?.closeModal();
+    smartLightsModalRef.current?.toggleModal();
     checkForCompletion();
   };
 
   const openSmartLightsModal = () => {
     if (smartLightsModalRef.current) {
       setIsPaused(true)
-      smartLightsModalRef.current.closeModal();
+      smartLightsModalRef.current.toggleModal();
     }
   }
 
