@@ -13,11 +13,13 @@ export class GameService {
 
   setUpRooms(): Room[] {
     return [
-      new Room("Living Room", "/game/living-room", "LivingRoomComponent", [
+      new Room("livingroom", "/game/livingroom", "LivingRoomComponent", [
         new SmartDevice("SmartTv"),
         new SmartDevice("SmartLights"),
         new SmartDevice("SecurityCamera"),
       ]),
+      new Room("kitchen", "/game/kitchen", "KitchenComponent", [
+        new SmartDevice("SmartHomeHub"),]),
     ];
   }
 
@@ -26,7 +28,7 @@ export class GameService {
 
     const room = this.game.rooms.find((r) => r.name === roomName);
     if (room) {
-      room.completed = true;
+      room.isCompleted = true;
       if (this.checkGameCompletionConditions()) {
         this.finishGame();
       } else {
@@ -39,7 +41,7 @@ export class GameService {
     if (!this.game) {
       return false
     }
-    return this.game.rooms.every((room) => room.completed);
+    return this.game.rooms.every((room) => room.isCompleted);
   }
 
   getDeviceForRoom(roomName: string) {
@@ -68,5 +70,30 @@ export class GameService {
 
   getRooms() {
     return this.game?.rooms
+  }
+
+  toogleRoomIsLocked(roomName: string) {
+
+    if (!this.game) {
+      return;
+    }
+
+    const room = this.game.rooms.find((r) => r.name === roomName);
+    if (room) {
+      room.isLocked = !room.isLocked;
+
+    }
+  }
+
+  leaveRoom(roomName: string):boolean {
+    if (!this.game) {
+      return false;
+    }
+
+    const room = this.game.rooms.find((r) => r.name === roomName);
+    if (room?.isLocked == false) {
+      this.navigate('/game');
+    }
+    return true;
   }
 }

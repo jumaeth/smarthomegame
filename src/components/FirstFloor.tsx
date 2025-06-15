@@ -1,27 +1,45 @@
-import {Room} from "../objects/Room.ts";
-import {useGameService} from "../hooks/useGameService.tsx";
+import {Stage} from "@pixi/react";
+import {useCallback, useEffect, useState} from "react";
+import {calculateCanvasSize} from "@/utils/movment";
+import {MainContainer} from "@/pixi/container/MainContainer";
+import {MapKey} from "@/types/maps";
+import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps";
+import {useNavigate} from "react-router-dom";
 
-export function FirstFloor() {
-  const gameService = useGameService();
+export const FirstFloor = () => {
+  const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
 
-  const createRoomButton = (name: string, url: string, completed: boolean) => {
-    const backgroundColor = completed ? 'green' : 'red';
-    return (
-            <div className="button-wrapper">
-              <a className="button-link" href={`${url}`} style={{backgroundColor}}>
-                {name}
-              </a>
-            </div>
-    );
+  const roomName = "hallway"; //ToDo find better way to match with GameService
+
+  const collisionMap = LEVEL_COLLISION_MAPS[roomName];
+  const navigate = useNavigate();
+
+
+  const updateCanvasSize = useCallback(() => {
+    setCanvasSize(calculateCanvasSize());
+  }, [])
+
+  const handleMapChange = (newMap: MapKey) => {
+    navigate(`/game/${newMap}`);
   };
-  const buttons = gameService.getRooms()?.map((room: Room) =>
-          createRoomButton(room.name, room.url, room.completed)
-  );
+
+  useEffect(() => {
+    window.addEventListener("resize", updateCanvasSize);
+    return () => {
+      window.removeEventListener("resize", updateCanvasSize);
+    }
+  }, [updateCanvasSize, collisionMap])
+
   return (
-          <div className="House">
-            <h2>Haus</h2>
-            <h4>Übersicht über deinem Smart Home</h4>
-            {buttons}
-          </div>
-  )
+          <>
+            <Stage width={canvasSize.width} height={canvasSize.height}>
+              <MainContainer
+                      canvasSize={canvasSize}
+                      map={roomName}
+                      collisionMap={collisionMap}
+                      onMapChange={handleMapChange}
+              />
+            </Stage>
+          </>
+  );
 }

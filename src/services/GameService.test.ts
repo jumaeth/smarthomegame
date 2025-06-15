@@ -16,9 +16,15 @@ describe('GameService', () => {
     ];
 
     navigateMock = jest.fn();
-    gameService = new GameService(navigateMock);
-    jest.spyOn(gameService, 'setUpRooms').mockReturnValue(rooms);
 
+    // Mock `setUpRooms` vor der Instanziierung von `GameService`
+    jest.spyOn(GameService.prototype, 'setUpRooms').mockReturnValue(rooms);
+
+    gameService = new GameService(navigateMock);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('finishGame() should navigate to the victory page', () => {
@@ -49,7 +55,7 @@ describe('GameService', () => {
 
 
     const rooms = gameService.getRooms();
-    rooms?.forEach((room) => room.completed = true);
+    rooms?.forEach((room) => room.isCompleted = true);
 
     expect(gameService.checkGameCompletionConditions()).toBe(true);
   })
@@ -57,7 +63,7 @@ describe('GameService', () => {
   it('completeRoom() should set selected room to complete', () => {
     gameService.completeRoom('Living Room');
 
-    expect(gameService.getRooms()?.[0].completed).toBe(true);
+    expect(gameService.getRooms()?.[0].isCompleted).toBe(true);
   });
 
   it('completeRoom() should call continue game when not all rooms are completed', () => {
