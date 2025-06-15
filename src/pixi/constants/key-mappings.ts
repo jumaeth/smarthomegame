@@ -8,5 +8,6 @@ export const DIRECTION_KEYS: Record<string, Direction> = {
   KeyW: 'UP',
   KeyS: 'DOWN',
   KeyA: 'LEFT',
-  KeyD: 'RIGHT'
+  KeyD: 'RIGHT',
+  KeyE: 'INTERACT'
 }
