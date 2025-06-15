@@ -16,9 +16,15 @@ describe('GameService', () => {
     ];
 
     navigateMock = jest.fn();
-    gameService = new GameService(navigateMock);
-    jest.spyOn(gameService, 'setUpRooms').mockReturnValue(rooms);
 
+    // Mock `setUpRooms` vor der Instanziierung von `GameService`
+    jest.spyOn(GameService.prototype, 'setUpRooms').mockReturnValue(rooms);
+
+    gameService = new GameService(navigateMock);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('finishGame() should navigate to the victory page', () => {
