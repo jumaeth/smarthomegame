@@ -9,6 +9,8 @@ import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {ModalWrapperComponent} from "@/components/ModalWrapperComponent.tsx";
 import {SmartHomeHub} from "@/components/smart-devices/SmartHomeHub.tsx";
 import { SmartDevice } from "@/objects/SmartDevice";
+import {SecurityCamera} from "@/components/smart-devices/SecurityCamera.tsx";
+import {Trans} from "@lingui/react/macro";
 
 export const Kitchen = () => {
     const gameService = useGameService();
@@ -16,12 +18,15 @@ export const Kitchen = () => {
     const [isPaused, setIsPaused] = useState(false);
 
     const smartHomeHubModalRef = useRef<{ toggleModal: () => void }>(null);
+    const securityCameraModalRef = useRef<{ toggleModal: () => void }>(null);
+
     const devices = gameService.getDeviceForRoom(roomName).map((device: SmartDevice) => device.name);
     const [isSmartHomeHubCompleted, setSmartHomeHubCompleted] = useState(false);
+    const [isSecurityCameraCompleted, setSecurityCameraCompleted] = useState(false);
 
 
     const checkForCompletion = () => {
-        if ((!devices.includes("SmartHomeHub") || isSmartHomeHubCompleted)) {
+        if ((!devices.includes("SmartHomeHub") || isSmartHomeHubCompleted)&& (!devices.includes("SecurityCamera") || isSecurityCameraCompleted)) {
             console.log("Kitchen erfolgreich abgeschlossen!");
             gameService.completeRoom(roomName);
         } else {
@@ -43,8 +48,23 @@ export const Kitchen = () => {
         }
     }
 
+    const securityCameraCallback = (isCompleted: boolean) => {
+        setSecurityCameraCompleted(isCompleted);
+        setIsPaused(false);
+        securityCameraModalRef.current?.toggleModal();
+        checkForCompletion();
+    };
+
+    const openSecurityCameraHomeHub = () => {
+        if (securityCameraModalRef.current) {
+            setIsPaused(true)
+            securityCameraModalRef.current.toggleModal();
+        }
+    }
+
     const interactiveElements = [
-        new InteractivePixiElement(1, 6, 1, 1, openSmartHomeHub)
+        new InteractivePixiElement(1, 6, 1, 1, openSmartHomeHub),
+        new InteractivePixiElement(1, 2, 1, 1, openSecurityCameraHomeHub)
     ]
 
     //Render Code
@@ -81,6 +101,13 @@ export const Kitchen = () => {
                     <ModalWrapperComponent
                         ref={smartHomeHubModalRef}
                         content={<SmartHomeHub onCompletion={smartHomeHubCallback}/>}
+                        onClose={onModalClose}
+                    />
+                )}
+                {devices.includes("SecurityCamera") && (
+                    <ModalWrapperComponent
+                        ref={securityCameraModalRef}
+                        content={<SecurityCamera onCompletion={securityCameraCallback}/>}
                         onClose={onModalClose}
                     />
                 )}
