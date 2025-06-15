@@ -7,11 +7,14 @@ import {FloorSelector} from "../components/FloorSelector.tsx";
 import NotFoundPage from "../pages/NotFoundPage.tsx";
 import HomePage from "../pages/HomePage.tsx";
 import {Kitchen} from "@/components/Kitchen.tsx";
+import {IntroPage} from "@/pages/IntroPage.tsx";
 
 const AppRoutes = () => (
         <Router>
           <Routes>
             <Route index element={<HomePage/>}/>
+            <Route path="/home" element={<HomePage/>}/>
+            <Route path="/intro" element={<IntroPage/>}/>
             <Route path="/game" element={<GameWrapper/>}>
               <Route index element={<FloorSelector/>}/>
               <Route path="livingroom" element={<LivingRoom/>}/>
