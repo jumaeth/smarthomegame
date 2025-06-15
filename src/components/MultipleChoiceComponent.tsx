@@ -28,6 +28,11 @@ export const MultipleChoiceComponent = ({
     onComplete(isAllCorrect);
   };
 
+  function resetAnswers() {
+    setAnswers(new Array(questions.length).fill(false));
+    setSubmitted(false);
+  }
+
   return (
           <div>
             <ul>
@@ -55,7 +60,9 @@ export const MultipleChoiceComponent = ({
             </ul>
             {!submitted ? (
                     <button onClick={submitAnswer}>Antwort abschicken</button>
-            ) : null}
+            ) : (
+              <button onClick={resetAnswers}>Nochmals versuchen</button>
+            )}
           </div>
   );
 };
