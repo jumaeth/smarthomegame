@@ -12,8 +12,8 @@ import {ModalWrapperComponent} from "@/components/ModalWrapperComponent.tsx";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 
 export const LivingRoom = () => {
-  const smartTvModalRef = useRef<{ closeModal: () => void }>(null);
-  const smartLightsModalRef = useRef<{ closeModal: () => void }>(null);
+  const smartTvModalRef = useRef<{ toggleModal: () => void }>(null);
+  const smartLightsModalRef = useRef<{ toggleModal: () => void }>(null);
   const roomName = "livingroom"; //ToDo find better way to match with GameService
   const [isPaused, setIsPaused] = useState(false);
 
