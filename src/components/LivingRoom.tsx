@@ -1,10 +1,10 @@
 import {useRef} from "react";
 import {SmartTv} from "./smart-devices/SmartTv.tsx";
 import {SmartLights} from "./smart-devices/SmartLights.tsx";
+import {SmartHomeHub} from "./smart-devices/SmartHomeHub";
 import {ModalWrapperComponent} from "./ModalWrapperComponent.tsx";
 import {SmartDevice} from "@/objects/SmartDevice";
 import {useGameService} from "@/hooks/useGameService";
-import SmartHomeHub from "./smart-devices/SmartHomeHub";
 
 export const LivingRoom = () => {
   const smartTvModalRef = useRef<{ closeModal: () => void }>(null);

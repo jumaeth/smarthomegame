@@ -1,18 +1,5 @@
 import React from 'react';
-import { Box, Paper } from '@mui/material';
-import { styled, Theme } from '@mui/material/styles';
-import DataSortingGame from '../dataSortingGame/DataSortingGame';
-
-const StyledPaper = styled(Paper)(({ theme }: { theme: Theme }) => ({
-  padding: theme.spacing(3),
-  margin: theme.spacing(2),
-  backgroundColor: '#f5f5f5',
-  borderRadius: '12px',
-  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  width: '100%',
-  height: '100%',
-  maxWidth: 'none',
-}));
+import {DataSortingGame} from '../dataSortingGame/DataSortingGame';
 
 interface SmartHomeHubProps {
   onCompletion: (isCompleted: boolean) => void;
@@ -24,14 +11,10 @@ export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({ onCompletion }) => {
   };
 
   return (
-    <StyledPaper>
-      <Box sx={{ 
-        width: '100%',
-        height: 'calc(100vh - 100px)',
-        minHeight: '500px'
-      }}>
+    <div className="p-6 m-4 bg-gray-100 rounded-xl shadow-md w-full h-full">
+      <div className="w-full h-[calc(100vh-100px)] min-h-[500px]">
         <DataSortingGame onCompletion={handleGameComplete} />
-      </Box>
-    </StyledPaper>
+      </div>
+    </div>
   );
 }; 
