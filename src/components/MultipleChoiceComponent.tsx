@@ -44,7 +44,7 @@ export const MultipleChoiceComponent = ({
                             />{" "}
                             {q}
                           </label>
-                          {submitted && (
+                          {submitted && answers[i] && (
                                   <span style={{ marginLeft: 8 }}>
                   {isCorrect ? "✅" : "❌"}
                 </span>
