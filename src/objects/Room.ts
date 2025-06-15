@@ -6,7 +6,8 @@ export class Room {
           public url: string,
           public componentName: string,
           public devices: SmartDevice[],
-          public completed: boolean = false
+          public isLocked: boolean = false,
+          public isCompleted: boolean = false
   ) {
   }
 }

@@ -9,7 +9,7 @@ export default function HomePage() {
             <b> Du befindest dich auf der Startseite. Um ein neues Abenteuer zu beginnen klicke auf die Spiel starten
               Schaltfläche. </b>
             <div>
-              <button onClick={() => navigate("/game")}>
+              <button onClick={() => navigate("/game/livingroom")}>
                 Spiel starten
               </button>
             </div>
