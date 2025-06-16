@@ -1,4 +1,4 @@
-import {SmartDevice} from "./SmartDevice.ts";
+import {SmartDevice} from "./SmartDevice";
 
 export class Room {
   constructor(
@@ -6,7 +6,8 @@ export class Room {
           public url: string,
           public componentName: string,
           public devices: SmartDevice[],
-          public completed: boolean = false
+          public isLocked: boolean = false,
+          public isCompleted: boolean = false
   ) {
   }
 }

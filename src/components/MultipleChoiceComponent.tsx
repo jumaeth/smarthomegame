@@ -1,50 +1,81 @@
-type MultipleChoiceCallback = (isCompleted: boolean) => void;
+import {useState} from "react";
+import {Trans} from "@lingui/react/macro";
 
-export class MultipleChoiceComponent {
+type MultipleChoiceProps = {
   questions: string[];
-  solutions: boolean[];
-  answers: boolean[];
-  onComplete: MultipleChoiceCallback;
+  solutions: (boolean | string)[];
+  onComplete: (isCompleted: boolean) => void;
+};
 
-  constructor(
-          questions: string[],
-          solutions: boolean[],
-          onComplete: MultipleChoiceCallback
-  ) {
-    this.questions = questions;
-    this.solutions = solutions;
-    this.answers = new Array(this.questions.length).fill(false);
-    this.onComplete = onComplete;
+export const MultipleChoiceComponent = ({
+                                          questions,
+                                          solutions,
+                                          onComplete,
+                                        }: MultipleChoiceProps) => {
+  const [answers, setAnswers] = useState<boolean[]>(
+          new Array(questions.length).fill(false)
+  );
+  const [submitted, setSubmitted] = useState(false);
+  const [feedbackMsg, setFeedbackMsg] = useState<string>("");
+
+
+  const handleAnswer = (i: number, answer: boolean) => {
+    const next = [...answers];
+    next[i] = answer;
+    setAnswers(next);
+    if (answer !== solutions[i] && typeof solutions[i] === "string") {
+      setFeedbackMsg(solutions[i].toString());
+    } else {
+      setFeedbackMsg("");
+    }
+  };
+
+  const submitAnswer = () => {
+    const isAllCorrect = answers.every((ans, i) => ans === solutions[i]);
+    setSubmitted(true);
+    onComplete(isAllCorrect);
+  };
+
+  function resetAnswers() {
+    setAnswers(new Array(questions.length).fill(false));
+    setSubmitted(false);
   }
 
-  getQuestions() {
-    const handleAnswer = (i: number, answer: boolean) => {
-      this.answers[i] = answer;
-    };
-
-    const submitAnswer = () => {
-      const isCorrect = this.answers.every((val, i) => val === this.solutions[i]);
-      console.log(isCorrect ? "Yay! answers are correct" : "Oh No! your answers are not correct");
-      this.onComplete(isCorrect); // Callback aufrufen
-    };
-
-    return (
-            <div>
-              <ul>
-                {this.questions.map((q, i) => (
-                        <li key={i}>
+  return (
+          <div>
+            <ul>
+              {questions.map((q, i) => {
+                const isCorrect = answers[i] === solutions[i];
+                return (
+                        <li key={i} style={{marginBottom: 8}}>
                           {q}
-                          <label className="switch">
+                          <label>
                             <input
                                     type="checkbox"
+                                    disabled={submitted}
+                                    checked={answers[i]}
                                     onChange={(e) => handleAnswer(i, e.target.checked)}
-                            />
+                            />{" "}
+                            {q}
                           </label>
+                          {submitted && answers[i] && (
+                                  <span style={{marginLeft: 8}}>
+                  {isCorrect ? "✅" : "❌"}
+                </span>
+                          )}
                         </li>
-                ))}
-                <button onClick={() => submitAnswer()}>Antwort abschicken</button>
-              </ul>
-            </div>
-    );
-  }
-}
+                );
+              })}
+            </ul>
+            <p className="text-red-600">{feedbackMsg}</p>
+
+            {!submitted ? (
+                    <button onClick={submitAnswer}>
+                      <Trans>Antwort abschicken</Trans>
+                    </button>
+            ) : (
+                    <button onClick={resetAnswers}>Nochmals versuchen</button>
+            )}
+          </div>
+  );
+};
