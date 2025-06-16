@@ -35,29 +35,43 @@ export const IntroContainer = ({canvasSize, onStart}: PropsWithChildren<IntroCon
     setFrame(f => (f - 1 >= 0 ? f - 1 : f));
   };
 
+  let width, height;
+  if (canvasSize.width / canvasSize.height > 3/2) {
+    height = canvasSize.height;
+    width = height * (3/2);
+  } else {
+    width = canvasSize.width;
+    height = width * (2/3);
+  }
 
   return (
           <>
-            <Container interactive={true}>
+            <Container
+              width={width}
+              height={height}
+              x={(canvasSize.width - width) / 2}
+              y={(canvasSize.height - height) / 2}
+              interactive={true}
+            >
               <Graphics
                       interactive={false}
                       draw={g => {
                         g.clear();
                         g.beginFill(0x38373a);
-                        g.drawRect(0, 0, canvasSize.width, canvasSize.height);
+                        g.drawRect(0, 0, width, height);
                         g.endFill();
                       }}
               />
               <Sprite
                       interactive={false}
                       texture={textures[frame]}
-                      width={canvasSize.width}
-                      height={canvasSize.height}
+                      width={width}
+                      height={height}
               />
               {frame > 0 && <PixiButton
                       label={"< Previous"}
-                      x={canvasSize.width - 330}
-                      y={canvasSize.height - 100}
+                      x={width - 330}
+                      y={height - 100}
                       width={120}
                       height={50}
                       onClick={() => prevFrame()}
@@ -65,8 +79,8 @@ export const IntroContainer = ({canvasSize, onStart}: PropsWithChildren<IntroCon
               {frame < textures.length - 1 ? (
                       <PixiButton
                               label={"Next >"}
-                              x={canvasSize.width - 200}
-                              y={canvasSize.height - 100}
+                              x={width - 200}
+                              y={height - 100}
                               width={120}
                               height={50}
                               onClick={nextFrame}
@@ -74,8 +88,8 @@ export const IntroContainer = ({canvasSize, onStart}: PropsWithChildren<IntroCon
               ) : (
                       <PixiButton
                               label={"Start"}
-                              x={canvasSize.width - 200}
-                              y={canvasSize.height - 100}
+                              x={width - 200}
+                              y={height - 100}
                               width={120}
                               height={50}
                               onClick={onStart ?? (() => {})}

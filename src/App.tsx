@@ -1,13 +1,9 @@
-import {MainStage} from "@/pixi/stages/MainStage";
+import AppRoutes from "./app/routes.tsx";
 
 function App() {
   return (
           <div>
-            {/*TODO: merge logic with pixistage*/}
-            {/*<main className="h-screen">*/}
-            {/*  <AppRoutes/>*/}
-            {/*</main>*/}
-            <MainStage/>
+              <AppRoutes/>
           </div>
   );
 }
