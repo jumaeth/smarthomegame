@@ -1,16 +1,13 @@
 import {AlphaFilter, Sprite, Text} from 'pixi.js'
-import {extend} from "@pixi/react";
 import {useCallback, useEffect, useState} from "react";
 import {Button} from "./Button.tsx";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
 
-extend({
-  Sprite,
-  Text
-});
 
 export const CookingStage = ({setStage, setTotalPoints}) => {
+
+  console.log("CookingStage");
 
   const [showButton, setShowButton] = useState(false);
   const [page, setPage] = useState(1);
@@ -24,7 +21,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
   const [infoComment, setInfoComment] = useState("");
   const [retry, setRetry] = useState(false);
 
-    const instruction = "Okay, lass uns ein Gericht daraus machen. \n\n" +
+  const instruction = "Okay, lass uns ein Gericht daraus machen. \n\n" +
           "Unsere Smartkitchen kann alle Zutaten vorbereiten aber wir müssen die richtige Maschine zum Kochen des Gerichts auswählen";
 
   const texturePaths: { [key: string]: string } = {
@@ -84,7 +81,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
   const steamer               = {id: "steamer",scale: 0.1, x: 350, y: 240, texture: textures.steamer, action: null};
   const renderElements = [
           cookingfield, foodprocessor, microwave, steamer
-  ]
+  ];
 
 
   const [hovered] = useState(false);
@@ -233,7 +230,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
     if(page === 1){
       return (
               <>
-                <pixiSprite
+                <Sprite
                         anchor={0.5}
                         eventMode={'static'}
                         scale={0.6}
@@ -241,7 +238,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
                         x={273}
                         y={220}
                 />
-                <pixiText
+                <Text
                         text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
                         x={75}
                         y={70}
@@ -274,14 +271,14 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
     if(page === 2){
       return (
               <>
-                <pixiSprite
+                <Sprite
                         eventMode={'static'}
                         scale={0.7}
                         texture={textures.wall}
                         x={0}
                         y={0}
                 />
-                <pixiSprite
+                <Sprite
                         anchor={0.5}
                         eventMode={'static'}
                         scale={0.47}
@@ -290,7 +287,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
                         y={165}
                 />
                 {renderElements.map((object) => (
-                        <pixiSprite
+                        <Sprite
                                 key={object.id}
                                 anchor={0.5}
                                 eventMode={'static'}
@@ -306,14 +303,14 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
                         />
                 ))}
                 {(showInfo &&
-                        <pixiGraphics
+                        <Graphics
                           x={15 + infoXOffset(hoveredId)}
                           y={15 + infoYOffset(hoveredId)}
                           draw={draw}
                           eventMode={'none'}
                         />)}
                 {(showInfo &&
-                        <pixiText
+                        <Text
                          text={infoTitles}
                          x={30 + infoXOffset(hoveredId)}
                          y={30 +infoYOffset(hoveredId)}
@@ -327,7 +324,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
                   />
                 )}
                 {(showInfo &&
-                        <pixiText
+                        <Text
                          text={infoText}
                          x={150 + infoXOffset(hoveredId)}
                          y={30 +infoYOffset(hoveredId)}
@@ -342,7 +339,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
                         />
                 )}
                 {(showInfo &&
-                        <pixiText
+                        <Text
                                 text={infoComment}
                                 x={30 + infoXOffset(hoveredId)}
                                 y={130 +infoYOffset(hoveredId)}

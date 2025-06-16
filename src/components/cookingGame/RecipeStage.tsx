@@ -1,16 +1,12 @@
-import {Sprite, Text} from 'pixi.js'
-import {extend} from "@pixi/react";
-import {useEffect, useState} from "react";
-import {Button} from "./Button.tsx";
+import React, {useEffect, useMemo, useState} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
+import {Sprite, Text} from "@pixi/react"
+import {TextStyle} from "pixi.js";
 
-extend({
-  Sprite,
-  Text
-});
 
-export const RecipeStage = ({setStage, setTotalPoints}) => {
+
+export const RecipeStage =  ({ setStage, setTotalPoints }) => {
 
   const [text, setText] = useState('');
   const [showButton, setShowButton] = useState(false);
@@ -28,11 +24,9 @@ export const RecipeStage = ({setStage, setTotalPoints}) => {
           "Wir müssen folgende Schritte befolgen: \n\n 1. Zutaten einkaufen \n 2. Gericht vorbereiten und kochen \n 3. Gericht servieren"
   ];
 
-
   const {textures} = useLoadTextures(texturePaths);
 
   //-----------------------text/typing-----------------------
-
   const { typedText, typingDone, showCursor } = useTypingText(text, 35);
 
   useEffect(() => {
@@ -47,6 +41,7 @@ export const RecipeStage = ({setStage, setTotalPoints}) => {
     }
   }, [typingDone]);
 
+
   useEffect(() => {
     setText(pageTexts[page-1]);
   }, [page]);
@@ -54,7 +49,7 @@ export const RecipeStage = ({setStage, setTotalPoints}) => {
   const action = () => {
     if (page < pageTexts.length) {
       if (page === pageTexts.length - 1) {
-        setLabel("Ende");
+        setLabel("end");
       }
       setPage(page + 1);
     } else {
@@ -64,40 +59,40 @@ export const RecipeStage = ({setStage, setTotalPoints}) => {
   };
 
 
-
   return (
           <>
-            <pixiSprite
+            {(textures.recipeopen !== undefined) &&(<Sprite
                     anchor={0.5}
                     eventMode={'static'}
                     scale={0.6}
                     texture={textures.recipeopen}
                     x={273}
                     y={220}
-            />
-            <pixiText
-                    text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
+            />)}
+            {(textures.recipeopen !== undefined) && (<Text
+                    text={(typedText+(showCursor?'|':'')).toUpperCase()}
                     x={75}
                     y={70}
-                    style={{
-                      fontFamily: 'micro5',
-                      fontSize: 30,
-                      wordWrap: true,
-                      wordWrapWidth: 400,
-                    }}
-                    anchor={{ x: 0, y: 0 }}
-            />
-            {(showButton &&
-              <Button
-                    x={370}
-                    y={275}
-                    color={0xdcc08e}
-                    lineColor={0x5d3c1a}
-                    width={90}
-                    height={35}
-                    label={label}
-                    action={action}
-              />)}
+                    style={
+                      new TextStyle({
+                        fontFamily:'micro5',
+                        fontSize:30,
+                        wordWrap:true,
+                        wordWrapWidth:400,
+                      })}
+                    anchor={{x:0,y:0}}
+            />)}
+            {(showButton&&
+                    <Button
+                            x={370}
+                            y={275}
+                            color={0xdcc08e}
+                            lineColor={0x5d3c1a}
+                            width={90}
+                            height={35}
+                            label={label}
+                            action={action}
+                    />)}
           </>
   );
 };

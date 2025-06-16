@@ -9,6 +9,7 @@ import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {ModalWrapperComponent} from "@/components/ModalWrapperComponent.tsx";
 import {SmartHomeHub} from "@/components/smart-devices/SmartHomeHub.tsx";
 import { SmartDevice } from "@/objects/SmartDevice";
+import {SmartKitchen} from "@/components/smart-devices/SmartKitchen.tsx";
 
 export const Kitchen = () => {
     const gameService = useGameService();
@@ -16,12 +17,16 @@ export const Kitchen = () => {
     const [isPaused, setIsPaused] = useState(false);
 
     const smartHomeHubModalRef = useRef<{ toggleModal: () => void }>(null);
+    const smartKitchenModalRef = useRef<{ toggleModal: () => void }>(null);
     const devices = gameService.getDeviceForRoom(roomName).map((device: SmartDevice) => device.name);
     const [isSmartHomeHubCompleted, setSmartHomeHubCompleted] = useState(false);
+    const [isSmartKitchenCompleted, setSmartKitchenCompleted] = useState(false);
 
 
-    const checkForCompletion = () => {
-        if ((!devices.includes("SmartHomeHub") || isSmartHomeHubCompleted)) {
+
+  const checkForCompletion = () => {
+    console.log("checkForCompletion");
+        if ((!devices.includes("SmartHomeHub") && !devices.includes("SmartKitchen") || isSmartHomeHubCompleted && isSmartKitchenCompleted)) {
             console.log("Kitchen erfolgreich abgeschlossen!");
             gameService.completeRoom(roomName);
         } else {
@@ -38,14 +43,31 @@ export const Kitchen = () => {
 
     const openSmartHomeHub = () => {
         if (smartHomeHubModalRef.current) {
-            setIsPaused(true)
+            setIsPaused(true);
             smartHomeHubModalRef.current.toggleModal();
         }
-    }
+    };
+
+    const smartKitchenCallback = (isCompleted: boolean) => {
+      console.log("smartKitchenCallback");
+      setSmartKitchenCompleted(isCompleted);
+      setIsPaused(false);
+      smartKitchenModalRef.current?.toggleModal();
+      checkForCompletion();
+    };
+
+    const openSmartKitchen = () => {
+      console.log("openSmartKitchen");
+      if (smartKitchenModalRef.current) {
+        setIsPaused(true);
+        smartKitchenModalRef.current.toggleModal();
+      }
+    };
 
     const interactiveElements = [
-        new InteractivePixiElement(1, 6, 1, 1, openSmartHomeHub)
-    ]
+        new InteractivePixiElement(1, 6, 1, 1, openSmartHomeHub),
+      new InteractivePixiElement(11, 3, 1, 1, openSmartKitchen)
+    ];
 
     //Render Code
     //ToDo check to remove duplicated code in other rooms
@@ -54,7 +76,7 @@ export const Kitchen = () => {
 
     const updateCanvasSize = useCallback(() => {
         setCanvasSize(calculateCanvasSize());
-    }, [])
+    }, []);
 
 
     function handleMapChange(newMap: MapKey): boolean {
@@ -72,7 +94,7 @@ export const Kitchen = () => {
         return () => {
             window.removeEventListener("resize", updateCanvasSize);
         }
-    }, [updateCanvasSize, collisionMap])
+    }, [updateCanvasSize, collisionMap]);
 
     return (
         <>
@@ -82,6 +104,13 @@ export const Kitchen = () => {
                         ref={smartHomeHubModalRef}
                         content={<SmartHomeHub onCompletion={smartHomeHubCallback}/>}
                         onClose={onModalClose}
+                    />
+                )}
+                {devices.includes("SmartKitchen") && (
+                    <ModalWrapperComponent
+                            ref={smartKitchenModalRef}
+                            content={<SmartKitchen onCompletion={smartKitchenCallback} />}
+                            onClose={onModalClose}
                     />
                 )}
             </div>

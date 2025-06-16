@@ -1,11 +1,8 @@
 import {Sprite, Text, Graphics} from 'pixi.js';
-import {extend} from "@pixi/react";
 import {useEffect, useRef, useState} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {Button} from "./Button.tsx";
-
-extend({ Sprite, Text, Graphics });
 
 export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
   const [showButton, setShowButton] = useState(false);
@@ -246,7 +243,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
     if(page === 1){
       return (
               <>
-                <pixiSprite
+                <Sprite
                         anchor={0.5}
                         eventMode={'static'}
                         scale={0.6}
@@ -254,7 +251,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
                         x={273}
                         y={220}
                 />
-                <pixiText
+                <Text
                         text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
                         x={75}
                         y={70}
@@ -285,7 +282,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
 
   const background = () => (
           <>
-            <pixiTilingSprite
+            <TilingSprite
                     texture={textures.tableBackground}
                     eventMode={'none'}
                     width={dimensions.width}
@@ -293,7 +290,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
                     tilePosition={{x:0, y:0}}
                     tileScale={0.2}
             />
-            <pixiSprite
+            <Sprite
                     anchor={0.5}
                     eventMode={'none'}
                     scale={0.325}
@@ -305,7 +302,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
   );
 
   const markers = () => markerPositions.map(marker => (
-          <pixiGraphics
+          <Graphics
                   key={marker.id}
                   x={marker.x}
                   y={marker.y}
@@ -316,7 +313,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
   ));
 
   const sprites = () => renderElements.map(object => (
-          <pixiSprite
+          <Sprite
                   key={object.id}
                   ref={el => { if (el) { el.id = object.id; spriteRefs.current[object.id] = el; }}}
                   anchor={object.anchor}
@@ -339,7 +336,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
       return (
               <>
         {background()}
-        <pixiGraphics
+        <Graphics
                 draw={(g) => {
                   g.clear();
                   g.beginFill(0xffffff, 0);

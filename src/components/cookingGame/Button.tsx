@@ -1,10 +1,5 @@
-import {Graphics} from "pixi.js";
-import {extend} from "@pixi/react";
+import {Text, Graphics} from "pixi.js";
 import {useCallback, useState} from "react";
-
-extend({
-  Graphics
-});
 
 export const Button =  ({x, y, width, height, label, action, color, lineColor} ) => {
 
@@ -22,7 +17,7 @@ export const Button =  ({x, y, width, height, label, action, color, lineColor} )
 
   return (
           <>
-            <pixiGraphics
+            <Graphics
                     x={x}
                     y={y}
                     draw={draw}
@@ -33,7 +28,7 @@ export const Button =  ({x, y, width, height, label, action, color, lineColor} )
                     onMouseOut={() => setHovered(false)}
                     cursor={hovered ? 'pointer' : 'none'}
             />
-            <pixiText
+            <Text
                     text={label.toUpperCase()}
                     x={x + width/2}
                     y={y + height/2}

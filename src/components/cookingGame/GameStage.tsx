@@ -17,15 +17,12 @@ export const GameStage = ({ setStage, notificationProperties }) => {
     }, 0);
   };
 
-
-
-
-  const recipe             = new ClickableElement("recipe", 0.14, 75, 80, "/cooking-sprites/recipe.png", 100, 100, new AlphaFilter({ alpha: highlightAlpha }), goToRecipe);
-  const notification       = new ClickableElement("recipeNotification", 0.08, notificationProperties.x, notificationProperties.y, "/cooking-sprites/notification.png", 100, 100, new AlphaFilter(), null);
-  const ingredients        = new ClickableElement("ingredients", 0.125, 75, 235, "/cooking-sprites/ingredients.png", 100, 100, new AlphaFilter({ alpha: highlightAlpha }), goToIngredients);
-  const herd               = new ClickableElement("herd", 0.2125, 270, 165, "/cooking-sprites/herd.png", 100, 100, new AlphaFilter({ alpha: highlightAlpha }), null);
-  const pots               = new ClickableElement("pots", 0.15, 465, 85, "/cooking-sprites/pots.png", 100, 100, new AlphaFilter({ alpha: highlightAlpha }), () => setStage("cook"));
-  const plate              = new ClickableElement("plate", 0.12, 465, 245, "/cooking-sprites/plate.png", 100, 100, new AlphaFilter({ alpha: highlightAlpha }), () => setStage("serve"));
+  const recipe             = new ClickableElement("recipe", 0.14, 75, 80, "/src/assets/cooking-sprites/recipe.png", 100, 100, new AlphaFilter(highlightAlpha), goToRecipe);
+  const notification       = new ClickableElement("recipeNotification", 0.08, notificationProperties.x, notificationProperties.y, "/src/assets/cooking-sprites/notification.png", 100, 100, new AlphaFilter(), null);
+  const ingredients        = new ClickableElement("ingredients", 0.125, 75, 235, "/src/assets/cooking-sprites/ingredients.png", 100, 100, new AlphaFilter(highlightAlpha), goToIngredients);
+  const herd               = new ClickableElement("herd", 0.2125, 270, 165, "/src/assets/cooking-sprites/herd.png", 100, 100, new AlphaFilter(highlightAlpha), null);
+  const pots               = new ClickableElement("pots", 0.15, 465, 85, "/src/assets/cooking-sprites/pots.png", 100, 100, new AlphaFilter(highlightAlpha), () => setStage("cook"));
+  const plate              = new ClickableElement("plate", 0.12, 465, 245, "/src/assets/cooking-sprites/plate.png", 100, 100, new AlphaFilter(highlightAlpha), () => setStage("serve"));
 
   const renderElements = [
     recipe,
@@ -35,7 +32,6 @@ export const GameStage = ({ setStage, notificationProperties }) => {
     plate,
     ...(notificationProperties.alpha !== 0 ? [notification] : [])
   ];
-
 
 
   return (

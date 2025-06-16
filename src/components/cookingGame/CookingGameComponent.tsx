@@ -1,134 +1,131 @@
-import {Application, extend} from '@pixi/react';
-import {Assets, Texture, TilingSprite} from "pixi.js";
-import {useEffect, useRef, useState} from "react";
+import {Assets, Texture} from "pixi.js";
+import React, { useEffect, useRef, useState} from "react";
 import {GameStage} from "./GameStage.tsx";
 import {RecipeStage} from "./RecipeStage.tsx";
 import {IngredientsStage} from "./IngredientsStage.tsx";
 import {CookingStage} from "./CookingStage.tsx";
 import {ServeStage} from "./ServeStage.tsx";
+import {Sprite, Stage, TilingSprite} from "@pixi/react";
 
-extend({
-  TilingSprite
-});
+interface CookingGameComponentProps {
+  onCompletion: () => void;
+}
 
-export const CookingGameComponent = ({setCompleted, reload}) => {
+export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCompletion }) => {
 
-  const customFont = new FontFace("micro5", "url(/fonts/micro5.ttf)");
-  customFont.load().then(() => document.fonts.add(customFont));
-  const [nextStage, setNextStage] = useState(1);
-  const [currentStage, setCurrentStage] = useState("game");
-  const [texture, setTexture] = useState(Texture.EMPTY);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({width: 0, height: 0});
-  const [isTextureLoaded, setIsTextureLoaded] = useState(false);
-  const [notificationProperties, setNotificationProperties] = useState({x:0, y: 0, alpha: 0});
-  const initStateRef = useRef(true);
-  const [totalPoints, setTotalPoints] = useState(0);
+  const customFont= new FontFace("micro5","url(/fonts/micro5.ttf)");
+  customFont.load().then(()=>document.fonts.add(customFont));
+  const[nextStage,setNextStage]=useState(1);
+  const[currentStage,setCurrentStage]=useState("game");
+  const[texture,setTexture]=useState(Texture.EMPTY);
+  const containerRef=useRef<HTMLDivElement>(null);
+  const[dimensions,setDimensions]=useState({width:0,height:0});
+  const[isTextureLoaded,setIsTextureLoaded]=useState(false);
+  const[notificationProperties,setNotificationProperties]=useState({x:0,y:0,alpha:0});
+  const initStateRef=useRef(true);
+  const[totalPoints,setTotalPoints]=useState(0);
 
-  const stages = [
-    "game", "recipe", "ingredients", "cook", "serve"
+  const stages=[
+    "game","recipe","ingredients","cook","serve"
   ];
 
-  const secureSetStage = stage => {
-    if(stage == "game"){
+  const secureSetStage=stage=>{
+    if(stage=="game"){
       setCurrentStage(stage);
-    } else if(stages.indexOf(stage) === nextStage){
-      setNextStage(prev => prev+1);
+    }else if(stages.indexOf(stage)===nextStage){
+      setNextStage(prev=>prev+1);
       setCurrentStage(stage);
     }
   };
 
-  useEffect(() => {
-    if (reload){
-      setCurrentStage("game");
-      setNextStage(1);
-      initStateRef.current = true;
-    }
-  }, [reload]);
+  // useEffect(()=>{
+  //   if(reload){
+  //   setCurrentStage("game");
+  //   setNextStage(1);
+  //   initStateRef.current=true;
+  //   }
+  // },[reload]);
 
-  useEffect(() => {
-    if (texture === Texture.EMPTY) {
-      Assets.load("/cooking-sprites/counter.png")
-              .then((result) => {
+  useEffect(()=>{
+    if(texture===Texture.EMPTY){
+      Assets.load("/src/assets/cooking-sprites/counter.png")
+              .then((result)=>{
                 setTexture(result);
                 setIsTextureLoaded(true);
               });
     }
-  }, [texture]);
+    console.log("loadcheck: "+isTextureLoaded+" for counter");
+  },[texture]);
 
-
-  useEffect(() => {
+  useEffect(()=>{
     if(containerRef.current){
       setDimensions({
-        width: containerRef.current.clientWidth,
-        height: containerRef.current.clientHeight
+        width: 544,
+        height: 325
+        // width:containerRef.current.clientWidth,
+        // height:containerRef.current.clientHeight
       })
     }
-  }, []);
+  },[]);
 
-  useEffect(() => {
-    if(dimensions.width !== 0 && dimensions.height !== 0){
-      switch (currentStage){
-        case "game":
-          if (initStateRef.current){
+  useEffect(()=>{
+    if(dimensions.width!==0&&dimensions.height!==0){
+      switch(currentStage){
+        case"game":
+          if(initStateRef.current){
             setTimeout(()=>{
-              setNotificationProperties({x: 130, y: 35, alpha: 1});
-              initStateRef.current = false;
+              setNotificationProperties({x:130,y:35,alpha:1});
+              initStateRef.current=false;
             },10);
           }
           break;
-        case "recipe":
-          setNotificationProperties({x: 125, y: 200, alpha: 1});
+        case"recipe":
+          setNotificationProperties({x:125,y:200,alpha:1});
           break;
-        case "ingredients":
-          setNotificationProperties({x: 515, y: 55, alpha: 1});
+        case"ingredients":
+          setNotificationProperties({x:515,y:55,alpha:1});
           break;
-        case "cook":
-          setNotificationProperties({x: 520, y: 200, alpha: 1});
+        case"cook":
+          setNotificationProperties({x:520,y:200,alpha:1});
           break;
-        case "serve":
-          setNotificationProperties({x: 0, y: 0, alpha: 0});
+        case"serve":
+          setNotificationProperties({x:0,y:0,alpha:0});
           break;
       }
     }
-  }, [currentStage, dimensions, initStateRef]);
+  },[currentStage,dimensions,initStateRef]);
 
-  const stageMap = {
-    game: () => <GameStage setStage={secureSetStage}  dimensions={dimensions} notificationProperties={notificationProperties} />,
-    recipe: () => <RecipeStage setStage={secureSetStage} dimensions={dimensions} setTotalPoints={setTotalPoints}/>,
-    ingredients: () => <IngredientsStage setStage={secureSetStage} setTotalPoints={setTotalPoints} />,
-    cook: () => <CookingStage setStage={secureSetStage}  dimensions={dimensions} setTotalPoints={setTotalPoints}/>,
-    serve: () => <ServeStage setStage={secureSetStage}  dimensions={dimensions} setTotalPoints={setTotalPoints}/>
-  };
+  const stageMap={
+    game:() => <GameStage setStage={secureSetStage} dimensions={dimensions} notificationProperties={notificationProperties}/>,
+    recipe:() => <RecipeStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
+    ingredients:()=><IngredientsStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
+    cook:()=><CookingStage setStage={secureSetStage}dimensions={dimensions}setTotalPoints={setTotalPoints}/>,
+    serve:()=><ServeStage setStage={secureSetStage}dimensions={dimensions}setTotalPoints={setTotalPoints}/>
+};
 
-  useEffect(() => {
-    if (totalPoints / stages.length > 50){
-      setCompleted(true);
-    }else{
-      setCompleted(false);
+  useEffect(()=>{
+    if(totalPoints/stages.length>50){
+      setTimeout(()=>onCompletion(),100);
     }
-  }, [totalPoints]);
-
+  },[totalPoints]);
 
   return (
-          <div ref={containerRef} className="h-[90%] mt-5">
-              {(isTextureLoaded &&
-                      <Application
+     <div ref={containerRef} className="h-[90%]mt-5">
+              {(isTextureLoaded&&
+                      <Stage
                               width={dimensions.width}
-                              height={325}
-                              backgroundColor={0xd87f20}>
-                        {(
-                                <pixiTilingSprite
-                                  texture={texture}
-                                  eventMode={'none'}
-                                  width={dimensions.width}
-                                  height={325}
-                                  tilePosition={{x:0, y:0}}
-                                  tileScale={0.3}
-                                />)}
+                              height={dimensions.height}>
+                        <TilingSprite
+                                image={"/src/assets/cooking-sprites/counter.png"}
+                                width={dimensions.width}
+                                height={dimensions.height}
+                                tilePosition={{ x: 0, y: 0 }}
+                                tileScale={{ x: 0.225, y: 0.225 }}
+                        />
                         {stageMap[currentStage]()}
-                      </Application>
+
+                      </Stage>
               )}
-          </div>
+    </div>
   );
 };

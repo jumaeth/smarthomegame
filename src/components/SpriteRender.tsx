@@ -1,8 +1,8 @@
 import {RenderElement} from "../objects/RenderElement";
-import {extend,} from '@pixi/react';
-import {Assets, Container, Graphics, Sprite, Texture,} from 'pixi.js';
+import {Assets, Filter, Texture} from 'pixi.js';
 import {useEffect, useRef, useState} from 'react';
 import {ClickableElement} from "../objects/ClickableElement.ts";
+import {Sprite} from "@pixi/react";
 
 interface SpriteRender {
   content: RenderElement;
@@ -11,13 +11,13 @@ interface SpriteRender {
 export const SpriteRender = (props: SpriteRender) => {
   const spriteRef = useRef(null);
   const [texture, setTexture] = useState(Texture.EMPTY);
-  const [filter, setFilter] = useState<PIXI.Filter | undefined>(undefined);
+  const [filter, setFilter] = useState<Filter[] | null>(null);
 
   const isInteractive = props.content instanceof ClickableElement;
 
   const handleMouseOver = () => {
     if (props.content instanceof ClickableElement){
-      setFilter(props.content.mouseOver);
+      setFilter([props.content.mouseOver]);
     }
   };
 
@@ -27,40 +27,29 @@ export const SpriteRender = (props: SpriteRender) => {
     }
   };
 
-
-  extend({
-    Container,
-    Graphics,
-    Sprite
-  });
-
-
-
-
   useEffect(() => {
     if (texture === Texture.EMPTY) {
-      Assets
-              .load(props.content.imagePath)
+      Assets.load(props.content.imagePath)
               .then((result) => {
-                setTexture(result)
-              });
+                setTexture(result);
+              })
     }
   }, [texture]);
-  return <>
-    <pixiSprite
-            ref={spriteRef}
-            anchor={0.5}
-            eventMode={'static'}
-            scale={props.content.scale}
-            texture={texture}
-            x={props.content.xCoordinate}
-            y={props.content.yCoordinate}
-            filters={filter}
-            onMouseOver={handleMouseOver}
-            onMouseOut={()=>setFilter(undefined)}
-            onPointerDown={() => handlePointerDown()}
-            cursor={isInteractive ? 'pointer' : 'none'}
-    />
 
-  </>;
+  return <>
+      <Sprite
+              ref={spriteRef}
+              anchor={0.5}
+              eventMode={'static'}
+              scale={props.content.scale}
+              texture={texture}
+              x={props.content.xCoordinate}
+              y={props.content.yCoordinate}
+              filters={filter}
+              onmouseover={handleMouseOver}
+              onmouseout={()=>setFilter(null)}
+              onpointerdown={()=>handlePointerDown()}
+              cursor={isInteractive?'pointer':'none'}
+        />
+  </>
 };
