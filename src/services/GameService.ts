@@ -16,9 +16,12 @@ export class GameService {
       new Room("livingroom", "/game/livingroom", "LivingRoomComponent", [
         new SmartDevice("SmartTv"),
         new SmartDevice("SmartLights"),
+        new SmartDevice("SecurityCamera"),
       ]),
       new Room("kitchen", "/game/kitchen", "KitchenComponent", [
-        new SmartDevice("SmartHomeHub"),]),
+        new SmartDevice("SmartHomeHub"),
+        new SmartDevice("SecurityCamera"),]
+      ),
     ];
   }
 
@@ -84,7 +87,7 @@ export class GameService {
     }
   }
 
-  leaveRoom(roomName: string):boolean {
+  leaveRoom(roomName: string): boolean {
     if (!this.game) {
       return false;
     }

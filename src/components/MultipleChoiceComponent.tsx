@@ -1,9 +1,10 @@
-import { useState } from "react";
+import {useState} from "react";
+import {Trans} from "@lingui/react/macro";
 
 type MultipleChoiceProps = {
   questions: string[];
-  solutions: boolean[];
-  onComplete: (isAllCorrect: boolean) => void;
+  solutions: (boolean | string)[];
+  onComplete: (isCompleted: boolean) => void;
 };
 
 export const MultipleChoiceComponent = ({
@@ -15,11 +16,18 @@ export const MultipleChoiceComponent = ({
           new Array(questions.length).fill(false)
   );
   const [submitted, setSubmitted] = useState(false);
+  const [feedbackMsg, setFeedbackMsg] = useState<string>("");
 
-  const handleAnswer = (i: number, value: boolean) => {
+
+  const handleAnswer = (i: number, answer: boolean) => {
     const next = [...answers];
-    next[i] = value;
+    next[i] = answer;
     setAnswers(next);
+    if (answer !== solutions[i] && typeof solutions[i] === "string") {
+      setFeedbackMsg(solutions[i].toString());
+    } else {
+      setFeedbackMsg("");
+    }
   };
 
   const submitAnswer = () => {
@@ -39,7 +47,8 @@ export const MultipleChoiceComponent = ({
               {questions.map((q, i) => {
                 const isCorrect = answers[i] === solutions[i];
                 return (
-                        <li key={i} style={{ marginBottom: 8 }}>
+                        <li key={i} style={{marginBottom: 8}}>
+                          {q}
                           <label>
                             <input
                                     type="checkbox"
@@ -50,7 +59,7 @@ export const MultipleChoiceComponent = ({
                             {q}
                           </label>
                           {submitted && answers[i] && (
-                                  <span style={{ marginLeft: 8 }}>
+                                  <span style={{marginLeft: 8}}>
                   {isCorrect ? "✅" : "❌"}
                 </span>
                           )}
@@ -58,10 +67,14 @@ export const MultipleChoiceComponent = ({
                 );
               })}
             </ul>
+            <p className="text-red-600">{feedbackMsg}</p>
+
             {!submitted ? (
-                    <button onClick={submitAnswer}>Antwort abschicken</button>
+                    <button onClick={submitAnswer}>
+                      <Trans>Antwort abschicken</Trans>
+                    </button>
             ) : (
-              <button onClick={resetAnswers}>Nochmals versuchen</button>
+                    <button onClick={resetAnswers}>Nochmals versuchen</button>
             )}
           </div>
   );
