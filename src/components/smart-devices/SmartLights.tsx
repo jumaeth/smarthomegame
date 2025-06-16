@@ -1,7 +1,5 @@
 import {MultipleChoiceComponent} from "../MultipleChoiceComponent.tsx";
 import "./Modal.css";
-import {Trans} from "@lingui/react/macro";
-import {t} from "@lingui/core/macro";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
@@ -17,16 +15,16 @@ export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback
 
   return (
           <>
-            <h3><Trans>Smarte Beleuchtung</Trans></h3>
+            <h3>Smarte Beleuchtung</h3>
             <div className="modal-content">
-              <h1><Trans>Smarte Beleuchtung Mission</Trans></h1>
-              <h3><Trans>Beantworte die folgenden Fragen ...</Trans></h3>
+              <h1>Smarte Beleuchtung Mission</h1>
+              <h3>Beantworte die folgenden Fragen ...</h3>
               <MultipleChoiceComponent
                       questions={[
-                        t`Möchtest du Bluetooth aktivieren?`,
-                        t`Möchtest du Wifi aktivieren?`,
-                        t`Möchtest du den Energieverbrauch aufzeichnen?`,
-                        t`Möchtest du die Verbindung mit der Smart App aktivieren?`,
+                        `Möchtest du Bluetooth aktivieren?`,
+                        `Möchtest du Wifi aktivieren?`,
+                        `Möchtest du den Energieverbrauch aufzeichnen?`,
+                        `Möchtest du die Verbindung mit der Smart App aktivieren?`,
                       ]}
                       solutions={[true, true, false, false]}
                       onComplete={handleQuizCompletion}

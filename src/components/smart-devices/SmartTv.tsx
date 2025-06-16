@@ -1,10 +1,9 @@
-import { MultipleChoiceComponent } from "../MultipleChoiceComponent.tsx";
+import {MultipleChoiceComponent} from "../MultipleChoiceComponent.tsx";
 import "./Modal.css";
-import {t} from "@lingui/core/macro";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
-export const SmartTv = ({ onCompletion }: { onCompletion: onCompletionCallback }) => {
+export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
   const handleQuizCompletion = (isCompleted: boolean) => {
     if (isCompleted) {
       console.log("Quiz erfolgreich abgeschlossen!");
@@ -22,8 +21,8 @@ export const SmartTv = ({ onCompletion }: { onCompletion: onCompletionCallback }
               <h3>Beantworte die folgenden Fragen …</h3>
               <MultipleChoiceComponent
                       questions={[
-                        t`Möchtest du die Spracherkennung aktivieren?`,
-                        t`Möchtest du die Kamera aktivieren?`,
+                        `Möchtest du die Spracherkennung aktivieren?`,
+                        `Möchtest du die Kamera aktivieren?`,
                       ]}
                       solutions={[false, false]}
                       onComplete={handleQuizCompletion}
