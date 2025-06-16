@@ -1,16 +1,18 @@
 import {useEffect, useState} from "react";
 import {Trans} from "@lingui/react/macro";
 import {loadImagesFromFolder} from "./loadImages";
+import Button from "@/components/ui-components/Button";
 
 type CaptchaProps = {
   pictureFolder: string;
-  solutions: boolean[];
+  solutions: (boolean | string)[];
   onComplete: (isCompleted: boolean) => void;
 };
 
 export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: CaptchaProps) => {
   const images = loadImagesFromFolder(pictureFolder);
   const imageList = Object.values(images);
+  const [feedbackMsg, setFeedbackMsg] = useState<string>("");
 
   const [displayedIndices, setDisplayedIndices] = useState<number[]>([]);
   const [score, setScore] = useState<number>(0);
@@ -21,14 +23,20 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
     setDisplayedIndices(Array.from({length: 9}, (_, i) => i));
   }, []);
 
+
   const handleImageClick = (gridIndex: number) => {
     if (isCompleted) return;
     const imageIndex = displayedIndices[gridIndex];
     if (imageIndex < solutions.length) {
       setScore(prevScore => prevScore + (solutions[imageIndex] ? 1 : -1));
+
+      if (solutions[imageIndex] !== true && solutions[imageIndex] !== false && typeof solutions[imageIndex] === "string") {
+        setFeedbackMsg(solutions[imageIndex].toString());
+      } else {
+        setFeedbackMsg("");
+      }
     }
 
-    // Replace clicked image with next available image
     setDisplayedIndices(prev => {
       const updated = [...prev];
       const nextImageIndex = Math.max(...prev) + 1;
@@ -68,17 +76,11 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
                       </div>
               )}
 
-              <button
-                      onClick={submitAnswer}
-                      disabled={isCompleted}
-                      className={`
-            px-4 py-2 rounded-md font-medium
-            ${isCompleted ? "bg-gray-300 text-gray-600" : "bg-blue-600 text-black hover:bg-blue-700"}
-            transition-colors duration-200
-          `}
-              >
+              {feedbackMsg && <div className="text-red-600 text-sm mt-1">{feedbackMsg}</div>}
+
+              <Button onClick={submitAnswer} disabled={isCompleted}>
                 <Trans>Antwort abschicken</Trans>
-              </button>
+              </Button>
 
               {!isCompleted && (
                       <div className="text-sm text-gray-600 mt-1">

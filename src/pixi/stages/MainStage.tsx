@@ -3,10 +3,14 @@ import {useCallback, useEffect, useState} from "react";
 import {calculateCanvasSize} from "@/utils/movment";
 import {MainContainer} from "@/pixi/container/MainContainer";
 import {IntroContainer} from "@/pixi/container/IntroContainer";
-import {MapKey} from "@/types/maps";
+import {DeviceKey, MapKey} from "@/types/maps";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps";
 
-export const MainStage = () => {
+interface MainStageProps {
+  triggerOverlay: (device :DeviceKey) => void;
+}
+
+export const MainStage = ({ triggerOverlay }: MainStageProps) => {
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
   const [showIntro, setShowIntro] = useState(true);
   const [currentMap, setCurrentMap] = useState<MapKey>('livingroom');
@@ -19,6 +23,10 @@ export const MainStage = () => {
   const handleMapChange = (newMap: MapKey) => {
     setCurrentMap(newMap);
   };
+
+  const handleMapOverlay = (device : DeviceKey) => {
+    triggerOverlay(device);
+  }
 
   useEffect(() => {
     window.addEventListener("resize", updateCanvasSize);
@@ -41,6 +49,7 @@ export const MainStage = () => {
                         map={currentMap}
                         collisionMap={collisionMap}
                         onMapChange={handleMapChange}
+                        onMapOverlay={handleMapOverlay}
                 />
         )}
       </Stage>
