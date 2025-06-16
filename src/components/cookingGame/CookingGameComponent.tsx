@@ -1,3 +1,4 @@
+import {Application, extend} from '@pixi/react';
 import {Assets, Texture, TilingSprite} from "pixi.js";
 import {useEffect, useRef, useState} from "react";
 import {GameStage} from "./GameStage.tsx";
@@ -5,7 +6,10 @@ import {RecipeStage} from "./RecipeStage.tsx";
 import {IngredientsStage} from "./IngredientsStage.tsx";
 import {CookingStage} from "./CookingStage.tsx";
 import {ServeStage} from "./ServeStage.tsx";
-import {Stage} from "@pixi/react";
+
+extend({
+  TilingSprite
+});
 
 export const CookingGameComponent = ({setCompleted, reload}) => {
 
@@ -109,12 +113,12 @@ export const CookingGameComponent = ({setCompleted, reload}) => {
   return (
           <div ref={containerRef} className="h-[90%] mt-5">
               {(isTextureLoaded &&
-                      <Stage
+                      <Application
                               width={dimensions.width}
                               height={325}
                               backgroundColor={0xd87f20}>
                         {(
-                                <TilingSprite
+                                <pixiTilingSprite
                                   texture={texture}
                                   eventMode={'none'}
                                   width={dimensions.width}
@@ -123,7 +127,7 @@ export const CookingGameComponent = ({setCompleted, reload}) => {
                                   tileScale={0.3}
                                 />)}
                         {stageMap[currentStage]()}
-                      </Stage>
+                      </Application>
               )}
           </div>
   );

@@ -1,9 +1,14 @@
 import {Sprite, Text} from 'pixi.js'
+import {extend} from "@pixi/react";
 import {useEffect, useState} from "react";
 import {Button} from "./Button.tsx";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
 
+extend({
+  Sprite,
+  Text
+});
 
 export const RecipeStage = ({setStage, setTotalPoints}) => {
 
@@ -62,7 +67,7 @@ export const RecipeStage = ({setStage, setTotalPoints}) => {
 
   return (
           <>
-            <Sprite
+            <pixiSprite
                     anchor={0.5}
                     eventMode={'static'}
                     scale={0.6}
@@ -70,7 +75,7 @@ export const RecipeStage = ({setStage, setTotalPoints}) => {
                     x={273}
                     y={220}
             />
-            <Text
+            <pixiText
                     text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
                     x={75}
                     y={70}

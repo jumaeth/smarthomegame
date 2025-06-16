@@ -214,7 +214,7 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
           setBackground("book");
         }
         return <>
-          <Text
+          <pixiText
                   text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
                   x={85}
                   y={65}
@@ -264,7 +264,7 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
         );
       }
       return <>
-        {<Text
+        {<pixiText
                 text={instruction.toUpperCase()}
                 x={272}
                 y={25}
@@ -289,7 +289,7 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
         setBackground("book");
       }
       return <>
-        <Text
+        <pixiText
                 text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
                 x={85}
                 y={65}
@@ -321,7 +321,7 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
     if(loaded){
       if(background === "book"){
         return (
-                <Sprite
+                <pixiSprite
                         anchor={0.5}
                         eventMode={'static'}
                         scale={0.6}
@@ -333,14 +333,14 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
       }else if(background === "market"){
         return (
                 <>
-                <Sprite
+                <pixiSprite
                         eventMode={'static'}
                         scale={0.6}
                         texture={textures.marketBackground}
                         x={0}
                         y={-200}
                 />
-                <Sprite
+                <pixiSprite
                         anchor={0.5}
                         eventMode={'static'}
                         scale={0.45}
