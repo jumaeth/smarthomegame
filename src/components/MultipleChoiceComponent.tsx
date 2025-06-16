@@ -48,7 +48,6 @@ export const MultipleChoiceComponent = ({
                 const isCorrect = answers[i] === solutions[i];
                 return (
                         <li key={i} style={{marginBottom: 8}}>
-                          {q}
                           <label>
                             <input
                                     type="checkbox"
