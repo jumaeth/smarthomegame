@@ -1,10 +1,10 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import {Trans} from "@lingui/react/macro";
 
 type MultipleChoiceProps = {
   questions: string[];
-  solutions: boolean[];
-  onComplete: (isAllCorrect: boolean) => void;
+  solutions: (boolean | string)[];
+  onComplete: (isCompleted: boolean) => void;
 };
 
 export const MultipleChoiceComponent = ({
@@ -19,9 +19,9 @@ export const MultipleChoiceComponent = ({
   const [feedbackMsg, setFeedbackMsg] = useState<string>("");
 
 
-  const handleAnswer = (i: number, value: boolean) => {
+  const handleAnswer = (i: number, answer: boolean) => {
     const next = [...answers];
-    next[i] = value;
+    next[i] = answer;
     setAnswers(next);
     if (answer !== solutions[i] && typeof solutions[i] === "string") {
       setFeedbackMsg(solutions[i].toString());
