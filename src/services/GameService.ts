@@ -16,10 +16,12 @@ export class GameService {
       new Room("livingroom", "/game/livingroom", "LivingRoomComponent", [
         new SmartDevice("SmartTv"),
         new SmartDevice("SmartLights"),
+        new SmartDevice("SecurityCamera"),
       ]),
       new Room("kitchen", "/game/kitchen", "KitchenComponent", [
         new SmartDevice("SmartHomeHub"),
         new SmartDevice("SmartKitchen"),
+        new SmartDevice("SecurityCamera"),
       ]),
     ];
   }

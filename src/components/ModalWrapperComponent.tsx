@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, {forwardRef, useImperativeHandle, useState} from "react";
 
 type ModalWrapperProps = {
   content: React.ReactNode;
@@ -23,7 +23,7 @@ export const ModalWrapperComponent = forwardRef(({content, onClose}: ModalWrappe
           <>
             {isOpen && (
                     <div className="modal" role="dialog" aria-modal="true">
-                      <div className="overlay" onClick={closeModal} />
+                      <div className="overlay" onClick={closeModal}/>
 
                       <div className="modal-window">
                         <button

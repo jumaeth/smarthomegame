@@ -1,9 +1,9 @@
-import { MultipleChoiceComponent } from "../MultipleChoiceComponent.tsx";
+import {MultipleChoiceComponent} from "../MultipleChoiceComponent.tsx";
 import "./Modal.css";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
-export const SmartLights = ({ onCompletion }: { onCompletion: onCompletionCallback }) => {
+export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
   const handleQuizCompletion = (isCompleted: boolean) => {
     if (isCompleted) {
       console.log("Quiz erfolgreich abgeschlossen!");
@@ -15,16 +15,16 @@ export const SmartLights = ({ onCompletion }: { onCompletion: onCompletionCallba
 
   return (
           <>
-            <h3>Smart Lights</h3>
+            <h3>Smarte Beleuchtung</h3>
             <div className="modal-content">
-              <h1>Smart Lights Mission</h1>
-              <h3>Beantworte die folgenden Fragen …</h3>
+              <h1>Smarte Beleuchtung Mission</h1>
+              <h3>Beantworte die folgenden Fragen ...</h3>
               <MultipleChoiceComponent
                       questions={[
-                        "Möchtest du Bluetooth aktivieren?",
-                        "Möchtest du Wifi aktivieren?",
-                        "Möchtest du den Energieverbrauch aufzeichnen?",
-                        "Möchtest du die Verbindung mit der Smart App aktivieren?",
+                        `Möchtest du Bluetooth aktivieren?`,
+                        `Möchtest du Wifi aktivieren?`,
+                        `Möchtest du den Energieverbrauch aufzeichnen?`,
+                        `Möchtest du die Verbindung mit der Smart App aktivieren?`,
                       ]}
                       solutions={[true, true, false, false]}
                       onComplete={handleQuizCompletion}
