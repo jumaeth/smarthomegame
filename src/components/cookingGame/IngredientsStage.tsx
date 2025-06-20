@@ -1,11 +1,16 @@
-import {useEffect, useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {Button} from "./Button.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {TextStyle} from "pixi.js";
 import {Text, Sprite} from "@pixi/react";
 
-export const IngredientsStage = ({ setStage, setTotalPoints }) => {
+interface IngredientsStageProps {
+  setStage: (stage: string) => void;
+  setTotalPoints: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, setTotalPoints }) => {
 
 
   const texturePaths= useMemo(() => ({
@@ -110,7 +115,7 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
     }
   }, [page]);
 
-  const btnAction = btnId =>
+  const btnAction = (btnId : number) =>
           () => {
             setScores(prev => ({
               ...prev,
@@ -191,17 +196,16 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
 
   const action = () => {
     if(page < offset + btnTexts.length){
-      return setPage(page+1);
+      setPage(page+1);
     }
     else if(choices[3] === 2){
       retry();
     }else{
-      return () => {
-        setTotalPoints(prev => prev+avgTotalWithPrivacy);
-        setStage("game");
-      }
+      setTotalPoints((prev : number) => prev+avgTotalWithPrivacy);
+      setStage("game");
     }
   };
+
 
   useEffect(() => {
     if (page === offset + 1 + btnTexts.length) {
@@ -254,7 +258,7 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
       for (let i = 0; i < 4; i++) {
         btns.push(
                 <Button
-                        key={btnTexts[i]}
+                        key={btnTexts[i][0]}
                         x={136}
                         y={86 + (i * 60)}
                         color={0xC4A484}
@@ -308,15 +312,14 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
         />
         {showButton &&
                 <Button
-                        anchor={{x: 0.5, y:0.5}}
-                        x={217}
+                        x={235}
                         y={275}
-                        width={110}
+                        width={100}
                         height={35}
                         color={0xdcc08e}
                         lineColor={0x5d3c1a}
                         label={btnText}
-                        action={action()}
+                        action={action}
                 />}
       </>
     }

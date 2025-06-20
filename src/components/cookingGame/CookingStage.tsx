@@ -1,11 +1,16 @@
-import {AlphaFilter, TextStyle} from 'pixi.js'
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {AlphaFilter, TextStyle, Graphics as PIXIGraphics} from 'pixi.js'
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {Button} from "./Button.tsx";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
-import {Graphics, Sprite, Text} from '@pixi/react'
+import {Graphics, Sprite, Text} from '@pixi/react';
 
-export const CookingStage = ({setStage, setTotalPoints}) => {
+interface CookingStageProps {
+  setStage: (stage: string) => void;
+  setTotalPoints: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoints})  => {
 
   const [showButton, setShowButton] = useState(false);
   const [page, setPage] = useState(1);
@@ -82,7 +87,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
   ];
 
 
-  const draw = useCallback((g) => {
+  const draw = useCallback((g : PIXIGraphics) => {
     g.clear();
     g.beginFill(0xacb4bd);
     g.lineStyle(3, 0x3f556b, 1);
@@ -90,7 +95,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
     g.endFill();
   }, []);
 
-  const onHover = id =>{
+  const onHover = (id : string) =>{
     if (allHoverable) {
       setHoveredId(id);
     }else if(id === selected){
@@ -106,7 +111,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
     setShowInfo(hoveredId !== "")
   }, [hoveredId]);
 
-  const select = id => {
+  const select = (id : string) => {
     if (selected === "") {
       setHoveredId("");
       setSelected(id)
@@ -118,13 +123,13 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
     }
   }
 
-  const filtercondition = id => {
+  const filtercondition = (id : string) => {
     return hoveredId === id || selected === id ? [new AlphaFilter(1.2)] :
             hoveredId !== "" &&  hoveredId !== id || selected !== "" && selected !== id ? [new AlphaFilter( 0.4)]
                     : [];
   }
 
-  const infoYOffset = id => {
+  const infoYOffset = (id : string) => {
     if(devices.indexOf(id) > 1){
       return 100;
     }else{
@@ -132,7 +137,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
     }
   }
 
-  const infoXOffset = id => {
+  const infoXOffset = (id : string) => {
     if(devices.indexOf(id) % 2 == 0){
       return 250;
     }else{
@@ -140,7 +145,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
     }
   }
 
-  const rating = (id, criteria) => {
+  const rating = (id : number, criteria : number) => {
     const s = stars[id][criteria];
     const total = ["["]
     for (let i = 0; i < s; i++) {
@@ -207,7 +212,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
       setRetry(true);
     }else if(!retry){
       setRetry(false);
-      setTotalPoints(prev => prev + evaluatePoints());
+      setTotalPoints((prev: number) => prev + evaluatePoints());
       setStage("game");
     }
   };

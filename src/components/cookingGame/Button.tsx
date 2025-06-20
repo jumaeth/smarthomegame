@@ -1,13 +1,25 @@
 import {TextStyle} from "pixi.js";
 import {useCallback, useState} from "react";
-import {Text, Graphics} from "@pixi/react"
+import {Graphics as PIXIGraphics} from "pixi.js"
+import {Text, Graphics as REACTGraphics} from "@pixi/react";
 
-export const Button =  ({x, y, width, height, label, action, color, lineColor} ) => {
+interface ButtonProps {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  label: string;
+  action: () => void;
+  color: number;
+  lineColor: number;
+}
+
+export const Button = ({ x, y, width, height, label, action, color, lineColor }: ButtonProps) => {
 
   const [hovered, setHovered] = useState(false);
   const textColor = hovered ? 0xeeeeee : 0x000000;
 
-  const draw = useCallback((g) => {
+  const draw = useCallback((g : PIXIGraphics) => {
     g.clear();
     g.beginFill(color);
     g.lineStyle(3,lineColor, 1);
@@ -17,7 +29,7 @@ export const Button =  ({x, y, width, height, label, action, color, lineColor} )
 
   return (
           <>
-            <Graphics
+            <REACTGraphics
                     x={x}
                     y={y}
                     interactive={true}

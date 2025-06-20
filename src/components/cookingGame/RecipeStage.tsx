@@ -5,9 +5,12 @@ import {Sprite, Text} from "@pixi/react"
 import {TextStyle} from "pixi.js";
 import {Button} from "@/components/cookingGame/Button.tsx";
 
+interface RecipeStageProps {
+  setStage: (stage: string) => void;
+  setTotalPoints: React.Dispatch<React.SetStateAction<number>>;
+}
 
-
-export const RecipeStage =  ({ setStage, setTotalPoints }) => {
+export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoints }) => {
   const [text, setText] = useState('');
   const [showButton, setShowButton] = useState(false);
   const [page, setPage] = useState(1);
@@ -53,7 +56,8 @@ export const RecipeStage =  ({ setStage, setTotalPoints }) => {
       }
       setPage(page + 1);
     } else {
-      setTotalPoints(prev => prev + 100);
+      setTotalPoints((prev : number) => prev + 100);
+      setTotalPoints((prev : number) => prev + 100);
       setStage("game");
     }
   };

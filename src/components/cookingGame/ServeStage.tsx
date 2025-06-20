@@ -1,16 +1,28 @@
 import {Sprite, Text, Graphics, TilingSprite} from '@pixi/react';
-import {useEffect, useMemo, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {Button} from "./Button.tsx";
-import {TextStyle} from "pixi.js";
+import {EventMode, FederatedPointerEvent} from 'pixi.js';
+import {TextStyle, Graphics as PIXIGraphics, Sprite as PIXISprite} from "pixi.js";
 
-export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
+interface ServeStageProps {
+  setStage: (stage: string) => void;
+  dimensions: {width: number, height: number}
+  setTotalPoints: React.Dispatch<React.SetStateAction<number>>;
+}
+
+type InteractiveSprite = PIXISprite & {
+  eventMode: EventMode;
+  id: string;
+};
+
+export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setTotalPoints}) => {
   const [showButton, setShowButton] = useState(false);
   const [hovered, setHovered] = useState("");
   const [dragged, setDragged] = useState("");
-  const [spriteToMarkerMap, setSpriteToMarkerMap] = useState({});
-  const [lockedSprites, setLockedSprites] = useState({});
+  const [spriteToMarkerMap, setSpriteToMarkerMap] = useState<Record<string, string>>({});
+  const [lockedSprites, setLockedSprites] = useState<Record<string, boolean>>({});
   const [page, setPage] = useState(1);
   const [points, setPoints] = useState(100);
   const [pointerdown, setPointerdown] = useState(false);
@@ -30,7 +42,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
     spoon: "/cooking-sprites/spoon.png",
   }), []);
 
-  const  initialPositions = useRef({
+  const  initialPositions = useRef<Record<string, { x: number; y: number }>>({
     plate: { x: 60, y: 50 },
     cutlery: { x: 160, y: 50 },
     glas: { x: 260, y: 50 },
@@ -88,7 +100,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
     }
   }, [typingDone]);
 
-  const drawMarker = (g, marker) => {
+  const drawMarker = (g : PIXIGraphics, marker : Marker) => {
     g.clear();
     g.beginFill( 0xeeeeee, marker.alpha);
     g.lineStyle(marker.alpha === 0 ? 0 : 1, 0x000000);
@@ -112,10 +124,10 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
 
 
   const renderElements = [plate, cutlery, glas, napkin, spoon];
-  const spriteRefs = useRef({});
+  const spriteRefs = useRef<Record<string, PIXISprite>>({});
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
-  const onDragStart = (e, id) => {
+  const onDragStart = (e: FederatedPointerEvent, id: string) => {
     if (lockedSprites[id]) return;
     setPointerdown(true);
     draggingRef.current = true;
@@ -131,13 +143,12 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
     e.stopPropagation();
   };
 
-  const onDragMove = (e) => {
+  const onDragMove = (e: FederatedPointerEvent) => {
 
     if (pointerdown) {
       if (!dragged || !spriteRefs.current[dragged]) return;
       const sprite = spriteRefs.current[dragged];
       const pos = e.data.getLocalPosition(sprite.parent);
-      console.log("setting sprite position 3" );
       sprite.x = pos.x - dragOffset.x;
       sprite.y = pos.y - dragOffset.y;
 
@@ -150,20 +161,19 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
 
   const onDragEnd = () => {
     if (dragged && spriteRefs.current[dragged]) {
-      checkSnapToMarker(spriteRefs.current[dragged], dragged);
+      checkSnapToMarker(spriteRefs.current[dragged] as InteractiveSprite, dragged);
     }
-    setDragged(null);
+    setDragged("");
     setPointerdown(false);
     draggingRef.current = false;
   };
 
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e: FederatedPointerEvent) => {
     if (pointerdown) {
       if (!draggingRef.current || !dragged || !spriteRefs.current[dragged]) return;
 
       const sprite = spriteRefs.current[dragged];
       const global = e.data.global;
-      console.log("setting sprite position 2");
       sprite.x = global.x;
       sprite.y = global.y;
 
@@ -174,7 +184,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
     }
   };
 
-  const checkRightPlacing = (sprite, marker) => {
+  const checkRightPlacing = (sprite: InteractiveSprite, marker: Marker) => {
     if (marker.expecting === sprite.id) {
       sprite.tint = 0x16ff00;
       setTimeout(() => {
@@ -193,7 +203,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
   };
 
   const SNAP_THRESHOLD = 30;
-  const checkSnapToMarker = (sprite, id) => {
+  const checkSnapToMarker = (sprite: InteractiveSprite, id: string) => {
     let snapped = false;
 
     for (const marker of markerPositions) {
@@ -205,7 +215,6 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
         snapped = true;
 
         sprite.eventMode = 'none';
-        console.log("setting sprite position 1");
         sprite.x = marker.x;
         sprite.y = marker.y;
 
@@ -227,7 +236,6 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
 
       if (start && originalMarkerId) {
         sprite.eventMode = 'none';
-        console.log("setting sprite position");
         sprite.x = start.x;
         sprite.y = start.y;
 
@@ -246,7 +254,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
     }
   };
 
-  const selectCursor = id => {
+  const selectCursor = (id: string) => {
     if (lockedSprites[id]) return 'not-allowed';
     if (hovered === id) return 'pointer';
     return 'default';
@@ -278,8 +286,6 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
   const pageUP = () => {
     setPage(prev => prev +1);
   };
-
-  console.log("rerender");
 
   const instructionPage =  () => {
     if(page === 1 && textures.recipeopen){
@@ -358,7 +364,10 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
   const sprites = () => renderElements.map(object => (
           <Sprite
                   key={object.id}
-                  ref={el => { if (el) { el.id = object.id; spriteRefs.current[object.id] = el; }}}
+                  ref={(el: InteractiveSprite) => {   if (el) {
+                    (el as InteractiveSprite).id = object.id;
+                    spriteRefs.current[object.id] = el as InteractiveSprite;
+                  }}}
                   anchor={object.anchor}
                   eventMode={'static'}
                   scale={object.scale}

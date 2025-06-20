@@ -24,27 +24,21 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   const[notificationProperties,setNotificationProperties]=useState({x:0,y:0,alpha:0});
   const initStateRef=useRef(true);
   const[totalPoints,setTotalPoints]=useState(0);
+  const [passedStages, setPassedStages] = useState(0);
 
   const stages=[
     "game","recipe","ingredients","cook","serve"
   ];
 
-  const secureSetStage=stage=>{
+  const secureSetStage= (stage : string) =>{
     if(stage=="game"){
       setCurrentStage(stage);
+      setPassedStages((prev: number) => prev+1);
     }else if(stages.indexOf(stage)===nextStage){
       setNextStage(prev=>prev+1);
       setCurrentStage(stage);
     }
   };
-
-  // useEffect(()=>{
-  //   if(reload){
-  //   setCurrentStage("game");
-  //   setNextStage(1);
-  //   initStateRef.current=true;
-  //   }
-  // },[reload]);
 
   useEffect(()=>{
     if(texture===Texture.EMPTY){
@@ -92,16 +86,16 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
     }
   },[currentStage,dimensions,initStateRef]);
 
-  const stageMap={
-    game:() => <GameStage setStage={secureSetStage} dimensions={dimensions} notificationProperties={notificationProperties}/>,
+  const stageMap: { [key: string]: () => JSX.Element } = {
+    game:() => <GameStage setStage={secureSetStage} notificationProperties={notificationProperties}/>,
     recipe:() => <RecipeStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
     ingredients:()=><IngredientsStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
-    cook:()=><CookingStage setStage={secureSetStage}dimensions={dimensions}setTotalPoints={setTotalPoints}/>,
-    serve:()=><ServeStage setStage={secureSetStage}dimensions={dimensions}setTotalPoints={setTotalPoints}/>
+    cook:()=><CookingStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
+    serve:()=><ServeStage setStage={secureSetStage} dimensions={dimensions} setTotalPoints={setTotalPoints}/>
 };
 
   useEffect(()=>{
-    if(totalPoints/stages.length>50){
+    if(passedStages === 4 && totalPoints/stages.length>50){
       setTimeout(()=>onCompletion(),100);
     }
   },[totalPoints]);
