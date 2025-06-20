@@ -1,13 +1,11 @@
-import {AlphaFilter, Sprite, Text} from 'pixi.js'
-import {useCallback, useEffect, useState} from "react";
+import {AlphaFilter, TextStyle} from 'pixi.js'
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {Button} from "./Button.tsx";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
-
+import {Graphics, Sprite, Text} from '@pixi/react'
 
 export const CookingStage = ({setStage, setTotalPoints}) => {
-
-  console.log("CookingStage");
 
   const [showButton, setShowButton] = useState(false);
   const [page, setPage] = useState(1);
@@ -24,7 +22,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
   const instruction = "Okay, lass uns ein Gericht daraus machen. \n\n" +
           "Unsere Smartkitchen kann alle Zutaten vorbereiten aber wir müssen die richtige Maschine zum Kochen des Gerichts auswählen";
 
-  const texturePaths: { [key: string]: string } = {
+  const texturePaths = useMemo(() => ({
     recipeopen: "/cooking-sprites/recipeopen.png",
     shelf: "/cooking-sprites/shelf.png",
     wall: "/cooking-sprites/wall.png",
@@ -32,7 +30,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
     foodprocessor: "/cooking-sprites/foodprocessor.png",
     microwave: "/cooking-sprites/microwave.png",
     steamer: "/cooking-sprites/steamer.png"
-  };
+  }), []);
 
   const devices = ["cookingfield", "foodprocessor", "microwave", "steamer"];
 
@@ -84,15 +82,13 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
   ];
 
 
-  const [hovered] = useState(false);
-
   const draw = useCallback((g) => {
     g.clear();
-    g.fill(0xacb4bd);
+    g.beginFill(0xacb4bd);
     g.lineStyle(3, 0x3f556b, 1);
-    g.roundRect(0, 0, 270, 200, 5);
+    g.drawRoundedRect(0, 0, 270, 200, 5);
     g.endFill();
-  }, [hovered]);
+  }, []);
 
   const onHover = id =>{
     if (allHoverable) {
@@ -123,9 +119,9 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
   }
 
   const filtercondition = id => {
-    return hoveredId === id || selected === id ? new AlphaFilter({alpha: 1.2}) :
-            hoveredId !== "" &&  hoveredId !== id || selected !== "" && selected !== id ? new AlphaFilter({alpha: 0.4})
-                    : null
+    return hoveredId === id || selected === id ? [new AlphaFilter(1.2)] :
+            hoveredId !== "" &&  hoveredId !== id || selected !== "" && selected !== id ? [new AlphaFilter( 0.4)]
+                    : [];
   }
 
   const infoYOffset = id => {
@@ -227,7 +223,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
 
 
   const instructionPage =  () => {
-    if(page === 1){
+    if(page === 1 && textures.recipeopen){
       return (
               <>
                 <Sprite
@@ -242,12 +238,13 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
                         text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
                         x={75}
                         y={70}
-                        style={{
-                          fontFamily: 'micro5',
-                          fontSize: 32,
-                          wordWrap: true,
-                          wordWrapWidth: 400,
-                        }}
+                        style={
+                          new TextStyle({
+                            fontFamily:'micro5',
+                            fontSize:32,
+                            wordWrap:true,
+                            wordWrapWidth:400,
+                          })}
                         anchor={{ x: 0, y: 0 }}
                 />
 
@@ -295,11 +292,11 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
                                 texture={object.texture}
                                 x={object.x}
                                 y={object.y}
-                                onMouseOver={()=>onHover(object.id)}
-                                onMouseOut={()=>hoverOut()}
+                                pointerover={()=>onHover(object.id)}
+                                pointerout={()=>hoverOut()}
                                 cursor={'pointer'}
                                 filters={filtercondition(object.id)}
-                                onPointerDown={()=>select(object.id)}
+                                pointerdown={()=>select(object.id)}
                         />
                 ))}
                 {(showInfo &&
@@ -314,12 +311,13 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
                          text={infoTitles}
                          x={30 + infoXOffset(hoveredId)}
                          y={30 +infoYOffset(hoveredId)}
-                         style={{
-                           fontFamily: 'micro5',
-                           fontSize: 25,
-                           wordWrap: true,
-                           wordWrapWidth: 400,
-                         }}
+                         style={
+                           new TextStyle({
+                             fontFamily:'micro5',
+                             fontSize:25,
+                             wordWrap:true,
+                             wordWrapWidth:400,
+                           })}
                          anchor={{ x: 0, y: 0 }}
                   />
                 )}
@@ -328,13 +326,14 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
                          text={infoText}
                          x={150 + infoXOffset(hoveredId)}
                          y={30 +infoYOffset(hoveredId)}
-                         style={{
-                           fontFamily: 'micro5',
-                           fontSize: 25,
-                           fill: {color: 0xe1eef0},
-                           wordWrap: true,
-                           wordWrapWidth: 400,
-                         }}
+                         style={
+                           new TextStyle({
+                             fontFamily:'micro5',
+                             fontSize:25,
+                             fill: 0xe1eef0,
+                             wordWrap:true,
+                             wordWrapWidth:400,
+                           })}
                          anchor={{ x: 0, y: 0 }}
                         />
                 )}
@@ -343,13 +342,14 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
                                 text={infoComment}
                                 x={30 + infoXOffset(hoveredId)}
                                 y={130 +infoYOffset(hoveredId)}
-                                style={{
-                                  fontFamily: 'micro5',
-                                  fontSize: 25,
-                                  fill: {color: 0x3f556b},
-                                  wordWrap: true,
-                                  wordWrapWidth: 250,
-                                }}
+                                style={
+                                  new TextStyle({
+                                    fontFamily:'micro5',
+                                    fontSize:25,
+                                    fill: 0x3f556b,
+                                    wordWrap:true,
+                                    wordWrapWidth:250,
+                                  })}
                                 anchor={{ x: 0, y: 0 }}
                         />
                 )}
@@ -374,6 +374,7 @@ export const CookingStage = ({setStage, setTotalPoints}) => {
       )
     }
   }
+
 
   return (
           <>

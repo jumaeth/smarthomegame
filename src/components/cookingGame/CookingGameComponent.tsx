@@ -5,7 +5,7 @@ import {RecipeStage} from "./RecipeStage.tsx";
 import {IngredientsStage} from "./IngredientsStage.tsx";
 import {CookingStage} from "./CookingStage.tsx";
 import {ServeStage} from "./ServeStage.tsx";
-import {Sprite, Stage, TilingSprite} from "@pixi/react";
+import {Stage, TilingSprite} from "@pixi/react";
 
 interface CookingGameComponentProps {
   onCompletion: () => void;
@@ -54,7 +54,6 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
                 setIsTextureLoaded(true);
               });
     }
-    console.log("loadcheck: "+isTextureLoaded+" for counter");
   },[texture]);
 
   useEffect(()=>{
@@ -62,8 +61,6 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
       setDimensions({
         width: 544,
         height: 325
-        // width:containerRef.current.clientWidth,
-        // height:containerRef.current.clientHeight
       })
     }
   },[]);

@@ -16,7 +16,8 @@ export const useLoadTextures = (texturePaths: TextureMap) => {
       try {
         const entries = await Promise.all(
                 Object.entries(texturePaths).map(async ([key, path]) => {
-                  const tex = await Assets.load(path);
+                  const existing = Assets.cache.get(path);
+                  const tex = existing ?? await Assets.load(path);
                   return [key, tex] as const;
                 })
         );
@@ -29,6 +30,7 @@ export const useLoadTextures = (texturePaths: TextureMap) => {
         if (!cancelled) setError(err as Error);
       }
     };
+
 
     load();
 

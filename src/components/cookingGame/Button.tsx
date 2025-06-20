@@ -1,5 +1,6 @@
-import {Text, Graphics} from "pixi.js";
+import {TextStyle} from "pixi.js";
 import {useCallback, useState} from "react";
+import {Text, Graphics} from "@pixi/react"
 
 export const Button =  ({x, y, width, height, label, action, color, lineColor} ) => {
 
@@ -8,37 +9,37 @@ export const Button =  ({x, y, width, height, label, action, color, lineColor} )
 
   const draw = useCallback((g) => {
     g.clear();
-    g.fill(color);
-    g.lineStyle(3, lineColor, 1);
-    g.roundRect(0, 0, width, height, 5);
+    g.beginFill(color);
+    g.lineStyle(3,lineColor, 1);
+    g.drawRoundedRect(0,0,width,height, 5);
     g.endFill();
   }, [hovered]);
-
 
   return (
           <>
             <Graphics
                     x={x}
                     y={y}
+                    interactive={true}
                     draw={draw}
-                    interactive
-                    eventMode={'static'}
-                    onPointerDown={action}
-                    onMouseOver={() => setHovered(true)}
-                    onMouseOut={() => setHovered(false)}
-                    cursor={hovered ? 'pointer' : 'none'}
+                    pointerdown={action}
+                    pointerover={() => setHovered(true)}
+                    pointerout={() => setHovered(false)}
+                    cursor={hovered ? 'pointer' : 'default'}
             />
             <Text
                     text={label.toUpperCase()}
                     x={x + width/2}
                     y={y + height/2}
-                    style={{
-                      fontFamily: 'micro5',
-                      fontSize: 30,
-                      wordWrap: true,
-                      wordWrapWidth: width-10,
-                      fill: {color: textColor}
-                    }}
+                    style={
+                      new TextStyle({
+                        fontFamily:'micro5',
+                        fontSize:30,
+                        wordWrap:true,
+                        wordWrapWidth:width-10,
+                        fill: textColor
+                      })
+                    }
                     anchor={{ x: 0.5, y: 0.6 }}
             />
           </>

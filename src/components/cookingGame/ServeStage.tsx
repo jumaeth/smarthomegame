@@ -1,8 +1,9 @@
-import {Sprite, Text, Graphics} from 'pixi.js';
-import {useEffect, useRef, useState} from "react";
+import {Sprite, Text, Graphics, TilingSprite} from '@pixi/react';
+import {useEffect, useMemo, useRef, useState} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {Button} from "./Button.tsx";
+import {TextStyle} from "pixi.js";
 
 export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
   const [showButton, setShowButton] = useState(false);
@@ -12,12 +13,13 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
   const [lockedSprites, setLockedSprites] = useState({});
   const [page, setPage] = useState(1);
   const [points, setPoints] = useState(100);
+  const [pointerdown, setPointerdown] = useState(false);
 
   const draggingRef = useRef(false);
 
   const instruction = "Wir sind fast fertig! \n\nAls letztes müssen wir den Tisch decken und unser Gericht servieren";
 
-  const texturePaths = {
+  const texturePaths = useMemo(() => ({
     recipeopen: "/cooking-sprites/recipeopen.png",
     tableBackground: "/cooking-sprites/table_background.png",
     placemat: "/cooking-sprites/placemat.png",
@@ -26,7 +28,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
     glas: "/cooking-sprites/glas.png",
     napkin: "/cooking-sprites/napkin.png",
     spoon: "/cooking-sprites/spoon.png",
-  };
+  }), []);
 
   const  initialPositions = useRef({
     plate: { x: 60, y: 50 },
@@ -71,7 +73,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
     cutlery: "2",
     glas: "3",
     napkin: "4",
-    spoon: "4"
+    spoon: "5"
   });
 
   const {textures} = useLoadTextures(texturePaths);
@@ -88,17 +90,25 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
 
   const drawMarker = (g, marker) => {
     g.clear();
-    g.fill( 0xeeeeee, marker.alpha);
+    g.beginFill( 0xeeeeee, marker.alpha);
     g.lineStyle(marker.alpha === 0 ? 0 : 1, 0x000000);
     g.drawRoundedRect(0, 0, 20, 20, 2);
     g.endFill();
   };
 
-  const plate = { id: "plate", scale: 0.1,  texture: textures.plate, x: initialPositions.current.plate.x, y: initialPositions.current.plate.y, anchor: {x: 0.4, y: 0.4} };
-  const cutlery = { id: "cutlery", scale: 0.08,  texture: textures.cutlery, x: initialPositions.current.cutlery.x, y: initialPositions.current.cutlery.y, anchor: {x: 0.4, y: 0.4} };
-  const glas = { id: "glas", scale: 0.09, texture: textures.glas, x: initialPositions.current.glas.x, y: initialPositions.current.glas.y, anchor: {x: 0.4, y: 0.4} };
-  const napkin = { id: "napkin", scale: 0.08,  texture: textures.napkin, x: initialPositions.current.napkin.x, y: initialPositions.current.napkin.y, anchor: {x: 0.5, y: 0.45} };
-  const spoon = { id: "spoon", scale: 0.07,  texture: textures.spoon, x: initialPositions.current.spoon.x, y: initialPositions.current.spoon.y, anchor: {x: 0.45, y: 0.38} };
+  const [spritePositions, setSpritePositions] = useState(() => ({
+    plate: { x: initialPositions.current.plate.x, y: initialPositions.current.plate.y },
+    cutlery: { x: initialPositions.current.cutlery.x, y: initialPositions.current.cutlery.y },
+    glas: { x: initialPositions.current.glas.x, y: initialPositions.current.glas.y },
+    napkin: { x: initialPositions.current.napkin.x, y: initialPositions.current.napkin.y },
+    spoon: { x: initialPositions.current.spoon.x, y: initialPositions.current.spoon.y },
+  }));
+
+  const plate = { id: "plate", scale: 0.1,  texture: textures.plate, x: spritePositions.plate.x, y: spritePositions.plate.y, anchor: {x: 0.4, y: 0.4} };
+  const cutlery = { id: "cutlery", scale: 0.08,  texture: textures.cutlery, x: spritePositions.cutlery.x, y: spritePositions.cutlery.y, anchor: {x: 0.4, y: 0.4} };
+  const glas = { id: "glas", scale: 0.09, texture: textures.glas, x: spritePositions.glas.x, y: spritePositions.glas.y, anchor: {x: 0.4, y: 0.4} };
+  const napkin = { id: "napkin", scale: 0.08,  texture: textures.napkin, x: spritePositions.napkin.x, y: spritePositions.napkin.y, anchor: {x: 0.5, y: 0.45} };
+  const spoon = { id: "spoon", scale: 0.07,  texture: textures.spoon, x: spritePositions.spoon.x, y: spritePositions.spoon.y, anchor: {x: 0.45, y: 0.38} };
 
 
   const renderElements = [plate, cutlery, glas, napkin, spoon];
@@ -107,6 +117,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
 
   const onDragStart = (e, id) => {
     if (lockedSprites[id]) return;
+    setPointerdown(true);
     draggingRef.current = true;
     const sprite = spriteRefs.current[id];
     if (!sprite) return;
@@ -121,11 +132,20 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
   };
 
   const onDragMove = (e) => {
-    if (!dragged || !spriteRefs.current[dragged]) return;
-    const sprite = spriteRefs.current[dragged];
-    const pos = e.data.getLocalPosition(sprite.parent);
-    sprite.x = pos.x - dragOffset.x;
-    sprite.y = pos.y - dragOffset.y;
+
+    if (pointerdown) {
+      if (!dragged || !spriteRefs.current[dragged]) return;
+      const sprite = spriteRefs.current[dragged];
+      const pos = e.data.getLocalPosition(sprite.parent);
+      console.log("setting sprite position 3" );
+      sprite.x = pos.x - dragOffset.x;
+      sprite.y = pos.y - dragOffset.y;
+
+      setSpritePositions(prev => ({
+        ...prev,
+        [dragged]: { x: sprite.x, y: sprite.y }
+      }));
+    }
   };
 
   const onDragEnd = () => {
@@ -133,16 +153,25 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
       checkSnapToMarker(spriteRefs.current[dragged], dragged);
     }
     setDragged(null);
+    setPointerdown(false);
     draggingRef.current = false;
   };
 
   const handlePointerMove = (e) => {
-    if (!draggingRef.current || !dragged || !spriteRefs.current[dragged]) return;
+    if (pointerdown) {
+      if (!draggingRef.current || !dragged || !spriteRefs.current[dragged]) return;
 
-    const sprite = spriteRefs.current[dragged];
-    const global = e.data.global;
-    sprite.x = global.x;
-    sprite.y = global.y;
+      const sprite = spriteRefs.current[dragged];
+      const global = e.data.global;
+      console.log("setting sprite position 2");
+      sprite.x = global.x;
+      sprite.y = global.y;
+
+      setSpritePositions(prev => ({
+        ...prev,
+        [dragged]: { x: sprite.x, y: sprite.y }
+      }));
+    }
   };
 
   const checkRightPlacing = (sprite, marker) => {
@@ -176,14 +205,18 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
         snapped = true;
 
         sprite.eventMode = 'none';
+        console.log("setting sprite position 1");
         sprite.x = marker.x;
         sprite.y = marker.y;
 
-        setTimeout(() => {
-          setSpriteToMarkerMap(prev => ({ ...prev, [id]: marker.id }));
-          checkRightPlacing(sprite, marker);
-          sprite.eventMode = 'static';
-        }, 100);
+        setSpritePositions(prev => ({
+          ...prev,
+          [dragged]: { x: sprite.x, y: sprite.y }
+        }));
+
+        checkRightPlacing(sprite, marker);
+        setSpriteToMarkerMap(prev => ({ ...prev, [id]: marker.id }));
+        sprite.eventMode = 'static';
         break;
       }
     }
@@ -194,8 +227,15 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
 
       if (start && originalMarkerId) {
         sprite.eventMode = 'none';
+        console.log("setting sprite position");
         sprite.x = start.x;
         sprite.y = start.y;
+
+        setSpritePositions(prev => ({
+          ...prev,
+          [dragged]: { x: sprite.x, y: sprite.y }
+        }));
+
         setTimeout(() => {
           sprite.eventMode = 'static';
         }, 50);
@@ -237,10 +277,12 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
 
   const pageUP = () => {
     setPage(prev => prev +1);
-  }
+  };
+
+  console.log("rerender");
 
   const instructionPage =  () => {
-    if(page === 1){
+    if(page === 1 && textures.recipeopen){
       return (
               <>
                 <Sprite
@@ -255,12 +297,13 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
                         text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
                         x={75}
                         y={70}
-                        style={{
-                          fontFamily: 'micro5',
-                          fontSize: 32,
-                          wordWrap: true,
-                          wordWrapWidth: 400,
-                        }}
+                        style={
+                          new TextStyle({
+                            fontFamily:'micro5',
+                            fontSize:32,
+                            wordWrap:true,
+                            wordWrapWidth:400,
+                          })}
                         anchor={{ x: 0, y: 0 }}
                 />
 
@@ -278,7 +321,7 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
               </>
       )
     }
-  }
+  };
 
   const background = () => (
           <>
@@ -322,12 +365,12 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
                   texture={object.texture}
                   x={object.x}
                   y={object.y}
-                  onMouseOver={() => setHovered(object.id)}
-                  onMouseOut={() => setHovered("")}
+                  pointerover={() => setHovered(object.id)}
+                  pointerout={() => setHovered("")}
                   cursor={selectCursor(object.id)}
-                  onPointerDown={(e) => onDragStart(e, object.id)}
-                  onPointerUp={onDragEnd}
-                  onPointerMove={onDragMove}
+                  pointerdown={(e) => onDragStart(e, object.id)}
+                  pointerup={onDragEnd}
+                  pointermove={onDragMove}
           />
   ));
 
@@ -343,9 +386,8 @@ export const ServeStage = ({setStage, dimensions, setTotalPoints}) => {
                   g.drawRect(0, 0, dimensions.width, 325);
                   g.endFill();
                 }}
-                anchor={0.5}
                 eventMode="static"
-                onPointerMove={handlePointerMove}
+                pointermove={handlePointerMove}
         />
         {markers()}
         {sprites()}

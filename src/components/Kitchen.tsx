@@ -1,7 +1,6 @@
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useGameService} from "@/hooks/useGameService";
 import {calculateCanvasSize} from "@/utils/movment.ts";
-import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
@@ -66,7 +65,7 @@ export const Kitchen = () => {
 
     const interactiveElements = [
         new InteractivePixiElement(1, 6, 1, 1, openSmartHomeHub),
-      new InteractivePixiElement(11, 3, 1, 1, openSmartKitchen)
+      new InteractivePixiElement(10, 3, 1, 1, openSmartKitchen)
     ];
 
     //Render Code
@@ -79,9 +78,7 @@ export const Kitchen = () => {
     }, []);
 
 
-    function handleMapChange(newMap: MapKey): boolean {
-        //Todo remove
-        console.log("Map changed to:", newMap);
+    function handleMapChange(): boolean {
         return gameService.leaveRoom(roomName);
     }
 

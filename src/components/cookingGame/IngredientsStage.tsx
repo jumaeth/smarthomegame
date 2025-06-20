@@ -1,17 +1,18 @@
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {Button} from "./Button.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
-import {Text, Sprite} from "pixi.js";
+import {TextStyle} from "pixi.js";
+import {Text, Sprite} from "@pixi/react";
 
 export const IngredientsStage = ({ setStage, setTotalPoints }) => {
 
 
-  const texturePaths: { [key: string]: string } = {
+  const texturePaths= useMemo(() => ({
     recipeopen: "/cooking-sprites/recipeopen.png",
     market: "/cooking-sprites/marketstand.png",
     marketBackground: "/cooking-sprites/market_background.png",
-  };
+  }), []);
 
   const explanations = [
     "Lass uns zuerst die benötigten Zutaten kaufen. Für gute Pasta brauchen wir: \n\n\t1. Spaghetti\n\t2. Tomaten\n\t3. Gewürze\n\t4. Käse",
@@ -32,13 +33,13 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
 
   const finalMessage = [
     "Danke für deine Hilfe, mal sehen:\n\n- Die Zutaten haben eine",
-    "Qualität.\n- Der Einkauf war", "\n- Dein Portmonee", "deine Entscheidungen."
+    "Qualität.\n- Der Einkauf war", "\n- Dein Portmonee war ", "deinen Entscheidungen."
   ];
 
   const evalChoices = [
     ["Super", "normale", "schlechte"],
     ["schnell.", "langsam."],
-    ["war glücklich über", "nicht böse mit", "war nicht einverstanden mit"]
+    ["glücklich über", "nicht böse mit", "nicht einverstanden mit"]
   ];
 
   const conclusion = [
@@ -219,12 +220,13 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
                   text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
                   x={85}
                   y={65}
-                  style={{
-                    fontFamily: 'micro5',
-                    fontSize: 30,
-                    wordWrap: true,
-                    wordWrapWidth: 400,
-                  }}
+                  style={
+                    new TextStyle({
+                      fontFamily:'micro5',
+                      fontSize:30,
+                      wordWrap:true,
+                      wordWrapWidth:400,
+                    })}
                   anchor={{x: 0, y: 0}}
           />
           {showButton &&
@@ -269,13 +271,14 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
                 text={instruction.toUpperCase()}
                 x={272}
                 y={25}
-                style={{
-                  fontFamily: 'micro5',
-                  fontSize: 36,
-                  wordWrap: true,
-                  wordWrapWidth: 400,
-                  fill: 0xffffff
-                }}
+                style={
+                  new TextStyle({
+                    fontFamily:'micro5',
+                    fontSize:36,
+                    wordWrap:true,
+                    wordWrapWidth:400,
+                    fill: 0xEEEEEE
+                  })}
                 anchor={{ x: 0.5, y: 0.5 }}
         />}
         {btns}
@@ -294,12 +297,13 @@ export const IngredientsStage = ({ setStage, setTotalPoints }) => {
                 text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
                 x={85}
                 y={65}
-                style={{
-                  fontFamily: 'micro5',
-                  fontSize: 30,
-                  wordWrap: true,
-                  wordWrapWidth: 400,
-                }}
+                style={
+                  new TextStyle({
+                    fontFamily:'micro5',
+                    fontSize:30,
+                    wordWrap:true,
+                    wordWrapWidth:400,
+                  })}
                 anchor={{x: 0, y: 0}}
         />
         {showButton &&
