@@ -8,10 +8,18 @@ export class Room {
           public isCompleted: boolean = false
   ) {
   }
+
+  complete(): void {
+    this.isCompleted = true;
+  }
+
+  toggleIsLocked(): void {
+    this.isLocked = !this.isLocked;
+  }
 }
 
 export type RoomName =
-        | 'livingRoom'
+        | 'livingroom'
         | 'hallway'
         | 'kitchen'
         ;

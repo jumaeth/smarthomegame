@@ -1,7 +1,7 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {FirstFloor} from '../components/FirstFloor.tsx';
-import {LivingRoom} from '../components/LivingRoom.tsx';
-import {GameOver} from '../components/GameOver';
+import {LivingRoom} from '../components/rooms/LivingRoom.tsx';
+import {GameOver} from '../pages/GameOver.tsx';
 import {GameWrapper} from "../components/GameWrapper.tsx";
 import {FloorSelector} from "../components/FloorSelector.tsx";
 import NotFoundPage from "../pages/NotFoundPage.tsx";
