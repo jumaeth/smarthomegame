@@ -1,34 +1,26 @@
 import {Room} from "./Room";
+import {GameScore} from "./GameScore.ts"
 
 export class Game {
   private readonly rooms: Room[];
-  private privacyScore: number;
-  private comfortScore: number;
+  private score: GameScore;
 
   constructor(rooms: Room[],) {
     this.rooms = rooms;
-    this.privacyScore = 0
-    this.comfortScore = 50
+    this.score = new GameScore(0, 50)
   }
 
   getRooms(): Room[] {
     return this.rooms;
   }
 
-  getPrivacyScore(): number {
-    return this.privacyScore;
+  getScore(): GameScore {
+    return this.score;
   }
 
-  setPrivacyScore(newScore: number): void {
-    this.privacyScore = newScore;
-  }
-
-  getComfortScore(): number {
-    return this.comfortScore;
-  }
-
-  setComfortScore(newScore: number): void {
-    this.comfortScore = newScore;
+  modifyScore(privacyScoreDelta: number, comfortScoreDelta: number): void {
+    this.score.setPrivacyScore(privacyScoreDelta + this.score.getPrivacyScore());
+    this.score.setComfortScore(comfortScoreDelta + this.score.getComfortScore());
   }
 
 }

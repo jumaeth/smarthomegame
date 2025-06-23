@@ -1,5 +1,5 @@
-import {CaptchaComponent} from "../CaptchaComponent.tsx";
-import {MultipleChoiceComponent} from "../MultipleChoiceComponent.tsx";
+import {CaptchaComponent} from "@/components/mini-game/CaptchaComponent.tsx";
+import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 import {useState} from "react";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
@@ -50,33 +50,33 @@ export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallb
     }
 
     return (
-        <div>
-            <h1>Überwachungskamera</h1>
-            <div className="modal-content">
+            <div>
+              <h1>Überwachungskamera</h1>
+              <div className="modal-content">
                 {frame == 0 && (
-                    <>
-                        <p>Oh nein all deine Einstellungen wurden zurückgesetzt. Zeit sie neu festzulegen
-                        </p>
-                        <MultipleChoiceComponent
-                            questions={MultipleChoiceProps.questions}
-                            solutions={MultipleChoiceProps.solutions}
-                            onComplete={MultipleChoiceProps.handleCompletion}
-                        />
-                    </>)}
+                        <>
+                          <p>Oh nein all deine Einstellungen wurden zurückgesetzt. Zeit sie neu festzulegen
+                          </p>
+                          <MultipleChoiceComponent
+                                  questions={MultipleChoiceProps.questions}
+                                  solutions={MultipleChoiceProps.solutions}
+                                  onComplete={MultipleChoiceProps.handleCompletion}
+                          />
+                        </>)}
                 {frame == 1 && (
-                    <>
-                        <p>Hey, du solltest deine Überwachungskameras neu anordnen. Das Smart Home hat bereits
+                        <>
+                          <p>Hey, du solltest deine Überwachungskameras neu anordnen. Das Smart Home hat bereits
                             eine
                             Vorauswahl getroffen. Bist du damit einverstanden? Wähle alle Kamera plazierungen die du
                             wieder
                             entfernen möchtest.</p>
-                        <CaptchaComponent
-                            pictureFolder={CaptchaComponentProps.pictureFolder}
-                            solutions={CaptchaComponentProps.solutions}
-                            onComplete={CaptchaComponentProps.onComplete}
-                        />
-                    </>)}
+                          <CaptchaComponent
+                                  pictureFolder={CaptchaComponentProps.pictureFolder}
+                                  solutions={CaptchaComponentProps.solutions}
+                                  onComplete={CaptchaComponentProps.onComplete}
+                          />
+                        </>)}
+              </div>
             </div>
-        </div>
     );
 };
