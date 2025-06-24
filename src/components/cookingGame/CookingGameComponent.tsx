@@ -1,12 +1,12 @@
 import {Assets, Texture} from "pixi.js";
-import React, { useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {GameStage} from "./GameStage.tsx";
 import {RecipeStage} from "./RecipeStage.tsx";
 import {IngredientsStage} from "./IngredientsStage.tsx";
 import {CookingStage} from "./CookingStage.tsx";
 import {ServeStage} from "./ServeStage.tsx";
 import {Stage, TilingSprite} from "@pixi/react";
-import {CookingGameComponent as pos, Global} from "./cookingGameEnums.ts"
+import {Stages} from "./Enums.ts"
 
 interface CookingGameComponentProps {
   onCompletion: () => void;
@@ -17,7 +17,7 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   const customFont= new FontFace("micro5","url(/fonts/micro5.ttf)");
   customFont.load().then(()=>document.fonts.add(customFont));
   const[nextStage,setNextStage]=useState(1);
-  const[currentStage,setCurrentStage]=useState("game");
+  const[currentStage,setCurrentStage]=useState(Stages.GAME);
   const[texture,setTexture]=useState(Texture.EMPTY);
   const containerRef=useRef<HTMLDivElement>(null);
   const[dimensions,setDimensions]=useState({width:0,height:0});
@@ -27,15 +27,12 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   const[totalPoints,setTotalPoints]=useState(0);
   const [passedStages, setPassedStages] = useState(0);
 
-  const stages=[
-    "game","recipe","ingredients","cook","serve"
-  ];
 
-  const secureSetStage= (stage : string) =>{
-    if(stage=="game"){
+  const secureSetStage= (stage : Stages) =>{
+    if(stage==Stages.GAME){
       setCurrentStage(stage);
       setPassedStages((prev: number) => prev+1);
-    }else if(stages.indexOf(stage)===nextStage){
+    }else if(stage === nextStage){
       setNextStage(prev=>prev+1);
       setCurrentStage(stage);
     }
@@ -54,8 +51,8 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   useEffect(()=>{
     if(containerRef.current){
       setDimensions({
-        width: Global.ApplicationWidth,
-        height: Global.ApplicationHeight
+        width: 544,
+        height: 325
       })
     }
   },[]);
@@ -63,40 +60,40 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   useEffect(()=>{
     if(dimensions.width!==0&&dimensions.height!==0){
       switch(currentStage){
-        case"game":
+        case Stages.GAME:
           if(initStateRef.current){
             setTimeout(()=>{
-              setNotificationProperties({x: pos.NotificationXRec,y: Global.StandardButtonHeight,alpha:1});
+              setNotificationProperties({x: 130,y: 35,alpha:1});
               initStateRef.current=false;
             },10);
           }
           break;
-        case"recipe":
-          setNotificationProperties({x:pos.NotificationXIngr,y:pos.LowerRowY,alpha:1});
+        case Stages.RECIPE:
+          setNotificationProperties({x:125,y:200,alpha:1});
           break;
-        case"ingredients":
-          setNotificationProperties({x:pos.RightRowX,y:pos.NotificationYCook,alpha:1});
+        case Stages.INGREDIENTS:
+          setNotificationProperties({x:520,y:55,alpha:1});
           break;
-        case"cook":
-          setNotificationProperties({x:pos.RightRowX,y:pos.LowerRowY,alpha:1});
+        case Stages.COOK:
+          setNotificationProperties({x:520,y:200,alpha:1});
           break;
-        case"serve":
+        case Stages.SERVE:
           setNotificationProperties({x:0,y:0,alpha:0});
           break;
       }
     }
   },[currentStage,dimensions,initStateRef]);
 
-  const stageMap: { [key: string]: () => JSX.Element } = {
-    game:() => <GameStage setStage={secureSetStage} notificationProperties={notificationProperties}/>,
-    recipe:() => <RecipeStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
-    ingredients:()=><IngredientsStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
-    cook:()=><CookingStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
-    serve:()=><ServeStage setStage={secureSetStage} dimensions={dimensions} setTotalPoints={setTotalPoints}/>
+  const stageMap: { [key: number]: () => JSX.Element } = {
+    [Stages.GAME]:() => <GameStage setStage={secureSetStage} notificationProperties={notificationProperties}/>,
+    [Stages.RECIPE]:() => <RecipeStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
+    [Stages.INGREDIENTS]:()=><IngredientsStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
+    [Stages.COOK]:()=><CookingStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
+    [Stages.SERVE]:()=><ServeStage setStage={secureSetStage} dimensions={dimensions} setTotalPoints={setTotalPoints}/>
 };
 
   useEffect(()=>{
-    if(passedStages === 4 && totalPoints/stages.length>50){
+    if(passedStages === 4 && totalPoints/4>50){
       setTimeout(()=>onCompletion(),100);
     }
   },[totalPoints]);

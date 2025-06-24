@@ -1,13 +1,13 @@
-import {AlphaFilter, TextStyle, Graphics as PIXIGraphics} from 'pixi.js'
+import {AlphaFilter, Graphics as PIXIGraphics, TextStyle} from 'pixi.js'
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {Button} from "./Button.tsx";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {Graphics, Sprite, Text} from '@pixi/react';
-import {CookingStage as pos, Global} from "@/components/cookingGame/cookingGameEnums.ts";
+import {Devices, Stages} from "@/components/cookingGame/Enums.ts";
 
 interface CookingStageProps {
-  setStage: (stage: string) => void;
+  setStage: (stage: Stages) => void;
   setTotalPoints: React.Dispatch<React.SetStateAction<number>>;
 }
 
@@ -17,9 +17,9 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
   const [page, setPage] = useState(1);
   const [label] = useState("weiter");
   const [showInfo, setShowInfo] = useState(true);
-  const [hoveredId, setHoveredId] = useState("");
+  const [hoveredId, setHoveredId] = useState(Devices.NONE);
   const [allHoverable, setAllHoverable] = useState(true);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(Devices.NONE);
   const [infoText, setInfoText] = useState("");
   const [infoTitles, setInfoTitles] = useState("");
   const [infoComment, setInfoComment] = useState("");
@@ -29,16 +29,15 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
           "Unsere Smartkitchen kann alle Zutaten vorbereiten aber wir müssen die richtige Maschine zum Kochen des Gerichts auswählen";
 
   const texturePaths = useMemo(() => ({
-    recipeopen: "/cooking-sprites/recipeopen.png",
-    shelf: "/cooking-sprites/shelf.png",
-    wall: "/cooking-sprites/wall.png",
-    cookingfield: "/cooking-sprites/cookingfield.png",
-    foodprocessor: "/cooking-sprites/foodprocessor.png",
-    microwave: "/cooking-sprites/microwave.png",
-    steamer: "/cooking-sprites/steamer.png"
+    recipeopen: "/src/assets/cooking-sprites/recipeopen.png",
+    shelf: "/src/assets/cooking-sprites/shelf.png",
+    wall: "/src/assets/cooking-sprites/wall.png",
+    cookingfield: "/src/assets/cooking-sprites/cookingfield.png",
+    foodprocessor: "/src/assets/cooking-sprites/foodprocessor.png",
+    microwave: "/src/assets/cooking-sprites/microwave.png",
+    steamer: "/src/assets/cooking-sprites/steamer.png"
   }), []);
 
-  const devices = ["cookingfield", "foodprocessor", "microwave", "steamer"];
 
   const criterias = [
     "Energie", "Berechtigung", "Zeit", "Bedienung"
@@ -65,7 +64,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     setPage(prev => prev +1);
   }
 
-  const { typedText, typingDone, showCursor } = useTypingText(instruction, Global.TextSpeed);
+  const { typedText, typingDone, showCursor } = useTypingText(instruction, 35);
 
   useEffect(() => {
     if (typingDone) {
@@ -79,10 +78,10 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     }
   }, [typingDone]);
 
-  const cookingfield             = {id: "cookingfield",scale: 0.11, x: 185, y: 105, texture: textures.cookingfield, action: null};
-  const foodprocessor       = {id: "foodprocessor",scale: 0.11, x: 350, y: 105, texture: textures.foodprocessor, action: null};
-  const microwave        = {id: "microwave",scale: 0.11, x: 185, y: 245, texture: textures.microwave, action: null};
-  const steamer               = {id: "steamer",scale: 0.1, x: 350, y: 240, texture: textures.steamer, action: null};
+  const cookingfield             = {id: Devices.COOKINGFIELD,scale: 0.11, x: 185, y: 105, texture: textures.cookingfield, action: null};
+  const foodprocessor       = {id: Devices.FOODPROCESSOR,scale: 0.11, x: 350, y: 105, texture: textures.foodprocessor, action: null};
+  const microwave        = {id: Devices.MICROWAVE,scale: 0.11, x: 185, y: 245, texture: textures.microwave, action: null};
+  const steamer               = {id: Devices.STEAMER,scale: 0.1, x: 350, y: 240, texture: textures.steamer, action: null};
   const renderElements = [
           cookingfield, foodprocessor, microwave, steamer
   ];
@@ -96,50 +95,48 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     g.endFill();
   }, []);
 
-  const onHover = (id : string) =>{
-    if (allHoverable) {
-      setHoveredId(id);
-    }else if(id === selected){
+  const onHover = (id : Devices) =>{
+    if (allHoverable || id === selected) {
       setHoveredId(id);
     }
   }
 
   const hoverOut = () =>{
-    setHoveredId("");
+    setHoveredId(Devices.NONE);
   }
 
   useEffect(() => {
-    setShowInfo(hoveredId !== "")
+    setShowInfo(hoveredId !== Devices.NONE)
   }, [hoveredId]);
 
-  const select = (id : string) => {
-    if (selected === "") {
-      setHoveredId("");
-      setSelected(id)
+  const select = (id : Devices) => {
+    if (selected === Devices.NONE) {
+      setHoveredId(Devices.NONE);
+      setSelected(id);
       setAllHoverable(false);
       setShowInfo(false);
     }else if(selected === id){
-      setSelected("")
+      setSelected(Devices.NONE);
       setAllHoverable(true);
     }
   }
 
-  const filtercondition = (id : string) => {
+  const filtercondition = (id : Devices) => {
     return hoveredId === id || selected === id ? [new AlphaFilter(1.2)] :
-            hoveredId !== "" &&  hoveredId !== id || selected !== "" && selected !== id ? [new AlphaFilter( 0.4)]
+            hoveredId !== Devices.NONE &&  hoveredId !== id || selected !== Devices.NONE && selected !== id ? [new AlphaFilter( 0.4)]
                     : [];
   }
 
-  const infoYOffset = (id : string) => {
-    if(devices.indexOf(id) > 1){
+  const infoYOffset = (id : Devices) => {
+    if(id > 1){
       return 100;
     }else{
       return 0;
     }
   }
 
-  const infoXOffset = (id : string) => {
-    if(devices.indexOf(id) % 2 == 0){
+  const infoXOffset = (id : Devices) => {
+    if(id % 2 == 0){
       return 250;
     }else{
       return 0;
@@ -148,7 +145,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
 
   const rating = (id : number, criteria : number) => {
     const s = stars[id][criteria];
-    const total = ["["]
+    const total = ["["];
     for (let i = 0; i < s; i++) {
       if(i < 4){
         total.push("𐄂|");
@@ -168,7 +165,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
   }
 
   useEffect(() => {
-    if(hoveredId !== ""){
+    if(hoveredId !== Devices.NONE){
       const text =
               criterias[0] +":\n" +
               criterias[1] +":\n"+
@@ -179,28 +176,28 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
   }, [hoveredId]);
 
   useEffect(() => {
-    if(hoveredId !== ""){
+    if(hoveredId !== Devices.NONE){
       const text =
-               rating(devices.indexOf(hoveredId), 0) +"\n" +
-               rating(devices.indexOf(hoveredId), 1) +"\n" +
-               rating(devices.indexOf(hoveredId), 2) +"\n" +
-               rating(devices.indexOf(hoveredId), 3) +"\n";
+               rating(hoveredId, 0) +"\n" +
+               rating(hoveredId, 1) +"\n" +
+               rating(hoveredId, 2) +"\n" +
+               rating(hoveredId, 3) +"\n";
       setInfoText(text);
     }
   }, [hoveredId]);
 
   useEffect(() => {
-    if(hoveredId !== ""){
-      const text = dataComments[devices.indexOf(hoveredId)];
+    if(hoveredId !== Devices.NONE){
+      const text = dataComments[hoveredId];
       setInfoComment(text.toUpperCase());
     }
   }, [hoveredId]);
 
   const evaluatePoints = () => {
     let points = 0;
-    if (selected != ""){
-      for (let i = 0; i < stars[devices.indexOf(selected)].length; i++) {
-        points += (stars[devices.indexOf(selected)][i]*20/criterias.length);
+    if (selected !== Devices.NONE){
+      for (let i = 0; i < stars[selected].length; i++) {
+        points += (stars[selected][i]*20/criterias.length);
       }
     }else{
       points = 0;
@@ -209,19 +206,19 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
   }
 
   const endGame = () => {
-    if (selected === devices[2]){
+    if (selected === Devices.MICROWAVE){
       setRetry(true);
     }else if(!retry){
       setRetry(false);
       setTotalPoints((prev: number) => prev + evaluatePoints());
-      setStage("game");
+      setStage(Stages.GAME);
     }
   };
 
   useEffect(() => {
     if (retry){
       setRetry(false);
-      setSelected("");
+      setSelected(Devices.NONE);
       setAllHoverable(true);
       setPage(2);
     }
@@ -237,13 +234,13 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                         eventMode={'static'}
                         scale={0.6}
                         texture={textures.recipeopen}
-                        x={Global.ApplicationWidth / 2}
-                        y={pos.BookBackgroundY}
+                        x={272}
+                        y={220}
                 />
                 <Text
                         text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
-                        x={pos.IntroTextX}
-                        y={pos.IntroTextY}
+                        x={75}
+                        y={70}
                         style={
                           new TextStyle({
                             fontFamily:'micro5',
@@ -256,12 +253,12 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
 
                 {(showButton &&
                         <Button
-                                x={pos.NextButtonX}
-                                y={pos.NextButtonY}
+                                x={370}
+                                y={275}
                                 color={0xdcc08e}
                                 lineColor={0x5d3c1a}
-                                width={Global.StandardButtonWidth}
-                                height={Global.StandardButtonHeight}
+                                width={90}
+                                height={35}
                                 label={label}
                                 action={pageUP}
                         />)}
@@ -286,8 +283,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                         eventMode={'static'}
                         scale={0.47}
                         texture={textures.shelf}
-                        x={Global.ApplicationWidth / 2}
-                        y={pos.ShelfY}
+                        x={272}
+                        y={165}
                 />
                 {renderElements.map((object) => (
                         <Sprite
@@ -307,16 +304,16 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                 ))}
                 {(showInfo &&
                         <Graphics
-                          x={pos.InfoGraphicPos + infoXOffset(hoveredId)}
-                          y={pos.InfoGraphicPos + infoYOffset(hoveredId)}
+                          x={15 + infoXOffset(hoveredId)}
+                          y={15 + infoYOffset(hoveredId)}
                           draw={draw}
                           eventMode={'none'}
                         />)}
                 {(showInfo &&
                         <Text
                          text={infoTitles}
-                         x={pos.InfoTitlePos + infoXOffset(hoveredId)}
-                         y={pos.InfoTitlePos +infoYOffset(hoveredId)}
+                         x={30 + infoXOffset(hoveredId)}
+                         y={30 +infoYOffset(hoveredId)}
                          style={
                            new TextStyle({
                              fontFamily:'micro5',
@@ -330,8 +327,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                 {(showInfo &&
                         <Text
                          text={infoText}
-                         x={pos.InfoTextX + infoXOffset(hoveredId)}
-                         y={pos.InfoTitlePos +infoYOffset(hoveredId)}
+                         x={150 + infoXOffset(hoveredId)}
+                         y={30 +infoYOffset(hoveredId)}
                          style={
                            new TextStyle({
                              fontFamily:'micro5',
@@ -346,8 +343,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                 {(showInfo &&
                         <Text
                                 text={infoComment}
-                                x={pos.InfoTitlePos + infoXOffset(hoveredId)}
-                                y={pos.InfoCommentY +infoYOffset(hoveredId)}
+                                x={30 + infoXOffset(hoveredId)}
+                                y={130 +infoYOffset(hoveredId)}
                                 style={
                                   new TextStyle({
                                     fontFamily:'micro5',
@@ -365,15 +362,15 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
   }
 
   const finishButton = () => {
-    if(selected !== ""){
+    if(selected !== Devices.NONE){
       return (
               <Button
-                      x={pos.FinishButtonX}
-                      y={pos.FinishButtonY}
+                      x={230}
+                      y={285}
                       color={0xacb4bd}
                       lineColor={0x3f556b}
-                      width={Global.StandardButtonWidth}
-                      height={Global.StandardButtonHeight}
+                      width={90}
+                      height={35}
                       label={"Select"}
                       action={()=>endGame()}
               />

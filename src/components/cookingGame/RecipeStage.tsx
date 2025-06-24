@@ -4,10 +4,10 @@ import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {Sprite, Text} from "@pixi/react"
 import {TextStyle} from "pixi.js";
 import {Button} from "@/components/cookingGame/Button.tsx";
-import {RecipeStage as pos, Global} from "@/components/cookingGame/cookingGameEnums.ts";
+import {Stages} from "@/components/cookingGame/Enums.ts";
 
 interface RecipeStageProps {
-  setStage: (stage: string) => void;
+  setStage: (stage: Stages) => void;
   setTotalPoints: React.Dispatch<React.SetStateAction<number>>;
 }
 
@@ -31,7 +31,7 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoin
   const {textures, loaded} = useLoadTextures(texturePaths);
 
   //-----------------------text/typing-----------------------
-  const { typedText, typingDone, showCursor } = useTypingText(text, Global.TextSpeed);
+  const { typedText, typingDone, showCursor } = useTypingText(text, 35);
 
    useEffect(() => {
     if (typingDone) {
@@ -53,13 +53,13 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoin
   const action = () => {
     if (page < pageTexts.length) {
       if (page === pageTexts.length - 1) {
-        setLabel("end");
+        setLabel("ende");
       }
       setPage(page + 1);
     } else {
       setTotalPoints((prev : number) => prev + 100);
       setTotalPoints((prev : number) => prev + 100);
-      setStage("game");
+      setStage(Stages.GAME);
     }
   };
 
@@ -70,14 +70,14 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoin
             {loaded && textures.recipeopen && (<Sprite
                     scale={0.6}
                     texture={textures.recipeopen}
-                    x={pos.BackgroundX}
-                    y={pos.BackgroundY}
+                    x={-33}
+                    y={-90}
             />)}
 
             {loaded && textures.recipeopen &&(<Text
                     text={(typedText+(showCursor?'|':'')).toUpperCase()}
-                    x={pos.TextX}
-                    y={pos.TextY}
+                    x={75}
+                    y={70}
                     style={
                       new TextStyle({
                         fontFamily:'micro5',
@@ -89,8 +89,8 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoin
             />)}
             {(showButton&&
                 <Button
-                        x={pos.ButtonX}
-                        y={pos.ButtonY}
+                        x={370}
+                        y={275}
                         color={0xdcc08e}
                         lineColor={0x5d3c1a}
                         width={90}

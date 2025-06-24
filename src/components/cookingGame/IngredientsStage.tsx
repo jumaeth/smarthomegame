@@ -4,19 +4,19 @@ import {Button} from "./Button.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {TextStyle} from "pixi.js";
 import {Text, Sprite} from "@pixi/react";
-import {IngredientsStage as pos, Global} from "@/components/cookingGame/cookingGameEnums.ts";
+import {Stages} from "@/components/cookingGame/Enums.ts";
 
 interface IngredientsStageProps {
-  setStage: (stage: string) => void;
+  setStage: (stage: Stages) => void;
   setTotalPoints: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, setTotalPoints }) => {
 
   const texturePaths= useMemo(() => ({
-    recipeopen: "/cooking-sprites/recipeopen.png",
-    market: "/cooking-sprites/marketstand.png",
-    marketBackground: "/cooking-sprites/market_background.png",
+    recipeopen: "/src/assets/cooking-sprites/recipeopen.png",
+    market: "/src/assets/cooking-sprites/marketstand.png",
+    marketBackground: "/src/assets/cooking-sprites/market_background.png",
   }), []);
 
   const explanations = [
@@ -97,7 +97,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
   });
   const [calcFinished, setCalcFinished] = useState(false);
   const [instruction,setInstruction] = useState(instructions[0]);
-  const { typedText, typingDone, showCursor } = useTypingText(text, pos.TextSpeed);
+  const { typedText, typingDone, showCursor } = useTypingText(text, 30);
   const [showButton, setShowButton] = useState(false);
   const offset = explanations.length;
   const [background, setBackground] = useState("book");
@@ -202,7 +202,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
       retry();
     }else{
       setTotalPoints((prev : number) => prev+avgTotalWithPrivacy);
-      setStage("game");
+      setStage(Stages.GAME);
     }
   };
 
@@ -222,8 +222,8 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
         return <>
           <Text
                   text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
-                  x={pos.BookTextX}
-                  y={pos.BookTextY}
+                  x={85}
+                  y={65}
                   style={
                     new TextStyle({
                       fontFamily:'micro5',
@@ -235,12 +235,12 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
           />
           {showButton &&
                   <Button
-                          x={pos.NextButtonX}
-                          y={pos.ButtonY}
+                          x={375}
+                          y={275}
                           color={0xdcc08e}
                           lineColor={0x5d3c1a}
-                          width={Global.StandardButtonWidth}
-                          height={Global.StandardButtonHeight}
+                          width={90}
+                          height={35}
                           label={"Weiter"}
                           action={action}
                   />}
@@ -259,12 +259,12 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
         btns.push(
                 <Button
                         key={btnTexts[i][0]}
-                        x={pos.OptionButtonX}
-                        y={pos.OptionButtonY + (i * 60)}
+                        x={136}
+                        y={86 + (i * 60)}
                         color={0xC4A484}
                         lineColor={0x5d3c1a}
-                        width={Global.ApplicationWidth / 2}
-                        height={pos.OptionButtonHeight}
+                        width={272}
+                        height={38}
                         label={buttonTexts[order[i]] || `Button ${i + 1}`}
                         action={btnAction(order[i])}
                 />
@@ -273,8 +273,8 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
       return <>
         {<Text
                 text={instruction.toUpperCase()}
-                x={pos.OptionTextX}
-                y={pos.OptionTextY}
+                x={272}
+                y={25}
                 style={
                   new TextStyle({
                     fontFamily:'micro5',
@@ -299,8 +299,8 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
       return <>
         <Text
                 text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
-                x={pos.BookTextX}
-                y={pos.BookTextY}
+                x={85}
+                y={65}
                 style={
                   new TextStyle({
                     fontFamily:'micro5',
@@ -312,10 +312,10 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
         />
         {showButton &&
                 <Button
-                        x={pos.SummaryButtonX}
-                        y={pos.ButtonY}
-                        width={pos.SummaryButtonWidth}
-                        height={Global.StandardButtonHeight}
+                        x={235}
+                        y={275}
+                        width={100}
+                        height={35}
                         color={0xdcc08e}
                         lineColor={0x5d3c1a}
                         label={btnText}
@@ -334,8 +334,8 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
                         eventMode={'static'}
                         scale={0.6}
                         texture={textures.recipeopen}
-                        x={Global.ApplicationWidth / 2}
-                        y={pos.BookBackgroundY}
+                        x={272}
+                        y={210}
                 />
         )
       }else if(background === "market"){
@@ -346,15 +346,15 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
                         scale={0.6}
                         texture={textures.marketBackground}
                         x={0}
-                        y={pos.MarketBackgroundY}
+                        y={-200}
                 />
                 <Sprite
                         anchor={0.5}
                         eventMode={'static'}
                         scale={0.45}
                         texture={textures.market}
-                        x={Global.ApplicationWidth / 2}
-                        y={pos.MarketY}
+                        x={272}
+                        y={170}
                 />
                 </>
         )

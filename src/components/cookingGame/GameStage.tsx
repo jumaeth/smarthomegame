@@ -2,9 +2,10 @@ import {ClickableElement} from "../../objects/ClickableElement.ts";
 import {AlphaFilter} from "pixi.js";
 import {SpriteRender} from "../SpriteRender.tsx";
 import React from "react";
+import {Stages} from "@/components/cookingGame/Enums.ts";
 
 interface GameStageProps {
-  setStage: (stage: string) => void;
+  setStage: (stage: Stages) => void;
   notificationProperties: { x: number; y: number; alpha: number };
 }
 
@@ -14,13 +15,13 @@ export const GameStage: React.FC<GameStageProps> = ({ setStage, notificationProp
 
   const goToRecipe = () => {
     setTimeout(() => {
-      setStage("recipe");
+      setStage(Stages.RECIPE);
     }, 0);
   };
 
   const goToIngredients = () => {
     setTimeout(() => {
-      setStage("ingredients");
+      setStage(Stages.INGREDIENTS);
     }, 0);
   };
 
@@ -28,8 +29,8 @@ export const GameStage: React.FC<GameStageProps> = ({ setStage, notificationProp
   const notification       = new ClickableElement("recipeNotification", 0.08, notificationProperties.x, notificationProperties.y, "/src/assets/cooking-sprites/notification.png", 100, 100, new AlphaFilter(), () => {});
   const ingredients        = new ClickableElement("ingredients", 0.125, 75, 235, "/src/assets/cooking-sprites/ingredients.png", 100, 100, new AlphaFilter(highlightAlpha), goToIngredients);
   const herd               = new ClickableElement("herd", 0.2125, 270, 165, "/src/assets/cooking-sprites/herd.png", 100, 100, new AlphaFilter(highlightAlpha), () => {});
-  const pots               = new ClickableElement("pots", 0.15, 465, 85, "/src/assets/cooking-sprites/pots.png", 100, 100, new AlphaFilter(highlightAlpha), () => setStage("cook"));
-  const plate              = new ClickableElement("plate", 0.12, 465, 245, "/src/assets/cooking-sprites/plate.png", 100, 100, new AlphaFilter(highlightAlpha), () => setStage("serve"));
+  const pots               = new ClickableElement("pots", 0.15, 465, 85, "/src/assets/cooking-sprites/pots.png", 100, 100, new AlphaFilter(highlightAlpha), () => setStage(Stages.COOK));
+  const plate              = new ClickableElement("plate", 0.12, 465, 245, "/src/assets/cooking-sprites/plate.png", 100, 100, new AlphaFilter(highlightAlpha), () => setStage(Stages.SERVE));
 
   const renderElements = [
     recipe,
