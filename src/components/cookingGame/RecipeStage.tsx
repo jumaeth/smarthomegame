@@ -4,6 +4,7 @@ import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {Sprite, Text} from "@pixi/react"
 import {TextStyle} from "pixi.js";
 import {Button} from "@/components/cookingGame/Button.tsx";
+import {RecipeStage as pos, Global} from "@/components/cookingGame/cookingGameEnums.ts";
 
 interface RecipeStageProps {
   setStage: (stage: string) => void;
@@ -30,7 +31,7 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoin
   const {textures, loaded} = useLoadTextures(texturePaths);
 
   //-----------------------text/typing-----------------------
-  const { typedText, typingDone, showCursor } = useTypingText(text, 35);
+  const { typedText, typingDone, showCursor } = useTypingText(text, Global.TextSpeed);
 
    useEffect(() => {
     if (typingDone) {
@@ -69,31 +70,31 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoin
             {loaded && textures.recipeopen && (<Sprite
                     scale={0.6}
                     texture={textures.recipeopen}
-                    x={-33}
-                    y={-90}
+                    x={pos.BackgroundX}
+                    y={pos.BackgroundY}
             />)}
 
             {loaded && textures.recipeopen &&(<Text
                     text={(typedText+(showCursor?'|':'')).toUpperCase()}
-                    x={75}
-                    y={70}
+                    x={pos.TextX}
+                    y={pos.TextY}
                     style={
                       new TextStyle({
                         fontFamily:'micro5',
-                        fontSize:30,
+                        fontSize: 30,
                         wordWrap:true,
-                        wordWrapWidth:400,
+                        wordWrapWidth: 400,
                       })}
                     anchor={{x:0,y:0}}
             />)}
             {(showButton&&
                 <Button
-                        x={370}
-                        y={275}
+                        x={pos.ButtonX}
+                        y={pos.ButtonY}
                         color={0xdcc08e}
                         lineColor={0x5d3c1a}
                         width={90}
-                        height={35}
+                        height={30}
                         label={label}
                         action={action}
                     />)}

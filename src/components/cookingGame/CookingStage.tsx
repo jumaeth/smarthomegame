@@ -4,6 +4,7 @@ import {Button} from "./Button.tsx";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {Graphics, Sprite, Text} from '@pixi/react';
+import {CookingStage as pos, Global} from "@/components/cookingGame/cookingGameEnums.ts";
 
 interface CookingStageProps {
   setStage: (stage: string) => void;
@@ -64,7 +65,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     setPage(prev => prev +1);
   }
 
-  const { typedText, typingDone, showCursor } = useTypingText(instruction, 35);
+  const { typedText, typingDone, showCursor } = useTypingText(instruction, Global.TextSpeed);
 
   useEffect(() => {
     if (typingDone) {
@@ -236,13 +237,13 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                         eventMode={'static'}
                         scale={0.6}
                         texture={textures.recipeopen}
-                        x={273}
-                        y={220}
+                        x={Global.ApplicationWidth / 2}
+                        y={pos.BookBackgroundY}
                 />
                 <Text
                         text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
-                        x={75}
-                        y={70}
+                        x={pos.IntroTextX}
+                        y={pos.IntroTextY}
                         style={
                           new TextStyle({
                             fontFamily:'micro5',
@@ -255,12 +256,12 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
 
                 {(showButton &&
                         <Button
-                                x={370}
-                                y={275}
+                                x={pos.NextButtonX}
+                                y={pos.NextButtonY}
                                 color={0xdcc08e}
                                 lineColor={0x5d3c1a}
-                                width={90}
-                                height={35}
+                                width={Global.StandardButtonWidth}
+                                height={Global.StandardButtonHeight}
                                 label={label}
                                 action={pageUP}
                         />)}
@@ -285,8 +286,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                         eventMode={'static'}
                         scale={0.47}
                         texture={textures.shelf}
-                        x={273}
-                        y={165}
+                        x={Global.ApplicationWidth / 2}
+                        y={pos.ShelfY}
                 />
                 {renderElements.map((object) => (
                         <Sprite
@@ -306,16 +307,16 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                 ))}
                 {(showInfo &&
                         <Graphics
-                          x={15 + infoXOffset(hoveredId)}
-                          y={15 + infoYOffset(hoveredId)}
+                          x={pos.InfoGraphicPos + infoXOffset(hoveredId)}
+                          y={pos.InfoGraphicPos + infoYOffset(hoveredId)}
                           draw={draw}
                           eventMode={'none'}
                         />)}
                 {(showInfo &&
                         <Text
                          text={infoTitles}
-                         x={30 + infoXOffset(hoveredId)}
-                         y={30 +infoYOffset(hoveredId)}
+                         x={pos.InfoTitlePos + infoXOffset(hoveredId)}
+                         y={pos.InfoTitlePos +infoYOffset(hoveredId)}
                          style={
                            new TextStyle({
                              fontFamily:'micro5',
@@ -329,8 +330,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                 {(showInfo &&
                         <Text
                          text={infoText}
-                         x={150 + infoXOffset(hoveredId)}
-                         y={30 +infoYOffset(hoveredId)}
+                         x={pos.InfoTextX + infoXOffset(hoveredId)}
+                         y={pos.InfoTitlePos +infoYOffset(hoveredId)}
                          style={
                            new TextStyle({
                              fontFamily:'micro5',
@@ -345,8 +346,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                 {(showInfo &&
                         <Text
                                 text={infoComment}
-                                x={30 + infoXOffset(hoveredId)}
-                                y={130 +infoYOffset(hoveredId)}
+                                x={pos.InfoTitlePos + infoXOffset(hoveredId)}
+                                y={pos.InfoCommentY +infoYOffset(hoveredId)}
                                 style={
                                   new TextStyle({
                                     fontFamily:'micro5',
@@ -367,12 +368,12 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     if(selected !== ""){
       return (
               <Button
-                      x={230}
-                      y={285}
+                      x={pos.FinishButtonX}
+                      y={pos.FinishButtonY}
                       color={0xacb4bd}
                       lineColor={0x3f556b}
-                      width={90}
-                      height={35}
+                      width={Global.StandardButtonWidth}
+                      height={Global.StandardButtonHeight}
                       label={"Select"}
                       action={()=>endGame()}
               />

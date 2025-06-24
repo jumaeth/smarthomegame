@@ -6,6 +6,7 @@ import {IngredientsStage} from "./IngredientsStage.tsx";
 import {CookingStage} from "./CookingStage.tsx";
 import {ServeStage} from "./ServeStage.tsx";
 import {Stage, TilingSprite} from "@pixi/react";
+import {CookingGameComponent as pos, Global} from "./cookingGameEnums.ts"
 
 interface CookingGameComponentProps {
   onCompletion: () => void;
@@ -53,8 +54,8 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   useEffect(()=>{
     if(containerRef.current){
       setDimensions({
-        width: 544,
-        height: 325
+        width: Global.ApplicationWidth,
+        height: Global.ApplicationHeight
       })
     }
   },[]);
@@ -65,19 +66,19 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
         case"game":
           if(initStateRef.current){
             setTimeout(()=>{
-              setNotificationProperties({x:130,y:35,alpha:1});
+              setNotificationProperties({x: pos.NotificationXRec,y: Global.StandardButtonHeight,alpha:1});
               initStateRef.current=false;
             },10);
           }
           break;
         case"recipe":
-          setNotificationProperties({x:125,y:200,alpha:1});
+          setNotificationProperties({x:pos.NotificationXIngr,y:pos.LowerRowY,alpha:1});
           break;
         case"ingredients":
-          setNotificationProperties({x:515,y:55,alpha:1});
+          setNotificationProperties({x:pos.RightRowX,y:pos.NotificationYCook,alpha:1});
           break;
         case"cook":
-          setNotificationProperties({x:520,y:200,alpha:1});
+          setNotificationProperties({x:pos.RightRowX,y:pos.LowerRowY,alpha:1});
           break;
         case"serve":
           setNotificationProperties({x:0,y:0,alpha:0});

@@ -5,6 +5,7 @@ import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {Button} from "./Button.tsx";
 import {EventMode, FederatedPointerEvent} from 'pixi.js';
 import {TextStyle, Graphics as PIXIGraphics, Sprite as PIXISprite} from "pixi.js";
+import {ServeStage as pos, Global} from "@/components/cookingGame/cookingGameEnums.ts";
 
 interface ServeStageProps {
   setStage: (stage: string) => void;
@@ -89,7 +90,7 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
   });
 
   const {textures} = useLoadTextures(texturePaths);
-  const { typedText, typingDone, showCursor } = useTypingText(instruction, 35);
+  const { typedText, typingDone, showCursor } = useTypingText(instruction, Global.TextSpeed);
 
   useEffect(() => {
     if (typingDone) {
@@ -296,13 +297,13 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
                         eventMode={'static'}
                         scale={0.6}
                         texture={textures.recipeopen}
-                        x={273}
-                        y={220}
+                        x={Global.ApplicationWidth / 2}
+                        y={pos.BookBackgroundY}
                 />
                 <Text
                         text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
-                        x={75}
-                        y={70}
+                        x={pos.IntroTextX}
+                        y={pos.IntroTextY}
                         style={
                           new TextStyle({
                             fontFamily:'micro5',
@@ -315,12 +316,12 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
 
                 {(showButton &&
                         <Button
-                                x={370}
-                                y={275}
+                                x={pos.NextButtonX}
+                                y={pos.NextButtonY}
                                 color={0xdcc08e}
                                 lineColor={0x5d3c1a}
-                                width={90}
-                                height={35}
+                                width={Global.StandardButtonWidth}
+                                height={Global.StandardButtonHeight}
                                 label={"Weiter"}
                                 action={pageUP}
                         />)}
@@ -334,8 +335,8 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
             <TilingSprite
                     texture={textures.tableBackground}
                     eventMode={'none'}
-                    width={dimensions.width}
-                    height={325}
+                    width={Global.ApplicationWidth}
+                    height={Global.ApplicationHeight}
                     tilePosition={{x:0, y:0}}
                     tileScale={0.2}
             />
@@ -344,8 +345,8 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
                     eventMode={'none'}
                     scale={0.325}
                     texture={textures.placemat}
-                    x={273}
-                    y={210}
+                    x={pos.PlacematX}
+                    y={pos.PlacematY}
             />
           </>
   );
