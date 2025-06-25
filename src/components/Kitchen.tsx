@@ -62,7 +62,7 @@ export const Kitchen = () => {
   }
 
   const interactiveElements = [
-    new InteractivePixiElement(1, 6, 1, 1, openSmartHomeHub),
+    new InteractivePixiElement(4, 10, 1, 1, openSmartHomeHub),
     new InteractivePixiElement(1, 2, 1, 1, openSecurityCameraHomeHub)
   ]
 
