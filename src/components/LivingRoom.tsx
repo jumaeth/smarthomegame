@@ -67,6 +67,7 @@ export const LivingRoom = () => {
   const interactiveElements = [
     new InteractivePixiElement(4, 2, 2, 1, openSmartTvModal),
     new InteractivePixiElement(1, 2, 1, 1, openSmartLightsModal)
+    //new InteractivePixiElement(12, 2, 1, 1, TODO)
   ]
 
   //Render Code
