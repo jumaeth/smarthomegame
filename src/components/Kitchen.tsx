@@ -8,24 +8,27 @@ import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {ModalWrapperComponent} from "@/components/ModalWrapperComponent.tsx";
 import {SmartHomeHub} from "@/components/smart-devices/SmartHomeHub.tsx";
-import {SmartDevice} from "@/objects/SmartDevice";
+import { SmartDevice } from "@/objects/SmartDevice";
+import {SmartKitchen} from "@/components/smart-devices/SmartKitchen.tsx";
 import {SecurityCamera} from "@/components/smart-devices/SecurityCamera.tsx";
 
 export const Kitchen = () => {
-  const gameService = useGameService();
-  const roomName = "kitchen"; //ToDo find better way to match with GameService
-  const [isPaused, setIsPaused] = useState(false);
+    const gameService = useGameService();
+    const roomName = "kitchen"; //ToDo find better way to match with GameService
+    const [isPaused, setIsPaused] = useState(false);
 
-  const smartHomeHubModalRef = useRef<{ toggleModal: () => void }>(null);
+    const smartHomeHubModalRef = useRef<{ toggleModal: () => void }>(null);
+  const smartKitchenModalRef = useRef<{ toggleModal: () => void }>(null);
   const securityCameraModalRef = useRef<{ toggleModal: () => void }>(null);
 
   const devices = gameService.getDeviceForRoom(roomName).map((device: SmartDevice) => device.name);
-  const [isSmartHomeHubCompleted, setSmartHomeHubCompleted] = useState(false);
+    const [isSmartHomeHubCompleted, setSmartHomeHubCompleted] = useState(false);
+  const [isSmartKitchenCompleted, setSmartKitchenCompleted] = useState(false);
   const [isSecurityCameraCompleted, setSecurityCameraCompleted] = useState(false);
 
 
   const checkForCompletion = () => {
-    if ((!devices.includes("SmartHomeHub") || isSmartHomeHubCompleted) && (!devices.includes("SecurityCamera") || isSecurityCameraCompleted)) {
+    if ((!devices.includes("SmartHomeHub") || isSmartHomeHubCompleted) && (!devices.includes("SecurityCamera") || isSecurityCameraCompleted) && (!devices.includes("SmartKitchen") || isSmartKitchenCompleted)) {
       console.log("Kitchen erfolgreich abgeschlossen!");
       gameService.completeRoom(roomName);
     } else {
@@ -33,19 +36,19 @@ export const Kitchen = () => {
     }
   };
 
-  const smartHomeHubCallback = (isCompleted: boolean) => {
-    setSmartHomeHubCompleted(isCompleted);
-    setIsPaused(false);
-    smartHomeHubModalRef.current?.toggleModal();
-    checkForCompletion();
-  };
+    const smartHomeHubCallback = (isCompleted: boolean) => {
+        setSmartHomeHubCompleted(isCompleted);
+        setIsPaused(false);
+        smartHomeHubModalRef.current?.toggleModal();
+        checkForCompletion();
+    };
 
-  const openSmartHomeHub = () => {
-    if (smartHomeHubModalRef.current) {
-      setIsPaused(true)
-      smartHomeHubModalRef.current.toggleModal();
+    const openSmartHomeHub = () => {
+        if (smartHomeHubModalRef.current) {
+            setIsPaused(true)
+            smartHomeHubModalRef.current.toggleModal();
+        }
     }
-  }
 
   const securityCameraCallback = (isCompleted: boolean) => {
     setSecurityCameraCompleted(isCompleted);
@@ -61,45 +64,69 @@ export const Kitchen = () => {
     }
   }
 
+  const smartKitchenCallback = (isCompleted: boolean) => {
+    console.log("smartKitchenCallback");
+    setSmartKitchenCompleted(isCompleted);
+    setIsPaused(false);
+    smartKitchenModalRef.current?.toggleModal();
+    checkForCompletion();
+  };
+
+  const openSmartKitchen = () => {
+    console.log("openSmartKitchen");
+    if (smartKitchenModalRef.current) {
+      setIsPaused(true);
+      smartKitchenModalRef.current.toggleModal();
+    }
+  };
+
   const interactiveElements = [
     new InteractivePixiElement(1, 6, 1, 1, openSmartHomeHub),
-    new InteractivePixiElement(1, 2, 1, 1, openSecurityCameraHomeHub)
+    new InteractivePixiElement(1, 2, 1, 1, openSecurityCameraHomeHub),
+    new InteractivePixiElement(10, 3, 1, 1, openSmartKitchen)
   ]
 
-  //Render Code
-  //ToDo check to remove duplicated code in other rooms
-  const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
-  const collisionMap = LEVEL_COLLISION_MAPS[roomName];
+    //Render Code
+    //ToDo check to remove duplicated code in other rooms
+    const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
+    const collisionMap = LEVEL_COLLISION_MAPS[roomName];
 
-  const updateCanvasSize = useCallback(() => {
-    setCanvasSize(calculateCanvasSize());
-  }, [])
+    const updateCanvasSize = useCallback(() => {
+        setCanvasSize(calculateCanvasSize());
+    }, [])
 
 
-  function handleMapChange(newMap: MapKey): boolean {
-    //Todo remove
-    console.log("Map changed to:", newMap);
-    return gameService.leaveRoom(roomName);
-  }
-
-  function onModalClose() {
-    setIsPaused(false);
-  }
-
-  useEffect(() => {
-    window.addEventListener("resize", updateCanvasSize);
-    return () => {
-      window.removeEventListener("resize", updateCanvasSize);
+    function handleMapChange(newMap: MapKey): boolean {
+        //Todo remove
+        console.log("Map changed to:", newMap);
+        return gameService.leaveRoom(roomName);
     }
-  }, [updateCanvasSize, collisionMap])
 
-  return (
-          <>
+    function onModalClose() {
+        setIsPaused(false);
+    }
+
+    useEffect(() => {
+        window.addEventListener("resize", updateCanvasSize);
+        return () => {
+            window.removeEventListener("resize", updateCanvasSize);
+        }
+    }, [updateCanvasSize, collisionMap])
+
+    return (
+        <>
             <div>
               {devices.includes("SmartHomeHub") && (
                       <ModalWrapperComponent
                               ref={smartHomeHubModalRef}
                               content={<SmartHomeHub onCompletion={smartHomeHubCallback}/>}
+                              onClose={onModalClose}
+                      />
+              )}
+              {devices.includes("SmartKitchen") && (
+                      <ModalWrapperComponent
+                              ref={smartKitchenModalRef}
+                              content={<SmartKitchen onCompletion={smartKitchenCallback} />}
                               onClose={onModalClose}
                       />
               )}
@@ -112,15 +139,15 @@ export const Kitchen = () => {
               )}
             </div>
             <Stage width={canvasSize.width} height={canvasSize.height}>
-              <MainContainer
-                      canvasSize={canvasSize}
-                      map={roomName}
-                      collisionMap={collisionMap}
-                      onMapChange={handleMapChange}
-                      interactiveElements={interactiveElements}
-                      isPaused={isPaused}
-              />
+                <MainContainer
+                    canvasSize={canvasSize}
+                    map={roomName}
+                    collisionMap={collisionMap}
+                    onMapChange={handleMapChange}
+                    interactiveElements={interactiveElements}
+                    isPaused={isPaused}
+                />
             </Stage>
-          </>
-  );
+        </>
+    );
 };
