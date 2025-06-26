@@ -6,7 +6,7 @@ import {IngredientsStage} from "./IngredientsStage.tsx";
 import {CookingStage} from "./CookingStage.tsx";
 import {ServeStage} from "./ServeStage.tsx";
 import {Stage, TilingSprite} from "@pixi/react";
-import {Stages} from "./Enums.ts"
+import {Stages} from "./Stages.ts"
 
 interface CookingGameComponentProps {
   onCompletion: () => void;

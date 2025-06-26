@@ -5,7 +5,7 @@ import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {Button} from "./Button.tsx";
 import {EventMode, FederatedPointerEvent} from 'pixi.js';
 import {TextStyle, Graphics as PIXIGraphics, Sprite as PIXISprite} from "pixi.js";
-import {Stages} from "@/components/cookingGame/Enums.ts";
+import {Stages} from "@/components/cookingGame/Stages.ts";
 
 interface ServeStageProps {
   setStage: (stage: Stages) => void;

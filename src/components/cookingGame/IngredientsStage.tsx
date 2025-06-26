@@ -4,7 +4,7 @@ import {Button} from "./Button.tsx";
 import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {TextStyle} from "pixi.js";
 import {Text, Sprite} from "@pixi/react";
-import {Stages} from "@/components/cookingGame/Enums.ts";
+import {Stages} from "@/components/cookingGame/Stages.ts";
 
 interface IngredientsStageProps {
   setStage: (stage: Stages) => void;

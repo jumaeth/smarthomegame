@@ -2,7 +2,7 @@ import {ClickableElement} from "../../objects/ClickableElement.ts";
 import {AlphaFilter} from "pixi.js";
 import {SpriteRender} from "../SpriteRender.tsx";
 import React from "react";
-import {Stages} from "@/components/cookingGame/Enums.ts";
+import {Stages} from "@/components/cookingGame/Stages.ts";
 
 interface GameStageProps {
   setStage: (stage: Stages) => void;
