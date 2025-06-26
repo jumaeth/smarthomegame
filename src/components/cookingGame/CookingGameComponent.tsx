@@ -7,6 +7,7 @@ import {CookingStage} from "./CookingStage.tsx";
 import {ServeStage} from "./ServeStage.tsx";
 import {Stage, TilingSprite} from "@pixi/react";
 import {Stages} from "./Stages.ts"
+import counterImg from '@/assets/cooking-sprites/counter.png';
 
 interface CookingGameComponentProps {
   onCompletion: () => void;
@@ -40,7 +41,7 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
 
   useEffect(()=>{
     if(texture===Texture.EMPTY){
-      Assets.load("/src/assets/cooking-sprites/counter.png")
+      Assets.load(counterImg)
               .then((result)=>{
                 setTexture(result);
                 setIsTextureLoaded(true);
@@ -105,7 +106,7 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
                               width={dimensions.width}
                               height={dimensions.height}>
                         <TilingSprite
-                                image={"/src/assets/cooking-sprites/counter.png"}
+                                texture={texture}
                                 width={dimensions.width}
                                 height={dimensions.height}
                                 tilePosition={{ x: 0, y: 0 }}
