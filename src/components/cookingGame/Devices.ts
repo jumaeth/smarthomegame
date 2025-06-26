@@ -1,0 +1,7 @@
+export enum Devices{
+  COOKINGFIELD,
+  FOODPROCESSOR,
+  MICROWAVE,
+  STEAMER,
+  NONE
+}

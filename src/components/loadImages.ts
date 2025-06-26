@@ -11,3 +11,4 @@ export function loadImagesFromFolder(folder: string): Record<string, string> {
   }
   return filteredImages;
 }
+
