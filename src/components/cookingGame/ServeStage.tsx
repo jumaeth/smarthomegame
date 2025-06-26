@@ -33,14 +33,14 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
   const instruction = "Wir sind fast fertig! \n\nAls letztes müssen wir den Tisch decken und unser Gericht servieren";
 
   const texturePaths = useMemo(() => ({
-    recipeopen: "/src/assets/cooking-sprites/recipeopen.png",
-    tableBackground: "/src/assets/cooking-sprites/table_background.png",
-    placemat: "/src/assets/cooking-sprites/placemat.png",
-    plate: "/src/assets/cooking-sprites/plate_with_food.png",
-    cutlery: "/src/assets/cooking-sprites/cutlery.png",
-    glas: "/src/assets/cooking-sprites/glas.png",
-    napkin: "/src/assets/cooking-sprites/napkin.png",
-    spoon: "/src/assets/cooking-sprites/spoon.png",
+    recipeopen: "@/assets/cooking-sprites/recipeopen.png",
+    tableBackground: "@/assets/cooking-sprites/table_background.png",
+    placemat: "@/assets/cooking-sprites/placemat.png",
+    plate: "@/assets/cooking-sprites/plate_with_food.png",
+    cutlery: "@/assets/cooking-sprites/cutlery.png",
+    glas: "@/assets/cooking-sprites/glas.png",
+    napkin: "@/assets/cooking-sprites/napkin.png",
+    spoon: "@/assets/cooking-sprites/spoon.png",
   }), []);
 
   const  initialPositions = useRef<Record<string, { x: number; y: number }>>({

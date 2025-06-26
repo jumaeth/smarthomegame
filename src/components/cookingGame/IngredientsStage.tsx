@@ -14,9 +14,9 @@ interface IngredientsStageProps {
 export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, setTotalPoints }) => {
 
   const texturePaths= useMemo(() => ({
-    recipeopen: "/src/assets/cooking-sprites/recipeopen.png",
-    market: "/src/assets/cooking-sprites/marketstand.png",
-    marketBackground: "/src/assets/cooking-sprites/market_background.png",
+    recipeopen: "@/assets/cooking-sprites/recipeopen.png",
+    market: "@/assets/cooking-sprites/marketstand.png",
+    marketBackground: "@/assets/cooking-sprites/market_background.png",
   }), []);
 
   const explanations = [
