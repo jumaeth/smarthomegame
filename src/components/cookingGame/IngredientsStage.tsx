@@ -5,6 +5,9 @@ import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {TextStyle} from "pixi.js";
 import {Text, Sprite} from "@pixi/react";
 import {Stages} from "@/components/cookingGame/Stages.ts";
+import recipeopenImg from "@/assets/cooking-sprites/recipeopen.png";
+import marketImg from "@/assets/cooking-sprites/marketstand.png";
+import marketBackgroundImg from "@/assets/cooking-sprites/market_background.png";
 
 interface IngredientsStageProps {
   setStage: (stage: Stages) => void;
@@ -14,9 +17,9 @@ interface IngredientsStageProps {
 export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, setTotalPoints }) => {
 
   const texturePaths= useMemo(() => ({
-    recipeopen: "@/assets/cooking-sprites/recipeopen.png",
-    market: "@/assets/cooking-sprites/marketstand.png",
-    marketBackground: "@/assets/cooking-sprites/market_background.png",
+    recipeopen: recipeopenImg,
+    market: marketImg,
+    marketBackground: marketBackgroundImg,
   }), []);
 
   const explanations = [
