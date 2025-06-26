@@ -81,7 +81,7 @@ export const Kitchen = () => {
   };
 
   const interactiveElements = [
-    new InteractivePixiElement(10, 4, 1, 1, openSmartHomeHub),
+    new InteractivePixiElement(14, 4, 1, 1, openSmartHomeHub),
     new InteractivePixiElement(1, 2, 1, 1, openSecurityCameraHomeHub),
     new InteractivePixiElement(10, 3, 1, 1, openSmartKitchen)
   ]
