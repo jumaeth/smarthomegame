@@ -6,11 +6,13 @@ import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {Graphics, Sprite, Text} from '@pixi/react';
 import {Devices} from "@/components/cookingGame/Devices.ts";
 import {Stages} from "../cookingGame/Stages.ts";
-import recipeopen from    '@/assets/cooking-sprites/recipeopen.png';
-import shelf from         '@/assets/cooking-sprites/shelf.png';
-import wall from          '@/assets/cooking-sprites/wall.png';
-import cookingfield from  '@/assets/cooking-sprites/cookingfield.png';
-import foodprocessor from '@/assets/cooking-sprites/foodprocessor.png';
+import recipeopenImg from    '@/assets/cooking-sprites/recipeopen.png';
+import shelfImg from         '@/assets/cooking-sprites/shelf.png';
+import wallImg from          '@/assets/cooking-sprites/wall.png';
+import cookingfieldImg from  '@/assets/cooking-sprites/cookingfield.png';
+import foodprocessorImg from '@/assets/cooking-sprites/foodprocessor.png';
+import microwaveImg from '@/assets/cooking-sprites/microwave.png';
+import steamerImg from '@/assets/cooking-sprites/steamer.png';
 
 interface CookingStageProps {
   setStage: (stage: Stages) => void;
@@ -35,13 +37,13 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
           "Unsere Smartkitchen kann alle Zutaten vorbereiten aber wir müssen die richtige Maschine zum Kochen des Gerichts auswählen";
 
   const texturePaths = useMemo(() => ({
-    recipeOpen: recipeopen,
-    shelf: shelf,
-    wall: wall,
-    cookingField: cookingfield,
-    foodProcessor: foodprocessor,
-    microwave: microwave,
-    steamer: steamer
+    recipeOpen: recipeopenImg,
+    shelf: shelfImg,
+    wall: wallImg,
+    cookingField: cookingfieldImg,
+    foodProcessor: foodprocessorImg,
+    microwave: microwaveImg,
+    steamer: steamerImg
   }), []);
 
 
