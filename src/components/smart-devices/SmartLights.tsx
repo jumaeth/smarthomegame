@@ -15,16 +15,16 @@ export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback
 
   return (
           <>
-            <h3>Smarte Beleuchtung</h3>
+            <h3>Smart lights</h3>
             <div className="modal-content">
-              <h1>Smarte Beleuchtung Mission</h1>
-              <h3>Beantworte die folgenden Fragen ...</h3>
+              <h1>Smart lights mission</h1>
+              <h3>Answer the following questions ...</h3>
               <MultipleChoiceComponent
                       questions={[
-                        `Möchtest du Bluetooth aktivieren?`,
-                        `Möchtest du Wifi aktivieren?`,
-                        `Möchtest du den Energieverbrauch aufzeichnen?`,
-                        `Möchtest du die Verbindung mit der Smart App aktivieren?`,
+                        `Would you like to activate Bluetooth?`,
+                        `Would you like to activate Wifi?`,
+                        `Would you like to record your energy consumption?`,
+                        `Would you like to activate the connection with the Smart App?`,
                       ]}
                       solutions={[true, true, false, false]}
                       onComplete={handleQuizCompletion}

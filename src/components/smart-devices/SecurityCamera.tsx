@@ -14,16 +14,16 @@ export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallb
 
     const MultipleChoiceProps = {
         questions: [
-            `Möchtest du den Internetzugang aktivieren?`,
-            `Möchtest du den Telefon Nutzung aktivieren?`,
-            `Möchtest du die Bilddaten zur Speicherung und Verarbeitung übermitteln?`,
-            `Möchtest du die Bilderkennung aktivieren?`
+            `Would you like to activate Internet access?`,
+            `Do you want to activate the phone usage?`,
+            `Would you like to transfer the image data for storage and processing?`,
+            `Would you like to activate image recognition?`
         ],
         solutions: [
             true,
             true,
-            `Das ist nich nötig und ein Risiko für deine Privatsphäre`,
-            `Das ist nich nötig und ein Risiko für deine Privatsphäre`],
+            `This is not necessary and a risk to your privacy`,
+            `This is not necessary and a risk to your privacy`],
         handleCompletion: (isCorrect: boolean) => {
             console.log("Completed:", isCorrect);
             setFrame(1);
@@ -36,13 +36,13 @@ export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallb
             true,
             true,
             true,
-            `Das ist ein Schlechter Platz für eine Kamera weil Gründe`,
+            `This is a bad place for a camera because reasons`,
             true,
-            `Das ist ein Schlechter Platz für eine Kamera weil Gründe`,
+            `This is a bad place for a camera because reasons`,
             true,
             true,
-            `Das ist ein Schlechter Platz für eine Kamera weil Gründe`,
-            `Das ist ein Schlechter Platz für eine Kamera weil Gründe`,
+            `This is a bad place for a camera because reasons`,
+            `This is a bad place for a camera because reasons`,
             true,
             true,
             true],
@@ -51,11 +51,11 @@ export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallb
 
     return (
         <div>
-            <h1>Überwachungskamera</h1>
+            <h1>Surveillance camera</h1>
             <div className="modal-content">
                 {frame == 0 && (
                     <>
-                        <p>Oh nein all deine Einstellungen wurden zurückgesetzt. Zeit sie neu festzulegen
+                        <p>Oh no, all your settings have been reset. Time to set them again
                         </p>
                         <MultipleChoiceComponent
                             questions={MultipleChoiceProps.questions}
@@ -65,11 +65,11 @@ export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallb
                     </>)}
                 {frame == 1 && (
                     <>
-                        <p>Hey, du solltest deine Überwachungskameras neu anordnen. Das Smart Home hat bereits
-                            eine
-                            Vorauswahl getroffen. Bist du damit einverstanden? Wähle alle Kamera plazierungen die du
-                            wieder
-                            entfernen möchtest.</p>
+                        <p>Hey, you should rearrange your surveillance cameras. The smart home already has made
+                            a
+                            preselection. Do you agree with this? Select all camera placements that
+                            you want
+                            to remove again</p>
                         <CaptchaComponent
                             pictureFolder={CaptchaComponentProps.pictureFolder}
                             solutions={CaptchaComponentProps.solutions}

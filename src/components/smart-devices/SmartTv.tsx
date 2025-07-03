@@ -18,11 +18,11 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
             <h3>Smart TV</h3>
             <div className="modal-content">
               <h1>Smart TV Mission</h1>
-              <h3>Beantworte die folgenden Fragen …</h3>
+              <h3>Answer the following questions ...</h3>
               <MultipleChoiceComponent
                       questions={[
-                        `Möchtest du die Spracherkennung aktivieren?`,
-                        `Möchtest du die Kamera aktivieren?`,
+                        `Would you like to activate voice recognition?`,
+                        `Do you want to activate the camera?`,
                       ]}
                       solutions={[false, false]}
                       onComplete={handleQuizCompletion}

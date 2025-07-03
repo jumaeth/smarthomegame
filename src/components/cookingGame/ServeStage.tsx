@@ -38,7 +38,7 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
 
   const draggingRef = useRef(false);
 
-  const instruction = "Wir sind fast fertig! \n\nAls letztes müssen wir den Tisch decken und unser Gericht servieren";
+  const instruction = "We are almost finished! \n\nThe last thing we have to do is set the table and serve our dish";
 
   const texturePaths = useMemo(() => ({
     recipeopen: recipeopenImg,
