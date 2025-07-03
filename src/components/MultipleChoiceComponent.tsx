@@ -70,10 +70,10 @@ export const MultipleChoiceComponent = ({
 
             {!submitted ? (
                     <button onClick={submitAnswer}>
-                      <Trans>Antwort abschicken</Trans>
+                      <Trans>Send answer</Trans>
                     </button>
             ) : (
-                    <button onClick={resetAnswers}>Nochmals versuchen</button>
+                    <button onClick={resetAnswers}>Try again</button>
             )}
           </div>
   );

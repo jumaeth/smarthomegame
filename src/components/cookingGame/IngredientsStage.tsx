@@ -23,35 +23,35 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
   }), []);
 
   const explanations = [
-    "Lass uns zuerst die benötigten Zutaten kaufen. Für gute Pasta brauchen wir: \n\n\t1. Spaghetti\n\t2. Tomaten\n\t3. Gewürze\n\t4. Käse",
-    "Du musst verschiedene Kriterien wie Kosten, Zeit und Qualität beachten. \n\nSei vorsichtig damit, deine Daten für " +
-    "bessere Resultate preiszugeben."
+    "First, let's buy the ingredients we need. For good pasta we need: \n\n\t1. Spaghetti\n\t2. Tomatoes\n\t3. Spices\n\t4. Cheese",
+    "You have to consider various criteria such as cost, time and quality.\n\nBe careful about using your data for " +
+    "better results."
   ];
 
   const btnTexts = [
-    ["Lokaler Supermarkt, bar", "Gemüse Lieferdienst", "Italien Fachhändler", "Discounter, mit Karte"],
-    ["Laden am Bauernhof", "Vegetarische box", "Co-op Bauernmarkt", "Markt"],
-    ["Eigener Balkon", "Gehyptes Gewürz Startup", "Omas Garten ", "Nachhaltiger Laden"],
-    ["Trip nach Italien", 'Workshop auf Bauernhof', "Im supermarkt (nochmal)", 'Von "parmesan.com"']
+    ["Local supermarket, bar", "Vegetable delivery service", "Italy Retailer", "Discounter, with Map"],
+    ["Store on the farm", "Vegetarian box", "Co-op Farmers' market", "Market"],
+    ["Own balcony", "Hyped spice startup", "Grandma's garden ", "Sustainable store"],
+    ["Trip to Italy", 'Workshop on a farm', "In the supermarket (again)", 'From "parmesan.com"']
   ];
 
   const instructions = [
-    "Spaghetti kaufen", "Tomaten kaufen", "Gewürze kaufen", "Käse kaufen"
+    "buy spaghetti", "buy tomatoes", "buy spices", "buy cheese"
   ];
 
   const finalMessage = [
-    "Danke für deine Hilfe, mal sehen:\n\n- Die Zutaten haben eine",
-    "Qualität.\n- Der Einkauf war", "\n- Dein Portmonee war ", "deinen Entscheidungen."
+    "Thanks for your help, let's see:\n\n- The ingredients have a",
+    "Quality.\n- The purchase was", "\n- Your wallet was", "your decisions."
   ];
 
   const evalChoices = [
-    ["Super", "normale", "schlechte"],
-    ["schnell.", "langsam."],
-    ["glücklich über", "nicht böse mit", "nicht einverstanden mit"]
+    ["Super", "normal", "bad"],
+    ["fast.", "slow."],
+    ["happy about", "not angry with", "do not agree with"]
   ];
 
   const conclusion = [
-    "Super job", "Weiter", "Nochmals"
+    "Good job", "Continue", "Try again"
   ];
 
   function shuffledRange(n: number): number[] {

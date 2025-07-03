@@ -33,8 +33,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     const [infoComment, setInfoComment] = useState("");
     const [retry, setRetry] = useState(false);
 
-    const instruction = "Okay, lass uns ein Gericht daraus machen. \n\n" +
-        "Unsere Smartkitchen kann alle Zutaten vorbereiten aber wir müssen die richtige Maschine zum Kochen des Gerichts auswählen";
+    const instruction = "Okay, let's make a dish out of it. \n\n" +
+        "Our Smartkitchen can prepare all the ingredients but we have to choose the right machine to cook the dish";
 
     const texturePaths = useMemo(() => ({
         recipeOpen: recipeOpenImg,
@@ -48,14 +48,14 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
 
 
     const criterias = [
-        "Energie", "Berechtigung", "Zeit", "Bedienung"
+        "Energy", "Authorization", "Time", "Operation"
     ];
 
     const dataComments = [
-        "Integriert in energy monitoring system", // Cookingfield
-        "Speichert Vorlieben und gekochte Gerichte", // Food Processor
-        "Speichert zeit und verbrauchte Energie",// Microwave
-        "Verbindet reglemässig mit cloud für updates" //Steamer
+        "Integrated in energy monitoring system", // Cookingfield
+        "Saves preferences and cooked dishes", // Food Processor
+        "Stores time and consumed energy",// Microwave
+        "Connects regularly to cloud for updates" //Steamer
     ];
 
     const stars = [

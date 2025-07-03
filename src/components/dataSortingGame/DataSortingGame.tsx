@@ -3,22 +3,22 @@ import React, { useState, useEffect } from 'react';
 // Define the data types and their corresponding colors and explanations
 const DATA_TYPES = {
   public: {
-    label: 'Öffentlich zugängliche Daten',
+    label: 'Publicly accessible data',
     color: 'bg-green-700',
-    description: 'Daten, die für die Allgemeinheit bestimmt sind und keine persönlichen Informationen enthalten',
-    explanation: 'Diese Daten sind öffentlich zugänglich und enthalten keine persönlichen Informationen. Sie können frei geteilt werden, da sie keine Privatsphäre-Bedenken aufwerfen.'
+    description: 'Data that is intended for the general public and does not contain any personal information',
+    explanation: 'This data is publicly accessible and does not contain any personal information. It can be shared freely as it does not raise any privacy concerns.'
   },
   personal: {
-    label: 'Personenbezogene Daten',
+    label: 'Personal data',
     color: 'bg-orange-600',
-    description: 'Persönliche Informationen, die sensibel werden können, wenn sie mit anderen Daten kombiniert werden',
-    explanation: 'Diese Daten sind persönlich, aber nicht hochsensibel. Sie können zu Identifikation führen und sollten geschützt werden, besonders wenn sie mit anderen Informationen kombiniert werden.'
+    description: 'Personal information that can become sensitive when combined with other data',
+    explanation: 'This data is personal, but not highly sensitive. It can lead to identification and should be protected, especially if it is combined with other information.'
   },
   sensitive: {
-    label: 'Personenbezogene Daten spezieller Kategorien',
+    label: 'Personal data of special categories',
     color: 'bg-red-700',
-    description: 'Daten, die nach DSGVO einen höheren Schutz erfordern',
-    explanation: 'Diese Daten sind besonders sensibel und erfordern höchsten Schutz nach DSGVO. Sie umfassen genetische, biometrische und Gesundheitsdaten sowie Informationen über rassische und ethnische Herkunft, politische Meinungen, religiöse Überzeugungen oder Gewerkschaftszugehörigkeit.'
+    description: 'Data that requires a higher level of protection under the GDPR',
+    explanation: 'This data is particularly sensitive and requires the highest level of protection under the GDPR. It includes genetic, biometric and health data as well as information on racial and ethnic origin, political opinions, religious beliefs or trade union membership.'
   }
 } as const;
 
@@ -34,127 +34,127 @@ const DATA_ITEMS: DataItem[] = [
   // Sensitive data examples
   { 
     id: 1, 
-    text: 'Gesundheitsdaten (z.B. Krankheitsgeschichte)', 
+    text: 'Health data (e.g. medical history)',
     type: 'sensitive',
-    explanation: 'Gesundheitsdaten sind besonders schützenswert nach DSGVO, da sie sehr persönliche Informationen enthalten und missbraucht werden könnten.'
+    explanation: 'Health data is particularly worthy of protection under the GDPR, as it contains very personal information and could be misused.'
   },
   { 
     id: 2, 
-    text: 'Biometrische Daten (z.B. Fingerabdruck)', 
+    text: 'Biometric data (e.g. fingerprint)',
     type: 'sensitive',
-    explanation: 'Biometrische Daten sind einzigartige Merkmale einer Person und können nicht geändert werden. Daher erfordern sie besonderen Schutz.'
+    explanation: 'Biometric data are unique characteristics of a person and cannot be changed. They therefore require special protection.'
   },
   { 
     id: 3, 
-    text: 'Genetische Daten', 
+    text: 'Genetic data',
     type: 'sensitive',
-    explanation: 'Genetische Daten sind besonders sensibel, da sie nicht nur die betroffene Person, sondern auch deren Verwandte betreffen können.'
+    explanation: 'Genetic data is particularly sensitive as it can affect not only the person concerned but also their relatives.'
   },
   { 
     id: 4, 
-    text: 'Religiöse Überzeugungen', 
+    text: 'Religious beliefs',
     type: 'sensitive',
-    explanation: 'Religiöse Überzeugungen sind besonders schützenswert, da sie zur Diskriminierung führen könnten.'
+    explanation: 'Religious beliefs are particularly worthy of protection as they could lead to discrimination.'
   },
   { 
     id: 5, 
-    text: 'Politische Meinungen', 
+    text: 'Political opinions',
     type: 'sensitive',
-    explanation: 'Politische Meinungen sind besonders schützenswert, da sie zur Diskriminierung oder Beeinflussung führen könnten.'
+    explanation: 'Political opinions are particularly worthy of protection as they could lead to discrimination or influence.'
   },
   { 
     id: 6, 
-    text: 'Gewerkschaftszugehörigkeit', 
+    text: 'Trade union membership',
     type: 'sensitive',
-    explanation: 'Die Gewerkschaftszugehörigkeit ist besonders schützenswert, da sie zur Diskriminierung am Arbeitsplatz führen könnte.'
+    explanation: 'Trade union membership is particularly worthy of protection as it could lead to discrimination in the workplace.'
   },
   { 
     id: 7, 
-    text: 'Rassische und ethnische Herkunft', 
+    text: 'Racial and ethnic origin',
     type: 'sensitive',
-    explanation: 'Diese Daten sind besonders schützenswert, da sie zur Diskriminierung führen könnten.'
+    explanation: 'This data is particularly worthy of protection as it could lead to discrimination.'
   },
 
   // Personal data examples
   { 
     id: 8, 
-    text: 'Name und Adresse', 
+    text: 'Name and address',
     type: 'personal',
-    explanation: 'Name und Adresse sind persönliche Daten, die zur Identifikation einer Person führen können.'
+    explanation: 'Name and address are personal data that can lead to the identification of a person.'
   },
   { 
     id: 9, 
-    text: 'E-Mail-Adresse', 
+    text: 'E-mail address',
     type: 'personal',
-    explanation: 'E-Mail-Adressen sind persönliche Daten, die zur Identifikation und Kontaktaufnahme dienen können.'
+    explanation: 'E-mail addresses are personal data that can be used for identification and contact purposes.'
   },
   { 
     id: 10, 
-    text: 'Telefonnummer', 
+    text: 'Phone number',
     type: 'personal',
-    explanation: 'Telefonnummern sind persönliche Daten, die zur Identifikation und Kontaktaufnahme dienen können.'
+    explanation: 'Telephone numbers are personal data that can be used for identification and contact purposes.'
   },
   { 
     id: 11, 
-    text: 'Geburtsdatum', 
+    text: 'Date of birth',
     type: 'personal',
-    explanation: 'Das Geburtsdatum ist eine persönliche Information, die zur Identifikation beitragen kann.'
+    explanation: 'The date of birth is personal information that can contribute to identification.'
   },
   { 
     id: 12, 
-    text: 'Bankverbindung', 
+    text: 'Bank details',
     type: 'personal',
-    explanation: 'Bankverbindungen sind persönliche Daten, die besonderen Schutz erfordern, da sie für finanzielle Transaktionen verwendet werden.'
+    explanation: 'Bank details are personal data that require special protection as they are used for financial transactions.'
   },
   { 
     id: 13, 
-    text: 'IP-Adresse', 
+    text: 'IP address',
     type: 'personal',
-    explanation: 'IP-Adressen sind persönliche Daten, die zur Identifikation eines Geräts und damit indirekt einer Person dienen können.'
+    explanation: 'IP addresses are personal data that can be used to identify a device and thus indirectly a person.'
   },
   { 
     id: 14, 
-    text: 'Standortdaten', 
+    text: 'Location data',
     type: 'personal',
-    explanation: 'Standortdaten sind persönliche Informationen, die Aufschluss über Bewegungsmuster und Aufenthaltsorte geben können.'
+    explanation: 'Location data is personal information that can provide information about movement patterns and whereabouts.'
   },
 
   // Public data examples
   { 
     id: 15, 
-    text: 'Öffentliche Veranstaltungshinweise', 
+    text: 'Public event information',
     type: 'public',
-    explanation: 'Öffentliche Veranstaltungshinweise sind für alle zugänglich und enthalten keine persönlichen Informationen.'
+    explanation: 'Public event announcements are accessible to everyone and do not contain any personal information.'
   },
   { 
     id: 16, 
-    text: 'Amtliche Bekanntmachungen', 
+    text: 'Official announcements',
     type: 'public',
-    explanation: 'Amtliche Bekanntmachungen sind öffentliche Informationen, die für alle Bürger zugänglich sind.'
+    explanation: 'Official announcements are public information that is accessible to all citizens.'
   },
   { 
     id: 17, 
-    text: 'Öffentliche Verkehrsinformationen', 
+    text: 'Public transport information',
     type: 'public',
-    explanation: 'Öffentliche Verkehrsinformationen sind für alle zugänglich und enthalten keine persönlichen Daten.'
+    explanation: 'Public transport information is accessible to everyone and does not contain any personal data.'
   },
   { 
     id: 18, 
-    text: 'Wetterdaten', 
+    text: 'Weather data',
     type: 'public',
-    explanation: 'Wetterdaten sind öffentliche Informationen, die keine persönlichen Bezüge enthalten.'
+    explanation: 'Weather data is public information that does not contain any personal references.'
   },
   { 
     id: 19, 
-    text: 'Öffentliche Statistiken', 
+    text: 'Public statistics',
     type: 'public',
-    explanation: 'Öffentliche Statistiken sind aggregierte Daten ohne persönlichen Bezug.'
+    explanation: 'Public statistics are aggregated data without personal reference.'
   },
   { 
     id: 20, 
-    text: 'Öffentliche Karten', 
+    text: 'Public cards',
     type: 'public',
-    explanation: 'Öffentliche Karten enthalten keine persönlichen Informationen und sind für alle zugänglich.'
+    explanation: 'Public maps do not contain any personal information and are accessible to everyone.'
   }
 ];
 
@@ -241,26 +241,26 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
     return (
       <div className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col items-center justify-center gap-8 bg-amber-600 font-mono text-center">
         <h2 className="text-2xl sm:text-3xl md:text-4xl text-white mb-4">
-          Glückwunsch!
+          Congratulations!
         </h2>
 
         <div className="bg-white/90 rounded-xl p-6 max-w-[600px] w-[90%]">
           <h3 className="text-xl sm:text-2xl md:text-3xl text-amber-900 mb-4">
-            Zusammenfassung
+            Summary
           </h3>
 
           <p className="text-lg sm:text-xl md:text-2xl text-amber-900 mb-6">
-            Alle Fragen wurden erfolgreich beantwortet!
+            All questions were answered successfully!
           </p>
 
           {firstTrySuccesses.length > 0 && (
             <p className="text-base sm:text-lg text-amber-900 mb-6">
-              Auf Anhieb richtig beantwortet: {firstTrySuccesses.length} von {DATA_ITEMS.length}
+              Answered correctly at the first attempt: {firstTrySuccesses.length} von {DATA_ITEMS.length}
             </p>
           )}
 
           <p className="text-base sm:text-lg md:text-xl text-amber-900 mb-8">
-            Das Smart Home Hub ist jetzt entsperrt!
+            The Smart Home Hub is now unlocked!
           </p>
 
           <div className="flex justify-center">
@@ -306,9 +306,9 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
           </p>
           <button
             onClick={handleCloseFeedback}
-            className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded w-full"
+            className="mt-4 px-4 py-2 bg-gray-500 hover:bg-gray-300 rounded w-full"
           >
-            Schließen
+            Close
           </button>
         </div>
       )}
