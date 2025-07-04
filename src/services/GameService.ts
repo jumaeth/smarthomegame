@@ -69,6 +69,14 @@ export class GameService {
     this.navigate('/game');
   }
 
+  pauseGame(): void {
+    //TODO
+  }
+
+  resumeGame(): void {
+    //TODO
+  }
+
   toogleRoomIsLocked(roomName: RoomName): void {
     const room: Room | undefined = this.findRoomByName(roomName);
     if (room) room.toggleIsLocked();
