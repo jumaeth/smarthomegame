@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useState} from "react";
-import HudComponent from "@/components/heads-up-display/HudComponent.tsx";
 import {useGameService} from "@/hooks/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {RoomName} from "@/objects/Room.ts";
@@ -14,6 +13,7 @@ import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
+import PassiveHUD from "@/components/heads-up-display/PassiveHUD.tsx";
 
 export const LivingRoom = () => {
   const roomName: RoomName = "livingroom"
@@ -84,7 +84,7 @@ export const LivingRoom = () => {
 
   return (
           <>
-            <HudComponent gameService={gameService}></HudComponent>
+            <PassiveHUD gameService={gameService}></PassiveHUD>
             <div>
               <BasicModalWrapper
                       isOpen={!!activeDevice}
@@ -100,6 +100,7 @@ export const LivingRoom = () => {
                       onMapChange={handleMapChange}
                       interactiveElements={interactiveElements}
                       isPaused={isPaused}
+                      gameService={gameService}
               />
             </Stage>
           </>

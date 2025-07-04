@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {useGameService} from "@/hooks/useGameService";
+import {useGameService} from "@/hooks/useGameService.tsx";
 import {calculateCanvasSize} from "@/utils/movment.ts";
 import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
@@ -8,7 +8,7 @@ import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {ModalWrapperComponent} from "@/components/ModalWrapperComponent.tsx";
 import {SmartHomeHub} from "@/components/smart-devices/SmartHomeHub.tsx";
-import {SmartDevice} from "@/objects/SmartDevice";
+import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {SecurityCamera} from "@/components/smart-devices/SecurityCamera.tsx";
 
 export const Kitchen = () => {
@@ -119,6 +119,7 @@ export const Kitchen = () => {
                       onMapChange={handleMapChange}
                       interactiveElements={interactiveElements}
                       isPaused={isPaused}
+                      gameService={gameService}
               />
             </Stage>
           </>

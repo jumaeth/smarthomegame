@@ -1,12 +1,12 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import {FirstFloor} from '../components/FirstFloor.tsx';
+import {FirstFloor} from '../components/rooms/FirstFloor.tsx';
 import {LivingRoom} from '../components/rooms/LivingRoom.tsx';
 import {GameOver} from '../pages/GameOver.tsx';
 import {GameWrapper} from "../components/GameWrapper.tsx";
 import {FloorSelector} from "../components/FloorSelector.tsx";
 import NotFoundPage from "../pages/NotFoundPage.tsx";
 import HomePage from "../pages/HomePage.tsx";
-import {Kitchen} from "@/components/Kitchen.tsx";
+import {Kitchen} from "@/components/rooms/Kitchen.tsx";
 import {IntroPage} from "@/pages/IntroPage.tsx";
 
 const AppRoutes = () => (

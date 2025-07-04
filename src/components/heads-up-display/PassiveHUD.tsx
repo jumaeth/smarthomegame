@@ -6,7 +6,7 @@ interface HudProps {
   gameService: GameService;
 }
 
-export default function HudComponent({ gameService }: HudProps) {
+export default function PassiveHUD({ gameService }: HudProps) {
   const [privacyScore, setPrivacyScore] = useState(0);
   const [comfortScore, setComfortScore] = useState(0);
 
