@@ -1,4 +1,4 @@
-import {MultipleChoiceComponent} from "../MultipleChoiceComponent.tsx";
+import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 import "./Modal.css";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
