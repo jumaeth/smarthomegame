@@ -13,7 +13,6 @@ import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
-import PassiveHUD from "@/components/heads-up-display/PassiveHUD.tsx";
 
 export const LivingRoom = () => {
   const roomName: RoomName = "livingroom"
@@ -84,7 +83,6 @@ export const LivingRoom = () => {
 
   return (
           <>
-            <PassiveHUD gameService={gameService}></PassiveHUD>
             <div>
               <BasicModalWrapper
                       isOpen={!!activeDevice}
