@@ -1,7 +1,16 @@
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {CookieBanner} from "@/components/general-ui/CookieBanner.tsx";
+import Button from "@/components/general-ui/Button.tsx";
 
 export default function HomePage() {
   const navigate = useNavigate();
+
+  const saveCookieChoice = (isAccepted: boolean) => {
+    const expiryDays = 365;
+    const date = new Date();
+    date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
+    document.cookie = `cookieConsent=${isAccepted}; expires=${date.toUTCString()}; path=/`;
+  }
 
   return (
           <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800">
@@ -13,18 +22,17 @@ export default function HomePage() {
               <span className="font-semibold"> Spiel starten </span> Schaltfläche.
             </p>
             <div className="flex space-x-4">
-              <button
-                      onClick={() => navigate("/intro")}
-                      className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
-              >
-                Spiel starten
-              </button>
+              <Button onClick={() => navigate("/intro")}>Start game</Button>
               <button
                       onClick={() => navigate("/game/livingroom")}
                       className="px-6 py-3 bg-gray-300 text-gray-800 rounded-lg shadow-md hover:bg-gray-400 transition"
               >
                 Intro überspringen und direkt ins Spiel
               </button>
+
+            </div>
+            <div className="flex space-x-4 w-[100%] justify-center mt-4 p-5 bg-gray-300 border-t border-b border-solid border-black">
+              <CookieBanner onComplete={saveCookieChoice}/>
             </div>
           </div>
   );
