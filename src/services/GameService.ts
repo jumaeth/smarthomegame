@@ -2,14 +2,21 @@ import {Game} from "../objects/Game";
 import {Room, RoomName} from "../objects/Room";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore.ts";
+import {CookieService} from "@/services/CookieService.ts";
 
 export class GameService {
   private game: Game;
   private navigate: (path: string) => void;
 
   constructor(navigate: (path: string) => void) {
-    this.game = new Game(this.setUpRooms());
+    const saveGame = CookieService.get<Game>('save_game');
+    const savedGame = saveGame ? Game.fromSerialized(saveGame) : null;
+    this.game = savedGame ? Game.fromSerialized(savedGame) : new Game(this.setUpRooms());
     this.navigate = navigate;
+  }
+
+  onGameStateChange(): void {
+    CookieService.set("save_game", this.game);
   }
 
   setUpRooms(): Room[] {
@@ -36,6 +43,7 @@ export class GameService {
     if (!room) return;
     room.complete();
     this.navigateAfterComplete();
+    this.onGameStateChange();
   }
 
   navigateAfterComplete(): void {
@@ -58,6 +66,7 @@ export class GameService {
   reset(): boolean {
     this.game = new Game(this.setUpRooms());
     this.navigate('/');
+    this.onGameStateChange();
     return true;
   }
 
@@ -80,12 +89,14 @@ export class GameService {
   toogleRoomIsLocked(roomName: RoomName): void {
     const room: Room | undefined = this.findRoomByName(roomName);
     if (room) room.toggleIsLocked();
+    this.onGameStateChange();
   }
 
   leaveRoom(roomName: RoomName): boolean {
     const room: Room | undefined = this.findRoomByName(roomName);
     if (room?.isLocked == false) {
       this.navigate('/game');
+      this.onGameStateChange();
     }
     return true;
   }
@@ -93,6 +104,7 @@ export class GameService {
   changeScore(scoreDelta: number, scoreType: ScoreType): void {
     if (scoreType === 'privacy') this.game.modifyScore(scoreDelta, 0);
     if (scoreType === 'comfort') this.game.modifyScore(0, scoreDelta);
+    this.onGameStateChange();
   }
 
   getScore():GameScore {

@@ -5,9 +5,15 @@ export class Game {
   private readonly rooms: Room[];
   private score: GameScore;
 
-  constructor(rooms: Room[],) {
+  constructor(rooms: Room[], score?: GameScore) {
     this.rooms = rooms;
-    this.score = new GameScore(0, 50)
+    this.score = score ? score : new GameScore(0, 50)
+  }
+
+  static fromSerialized(data: Game): Game {
+    const rooms = data.rooms.map((roomData: Room) => Room.fromSerialized(roomData));
+    const score = GameScore.fromSerialized(data.score);
+    return new Game(rooms, score);
   }
 
   getRooms(): Room[] {
