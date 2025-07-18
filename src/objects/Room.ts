@@ -9,6 +9,14 @@ export class Room {
   ) {
   }
 
+  static fromSerialized(data: Room): Room {
+    const devices = data.devices.map((d: SmartDevice) => SmartDevice.fromSerialized(d));
+    const room = new Room(data.name, devices);
+    room.isCompleted = data.isCompleted;
+    room.isLocked = data.isLocked;
+    return room;
+  }
+
   complete(): void {
     this.isCompleted = true;
   }

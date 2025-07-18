@@ -7,6 +7,10 @@ export class GameScore {
     this.comfortScore = comfortScore;
   }
 
+  static fromSerialized(data: GameScore): GameScore {
+    return new GameScore(data.privacyScore, data.comfortScore);
+  }
+
   getPrivacyScore(): number {
     return this.privacyScore;
   }

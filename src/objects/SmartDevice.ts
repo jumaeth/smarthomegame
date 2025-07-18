@@ -5,6 +5,10 @@ export class SmartDevice {
   ) {
   }
 
+  static fromSerialized(data: SmartDevice): SmartDevice {
+    return new SmartDevice(data.name);
+  }
+
   complete():void {
     this.isCompleted = true;
   }
