@@ -80,12 +80,12 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
                 {feedbackMsg && <div className="text-red-600 text-sm mt-1">{feedbackMsg}</div>}
 
                 <Button onClick={submitAnswer} disabled={isCompleted}>
-                  <Trans>Antwort abschicken</Trans>
+                  <Trans>Send answer</Trans>
                 </Button>
 
                 {!isCompleted && (
                         <div className="text-sm text-gray-600 mt-1">
-                          <Trans>Current score: {score}</Trans>
+                          <Trans>Current score: </Trans>{score}
                         </div>
                 )}
               </div>

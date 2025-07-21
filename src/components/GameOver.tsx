@@ -1,15 +1,14 @@
+import { Trans } from "@lingui/react/macro";
 import {useGameService} from "../hooks/useGameService.tsx";
 
 export function GameOver() {
-  const gameOverMessage = "Gratulation, du hast gewonnen";
-  const gameResetLabel = "Zur Homepage";
   const gameService = useGameService();
 
   return (
           <div className="GameOverPage">
-            <h2>{gameOverMessage}</h2>
+            <h2><Trans>Congratulations, you have won</Trans></h2>
             <button onClick={() => gameService.reset()}>
-              {gameResetLabel}
+              <Trans>Back to Homepage</Trans>
             </button>
           </div>
   );
