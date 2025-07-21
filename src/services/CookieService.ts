@@ -1,8 +1,15 @@
 export class CookieService {
+
+  static areCookiesAllowed():boolean{
+    return this.get("cookieConsent") === true;
+  }
+
   static set<T>(name: string, value: T, days: number = 365): void {
-    const encodedValue = encodeURIComponent(JSON.stringify(value));
-    const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = `${name}=${encodedValue}; expires=${expires}; path=/`;
+    if (this.areCookiesAllowed() || name === "cookieConsent"){
+      const encodedValue = encodeURIComponent(JSON.stringify(value));
+      const expires = new Date(Date.now() + days * 864e5).toUTCString();
+      document.cookie = `${name}=${encodedValue}; expires=${expires}; path=/`;
+    }
   }
 
   static get<T>(name: string): T | null {

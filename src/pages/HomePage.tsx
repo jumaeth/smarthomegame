@@ -1,15 +1,13 @@
 import {useNavigate} from "react-router-dom";
 import {CookieBanner} from "@/components/general-ui/CookieBanner.tsx";
 import Button from "@/components/general-ui/Button.tsx";
+import {CookieService} from "@/services/CookieService.ts";
 
 export default function HomePage() {
   const navigate = useNavigate();
 
   const saveCookieChoice = (isAccepted: boolean) => {
-    const expiryDays = 365;
-    const date = new Date();
-    date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
-    document.cookie = `cookieConsent=${isAccepted}; expires=${date.toUTCString()}; path=/`;
+    CookieService.set("cookieConsent",isAccepted);
   }
 
   return (
