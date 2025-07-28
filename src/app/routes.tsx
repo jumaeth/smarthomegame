@@ -8,9 +8,11 @@ import NotFoundPage from "../pages/NotFoundPage.tsx";
 import HomePage from "../pages/HomePage.tsx";
 import {Kitchen} from "@/components/rooms/Kitchen.tsx";
 import {IntroPage} from "@/pages/IntroPage.tsx";
+import ReloadHandler from "@/app/ReloadHandler.tsx";
 
 const AppRoutes = () => (
         <Router>
+          <ReloadHandler/>
           <Routes>
             <Route index element={<HomePage/>}/>
             <Route path="/home" element={<HomePage/>}/>
