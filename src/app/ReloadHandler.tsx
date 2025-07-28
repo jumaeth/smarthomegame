@@ -47,6 +47,7 @@ const ReloadHandler = () => {
         }
       } catch (e) {
         // Fallback detection
+        console.log(e);
         return wasReloaded === "true";
       }
 
