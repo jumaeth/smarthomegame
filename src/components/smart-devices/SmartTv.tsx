@@ -15,9 +15,8 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
 
   return (
           <>
-            <h3>Smart TV</h3>
+            <h1>Smart TV</h1>
             <div className="modal-content">
-              <h1>Smart TV Mission</h1>
               <h3>Answer the following questions ...</h3>
               <MultipleChoiceComponent
                       questions={[

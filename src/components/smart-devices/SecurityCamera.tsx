@@ -55,8 +55,8 @@ export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallb
             <div className="modal-content">
                 {frame == 0 && (
                     <>
-                        <p>Oh no, all your settings have been reset. Time to set them again
-                        </p>
+                        <h3>Oh no, all your settings have been reset. Time to set them again
+                        </h3>
                         <MultipleChoiceComponent
                             questions={MultipleChoiceProps.questions}
                             solutions={MultipleChoiceProps.solutions}
