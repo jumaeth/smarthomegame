@@ -239,94 +239,121 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
 
   if (showSummary) {
     return (
-      <div className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col items-center justify-center gap-8 bg-amber-600 font-mono text-center">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl text-white mb-4">
-          Congratulations!
-        </h2>
-
-        <div className="bg-white/90 rounded-xl p-6 max-w-[600px] w-[90%]">
-          <h3 className="text-xl sm:text-2xl md:text-3xl text-amber-900 mb-4">
-            Summary
-          </h3>
-
-          <p className="text-lg sm:text-xl md:text-2xl text-amber-900 mb-6">
-            All questions were answered successfully!
-          </p>
-
-          {firstTrySuccesses.length > 0 && (
-            <p className="text-base sm:text-lg text-amber-900 mb-6">
-              Answered correctly at the first attempt: {firstTrySuccesses.length} von {DATA_ITEMS.length}
-            </p>
-          )}
-
-          <p className="text-base sm:text-lg md:text-xl text-amber-900 mb-8">
-            The Smart Home Hub is now unlocked!
-          </p>
-
-          <div className="flex justify-center">
-            <button
-              onClick={onCompletion}
-              className="px-6 py-3 bg-green-700 hover:bg-green-800 text-white rounded-xl transition-colors"
+            <div
+                    className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col items-center justify-center gap-8 bg-amber-600 text-center"
+                    style={{ fontFamily: 'LoResRegular, sans-serif' }}
             >
-              Fertig
-            </button>
-          </div>
-        </div>
-      </div>
+              <h2
+                      className="text-2xl sm:text-3xl md:text-4xl text-white mb-4"
+                      style={{ fontFamily: 'LoResBold, sans-serif' }}
+              >
+                Congratulations!
+              </h2>
+
+              <div className="bg-white/90 rounded-xl p-6 max-w-[600px] w-[90%]">
+                <h3
+                        className="text-xl sm:text-2xl md:text-3xl text-amber-900 mb-4"
+                        style={{ fontFamily: 'LoResBold, sans-serif' }}
+                >
+                  Summary
+                </h3>
+
+                <p className="text-lg sm:text-xl md:text-2xl text-amber-900 mb-6">
+                  All questions were answered successfully!
+                </p>
+
+                {firstTrySuccesses.length > 0 && (
+                        <p className="text-base sm:text-lg text-amber-900 mb-6">
+                          Answered correctly at the first attempt: {firstTrySuccesses.length} von {DATA_ITEMS.length}
+                        </p>
+                )}
+
+                <p className="text-base sm:text-lg md:text-xl text-amber-900 mb-8">
+                  The Smart Home Hub is now unlocked!
+                </p>
+
+                <div className="flex justify-center">
+                  <button
+                          onClick={onCompletion}
+                          className="px-6 py-3 bg-green-700 hover:bg-green-800 text-white rounded-xl transition-colors"
+                          style={{ fontFamily: 'LoResBold, sans-serif' }}
+                  >
+                    Fertig
+                  </button>
+                </div>
+              </div>
+            </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col gap-4 md:gap-6 lg:gap-8 bg-amber-600 font-mono relative">
-      <div className="flex justify-center w-full h-32 mt-4 md:mt-6 lg:mt-8">
-        {currentItem && (
           <div
-            draggable
-            onDragStart={(e) => handleDragStart(e, currentItem)}
-            className="w-[90%] sm:w-[70%] md:w-[60%] max-w-[600px] cursor-grab p-3 sm:p-4 md:p-5 text-amber-900 bg-white rounded-lg shadow-md"
+                  className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col gap-4 md:gap-6 lg:gap-8 bg-amber-600 relative"
+                  style={{ fontFamily: 'LoResRegular, sans-serif' }}
           >
-            <h6 className="text-lg sm:text-xl md:text-2xl font-mono">
-              {currentItem.text}
-            </h6>
-          </div>
-        )}
-      </div>
+            <div className="flex justify-center w-full h-32 mt-4 md:mt-6 lg:mt-8">
+              {currentItem && (
+                      <div
+                              draggable
+                              onDragStart={(e) => handleDragStart(e, currentItem)}
+                              className="w-[90%] sm:w-[70%] md:w-[60%] max-w-[600px] cursor-grab p-3 sm:p-4 md:p-5 text-amber-900 bg-white rounded-lg shadow-md"
+                      >
+                        <p
+                                className="text-lg sm:text-xl md:text-2xl"
+                                style={{ fontFamily: 'LoResRegular, sans-serif' }}
+                        >
+                          {currentItem.text}
+                        </p>
+                      </div>
+              )}
+            </div>
 
-      {feedback && (
-        <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 rounded-lg shadow-lg z-10 ${
-          feedback.type === 'success' ? 'bg-green-100' : 'bg-red-100'
-        }`}>
-          <p className={`text-lg font-semibold ${
-            feedback.type === 'success' ? 'text-green-800' : 'text-red-800'
-          }`}>
-            {feedback.message}
-          </p>
-          <p className="text-sm mt-2 text-gray-700 max-w-md">
-            {feedback.explanation}
-          </p>
-          <button
-            onClick={handleCloseFeedback}
-            className="mt-4 px-4 py-2 bg-gray-500 hover:bg-gray-300 rounded w-full"
-          >
-            Close
-          </button>
-        </div>
-      )}
+            {feedback && (
+                    <div
+                            className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 rounded-lg shadow-lg z-10 ${
+                                    feedback.type === 'success' ? 'bg-green-100' : 'bg-red-100'
+                            }`}
+                    >
+                      <p
+                              className={`text-lg font-semibold ${
+                                      feedback.type === 'success' ? 'text-green-800' : 'text-red-800'
+                              }`}
+                              style={{ fontFamily: 'LoResBold, sans-serif' }}
+                      >
+                        {feedback.message}
+                      </p>
+                      <p className="text-sm mt-2 text-gray-700 max-w-md">
+                        {feedback.explanation}
+                      </p>
+                      <button
+                              onClick={handleCloseFeedback}
+                              className="mt-4 px-4 py-2 bg-gray-500 hover:bg-gray-300 rounded w-full"
+                              style={{ fontFamily: 'LoResBold, sans-serif' }}
+                      >
+                        Close
+                      </button>
+                    </div>
+            )}
 
-      <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 lg:gap-8 mt-4 md:mt-6 lg:mt-8">
-        {Object.entries(DATA_TYPES).map(([type, { label, color, description }]) => (
-          <div
-            key={type}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={(e) => handleDrop(e, type as keyof typeof DATA_TYPES)}
-            className={`w-full md:w-1/3 p-4 rounded-lg ${color} text-white min-h-[200px] flex flex-col items-center justify-center text-center`}
-          >
-            <h3 className="text-xl font-bold mb-2">{label}</h3>
-            <p className="text-sm">{description}</p>
+            <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 lg:gap-8 mt-4 md:mt-6 lg:mt-8">
+              {Object.entries(DATA_TYPES).map(([type, { label, color, description }]) => (
+                      <div
+                              key={type}
+                              onDragOver={handleDragOver}
+                              onDragLeave={handleDragLeave}
+                              onDrop={(e) => handleDrop(e, type as keyof typeof DATA_TYPES)}
+                              className={`w-full md:w-1/3 p-4 rounded-lg ${color} text-white min-h-[200px] flex flex-col items-center justify-center text-center`}
+                      >
+                        <h3
+                                className="text-xl font-bold mb-2"
+                                style={{ fontFamily: 'LoResBold, sans-serif' }}
+                        >
+                          {label}
+                        </h3>
+                        <p className="text-sm">{description}</p>
+                      </div>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
-    </div>
   );
 };
