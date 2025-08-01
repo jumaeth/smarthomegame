@@ -98,7 +98,7 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
   });
 
   const {textures} = useLoadTextures(texturePaths);
-  const { typedText, typingDone, showCursor } = useTypingText(instruction, 35);
+  const { typedText, typingDone, showCursor } = useTypingText(instruction, 0);
 
   useEffect(() => {
     if (typingDone) {
@@ -314,8 +314,8 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
                         y={70}
                         style={
                           new TextStyle({
-                            fontFamily:'micro5',
-                            fontSize:32,
+                            fontFamily:'LoResRegular',
+                            fontSize:24,
                             wordWrap:true,
                             wordWrapWidth:400,
                           })}

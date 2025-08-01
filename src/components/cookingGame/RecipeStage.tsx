@@ -32,7 +32,7 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoin
   const {textures, loaded} = useLoadTextures(texturePaths);
 
   //-----------------------text/typing-----------------------
-  const { typedText, typingDone, showCursor } = useTypingText(text, 35);
+  const { typedText, typingDone, showCursor } = useTypingText(text, 0);
 
    useEffect(() => {
     if (typingDone) {
@@ -81,8 +81,8 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoin
                     y={70}
                     style={
                       new TextStyle({
-                        fontFamily:'micro5',
-                        fontSize: 30,
+                        fontFamily:'LoResRegular',
+                        fontSize: 24,
                         wordWrap:true,
                         wordWrapWidth: 400,
                       })}
