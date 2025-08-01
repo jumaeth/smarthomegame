@@ -8,6 +8,7 @@ import {Stages} from "@/components/cookingGame/Stages.ts";
 import recipeopenImg from "@/assets/cooking-sprites/recipeopen.png";
 import marketImg from "@/assets/cooking-sprites/marketstand.png";
 import marketBackgroundImg from "@/assets/cooking-sprites/market_background.png";
+import {t} from "@lingui/core/macro";
 
 interface IngredientsStageProps {
   setStage: (stage: Stages) => void;
@@ -23,35 +24,35 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
   }), []);
 
   const explanations = [
-    "Lass uns zuerst die benötigten Zutaten kaufen. Für gute Pasta brauchen wir: \n\n\t1. Spaghetti\n\t2. Tomaten\n\t3. Gewürze\n\t4. Käse",
-    "Du musst verschiedene Kriterien wie Kosten, Zeit und Qualität beachten. \n\nSei vorsichtig damit, deine Daten für " +
-    "bessere Resultate preiszugeben."
+    t`First, let's buy the ingredients we need. For good pasta we need: \n\n\t1. Spaghetti\n\t2. Tomatoes\n\t3. Spices\n\t4. Cheese`,
+    t`You need to consider various criteria such as cost, time and quality. \n\nBe careful about using your data to ` +
+    t`achieve better results.`
   ];
 
   const btnTexts = [
-    ["Lokaler Supermarkt, bar", "Gemüse Lieferdienst", "Italien Fachhändler", "Discounter, mit Karte"],
-    ["Laden am Bauernhof", "Vegetarische box", "Co-op Bauernmarkt", "Markt"],
-    ["Eigener Balkon", "Gehyptes Gewürz Startup", "Omas Garten ", "Nachhaltiger Laden"],
-    ["Trip nach Italien", 'Workshop auf Bauernhof', "Im supermarkt (nochmal)", 'Von "parmesan.com"']
+    [t`Local supermarket, bar`, t`Vegetable delivery service`, t`Italy Retailer`, t`Discounter, with card`],
+    [t`Store on the farm`, t`Vegetarian box`, t`Co-op farmers' market`, t`Market`],
+    [t`Own balcony`, t`Hyped spice startup`, t`Grandma's garden `, t`Sustainable store`],
+    [t`Trip to Italy`, t`Workshop on a farm`, t`in the supermarket (again)`, t`from "parmesan.com`]
   ];
 
   const instructions = [
-    "Spaghetti kaufen", "Tomaten kaufen", "Gewürze kaufen", "Käse kaufen"
+    t`buy spaghetti`, t`buy tomatoes`, t`buy spices`, t`buy cheese`
   ];
 
   const finalMessage = [
-    "Danke für deine Hilfe, mal sehen:\n\n- Die Zutaten haben eine",
-    "Qualität.\n- Der Einkauf war", "\n- Dein Portmonee war ", "deinen Entscheidungen."
+    t`Thanks for your help, let's see:\n\n- The ingredients have a`,
+    t`quality.\n- The purchase was`, t`\n- Your wallet was `, t`your decisions.`
   ];
 
   const evalChoices = [
-    ["Super", "normale", "schlechte"],
-    ["schnell.", "langsam."],
-    ["glücklich über", "nicht böse mit", "nicht einverstanden mit"]
+    [t`Super`, t`normal`, t`bad`],
+    [t`fast.`, t`slow.`],
+    [t`happy about`, t`not angry with`, t`do not agree with`]
   ];
 
   const conclusion = [
-    "Super job", "Weiter", "Nochmals"
+    t`Super job`, t`Continue`, t`Try again`
   ];
 
   function shuffledRange(n: number): number[] {

@@ -13,6 +13,7 @@ import cookingFieldImg from '@/assets/cooking-sprites/cookingfield.png';
 import foodProcessorImg from '@/assets/cooking-sprites/foodprocessor.png';
 import microwaveImg from '@/assets/cooking-sprites/microwave.png';
 import steamerImg from '@/assets/cooking-sprites/steamer.png';
+import {t} from "@lingui/core/macro";
 
 interface CookingStageProps {
     setStage: (stage: Stages) => void;
@@ -33,8 +34,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     const [infoComment, setInfoComment] = useState("");
     const [retry, setRetry] = useState(false);
 
-    const instruction = "Okay, lass uns ein Gericht daraus machen. \n\n" +
-        "Unsere Smartkitchen kann alle Zutaten vorbereiten aber wir müssen die richtige Maschine zum Kochen des Gerichts auswählen";
+    const instruction = t`Okay, let's make a dish out of it. \n\n
+    Our Smartkitchen can prepare all the ingredients but we have to choose the right machine to cook the dish`;
 
     const texturePaths = useMemo(() => ({
         recipeOpen: recipeOpenImg,
@@ -48,14 +49,14 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
 
 
     const criterias = [
-        "Energie", "Berechtigung", "Zeit", "Bedienung"
+        t`Energy`, t`Authorization`, t`Time`, t`Operation`
     ];
 
     const dataComments = [
-        "Integriert in energy monitoring system", // Cookingfield
-        "Speichert Vorlieben und gekochte Gerichte", // Food Processor
-        "Speichert zeit und verbrauchte Energie",// Microwave
-        "Verbindet reglemässig mit cloud für updates" //Steamer
+        t`Integriert in Energieüberwachungssystem`, // Cookingfield
+        t`Saves preferences and cooked dishes`, // Food Processor
+        t`Stores time and consumed energy`,// Microwave
+        t`Connects regularly to cloud for updates` //Steamer
     ];
 
     const stars = [
