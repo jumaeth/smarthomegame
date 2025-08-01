@@ -11,6 +11,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@fontsource/pixelify-sans": "^5.2.6",
     "@lingui/format-json": "^5.3.1",
     "@lingui/macro": "^5.3.1",
     "@lingui/react": "^5.3.1",
