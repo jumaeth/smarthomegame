@@ -8,9 +8,12 @@ import NotFoundPage from "../pages/NotFoundPage.tsx";
 import HomePage from "../pages/HomePage.tsx";
 import {Kitchen} from "@/components/rooms/Kitchen.tsx";
 import {IntroPage} from "@/pages/IntroPage.tsx";
+import ReloadHandler from "@/app/ReloadHandler.tsx";
+import {ContinueGame} from "@/pages/ContinueGame.tsx";
 
 const AppRoutes = () => (
         <Router>
+          <ReloadHandler/>
           <Routes>
             <Route index element={<HomePage/>}/>
             <Route path="/home" element={<HomePage/>}/>
@@ -20,6 +23,7 @@ const AppRoutes = () => (
               <Route path="livingroom" element={<LivingRoom/>}/>
               <Route path="kitchen" element={<Kitchen/>}/>
               <Route path="game-over" element={<GameOver/>}/>
+              <Route path="continue-game" element={<ContinueGame/>}/>
               <Route path="first-floor" element={<FirstFloor/>}/>
             </Route>
             <Route path="*" element={<NotFoundPage />} />
