@@ -8,9 +8,13 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest",
+    "extract": "lingui extract",
+    "compile": "lingui compile --typescript"
   },
   "dependencies": {
+    "@lingui/react": "^5.3.3",
+    "@fontsource/pixelify-sans": "^5.2.6",
     "@lingui/format-json": "^5.3.1",
     "@lingui/macro": "^5.3.1",
     "@lingui/react": "^5.3.1",
@@ -25,8 +29,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
-    "@lingui/babel-plugin-lingui-macro": "^5.3.1",
-    "@lingui/cli": "^5.3.1",
+    "@lingui/babel-plugin-lingui-macro": "^5.3.3",
+    "@lingui/cli": "^5.3.3",
+    "@lingui/vite-plugin": "^5.3.3",
     "@types/jest": "^29.5.14",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",

@@ -8,6 +8,7 @@ import {Stages} from "@/components/cookingGame/Stages.ts";
 import recipeopenImg from "@/assets/cooking-sprites/recipeopen.png";
 import marketImg from "@/assets/cooking-sprites/marketstand.png";
 import marketBackgroundImg from "@/assets/cooking-sprites/market_background.png";
+import {t} from "@lingui/core/macro";
 
 interface IngredientsStageProps {
   setStage: (stage: Stages) => void;
@@ -23,35 +24,35 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
   }), []);
 
   const explanations = [
-    "First, let's buy the ingredients we need. For good pasta we need: \n\n\t1. Spaghetti\n\t2. Tomatoes\n\t3. Spices\n\t4. Cheese",
-    "You have to consider various criteria such as cost, time and quality.\n\nBe careful about using your data for " +
-    "better results."
+    t`First, let's buy the ingredients we need. For good pasta we need: \n\n\t1. Spaghetti\n\t2. Tomatoes\n\t3. Spices\n\t4. Cheese`,
+    t`You need to consider various criteria such as cost, time and quality. \n\nBe careful about using your data to ` +
+    t`achieve better results.`
   ];
 
   const btnTexts = [
-    ["Local supermarket, bar", "Vegetable delivery service", "Italy Retailer", "Discounter, with Map"],
-    ["Store on the farm", "Vegetarian box", "Co-op Farmers' market", "Market"],
-    ["Own balcony", "Hyped spice startup", "Grandma's garden ", "Sustainable store"],
-    ["Trip to Italy", 'Workshop on a farm', "In the supermarket (again)", 'From "parmesan.com"']
+    [t`Local supermarket, bar`, t`Vegetable delivery service`, t`Italy Retailer`, t`Discounter, with card`],
+    [t`Store on the farm`, t`Vegetarian box`, t`Co-op farmers' market`, t`Market`],
+    [t`Own balcony`, t`Hyped spice startup`, t`Grandma's garden `, t`Sustainable store`],
+    [t`Trip to Italy`, t`Workshop on a farm`, t`in the supermarket (again)`, t`from "parmesan.com`]
   ];
 
   const instructions = [
-    "buy spaghetti", "buy tomatoes", "buy spices", "buy cheese"
+    t`buy spaghetti`, t`buy tomatoes`, t`buy spices`, t`buy cheese`
   ];
 
   const finalMessage = [
-    "Thanks for your help, let's see:\n\n- The ingredients have a",
-    "Quality.\n- The purchase was", "\n- Your wallet was", "your decisions."
+    t`Thanks for your help, let's see:\n\n- The ingredients have a`,
+    t`quality.\n- The purchase was`, t`\n- Your wallet was `, t`your decisions.`
   ];
 
   const evalChoices = [
-    ["Super", "normal", "bad"],
-    ["fast.", "slow."],
-    ["happy about", "not angry with", "do not agree with"]
+    [t`Super`, t`normal`, t`bad`],
+    [t`fast.`, t`slow.`],
+    [t`happy about`, t`not angry with`, t`do not agree with`]
   ];
 
   const conclusion = [
-    "Good job", "Continue", "Try again"
+    t`Super job`, t`Continue`, t`Try again`
   ];
 
   function shuffledRange(n: number): number[] {
@@ -100,7 +101,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
   });
   const [calcFinished, setCalcFinished] = useState(false);
   const [instruction,setInstruction] = useState(instructions[0]);
-  const { typedText, typingDone, showCursor } = useTypingText(text, 30);
+  const { typedText, typingDone, showCursor } = useTypingText(text, 0);
   const [showButton, setShowButton] = useState(false);
   const offset = explanations.length;
   const [background, setBackground] = useState("book");
@@ -229,8 +230,8 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
                   y={65}
                   style={
                     new TextStyle({
-                      fontFamily:'micro5',
-                      fontSize:30,
+                      fontFamily:'LoResRegular',
+                      fontSize:24,
                       wordWrap:true,
                       wordWrapWidth: 400,
                     })}
@@ -277,11 +278,11 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
         {<Text
                 text={instruction.toUpperCase()}
                 x={272}
-                y={25}
+                y={30}
                 style={
                   new TextStyle({
-                    fontFamily:'micro5',
-                    fontSize:36,
+                    fontFamily:'LoResRegular',
+                    fontSize:20,
                     wordWrap:true,
                     wordWrapWidth: 400,
                     fill: 0xEEEEEE
@@ -306,8 +307,8 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
                 y={65}
                 style={
                   new TextStyle({
-                    fontFamily:'micro5',
-                    fontSize:30,
+                    fontFamily:'LoResRegular',
+                    fontSize:24,
                     wordWrap:true,
                     wordWrapWidth:400,
                   })}

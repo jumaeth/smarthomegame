@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {Trans} from "@lingui/react/macro";
-import {loadImagesFromFolder} from "./loadImages";
-import Button from "@/components/ui-components/Button";
+import {loadImagesFromFolder} from "@/utils/loadImages.ts";
+import Button from "@/components/general-ui/Button.tsx";
 
 type CaptchaProps = {
   pictureFolder: string;

@@ -1,24 +1,32 @@
 import {Game} from "../objects/Game";
-import {Room} from "../objects/Room";
+import {Room, RoomName} from "../objects/Room";
 import {SmartDevice} from "../objects/SmartDevice";
+import {GameScore, ScoreType} from "@/objects/GameScore.ts";
+import {CookieService} from "@/services/CookieService.ts";
 
 export class GameService {
-  private game: Game | null;
+  private game: Game;
   private navigate: (path: string) => void;
 
   constructor(navigate: (path: string) => void) {
-    this.game = new Game(this.setUpRooms());
+    const saveGame = CookieService.get<Game>('save_game');
+    const savedGame = saveGame ? Game.fromSerialized(saveGame) : null;
+    this.game = savedGame ? Game.fromSerialized(savedGame) : new Game(this.setUpRooms());
     this.navigate = navigate;
+  }
+
+  onGameStateChange(): void {
+    CookieService.set("save_game", this.game);
   }
 
   setUpRooms(): Room[] {
     return [
-      new Room("livingroom", "/game/livingroom", "LivingRoomComponent", [
+      new Room("livingroom", [
         new SmartDevice("SmartTv"),
         new SmartDevice("SmartLights"),
-        new SmartDevice("SecurityCamera"),
+        new SmartDevice("SecurityCamera")
       ]),
-      new Room("kitchen", "/game/kitchen", "KitchenComponent", [
+      new Room("kitchen", [
         new SmartDevice("SmartHomeHub"),
         new SmartDevice("SmartKitchen"),
         new SmartDevice("SecurityCamera"),
@@ -26,77 +34,80 @@ export class GameService {
     ];
   }
 
-  completeRoom(roomName: string) {
-    if (!this.game) return;
+  findRoomByName(roomName: RoomName): Room | undefined {
+    return this.game.getRooms().find((r: Room): boolean => r.name === roomName);
+  }
 
-    const room = this.game.rooms.find((r) => r.name === roomName);
-    if (room) {
-      room.isCompleted = true;
-      if (this.checkGameCompletionConditions()) {
-        this.finishGame();
-      } else {
-        this.continueGame();
-      }
+  completeRoom(roomName: RoomName): void {
+    const room: Room | undefined = this.findRoomByName(roomName);
+    if (!room) return;
+    room.complete();
+    this.navigateAfterComplete();
+    this.onGameStateChange();
+  }
+
+  navigateAfterComplete(): void {
+    if (this.checkGameCompletionConditions()) {
+      this.finishGame();
+    } else {
+      this.continueGame();
     }
   }
 
   checkGameCompletionConditions(): boolean {
-    if (!this.game) {
-      return false
-    }
-    return this.game.rooms.every((room) => room.isCompleted);
+    return this.game.getRooms().every((room: Room): boolean => room.isCompleted);
   }
 
-  getDeviceForRoom(roomName: string) {
-    if (!this.game) {
-      return [];
-    }
-    const room = this.game.rooms.find((room) => room.name === roomName);
+  getDeviceForRoom(roomName: RoomName): SmartDevice[] {
+    const room: Room | undefined = this.findRoomByName(roomName);
     return room ? room.devices : [];
   }
 
   reset(): boolean {
-    // Reset game logic here
-    this.game = null;
+    this.game = new Game(this.setUpRooms());
     this.navigate('/');
+    this.onGameStateChange();
     return true;
   }
 
-  finishGame() {
+  finishGame(): void {
     this.navigate('/game/game-over');
-
   }
 
-  continueGame() {
+  continueGame(): void {
     this.navigate('/game');
   }
 
-  getRooms() {
-    return this.game?.rooms
+  pauseGame(): void {
+    //TODO
   }
 
-  toogleRoomIsLocked(roomName: string) {
-
-    if (!this.game) {
-      return;
-    }
-
-    const room = this.game.rooms.find((r) => r.name === roomName);
-    if (room) {
-      room.isLocked = !room.isLocked;
-
-    }
+  resumeGame(): void {
+    //TODO
   }
 
-  leaveRoom(roomName: string):boolean {
-    if (!this.game) {
-      return false;
-    }
+  toogleRoomIsLocked(roomName: RoomName): void {
+    const room: Room | undefined = this.findRoomByName(roomName);
+    if (room) room.toggleIsLocked();
+    this.onGameStateChange();
+  }
 
-    const room = this.game.rooms.find((r) => r.name === roomName);
+  leaveRoom(roomName: RoomName): boolean {
+    const room: Room | undefined = this.findRoomByName(roomName);
     if (room?.isLocked == false) {
       this.navigate('/game');
+      this.onGameStateChange();
     }
     return true;
+  }
+
+  changeScore(scoreDelta: number, scoreType: ScoreType): void {
+    if (scoreType === 'privacy') this.game.modifyScore(scoreDelta, 0);
+    if (scoreType === 'comfort') this.game.modifyScore(0, scoreDelta);
+    this.onGameStateChange();
+  }
+
+  getScore():GameScore {
+    return this.game.getScore();
   }
 }

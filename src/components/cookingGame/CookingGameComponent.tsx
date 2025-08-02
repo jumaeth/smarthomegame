@@ -15,7 +15,7 @@ interface CookingGameComponentProps {
 
 export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCompletion }) => {
 
-  const customFont= new FontFace("micro5","url(/fonts/micro5.ttf)");
+  const customFont= new FontFace("LoResRegular","url(/fonts/LoRes12OT-Regular.ttf)");
   customFont.load().then(()=>document.fonts.add(customFont));
   const[nextStage,setNextStage]=useState(1);
   const[currentStage,setCurrentStage]=useState(Stages.GAME);

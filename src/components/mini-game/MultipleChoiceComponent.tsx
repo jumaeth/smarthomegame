@@ -73,7 +73,7 @@ export const MultipleChoiceComponent = ({
                       <Trans>Send answer</Trans>
                     </button>
             ) : (
-                    <button onClick={resetAnswers}>Try again</button>
+                    <button onClick={resetAnswers}><Trans>Try again</Trans></button>
             )}
           </div>
   );
