@@ -1,7 +1,7 @@
-import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 import "./Modal.css";
 import {t} from "@lingui/core/macro";
 import {Trans} from "@lingui/react/macro";
+import {MultipleChoiceComponent} from "@/components/MultipleChoiceComponent.tsx";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
