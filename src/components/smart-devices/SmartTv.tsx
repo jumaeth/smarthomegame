@@ -1,8 +1,8 @@
-import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 import "./Modal.css";
 import {useGameService} from "@/hooks/useGameService.tsx";
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
+import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
@@ -22,9 +22,8 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
 
   return (
           <>
-            <h3>Smart TV</h3>
+            <h1>Smart TV</h1>
             <div className="modal-content">
-              <h1><Trans>Smart TV Mission</Trans></h1>
               <h3><Trans>Answer the following questions</Trans>…</h3>
               <MultipleChoiceComponent
                       questions={[

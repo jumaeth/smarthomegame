@@ -1,7 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Micro+5&display=swap');
+@font-face {
+  font-family: 'LoResBold';
+  src: url('/fonts/LoRes12OT-Bold.woff2') format('woff2'),
+  url('/fonts/LoRes12OT-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LoResRegular';
+  src: url('/fonts/LoRes12OT-Regular.woff2') format('woff2'),
+  url('/fonts/LoRes12OT-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 body {
-  font-family: 'Micro 5', monospace;
+  font-family: "LoResRegular", sans-serif;
   background: #222;
   color: #eee;
   margin: 0;
@@ -29,7 +43,7 @@ body.active-modal {
   padding: 10px 20px;
   display: block;
   margin: 100px auto 0;
-  font-size: 24px;
+  font-size: 20px;
   background: #000000;
   color: #fff;
   border: 2px solid #fff;
@@ -61,9 +75,19 @@ body.active-modal {
   height: auto;
 }
 
-.modal-window h3 {
+.modal-window h1 {
+  font-family: "LoResBold", sans-serif;
   font-size: 28px;
+  padding-bottom: 15px;
+  text-align: center;
+  line-height: 1;
+}
+
+.modal-window h3 {
+  font-family: "LoResBold", sans-serif;
+  font-size: 20px;
   padding-bottom: 10px;
+  padding-left: 10px;
 }
 
 /* Close-button */
@@ -77,7 +101,7 @@ body.active-modal {
   width: 30px;
   height: 30px;
 
-  padding: 3px 0px 1px 3px;
+  padding: 0px 0px 6px 0px;
 
   display: flex;
   align-items: center;
@@ -110,9 +134,9 @@ body.active-modal {
   align-items: center;
   justify-content: space-between;
   background: #4a4a4a;
-  border: 1px solid #222;
-  padding: 4px 8px;
-  margin-bottom: 8px;
+  border: 2px solid #222;
+  padding: 5px 10px;
+  margin-bottom: 15px;
 }
 
 /* checkboxes */
@@ -121,6 +145,7 @@ body.active-modal {
   height: 20px;
   accent-color: #37a820;
   cursor: pointer;
+  flex-shrink: 0;
   margin-right: 12px;
 }
 
@@ -129,7 +154,7 @@ body.active-modal {
   display: flex;
   align-items: center;
   flex: 1;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 /* Result indicators */
@@ -141,9 +166,10 @@ body.active-modal {
 /* Submit button */
 .modal-body .modal-content button {
   display: block;
-  margin: 16px auto 0;
+  margin: 30px auto 0;
   padding: 8px 16px;
-  font-size: 24px;
+  font-family: "LoResBold", sans-serif;
+  font-size: 20px;
   background: #267515;
   color: #fff;
   border: 2px solid #fff;

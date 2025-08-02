@@ -73,7 +73,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
         setPage(prev => prev + 1);
     }
 
-    const {typedText, typingDone, showCursor} = useTypingText(instruction, 35);
+    const {typedText, typingDone, showCursor} = useTypingText(instruction, 0);
 
     useEffect(() => {
         if (typingDone) {
@@ -164,9 +164,9 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
         }
         for (let i = 0; i < 5 - s; i++) {
             if (i < 5 - 1 - s) {
-                total.push("...|");
+                total.push("  |");
             } else {
-                total.push("...");
+                total.push("  ");
             }
         }
         total.push("]");
@@ -254,8 +254,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                         y={70}
                         style={
                             new TextStyle({
-                                fontFamily: 'micro5',
-                                fontSize: 32,
+                                fontFamily: 'LoResRegular',
+                                fontSize: 24,
                                 wordWrap: true,
                                 wordWrapWidth: 400,
                             })}
@@ -329,8 +329,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                             y={30 + infoYOffset(hoveredId)}
                             style={
                                 new TextStyle({
-                                    fontFamily: 'micro5',
-                                    fontSize: 25,
+                                    fontFamily: 'LoResRegular',
+                                    fontSize: 17,
                                     wordWrap: true,
                                     wordWrapWidth: 400,
                                 })}
@@ -344,8 +344,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                             y={30 + infoYOffset(hoveredId)}
                             style={
                                 new TextStyle({
-                                    fontFamily: 'micro5',
-                                    fontSize: 25,
+                                    fontFamily: 'LoResRegular',
+                                    fontSize: 17,
                                     fill: 0xe1eef0,
                                     wordWrap: true,
                                     wordWrapWidth: 400,
@@ -360,8 +360,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                             y={130 + infoYOffset(hoveredId)}
                             style={
                                 new TextStyle({
-                                    fontFamily: 'micro5',
-                                    fontSize: 25,
+                                    fontFamily: 'LoResRegular',
+                                    fontSize: 18,
                                     fill: 0x3f556b,
                                     wordWrap: true,
                                     wordWrapWidth: 250,

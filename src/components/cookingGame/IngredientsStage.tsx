@@ -101,7 +101,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
   });
   const [calcFinished, setCalcFinished] = useState(false);
   const [instruction,setInstruction] = useState(instructions[0]);
-  const { typedText, typingDone, showCursor } = useTypingText(text, 30);
+  const { typedText, typingDone, showCursor } = useTypingText(text, 0);
   const [showButton, setShowButton] = useState(false);
   const offset = explanations.length;
   const [background, setBackground] = useState("book");
@@ -230,8 +230,8 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
                   y={65}
                   style={
                     new TextStyle({
-                      fontFamily:'micro5',
-                      fontSize:30,
+                      fontFamily:'LoResRegular',
+                      fontSize:24,
                       wordWrap:true,
                       wordWrapWidth: 400,
                     })}
@@ -278,11 +278,11 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
         {<Text
                 text={instruction.toUpperCase()}
                 x={272}
-                y={25}
+                y={30}
                 style={
                   new TextStyle({
-                    fontFamily:'micro5',
-                    fontSize:36,
+                    fontFamily:'LoResRegular',
+                    fontSize:20,
                     wordWrap:true,
                     wordWrapWidth: 400,
                     fill: 0xEEEEEE
@@ -307,8 +307,8 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
                 y={65}
                 style={
                   new TextStyle({
-                    fontFamily:'micro5',
-                    fontSize:30,
+                    fontFamily:'LoResRegular',
+                    fontSize:24,
                     wordWrap:true,
                     wordWrapWidth:400,
                   })}
