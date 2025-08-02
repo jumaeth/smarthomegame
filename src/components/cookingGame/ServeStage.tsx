@@ -14,6 +14,7 @@ import cutleryImg from "@/assets/cooking-sprites/cutlery.png";
 import glasImg from "@/assets/cooking-sprites/glas.png";
 import napkinImg from "@/assets/cooking-sprites/napkin.png";
 import spoonImg from "@/assets/cooking-sprites/spoon.png";
+import {t} from "@lingui/core/macro";
 
 interface ServeStageProps {
   setStage: (stage: Stages) => void;
@@ -38,7 +39,7 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
 
   const draggingRef = useRef(false);
 
-  const instruction = "We are almost finished! \n\nThe last thing we have to do is set the table and serve our dish";
+  const instruction = t`We are almost finished! \n\nThe last thing we have to do is set the table and serve our dish`;
 
   const texturePaths = useMemo(() => ({
     recipeopen: recipeopenImg,

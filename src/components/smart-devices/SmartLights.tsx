@@ -1,5 +1,7 @@
-import {MultipleChoiceComponent} from "../MultipleChoiceComponent.tsx";
+import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 import "./Modal.css";
+import {t} from "@lingui/core/macro";
+import {Trans} from "@lingui/react/macro";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
@@ -15,15 +17,19 @@ export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback
 
   return (
           <>
-            <h1>Smart lights</h1>
+            <h1>
+              <Trans>Smarte Beleuchtung</Trans>
+            </h1>
             <div className="modal-content">
-              <h3>Answer the following questions ...</h3>
+              <h3>
+                <Trans>Beantworte die folgenden Fragen ...</Trans>
+              </h3>
               <MultipleChoiceComponent
                       questions={[
-                        `Would you like to activate Bluetooth?`,
-                        `Would you like to activate Wifi?`,
-                        `Would you like to record your energy consumption?`,
-                        `Would you like to activate the connection with the Smart App?`,
+                        t`Would you like to activate Bluetooth?`,
+                        t`Would you like to activate Wifi?`,
+                        t`Would you like to record your energy consumption?`,
+                        t`Would you like to activate the connection with the Smart App?`,
                       ]}
                       solutions={[true, true, false, false]}
                       onComplete={handleQuizCompletion}

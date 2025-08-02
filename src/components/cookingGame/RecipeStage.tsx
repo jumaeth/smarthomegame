@@ -6,6 +6,7 @@ import {TextStyle} from "pixi.js";
 import {Button} from "@/components/cookingGame/Button.tsx";
 import {Stages} from "@/components/cookingGame/Stages.ts";
 import recipeopen from '@/assets/cooking-sprites/recipeopen.png';
+import {t} from "@lingui/core/macro";
 
 interface RecipeStageProps {
   setStage: (stage: Stages) => void;
@@ -24,9 +25,9 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoin
   }), []);
 
   const pageTexts = useMemo(() => [
-    "Welcome boss! \nToday we are cooking pasta!\n\nFortunately, our Smartkitchen can be equipped with the right " +
-    "settings and will do most of the work for us.",
-    "We must follow the following steps: \n\n 1. Buy ingredients \n 2. Prepare and cook the dish \n 3. Serve the dish"
+    t`Welcome boss! \nToday we are cooking pasta!\n\nFortunately, our Smartkitchen can be equipped with the right
+    Settings do most of the work.
+    We must follow the following steps: \n\n 1. Buying ingredients \n 2. Prepare and cook the dish \n 3. Serve the dish`
   ], []);
 
   const {textures, loaded} = useLoadTextures(texturePaths);
