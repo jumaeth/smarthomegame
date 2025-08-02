@@ -1,4 +1,4 @@
-import {PropsWithChildren, useCallback, useMemo, useState} from "react";
+import React, {PropsWithChildren, useCallback, useMemo, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
 import {Level} from "@/pixi/levels/Level";
 import characterImage from "@/assets/character/character_movement.png";
@@ -15,6 +15,8 @@ import {Door} from "@/pixi/levels/Door";
 import {DoorState} from "@/types/door";
 import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
+import {HeadUpDisplay} from "@/pixi/components/HeadUpDisplay.tsx";
+import {GameService} from "@/services/GameService.ts";
 
 interface MainContainerProps {
     canvasSize: {
@@ -27,6 +29,7 @@ interface MainContainerProps {
     isPaused?: boolean;
     children?: React.ReactNode;
     interactiveElements?: InteractivePixiElement[];
+  gameService: GameService;
 }
 
 export const MainContainer = ({
@@ -36,7 +39,8 @@ export const MainContainer = ({
                                   onMapChange,
                                   isPaused = false,
                                   children,
-                                  interactiveElements
+                                interactiveElements,
+                                gameService
                               }: PropsWithChildren<MainContainerProps>) => {
     const [inTransition, setInTransition] = useState(false);
     const [pendingTransition, setPendingTransition] = useState<{ to: MapKey, spawn: Position } | null>(null);
@@ -143,6 +147,11 @@ export const MainContainer = ({
                     }}
                     onTransitionEnd={() => setInTransition(false)}
                 />
+              <HeadUpDisplay
+                      windowWidth={canvasSize.width}
+                      windowHeight={canvasSize.height}
+                      gameService={gameService}
+              />
             </Container>
         </>
     );

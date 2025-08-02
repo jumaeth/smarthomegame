@@ -1,0 +1,25 @@
+import React from "react";
+
+type BasicModalWrapperProps = {
+  content: React.ReactNode;
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+export const BasicModalWrapper = ({ content, isOpen, onClose }: BasicModalWrapperProps) => {
+  if (!isOpen) return null;
+
+  return (
+          <div className="modal" role="dialog" aria-modal="true">
+            <div className="overlay" onClick={onClose} />
+
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#3a3a3a] border-4 border-white shadow-[0_0_0_6px_black] p-4 max-w-[90vw] text-[18px] leading-[1.4] z-[100] w-auto h-auto rounded-none overflow-visible">
+              <button className="close-modal" onClick={onClose} aria-label="Schliessen">
+                ×
+              </button>
+
+              <div className="modal-body">{content}</div>
+            </div>
+          </div>
+  );
+};

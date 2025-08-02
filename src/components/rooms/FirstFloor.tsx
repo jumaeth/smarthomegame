@@ -1,10 +1,11 @@
 import {Stage} from "@pixi/react";
 import {useCallback, useEffect, useState} from "react";
-import {calculateCanvasSize} from "@/utils/movment";
-import {MainContainer} from "@/pixi/container/MainContainer";
-import {MapKey} from "@/types/maps";
-import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps";
+import {calculateCanvasSize} from "@/utils/movment.ts";
+import {MainContainer} from "@/pixi/container/MainContainer.tsx";
+import {MapKey} from "@/types/maps.ts";
+import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {useNavigate} from "react-router-dom";
+import {useGameService} from "@/hooks/useGameService.tsx";
 
 export const FirstFloor = () => {
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
@@ -38,6 +39,7 @@ export const FirstFloor = () => {
                       map={roomName}
                       collisionMap={collisionMap}
                       onMapChange={handleMapChange}
+                      gameService={useGameService()}
               />
             </Stage>
           </>

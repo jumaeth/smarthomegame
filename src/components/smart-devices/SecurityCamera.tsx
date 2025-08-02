@@ -1,8 +1,8 @@
 import {useState} from "react";
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
-import {MultipleChoiceComponent} from "@/components/MultipleChoiceComponent.tsx";
-import {CaptchaComponent} from "@/components/CaptchaComponent.tsx";
+import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
+import {CaptchaComponent} from "@/components/mini-game/CaptchaComponent.tsx";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
@@ -59,11 +59,11 @@ export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallb
               <div className="modal-content">
                 {frame == 0 && (
                         <>
-                          <h3>
+                          <p>
                             <Trans>
                              Oh no, all your settings have been reset. Time to set them again
                             </Trans>
-                          </h3>
+                          </p>
                           <MultipleChoiceComponent
                                   questions={MultipleChoiceProps.questions}
                                   solutions={MultipleChoiceProps.solutions}
