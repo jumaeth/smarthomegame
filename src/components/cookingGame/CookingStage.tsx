@@ -1,8 +1,7 @@
-import {AlphaFilter, Graphics as PIXIGraphics, TextStyle} from 'pixi.js'
+ import {AlphaFilter, Graphics as PIXIGraphics, TextStyle} from 'pixi.js'
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {Button} from "./Button.tsx";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
-import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {Graphics, Sprite, Text} from '@pixi/react';
 import {Devices} from "@/components/cookingGame/Devices.ts";
 import {Stages} from "../cookingGame/Stages.ts";
@@ -22,7 +21,6 @@ interface CookingStageProps {
 
 export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoints}) => {
 
-    const [showButton, setShowButton] = useState(false);
     const [page, setPage] = useState(1);
     const [label] = useState("weiter");
     const [showInfo, setShowInfo] = useState(true);
@@ -34,8 +32,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     const [infoComment, setInfoComment] = useState("");
     const [retry, setRetry] = useState(false);
 
-    const instruction = t`Okay, let's make a dish out of it. \n\n
-    Our Smartkitchen can prepare all the ingredients but we have to choose the right machine to cook the dish`;
+    const instruction = t`\nOkay, let's make a dish out of it. \n\nOur Smartkitchen can prepare all the ingredients but we have to choose the right machine to cook the dish`;
 
     const texturePaths = useMemo(() => ({
         recipeOpen: recipeOpenImg,
@@ -53,7 +50,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     ];
 
     const dataComments = [
-        t`Integriert in Energieüberwachungssystem`, // Cookingfield
+        t`Integrated into the energy monitoring system`, // Cookingfield
         t`Saves preferences and cooked dishes`, // Food Processor
         t`Stores time and consumed energy`,// Microwave
         t`Connects regularly to cloud for updates` //Steamer
@@ -73,19 +70,6 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
         setPage(prev => prev + 1);
     }
 
-    const {typedText, typingDone, showCursor} = useTypingText(instruction, 0);
-
-    useEffect(() => {
-        if (typingDone) {
-            const delay = setTimeout(() => {
-                setShowButton(true);
-            }, 500);
-
-            return () => clearTimeout(delay);
-        } else {
-            setShowButton(false);
-        }
-    }, [typingDone]);
 
     const cookingfield = {id: Devices.COOKINGFIELD, scale: 0.11, x: 185, y: 105, texture: textures.cookingField, action: null};
     const foodprocessor = {id: Devices.FOODPROCESSOR, scale: 0.11, x: 350, y: 105, texture: textures.foodProcessor, action: null};
@@ -176,10 +160,10 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     useEffect(() => {
         if (hoveredId !== Devices.NONE) {
             const text =
-                criterias[0] + ":\n" +
-                criterias[1] + ":\n" +
-                criterias[2] + ":\n" +
-                criterias[3] + ":";
+                criterias[0] + "\n" +
+                criterias[1] + "\n" +
+                criterias[2] + "\n" +
+                criterias[3] + "\n";
             setInfoTitles(text.toUpperCase());
         }
     }, [hoveredId]);
@@ -235,8 +219,6 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
 
 
     const instructionPage = () => {
-        console.log("instructionPage: loaded", loaded);
-        console.log(textures, "textures is not null");
         if (loaded&&page === 1 && textures.recipeOpen) {
             return (
                 <>
@@ -248,8 +230,8 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                         x={272}
                         y={220}
                     />
-                    <Text
-                        text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
+                    { instruction && <Text
+                        text={instruction.toUpperCase()}
                         x={75}
                         y={70}
                         style={
@@ -260,27 +242,24 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                                 wordWrapWidth: 400,
                             })}
                         anchor={{x: 0, y: 0}}
-                    />
+                    />}
 
-                    {(showButton &&
-                        <Button
-                            x={370}
-                            y={275}
-                            color={0xdcc08e}
-                            lineColor={0x5d3c1a}
-                            width={90}
-                            height={35}
-                            label={label}
-                            action={pageUP}
-                        />)}
+                    <Button
+                        x={370}
+                        y={275}
+                        color={0xdcc08e}
+                        lineColor={0x5d3c1a}
+                        width={90}
+                        height={35}
+                        label={label}
+                        action={pageUP}
+                    />
                 </>
             )
         }
     }
 
     const selectionPage = () => {
-        console.log("selectionPage: loaded", loaded);
-
         if (loaded&&page === 2) {
             return (
                 <>
@@ -340,7 +319,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                     {(showInfo &&
                         <Text
                             text={infoText}
-                            x={150 + infoXOffset(hoveredId)}
+                            x={175 + infoXOffset(hoveredId)}
                             y={30 + infoYOffset(hoveredId)}
                             style={
                                 new TextStyle({
@@ -375,8 +354,6 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     }
 
     const finishButton = () => {
-        console.log("finishButton: loaded", loaded);
-
         if (loaded&&selected !== Devices.NONE) {
             return (
                 <Button
