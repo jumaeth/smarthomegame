@@ -70,7 +70,7 @@ export default function HomePage() {
 
             {showBanner && (
                     <div className="absolute inset-0 bg-white/50 z-50 flex items-center justify-center">
-                      <div className="flex space-x-4 w-[100%] justify-center mt-4 p-5 bg-gray-300 border-t border-b border-solid border-black">
+                      <div className="p-6 bg-white/90 rounded-2xl shadow-xl backdrop-blur-md w-[min(90vw,36rem)] max-w-full">
                         <CookieBanner onComplete={saveCookieChoice}/>
                       </div>
                     </div>
