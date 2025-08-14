@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {Trans} from "@lingui/react/macro";
+import Toggle from "@/components/general-ui/Toggle.tsx";
 
 type MultipleChoiceProps = {
   questions: string[];
@@ -13,7 +14,7 @@ export const MultipleChoiceComponent = ({
                                           onComplete,
                                         }: MultipleChoiceProps) => {
   const [answers, setAnswers] = useState<boolean[]>(
-          new Array(questions.length).fill(false)
+          new Array(questions.length).fill(true)
   );
   const [submitted, setSubmitted] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<string>("");
@@ -37,7 +38,7 @@ export const MultipleChoiceComponent = ({
   };
 
   function resetAnswers() {
-    setAnswers(new Array(questions.length).fill(false));
+    setAnswers(new Array(questions.length).fill(true));
     setSubmitted(false);
   }
 
@@ -48,14 +49,18 @@ export const MultipleChoiceComponent = ({
                 const isCorrect = answers[i] === solutions[i];
                 return (
                         <li key={i} style={{marginBottom: 8}}>
-                          <label>
-                            <input
-                                    type="checkbox"
-                                    disabled={submitted}
-                                    checked={answers[i]}
-                                    onChange={(e) => handleAnswer(i, e.target.checked)}
-                            />{" "}
+                          <label className="flex">
                             {q}
+                            <div className="ml-auto">
+                              <Toggle
+                                    isOn={answers[i]}
+                                    defaultChecked={true}
+                                    disabled={submitted}
+                                    onToggle={(newValue) => handleAnswer(i, newValue)}
+                                    onColor={"bg-green-500"}
+                                    offColor={"bg-red-300"}
+                              />
+                            </div>
                           </label>
                           {submitted && answers[i] && (
                                   <span style={{marginLeft: 8}}>
