@@ -6,30 +6,25 @@ import eKey from "@/assets/tutorial/characterPage/cp_e_key.png";
 import highlighting from "@/assets/tutorial/characterPage/cp_highlight.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
 import {
-  Sprite as PixiSprite,
-  Graphics as PixiGraphics,
   Container as PixiContainer,
+  Graphics as PixiGraphics,
+  Sprite as PixiSprite,
   Text as PixiText,
-  TextStyle, TextStyleFontWeight
+  TextStyle,
+  TextStyleFontWeight
 } from "pixi.js";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
-import {Pages} from "@/pixi/components/Tutorial/Pages.ts";
+import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {Texture} from "@pixi/core";
+import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 
-interface CharacterPageProps {
-  windowWidth: number;
-  windowHeight: number;
-  keyControl: Pages;
-  setKeyControl: (page: Pages) => void;
-}
-
-
-export const CharacterPage: React.FC<CharacterPageProps> = ({
+export const CharacterPage: React.FC<PageProps> = ({
        windowWidth,
        windowHeight,
        keyControl,
        setKeyControl,
-           }: PropsWithChildren<CharacterPageProps>) => {
+       setSpotLightAnimation
+           }: PropsWithChildren<PageProps>) => {
 
   type animProps = {
     startX: number,
@@ -54,7 +49,10 @@ export const CharacterPage: React.FC<CharacterPageProps> = ({
   const [showExpl, setShowExpl] = useState(false);
   const [pixiTexts, setPixiTexts] = useState([]);
   const conRef = useRef<PixiContainer|null>(null);
-  const [onLoad, setOnLoad] = useState(true)
+  const [onLoad, setOnLoad] = useState(true);
+  const [animating, setAnimating] = useState(false);
+  const [showChar, setShowChar] = useState(true);
+
 
   const textsTemp = [
           "Movement", "Use the arrow keys or WASD to move around", "Interaction", 'Use the “E” key to interact with objects',
@@ -72,30 +70,25 @@ export const CharacterPage: React.FC<CharacterPageProps> = ({
     }
   }, [onLoad]);
 
+
   //keyControls
   useEffect(() => {
-    if(keyControl != Pages.Character)return;
-    const onNumberPressed = (e: KeyboardEvent) => {
-      switch (e.key){
-        case "1":
-          setAnimation(1);
-          break;
-        case "2":
+    if(keyControl != Pages.Character || animating)return;
+
+    const onSpecialPressed = (e: KeyboardEvent) => {
+      switch (e.code) {
+        case "Space":
           setAnimation(2);
-          break;
-        case "3":
-          setKeyControl(Pages.Main);
-          break;
       }
     }
 
-    const events = [onNumberPressed];
+    const events = [onSpecialPressed];
 
     events.forEach(func => window.addEventListener("keydown", func));
     return () => {
       events.forEach(func => window.removeEventListener("keydown", func));
     };
-  }, []);
+  }, [keyControl, animating]);
 
   //manage animations
   useEffect(() => {
@@ -109,7 +102,7 @@ export const CharacterPage: React.FC<CharacterPageProps> = ({
           endX: windowWidth*0.5+TILE_SIZE*3, endY: windowHeight * 0.5,
           startS: 5, endS: 17, showOthers: true, duration: 750
         } as animProps
-        growAnimation(sprite, anim1);
+        growAnimation(sprite, anim1, 0);
         break;
       case 2:
         const anim2 = {
@@ -117,7 +110,13 @@ export const CharacterPage: React.FC<CharacterPageProps> = ({
           endX: windowWidth/2+TILE_SIZE*4, endY: windowHeight/2+TILE_SIZE*5.9,
           startS: 17, endS: 5, showOthers: false, duration: 750
         } as animProps
-        growAnimation(sprite, anim2);
+        growAnimation(sprite, anim2, 3);
+        break;
+      case 3:
+        setKeyControl(Pages.Main);
+        setSpotLightAnimation(2);
+        setAnimating(true);
+        setShowChar(false);
         break;
     }
   }, [animation]);
@@ -240,9 +239,10 @@ export const CharacterPage: React.FC<CharacterPageProps> = ({
             </Container>
     )
   }
-  const growAnimation = (sprite: PixiSprite, props: animProps) => {
+  const growAnimation = (sprite: PixiSprite, props: animProps, next: number) => {
 
     if (!sprite) return;
+    setAnimating(true);
 
     let rafId = 0;
     const startTime = performance.now();
@@ -277,10 +277,11 @@ export const CharacterPage: React.FC<CharacterPageProps> = ({
         if (p < 1) {
           rafId = requestAnimationFrame(tick);
         }else {
-          setAnimation(0);
+          setAnimation(next);
           if(props.showOthers) {
             setShowExpl(true);
           }
+          setAnimating(false);
         }
       }
 
@@ -293,7 +294,7 @@ export const CharacterPage: React.FC<CharacterPageProps> = ({
 
   return (
       <>
-        {texture && <Sprite
+        {showChar && texture && <Sprite
           texture={texture}
           ref={charRef}
         />}
