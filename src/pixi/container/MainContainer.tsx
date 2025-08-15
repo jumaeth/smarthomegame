@@ -17,6 +17,7 @@ import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {HeadUpDisplay} from "@/pixi/components/HeadUpDisplay.tsx";
 import {GameService} from "@/services/GameService.ts";
+import {Tutorial} from "@/pixi/components/Tutorial/Tutorial.tsx";
 
 interface MainContainerProps {
     canvasSize: {
@@ -151,6 +152,12 @@ export const MainContainer = ({
                       windowWidth={canvasSize.width}
                       windowHeight={canvasSize.height}
                       gameService={gameService}
+              />
+              <Tutorial
+                      windowWidth={canvasSize.width}
+                      windowHeight={canvasSize.height}
+                      gameService={gameService}
+                      characterPositon={characterPosition}
               />
             </Container>
         </>

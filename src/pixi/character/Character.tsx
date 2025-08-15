@@ -7,6 +7,8 @@ import {Direction, Position} from "@/types/movement";
 import {calculateNewTarget, checkCanMove, handleCharacterMovement} from "@/utils/movment";
 import {useCharacterAnimation} from "@/hooks/character/useCharacterAnimation";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
+import {characterPositionStore} from "@/utils/characterPosition.ts";
+import {useMovementStore} from "@/utils/movementEnabled.ts";
 
 interface CharacterProps {
     texture: Texture;
@@ -33,6 +35,8 @@ export const Character = ({texture, onMove, collisionMap, spawnPosition, isPause
         animationSpeed: ANIMATION_SPEED,
     })
 
+    const { movementEnabled, disable } = useMovementStore();
+
     const setNextTarget = useCallback((direction: Direction) => {
         if (targetPosition.current) return
         const {x, y} = position.current;
@@ -49,12 +53,13 @@ export const Character = ({texture, onMove, collisionMap, spawnPosition, isPause
             position.current = newPosition;
             targetPosition.current = null;
             isMoving.current = false;
+            characterPositionStore.teleport(newPosition);
         }
     }, []);
 
     useEffect(() => {
         teleportTo(spawnPosition)
-    }, [spawnPosition]);
+    }, [spawnPosition, teleportTo]);
 
     function checkForInteraction() {
         if (!position.current) {
@@ -82,32 +87,36 @@ export const Character = ({texture, onMove, collisionMap, spawnPosition, isPause
     }
 
     useTick((delta) => {
-        if (isPaused) {
-            return;
-        }
+        const pauseRequested = isPaused || !movementEnabled;
 
-        const direction = getControlsDirection();
-        if (direction && direction == 'INTERACT') {
+        if(!pauseRequested){
+          const direction = getControlsDirection();
+          if (direction && direction == 'INTERACT') {
             checkForInteraction()
-        } else if (direction) {
+          } else if (direction) {
             setNextTarget(direction);
+          }
+
         }
-        // handle Movement
+          // handle Movement
         if (targetPosition.current) {
-            const {
-                position: newPosition,
-                completed
-            } = handleCharacterMovement(position.current, targetPosition.current, MOVE_SPEED, delta);
+          const {
+            position: newPosition,
+            completed
+          } = handleCharacterMovement(position.current, targetPosition.current, MOVE_SPEED, delta);
 
-            position.current = newPosition;
-            isMoving.current = true;
+          position.current = newPosition;
+          isMoving.current = true;
+          characterPositionStore.set(newPosition);
 
-            if (completed) {
-                onMove(position.current)
-                targetPosition.current = null;
-                isMoving.current = false;
-            }
+          if (completed) {
+            onMove(position.current)
+            targetPosition.current = null;
+            isMoving.current = false;
+          }
         }
+
+
         updateSprite(currentDirection.current!, isMoving.current);
     })
 

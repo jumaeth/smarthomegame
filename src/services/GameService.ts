@@ -3,10 +3,12 @@ import {Room, RoomName} from "../objects/Room";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore.ts";
 import {CookieService} from "@/services/CookieService.ts";
+import {movementStore, useMovementStore} from "@/utils/movementEnabled.ts";
 
 export class GameService {
   private game: Game;
   private navigate: (path: string) => void;
+  private paused: boolean;
 
   constructor(navigate: (path: string) => void) {
     const saveGame = CookieService.get<Game>('save_game');
@@ -79,11 +81,23 @@ export class GameService {
   }
 
   pauseGame(): void {
-    //TODO
+
+    this.paused = true;
+
+    //disable movement
+    if (movementStore.getSnapshot().movementEnabled){
+      movementStore.disable();
+    }
   }
 
   resumeGame(): void {
-    //TODO
+
+    this.paused = false;
+
+    //enable movement
+    if (!movementStore.getSnapshot().movementEnabled){
+      movementStore.enable();
+    }
   }
 
   toogleRoomIsLocked(roomName: RoomName): void {
@@ -105,6 +119,10 @@ export class GameService {
     if (scoreType === 'privacy') this.game.modifyScore(scoreDelta, 0);
     if (scoreType === 'comfort') this.game.modifyScore(0, scoreDelta);
     this.onGameStateChange();
+  }
+
+  isPaused(): boolean {
+    return this.paused;
   }
 
   getScore():GameScore {
