@@ -1,18 +1,15 @@
 import React, {PropsWithChildren, useEffect, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
-import {
-  Container as PixiContainer,
-  Graphics as PixiGraphics,
-  Rectangle,
-  Sprite as PixiSprite,
-  Text,
-  TextStyle
-} from "pixi.js";
+import {Container as PixiContainer, Graphics as PixiGraphics, Rectangle, Text, TextStyle} from "pixi.js";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {PAGE_COMPONENTS, PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
 import {spotlightTween} from "@/pixi/components/Tutorial/anim/spotlightTween.ts";
+import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeTween.ts";
+import {blinkAnimation} from "@/pixi/components/Tutorial/anim/blinkTween.ts";
+import {Simulate} from "react-dom/test-utils";
+import submit = Simulate.submit;
 
 interface TutorialProps {
   windowWidth: number;
@@ -35,7 +32,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
   const [showBackground, setShowBackground] = useState(true);
   const [showSpotlight, setShowSpotlight] = useState(false);
   const [instrBlinking, setInstrBlinking] = useState(true);
-  const [spotLightAnimation, setSpotLightAnimation] = useState(0);
+  const [nextPage, setNextPage] = useState(0);
   const [curFeature, setcurFeature] = useState(0);
 
   const rootRef = useRef<PixiContainer | null>(null);
@@ -44,12 +41,13 @@ export const Tutorial: React.FC<TutorialProps> = ({
 
   const spotRectRef = useRef<SpotRect>({ x: 0, y: 0, width: 200, height: 200, r: 10 });
   const backgroundRef = useRef<PixiGraphics | null>(null);
-  const [keyControl, setKeyControl] = useState(Pages.Main)
+  const [keyControl, setKeyControl] = useState(Pages.MAIN)
 
-  const commonProps: PageProps = { windowWidth, windowHeight, keyControl, setKeyControl, setSpotLightAnimation };
+  const commonProps: PageProps = { windowWidth, windowHeight, keyControl, setKeyControl, setNextPage };
   const ActivePage = PAGE_COMPONENTS[keyControl]; // Component or null
 
   const mgrRef = useRef<AnimationManager | null>(null);
+  const pressedRef = useRef<boolean>(false);
 
 
 
@@ -128,7 +126,10 @@ export const Tutorial: React.FC<TutorialProps> = ({
   //cleanup animation manager
   useEffect(() => {
     mgrRef.current = new AnimationManager();
-    return () => mgrRef.current?.cancelAll();
+    try{
+      mgrRef.current?.cancelAll()
+    }catch (e: Error){}
+    return;
   }, []);
 
   //run animations
@@ -182,27 +183,52 @@ export const Tutorial: React.FC<TutorialProps> = ({
   }, [showInstruction]);
 
   //instruction blinking
+  // useEffect(() => {
+  //   if (!instrBlinking || !showInstruction) return;
+  //
+  //   let rafId: number;
+  //   const dir = { current: -1 as 1 | -1 };
+  //   const speed = 0.008;
+  //   const tick = () => {
+  //
+  //     const t = instrRef.current;
+  //     if (t) {
+  //       t.alpha += dir.current * speed;
+  //
+  //       if (t.alpha <= 0) { t.alpha = 0; dir.current = 1; }
+  //       else if (t.alpha >= 1) { t.alpha = 1; dir.current = -1; }
+  //     }
+  //
+  //     rafId = requestAnimationFrame(tick);
+  //   };
+  //
+  //   rafId = requestAnimationFrame(tick);
+  //   return () => cancelAnimationFrame(rafId);
+  // }, [instrBlinking, showInstruction]);
+
+
   useEffect(() => {
+    const mgr = mgrRef.current;
+    const txt = instrRef.current;
+    if (!mgr || !txt)return;
     if (!instrBlinking || !showInstruction) return;
 
-    let rafId: number;
-    const dir = { current: -1 as 1 | -1 };
-    const speed = 0.008;
-    const tick = () => {
+    const speed = 2000;
 
-      const t = instrRef.current;
-      if (t) {
-        t.alpha += dir.current * speed;
+    const { promise } = mgr.runUntil(
+            () => {
+              return [
+                () => ({
 
-        if (t.alpha <= 0) { t.alpha = 0; dir.current = 1; }
-        else if (t.alpha >= 1) { t.alpha = 1; dir.current = -1; }
-      }
-
-      rafId = requestAnimationFrame(tick);
-    };
-
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
+                  promise: mgr.sequence([
+                    () => fadeAnimation(mgr, txt, {duration: speed, startA: 0.8, endA: 0}),
+                    () => fadeAnimation(mgr, txt, {duration: speed, startA: 0, endA: 0.8})
+                  ])
+                }),
+              ];
+            },
+            { mode: "sequence", until: () => pressedRef.current, delayMs: 100 }
+    );
   }, [instrBlinking, showInstruction]);
 
   //compute end of animation
@@ -270,14 +296,14 @@ export const Tutorial: React.FC<TutorialProps> = ({
     }
 
     if(showSpotlight){
-      spotRectRef.current = computeEndRect(spotLightAnimation);
+      spotRectRef.current = computeEndRect(nextPage);
       drawSpotlight(spotRectRef.current);
     }
   }, [windowWidth, windowHeight]);
 
   //key events
   useEffect(() => {
-    if(keyControl != Pages.Main)return;
+    if(keyControl != Pages.MAIN)return;
     const onSpacePressed = (e: KeyboardEvent) => {
       if(e.code == "Space" && showExplanation){
         setShowBackground(false);
@@ -285,7 +311,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
         setShowExplanation(false);
         setShowInstruction(false);
         setShowSpotlight(true);
-        setSpotLightAnimation(1);
+        setNextPage(1);
       }
     }
 
@@ -302,7 +328,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
         switch (curFeature){
           case 1:
             drawBackground();
-            setKeyControl(Pages.Character);
+            setKeyControl(Pages.CHARACTER);
         }
       }
     }
@@ -325,9 +351,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
     let cancelled = false;
 
     const run = async () => {
-      switch (spotLightAnimation) {
-        case 0:
-          return; // idle
+      switch (nextPage) {
 
         case 1: {
           if (!explRef.current) return;
@@ -351,11 +375,12 @@ export const Tutorial: React.FC<TutorialProps> = ({
           setShowSpotlight(false);
           drawBackground();
 
-          setKeyControl(Pages.Character);
-          setSpotLightAnimation(0);
+          setKeyControl(Pages.CHARACTER);
+          setNextPage(0);
 
           return;
           }
+          return;
         }
 
         case 2: {
@@ -372,8 +397,8 @@ export const Tutorial: React.FC<TutorialProps> = ({
             setShowSpotlight(false);
             drawBackground();
 
-            setKeyControl(Pages.Scores);
-            setSpotLightAnimation(0);
+            setKeyControl(Pages.SCORES);
+            setNextPage(0);
           }, 250);
           return;
         }
@@ -386,15 +411,28 @@ export const Tutorial: React.FC<TutorialProps> = ({
           drawSpotlight(spotRectRef.current);
 
           timeoutId = window.setTimeout(async () => {
-            setShowSpotlight(false);
             await runSpotlightAnim(drawSpotlight, start, end, 1000);
             if (cancelled) return;
             setShowSpotlight(false);
             drawBackground();
 
-            setKeyControl(Pages.Smartphone );
-            setSpotLightAnimation(0);
+            setKeyControl(Pages.SMARTPHONE );
+            setNextPage(0);
           }, 250);
+          return;
+        }
+
+        case 4: {
+          setKeyControl(Pages.EXPLANATION1);
+          return;
+        }
+        case 5: {
+          console.log("to be implemented")
+          return;
+        }
+
+        case 6: {
+          await runClearBGAnim();
           return;
         }
       }
@@ -406,19 +444,33 @@ export const Tutorial: React.FC<TutorialProps> = ({
       cancelled = true;
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [spotLightAnimation]);
+  }, [nextPage]);
 
+  const runClearBGAnim = async () => {
+
+    const mgr = mgrRef.current;
+    const bg = backgroundRef.current;
+
+    if(!mgr || !bg)return;
+
+    const durationOut = 1000;
+
+    const fadeOut = {
+      duration: durationOut,
+      startA: bg.alpha,
+      endA: 0,
+    } as FadeProps
+
+    await mgr.parallel([
+      () => fadeAnimation(mgr, bg, fadeOut),
+    ]);
+  }
 
   return (
       <>
         {background()}
+        <Container ref={rootRef}/>
         {ActivePage && <ActivePage key={keyControl} {...commonProps} />}
-        <Container
-        eventMode="static"
-        ref={rootRef}
-        sortableChildren={true}
-        hitArea={new Rectangle(0, 0, windowWidth, windowHeight)}
-        />
       </>
   )
 };

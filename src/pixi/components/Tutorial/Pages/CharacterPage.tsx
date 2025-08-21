@@ -23,7 +23,7 @@ export const CharacterPage: React.FC<PageProps> = ({
        windowHeight,
        keyControl,
        setKeyControl,
-       setSpotLightAnimation
+       setNextPage
            }: PropsWithChildren<PageProps>) => {
 
   type animProps = {
@@ -73,7 +73,7 @@ export const CharacterPage: React.FC<PageProps> = ({
 
   //keyControls
   useEffect(() => {
-    if(keyControl != Pages.Character || animating)return;
+    if(keyControl != Pages.CHARACTER || animating)return;
 
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
@@ -113,8 +113,8 @@ export const CharacterPage: React.FC<PageProps> = ({
         growAnimation(sprite, anim2, 3);
         break;
       case 3:
-        setKeyControl(Pages.Main);
-        setSpotLightAnimation(2);
+        setKeyControl(Pages.MAIN);
+        setNextPage(2);
         setAnimating(true);
         setShowChar(false);
         break;

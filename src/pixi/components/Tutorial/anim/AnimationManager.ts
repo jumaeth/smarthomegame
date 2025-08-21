@@ -117,4 +117,111 @@ export class AnimationManager {
       this.raf = null;
     }
   }
+
+  private async runOnce(
+          mode: "sequence" | "parallel",
+          steps: Array<() => { promise: Promise<void> }>,
+          signal?: AbortSignal
+  ): Promise<void> {
+    if (signal?.aborted) throw new Error("loop aborted");
+
+    if (mode === "sequence") {
+      await this.sequence(steps);
+    } else {
+      await this.parallel(steps);
+    }
+  }
+
+  /** Sleep helper that respects AbortSignal */
+  private sleep(ms: number, signal?: AbortSignal): Promise<void> {
+    if (!ms) return Promise.resolve();
+    return new Promise<void>((resolve, reject) => {
+      const id = setTimeout(() => {
+        signal?.removeEventListener("abort", onAbort);
+        resolve();
+      }, ms);
+
+      const onAbort = () => {
+        clearTimeout(id);
+        reject(new Error("loop aborted"));
+      };
+
+      if (signal) {
+        if (signal.aborted) onAbort();
+        else signal.addEventListener("abort", onAbort, { once: true });
+      }
+    });
+  }
+  runUntil(
+          factory: () => Array<() => { promise: Promise<void> }>,
+          opts: {
+            mode: "sequence" | "parallel";
+            until: () => boolean | Promise<boolean>;
+            delayMs?: number;
+            maxIterations?: number;
+            signal?: AbortSignal;
+            checkAfter?: boolean;
+          }
+  ): { promise: Promise<void>; cancel: () => void; signal: AbortSignal } {
+    const {
+      mode,
+      until,
+      delayMs = 0,
+      maxIterations = Infinity,
+      signal: externalSignal,
+      checkAfter = true,
+    } = opts;
+
+    // Create our own AbortController; respect an external signal if provided
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    const cancel = () => controller.abort();
+
+    // If an external signal is provided, wire it up
+    if (externalSignal) {
+      if (externalSignal.aborted) controller.abort();
+      else {
+        const onAbort = () => controller.abort();
+        externalSignal.addEventListener("abort", onAbort, { once: true });
+        signal.addEventListener("abort", () =>
+                externalSignal.removeEventListener("abort", onAbort)
+        );
+      }
+    }
+
+    const promise = (async () => {
+      let i = 0;
+
+      const shouldStop = async () => Boolean(await until());
+
+      // 1) Check before first iteration
+      if (await shouldStop()) return;
+
+      while (!signal.aborted) {
+        if (i++ >= maxIterations) {
+          throw new Error("runUntil: exceeded maxIterations");
+        }
+
+        // Build steps fresh each loop (so callers can vary props/targets)
+        const steps = factory();
+
+        // Run them once in chosen mode
+        await this.runOnce(mode, steps, signal);
+
+        // 2) Optional check after each iteration
+        if (checkAfter && (await shouldStop())) return;
+
+        // Optional delay between iterations
+        if (delayMs) {
+          await this.sleep(delayMs, signal);
+        }
+      }
+
+      // If we get here due to abort:
+      throw new Error("loop aborted");
+    })();
+
+    return { promise, cancel, signal };
+  }
 }

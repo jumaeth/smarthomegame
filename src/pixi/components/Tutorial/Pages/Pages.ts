@@ -1,6 +1,7 @@
 export enum Pages{
-  "Main",
-  "Character",
-  "Scores",
-  "Smartphone"
+  MAIN,
+  CHARACTER,
+  SCORES,
+  SMARTPHONE,
+  EXPLANATION1
 }

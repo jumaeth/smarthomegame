@@ -22,7 +22,7 @@ export const ScoresPage: React.FC<PageProps> = ({
        windowHeight,
        keyControl,
        setKeyControl,
-       setSpotLightAnimation
+       setNextPage
            }: PropsWithChildren<PageProps>) => {
 
   const texture = useMemo(() => loadTexture(scoresImage), []);
@@ -92,7 +92,9 @@ export const ScoresPage: React.FC<PageProps> = ({
             startS: 0.275, endS: 1, showOthers: true, duration: 750
           } as GrowProps
 
+          setAnimating(true);
           await runGrowAnimation(sprite, anim1);
+          setAnimating(false);
           setAnimation(0);
           setShowExpl(true);
           break;
@@ -104,12 +106,14 @@ export const ScoresPage: React.FC<PageProps> = ({
           } as GrowProps
 
           setShowExpl(false);
+          setAnimating(true);
           await runGrowAnimation(sprite, anim2);
+          setAnimating(false);
           setAnimation(3);
           break;
         case 3:
-          setKeyControl(Pages.Main);
-          setSpotLightAnimation(3);
+          setKeyControl(Pages.MAIN);
+          setNextPage(3);
           setAnimating(true);
           setShowChar(false);
           break;
@@ -129,7 +133,7 @@ export const ScoresPage: React.FC<PageProps> = ({
 
   //keyControls
   useEffect(() => {
-    if(keyControl != Pages.Scores || animating)return;
+    if(keyControl != Pages.SCORES || animating)return;
 
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
@@ -177,7 +181,7 @@ export const ScoresPage: React.FC<PageProps> = ({
     setupTexts(textsTemp[1], windowWidth*0.2525, windowHeight*0.71, 0.03, "lighter", 0.3);
     setupTexts(textsTemp[3], windowWidth*0.7425, windowHeight*0.73, 0.03, "lighter", 0.36);
 
-    setupTexts(textsTemp[6], windowWidth*0.5+TILE_SIZE*3, windowHeight*0.25, 0.07, "bold", 0.3);
+    setupTexts(textsTemp[4], windowWidth*0.55+TILE_SIZE*3, windowHeight*0.1, 0.07, "bold", 0.3);
 
     pixiTexts.forEach(t => c.addChild(t));
     c.width = windowWidth;

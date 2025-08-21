@@ -3,23 +3,26 @@ import { CharacterPage } from "@/pixi/components/Tutorial/Pages/CharacterPage.ts
 import { ScoresPage } from "@/pixi/components/Tutorial/Pages/ScoresPage.tsx";
 import { Pages } from "./Pages.ts";
 import {PhonePage} from "@/pixi/components/Tutorial/Pages/PhonePage.tsx";
+import {Explanation_1} from "@/pixi/components/Tutorial/Pages/Explanation_1.tsx";
 
 export interface PageProps {
   windowWidth: number;
   windowHeight: number;
   keyControl: Pages;
   setKeyControl: (p: Pages) => void;
-  setSpotLightAnimation: (a: number) => void;
+  setNextPage: (a: number) => void;
 }
 
 export const PAGE_COMPONENTS: {
-  [Pages.Main]: null;
-  [Pages.Character]: React.FunctionComponent<PageProps>;
-  [Pages.Scores]: React.FunctionComponent<PageProps>;
-  [Pages.Smartphone]: React.FunctionComponent<PageProps>;
+  [Pages.MAIN]: null;
+  [Pages.CHARACTER]: React.FunctionComponent<PageProps>;
+  [Pages.SCORES]: React.FunctionComponent<PageProps>;
+  [Pages.SMARTPHONE]: React.FunctionComponent<PageProps>;
+  [Pages.EXPLANATION1]: React.FunctionComponent<PageProps>;
 } = {
-  [Pages.Main]: null,
-  [Pages.Character]: CharacterPage,
-  [Pages.Scores]: ScoresPage,
-  [Pages.Smartphone]: PhonePage
+  [Pages.MAIN]: null,
+  [Pages.CHARACTER]: CharacterPage,
+  [Pages.SCORES]: ScoresPage,
+  [Pages.SMARTPHONE]: PhonePage,
+  [Pages.EXPLANATION1]: Explanation_1
 };

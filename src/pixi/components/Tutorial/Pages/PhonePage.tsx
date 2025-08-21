@@ -10,7 +10,6 @@ import {
   TextStyle,
   TextStyleFontWeight
 } from "pixi.js";
-import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
 import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growTween.ts";
@@ -23,7 +22,7 @@ export const PhonePage: React.FC<PageProps> = ({
        windowHeight,
        keyControl,
        setKeyControl,
-       setSpotLightAnimation
+       setNextPage
            }: PropsWithChildren<PageProps>) => {
 
   const texture = useMemo(() => loadTexture(phoneImage), []);
@@ -81,7 +80,7 @@ export const PhonePage: React.FC<PageProps> = ({
 
   //keyControls
   useEffect(() => {
-    if(keyControl != Pages.Smartphone || animating)return;
+    if(keyControl != Pages.SMARTPHONE || animating)return;
 
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
@@ -116,7 +115,9 @@ export const PhonePage: React.FC<PageProps> = ({
             startS: 0.25, endS: 1, showOthers: true, duration: 750
           } as GrowProps
 
+          setAnimating(true);
           await runGrowAnimation(sprite, anim1);
+          setAnimating(false);
           setAnimation(0);
           setShowExpl(true);
           break;
@@ -128,12 +129,14 @@ export const PhonePage: React.FC<PageProps> = ({
           } as GrowProps
 
           setShowExpl(false);
+          setAnimating(true);
           await runGrowAnimation(sprite, anim2);
+          setAnimating(false);
           setAnimation(3);
           break;
         case 3:
-          setKeyControl(Pages.Main);
-          setSpotLightAnimation(3);
+          setKeyControl(Pages.MAIN);
+          setNextPage(4);
           setAnimating(true);
           setShowChar(false);
           break;
@@ -197,19 +200,29 @@ export const PhonePage: React.FC<PageProps> = ({
   const drawLines =  useCallback( (g: PixiGraphics) => {
     g.clear();
 
-    //left
-    g.lineStyle(7, "#f0b100", 1);
-    g.moveTo(windowWidth*0.175, windowHeight*0.55);
-    g.bezierCurveTo(windowWidth*0.2, windowHeight*0.225, windowWidth*0.3, windowHeight*0.225, windowWidth*0.3, windowHeight*0.22);
+    //top left
+    g.lineStyle(5, "#135690", 1);
+    g.moveTo(windowWidth*0.4475, windowHeight*0.395);
+    g.bezierCurveTo(windowWidth*0.4, windowHeight*0.4, windowWidth*0.275, windowHeight*0.3, windowWidth*0.275, windowHeight*0.3);
 
-    //right
-    g.lineStyle(6, "#f0b100", 1);
-    g.moveTo(windowWidth*0.55, windowHeight*0.725);
-    g.bezierCurveTo(windowWidth*0.475, windowHeight*0.67, windowWidth*0.405, windowHeight*0.525, windowWidth*0.4, windowHeight*0.5);
+    //bottom left
+    g.lineStyle(6, "#1C557D", 1);//#1C557D
+    g.moveTo(windowWidth*0.45, windowHeight*0.46);
+    g.bezierCurveTo(windowWidth*0.35, windowHeight*0.5, windowWidth*0.25, windowHeight*0.6, windowWidth*0.225, windowHeight*0.675);
+
+    //bottom right
+    g.lineStyle(6, "#7CB3D3", 1);//#1C557D
+    g.moveTo(windowWidth*0.55, windowHeight*0.475);
+    g.bezierCurveTo(windowWidth*0.6, windowHeight*0.475, windowWidth*0.675, windowHeight*0.625, windowWidth*0.7, windowHeight*0.7);
+
+    //top right
+    g.lineStyle(5, "#EB992E", 1);
+    g.moveTo(windowWidth*0.55, windowHeight*0.34);
+    g.bezierCurveTo(windowWidth*0.6, windowHeight*0.3, windowWidth*0.625, windowHeight*0.3, windowWidth*0.655, windowHeight*0.3);
 
   }, [])
 
-  //stranslate lines to react
+  //translate lines to react
   const lines = () => {
     return (<Graphics draw={drawLines}/>)
   }
