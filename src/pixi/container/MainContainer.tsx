@@ -1,5 +1,6 @@
-import React, {PropsWithChildren, useCallback, useMemo, useState} from "react";
+import React, {forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
+import {MovementButtons} from "@/components/general-ui/MovementButtons.tsx";
 import {Level} from "@/pixi/levels/Level";
 import characterImage from "@/assets/character/character_movement.png";
 import {Character} from "@/pixi/character/Character";
@@ -18,32 +19,18 @@ import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {HeadUpDisplay} from "@/pixi/components/HeadUpDisplay.tsx";
 import {GameService} from "@/services/GameService.ts";
 
-interface MainContainerProps {
-    canvasSize: {
-        width: number;
-        height: number
-    };
-    map: MapKey;
-    collisionMap: number[];
-    onMapChange: (newMap: MapKey) => void;
-    isPaused?: boolean;
-    children?: React.ReactNode;
-    interactiveElements?: InteractivePixiElement[];
-  gameService: GameService;
-}
-
-export const MainContainer = ({
-                                  canvasSize,
-                                  map,
-                                  collisionMap,
-                                  onMapChange,
-                                  isPaused = false,
-                                  children,
-                                interactiveElements,
-                                gameService
-                              }: PropsWithChildren<MainContainerProps>) => {
-    const [inTransition, setInTransition] = useState(false);
-    const [pendingTransition, setPendingTransition] = useState<{ to: MapKey, spawn: Position } | null>(null);
+export const MainContainer = forwardRef(({
+                                           canvasSize,
+                                           map,
+                                           collisionMap,
+                                           onMapChange,
+                                           isPaused = false,
+                                           children,
+                                           interactiveElements,
+                                           gameService
+                                         }, ref) => {
+  const [inTransition, setInTransition] = useState(false);
+  const [pendingTransition, setPendingTransition] = useState<{ to: MapKey, spawn: Position } | null>(null);
 
     const [shouldSnapCamera, setShouldSnapCamera] = useState(false);
     /**
@@ -102,6 +89,36 @@ export const MainContainer = ({
         updateCharacterPosition(pos);
     };
 
+  useImperativeHandle(ref, () => ({
+    startTransition: (to: MapKey, spawn: Position) => {
+      setPendingTransition({to, spawn});
+      setInTransition(true);
+    },
+    teleportTo,
+    updateCharacterPosition,
+  }));
+
+  const characterRef = useRef();
+
+  const handleMoveUp = () => {
+    characterRef.current?.moveUp();
+  };
+
+  const handleMoveDown = () => {
+    characterRef.current?.moveDown();
+  };
+
+  const handleMoveLeft = () => {
+    characterRef.current?.moveLeft();
+  };
+
+  const handleMoveRight = () => {
+    characterRef.current?.moveRight();
+  };
+
+  const handleInteract = () => {
+    characterRef.current?.interact();
+  };
     return (
         <>
             <Container>
@@ -152,7 +169,17 @@ export const MainContainer = ({
                       windowHeight={canvasSize.height}
                       gameService={gameService}
               />
+
+              {/* Bewegungsbuttons nur auf mobilen Geräten */}
+                      <MovementButtons
+                              canvasSize={canvasSize}
+                              onMoveUp={handleMoveUp}
+                              onMoveDown={handleMoveDown}
+                              onMoveLeft={handleMoveLeft}
+                              onMoveRight={handleMoveRight}
+                              onInteract={handleInteract}
+                      />
             </Container>
-        </>
-    );
-}
+          </>
+  );
+});
