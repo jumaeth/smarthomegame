@@ -10,15 +10,15 @@ export function GameOver() {
   const gameScore: GameScore = gameService.getScore();
   const privacyScore: number = gameScore.getPrivacyScore();
   const comfortScore: number = gameScore.getComfortScore();
-  const gameOverMessage: string = (privacyScore >= 50 && comfortScore >= 50) ? t`Gratulation, du hast gewonnen` : t`Schade, du hast verloren`;
+  const gameOverMessage: string = (privacyScore >= 50 && comfortScore >= 50) ? t`Gratulation, du hast gewonnen` : t`Too bad, you lost`;
 
   return (
           <div className="flex items-center justify-center min-h-screen">
             <div className="text-center">
               <h2 className="text-2xl font-bold mb-4">{gameOverMessage}</h2>
-              <p><Trans>Du hast folgende Punktzahl erreicht:
-                Privatsphäre: </Trans>{privacyScore}<Trans> Bequemlichkeit: </Trans>{comfortScore}</p>
-              <Button onClick={() => gameService.reset()}><Trans>Neu Starten</Trans></Button>
+              <p><Trans>You have achieved the following score:
+                Privacy: </Trans>{privacyScore}<Trans> Convenience: </Trans>{comfortScore}</p>
+              <Button onClick={() => gameService.reset()}><Trans>Restart</Trans></Button>
             </div>
           </div>
   );

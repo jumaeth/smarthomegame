@@ -2,6 +2,7 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import { lingui } from "@lingui/vite-plugin";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -15,6 +16,7 @@ export default defineConfig({
       },
     }),
     tailwindcss(),
+    lingui(),
   ],
   build: {
     outDir: 'dist',

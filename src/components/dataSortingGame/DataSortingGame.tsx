@@ -1,168 +1,171 @@
 import React, { useState, useEffect } from 'react';
-
-// Define the data types and their corresponding colors and explanations
-const DATA_TYPES = {
-  public: {
-    label: 'Öffentlich zugängliche Daten',
-    color: 'bg-green-700',
-    description: 'Daten, die für die Allgemeinheit bestimmt sind und keine persönlichen Informationen enthalten',
-    explanation: 'Diese Daten sind öffentlich zugänglich und enthalten keine persönlichen Informationen. Sie können frei geteilt werden, da sie keine Privatsphäre-Bedenken aufwerfen.'
-  },
-  personal: {
-    label: 'Personenbezogene Daten',
-    color: 'bg-orange-600',
-    description: 'Persönliche Informationen, die sensibel werden können, wenn sie mit anderen Daten kombiniert werden',
-    explanation: 'Diese Daten sind persönlich, aber nicht hochsensibel. Sie können zu Identifikation führen und sollten geschützt werden, besonders wenn sie mit anderen Informationen kombiniert werden.'
-  },
-  sensitive: {
-    label: 'Personenbezogene Daten spezieller Kategorien',
-    color: 'bg-red-700',
-    description: 'Daten, die nach DSGVO einen höheren Schutz erfordern',
-    explanation: 'Diese Daten sind besonders sensibel und erfordern höchsten Schutz nach DSGVO. Sie umfassen genetische, biometrische und Gesundheitsdaten sowie Informationen über rassische und ethnische Herkunft, politische Meinungen, religiöse Überzeugungen oder Gewerkschaftszugehörigkeit.'
-  }
-} as const;
-
-type DataItem = {
-  id: number;
-  text: string;
-  type: keyof typeof DATA_TYPES;
-  explanation: string;
-};
-
-// Sample data items to sort
-const DATA_ITEMS: DataItem[] = [
-  // Sensitive data examples
-  { 
-    id: 1, 
-    text: 'Gesundheitsdaten (z.B. Krankheitsgeschichte)', 
-    type: 'sensitive',
-    explanation: 'Gesundheitsdaten sind besonders schützenswert nach DSGVO, da sie sehr persönliche Informationen enthalten und missbraucht werden könnten.'
-  },
-  { 
-    id: 2, 
-    text: 'Biometrische Daten (z.B. Fingerabdruck)', 
-    type: 'sensitive',
-    explanation: 'Biometrische Daten sind einzigartige Merkmale einer Person und können nicht geändert werden. Daher erfordern sie besonderen Schutz.'
-  },
-  { 
-    id: 3, 
-    text: 'Genetische Daten', 
-    type: 'sensitive',
-    explanation: 'Genetische Daten sind besonders sensibel, da sie nicht nur die betroffene Person, sondern auch deren Verwandte betreffen können.'
-  },
-  { 
-    id: 4, 
-    text: 'Religiöse Überzeugungen', 
-    type: 'sensitive',
-    explanation: 'Religiöse Überzeugungen sind besonders schützenswert, da sie zur Diskriminierung führen könnten.'
-  },
-  { 
-    id: 5, 
-    text: 'Politische Meinungen', 
-    type: 'sensitive',
-    explanation: 'Politische Meinungen sind besonders schützenswert, da sie zur Diskriminierung oder Beeinflussung führen könnten.'
-  },
-  { 
-    id: 6, 
-    text: 'Gewerkschaftszugehörigkeit', 
-    type: 'sensitive',
-    explanation: 'Die Gewerkschaftszugehörigkeit ist besonders schützenswert, da sie zur Diskriminierung am Arbeitsplatz führen könnte.'
-  },
-  { 
-    id: 7, 
-    text: 'Rassische und ethnische Herkunft', 
-    type: 'sensitive',
-    explanation: 'Diese Daten sind besonders schützenswert, da sie zur Diskriminierung führen könnten.'
-  },
-
-  // Personal data examples
-  { 
-    id: 8, 
-    text: 'Name und Adresse', 
-    type: 'personal',
-    explanation: 'Name und Adresse sind persönliche Daten, die zur Identifikation einer Person führen können.'
-  },
-  { 
-    id: 9, 
-    text: 'E-Mail-Adresse', 
-    type: 'personal',
-    explanation: 'E-Mail-Adressen sind persönliche Daten, die zur Identifikation und Kontaktaufnahme dienen können.'
-  },
-  { 
-    id: 10, 
-    text: 'Telefonnummer', 
-    type: 'personal',
-    explanation: 'Telefonnummern sind persönliche Daten, die zur Identifikation und Kontaktaufnahme dienen können.'
-  },
-  { 
-    id: 11, 
-    text: 'Geburtsdatum', 
-    type: 'personal',
-    explanation: 'Das Geburtsdatum ist eine persönliche Information, die zur Identifikation beitragen kann.'
-  },
-  { 
-    id: 12, 
-    text: 'Bankverbindung', 
-    type: 'personal',
-    explanation: 'Bankverbindungen sind persönliche Daten, die besonderen Schutz erfordern, da sie für finanzielle Transaktionen verwendet werden.'
-  },
-  { 
-    id: 13, 
-    text: 'IP-Adresse', 
-    type: 'personal',
-    explanation: 'IP-Adressen sind persönliche Daten, die zur Identifikation eines Geräts und damit indirekt einer Person dienen können.'
-  },
-  { 
-    id: 14, 
-    text: 'Standortdaten', 
-    type: 'personal',
-    explanation: 'Standortdaten sind persönliche Informationen, die Aufschluss über Bewegungsmuster und Aufenthaltsorte geben können.'
-  },
-
-  // Public data examples
-  { 
-    id: 15, 
-    text: 'Öffentliche Veranstaltungshinweise', 
-    type: 'public',
-    explanation: 'Öffentliche Veranstaltungshinweise sind für alle zugänglich und enthalten keine persönlichen Informationen.'
-  },
-  { 
-    id: 16, 
-    text: 'Amtliche Bekanntmachungen', 
-    type: 'public',
-    explanation: 'Amtliche Bekanntmachungen sind öffentliche Informationen, die für alle Bürger zugänglich sind.'
-  },
-  { 
-    id: 17, 
-    text: 'Öffentliche Verkehrsinformationen', 
-    type: 'public',
-    explanation: 'Öffentliche Verkehrsinformationen sind für alle zugänglich und enthalten keine persönlichen Daten.'
-  },
-  { 
-    id: 18, 
-    text: 'Wetterdaten', 
-    type: 'public',
-    explanation: 'Wetterdaten sind öffentliche Informationen, die keine persönlichen Bezüge enthalten.'
-  },
-  { 
-    id: 19, 
-    text: 'Öffentliche Statistiken', 
-    type: 'public',
-    explanation: 'Öffentliche Statistiken sind aggregierte Daten ohne persönlichen Bezug.'
-  },
-  { 
-    id: 20, 
-    text: 'Öffentliche Karten', 
-    type: 'public',
-    explanation: 'Öffentliche Karten enthalten keine persönlichen Informationen und sind für alle zugänglich.'
-  }
-];
+import {Trans} from "@lingui/react/macro";
+import {t} from "@lingui/core/macro";
 
 interface DataSortingGameProps {
   onCompletion: () => void;
 }
 
 export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }) => {
+  // Define the data types and their corresponding colors and explanations
+  const DATA_TYPES = {
+    public: {
+      label: t`Publicly accessible data`,
+      color: 'bg-green-700',
+      description: t`Data that is intended for the general public and does not contain any personal information`,
+      explanation: t`This data is publicly accessible and does not contain any personal information. It can be shared freely as it does not raise any privacy concerns.`
+    },
+    personal: {
+      label: t`Personal data`,
+      color: 'bg-orange-600',
+      description: t`Personal information that can become sensitive when combined with other data`,
+      explanation: t`This data is personal, but not highly sensitive. It can lead to identification and should be protected, especially if it is combined with other information.`
+    },
+    sensitive: {
+      label: t`Personal data of special categories`,
+      color: 'bg-red-700',
+      description: t`Data that requires a higher level of protection under the GDPR`,
+      explanation: t`This data is particularly sensitive and requires the highest level of protection under the GDPR. It includes genetic, biometric and health data as well as information on racial and ethnic origin, political opinions, religious beliefs or trade union membership.`
+    }
+  } as const;
+
+  type DataItem = {
+    id: number;
+    text: string;
+    type: keyof typeof DATA_TYPES;
+    explanation: string;
+  };
+
+// Sample data items to sort
+  const DATA_ITEMS: DataItem[] = [
+    // Sensitive data examples
+    {
+      id: 1,
+      text: t`Health data (e.g. medical history)`,
+      type: 'sensitive',
+      explanation: t`Health data is particularly worthy of protection under the GDPR, as it contains very personal information and could be misused.`
+    },
+    {
+      id: 2,
+      text: 'Biometrische Daten (z.B. Fingerabdruck)',
+      type: 'sensitive',
+      explanation: 'Biometrische Daten sind einzigartige Merkmale einer Person und können nicht geändert werden. Daher erfordern sie besonderen Schutz.'
+    },
+    {
+      id: 3,
+      text: t`Genetic data`,
+      type: 'sensitive',
+      explanation: t`Genetic data is particularly sensitive as it can affect not only the person concerned but also their relatives.`
+    },
+    {
+      id: 4,
+      text: t`Religious beliefs`,
+      type: 'sensitive',
+      explanation: t`Religious beliefs are particularly worthy of protection as they could lead to discrimination.`
+    },
+    {
+      id: 5,
+      text: t`Political opinions`,
+      type: 'sensitive',
+      explanation: t`Political opinions are particularly worthy of protection as they could lead to discrimination or influence.`
+    },
+    {
+      id: 6,
+      text: t`Trade union membership`,
+      type: 'sensitive',
+      explanation: 'Trade union membership is particularly worthy of protection as it could lead to discrimination in the workplace.'
+    },
+    {
+      id: 7,
+      text: t`Racial and ethnic origin`,
+      type: 'sensitive',
+      explanation: t`This data is particularly worthy of protection as it could lead to discrimination.`
+    },
+
+    // Personal data examples
+    {
+      id: 8,
+      text: t`Name and address`,
+      type: 'personal',
+      explanation: t`Name and address are personal data that can lead to the identification of a person.`
+    },
+    {
+      id: 9,
+      text: t`E-mail address`,
+      type: 'personal',
+      explanation: t`E-mail addresses are personal data that can be used for identification and contact purposes.`
+    },
+    {
+      id: 10,
+      text: t`Phone number`,
+      type: 'personal',
+      explanation: t`Telephone numbers are personal data that can be used for identification and contact purposes.`
+    },
+    {
+      id: 11,
+      text: t`Date of birth`,
+      type: 'personal',
+      explanation: t`The date of birth is personal information that can contribute to identification.`
+    },
+    {
+      id: 12,
+      text: t`Bank details`,
+      type: 'personal',
+      explanation: t`Bank details are personal data that require special protection as they are used for financial transactions.`
+    },
+    {
+      id: 13,
+      text: t`IP address`,
+      type: 'personal',
+      explanation: t`IP addresses are personal data that can be used to identify a device and thus indirectly a person.`
+    },
+    {
+      id: 14,
+      text: t`Location data`,
+      type: 'personal',
+      explanation: t`Location data is personal information that can provide information about movement patterns and whereabouts.`
+    },
+
+    // Public data examples
+    {
+      id: 15,
+      text: t`Public event information`,
+      type: 'public',
+      explanation: t`Public event announcements are accessible to everyone and do not contain any personal information.`
+    },
+    {
+      id: 16,
+      text: t`Official announcements`,
+      type: 'public',
+      explanation: t`Official announcements are public information that is accessible to all citizens.`
+    },
+    {
+      id: 17,
+      text: t`Public transport information`,
+      type: 'public',
+      explanation: t`Public transport information is accessible to everyone and does not contain any personal data.`
+    },
+    {
+      id: 18,
+      text: t`Weather data`,
+      type: 'public',
+      explanation: t`Weather data is public information that does not contain any personal references.`
+    },
+    {
+      id: 19,
+      text: t`Public statistics`,
+      type: 'public',
+      explanation: t`Public statistics are aggregated data without personal reference.`
+    },
+    {
+      id: 20,
+      text: t`Public cards`,
+      type: 'public',
+      explanation: t`Public maps do not contain any personal information and are accessible to everyone.`
+    }
+  ];
+
+
   const [currentItem, setCurrentItem] = useState<DataItem | null>(null);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string; explanation: string } | null>(null);
   const [remainingItems, setRemainingItems] = useState<DataItem[]>([]);
@@ -224,7 +227,7 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
 
     setFeedback({
       type: isCorrect ? 'success' : 'error',
-      message: isCorrect ? 'Richtig!' : 'Falsch! Versuche es noch einmal.',
+      message: isCorrect ? t`Correct!` : t`Wrong! Try it again.`,
       explanation: isCorrect ? item.explanation : DATA_TYPES[type].explanation
     });
   };
@@ -241,26 +244,26 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
     return (
       <div className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col items-center justify-center gap-8 bg-amber-600 font-mono text-center">
         <h2 className="text-2xl sm:text-3xl md:text-4xl text-white mb-4">
-          Glückwunsch!
+          <Trans>Congratulations!</Trans>
         </h2>
 
         <div className="bg-white/90 rounded-xl p-6 max-w-[600px] w-[90%]">
           <h3 className="text-xl sm:text-2xl md:text-3xl text-amber-900 mb-4">
-            Zusammenfassung
+            <Trans>Summary</Trans>
           </h3>
 
           <p className="text-lg sm:text-xl md:text-2xl text-amber-900 mb-6">
-            Alle Fragen wurden erfolgreich beantwortet!
+            <Trans>All questions were answered successfully!</Trans>
           </p>
 
           {firstTrySuccesses.length > 0 && (
             <p className="text-base sm:text-lg text-amber-900 mb-6">
-              Auf Anhieb richtig beantwortet: {firstTrySuccesses.length} von {DATA_ITEMS.length}
+              <Trans>Answered correctly at the first attempt:</Trans> {firstTrySuccesses.length} <Trans>by</Trans> {DATA_ITEMS.length}
             </p>
           )}
 
           <p className="text-base sm:text-lg md:text-xl text-amber-900 mb-8">
-            Das Smart Home Hub ist jetzt entsperrt!
+            <Trans>The Smart Home Hub is now unlocked!</Trans>
           </p>
 
           <div className="flex justify-center">
@@ -268,7 +271,7 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
               onClick={onCompletion}
               className="px-6 py-3 bg-green-700 hover:bg-green-800 text-white rounded-xl transition-colors"
             >
-              Fertig
+              <Trans>Completed</Trans>
             </button>
           </div>
         </div>
@@ -308,7 +311,7 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
             onClick={handleCloseFeedback}
             className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded w-full"
           >
-            Schließen
+            <Trans>Close</Trans>
           </button>
         </div>
       )}

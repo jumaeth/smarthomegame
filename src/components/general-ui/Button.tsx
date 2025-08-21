@@ -6,7 +6,7 @@ type ButtonProps = {
 };
 
 const Button = ({ onClick, disabled = false, children, className }: ButtonProps) => {
-  const baseStyles = "px-4 py-2 transition-colors duration-200 text-white text-[18px]";
+  const baseStyles = "m-2 px-4 py-2 transition-colors duration-200 text-white text-[18px] hover:bg-blue-900";
   const enabledStyles = "bg-[#2222aa] rounded-[8px] cursor-pointer hover:cursor-pointer";
   const disabledStyles = "bg-gray-300 rounded-[8px] text-gray-600 cursor-not-allowed";
 

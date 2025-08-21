@@ -1,6 +1,8 @@
 import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 import "./Modal.css";
 import {useGameService} from "@/hooks/useGameService.tsx";
+import {Trans} from "@lingui/react/macro";
+import {t} from "@lingui/core/macro";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
@@ -22,12 +24,12 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
           <>
             <h3>Smart TV</h3>
             <div className="modal-content">
-              <h1>Smart TV Mission</h1>
-              <h3>Beantworte die folgenden Fragen …</h3>
+              <h1><Trans>Smart TV Mission</Trans></h1>
+              <h3><Trans>Answer the following questions</Trans>…</h3>
               <MultipleChoiceComponent
                       questions={[
-                        `Möchtest du die Spracherkennung aktivieren?`,
-                        `Möchtest du die Kamera aktivieren?`,
+                        t`Would you like to activate voice recognition?`,
+                        t`Do you want to activate the camera?`,
                       ]}
                       solutions={[false, false]}
                       onComplete={handleQuizCompletion}
