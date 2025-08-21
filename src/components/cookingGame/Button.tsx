@@ -42,11 +42,11 @@ export const Button = ({ x, y, width, height, label, action, color, lineColor }:
             <Text
                     text={label.toUpperCase()}
                     x={x + width/2}
-                    y={y + height/2}
+                    y={y + height/2 + 4}
                     style={
                       new TextStyle({
-                        fontFamily:'micro5',
-                        fontSize:30,
+                        fontFamily:'LoResRegular',
+                        fontSize:20,
                         wordWrap:true,
                         wordWrapWidth:width-10,
                         fill: textColor

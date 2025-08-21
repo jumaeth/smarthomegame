@@ -51,45 +51,43 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
   };
 
   return (
-          <div className="w-[80vw] h-[80vh] overflow-auto">
-            <div className="flex flex-col items-center gap-6">
-              <div className="grid grid-cols-3 gap-4">
-                {displayedIndices.map((imageIndex, gridIndex) => (
-                        <div key={gridIndex} className={`w-[25vh] h-[25vh] max-w-[25vw] max-h-[25vw] flex items-center justify-center rounded-lg overflow-hidden
+          <div className="flex flex-col items-center gap-6">
+            <div className="grid grid-cols-3 gap-4">
+              {displayedIndices.map((imageIndex, gridIndex) => (
+                      <div key={gridIndex} className={`w-30 h-30 flex items-center justify-center rounded-lg overflow-hidden
               ${imageIndex >= 0 && !isCompleted ? "cursor-pointer hover:opacity-80 border-2 border-gray-300" : "bg-gray-100"}
               transition-all duration-200
             `}
-                             onClick={() => imageIndex >= 0 && !isCompleted && handleImageClick(gridIndex)}
-                        >{imageIndex >= 0 && imageIndex < imageList.length ? (
-                                <img
-                                        src={imageList[imageIndex]}
-                                        alt={`question-${imageIndex}`}
-                                        className="w-full h-full object-cover"
-                                />) : (<div className="w-full h-full bg-gray-200"></div>)}
-                        </div>
-                ))}
-              </div>
+                           onClick={() => imageIndex >= 0 && !isCompleted && handleImageClick(gridIndex)}
+                      >{imageIndex >= 0 && imageIndex < imageList.length ? (
+                              <img
+                                      src={imageList[imageIndex]}
+                                      alt={`question-${imageIndex}`}
+                                      className="w-full h-full object-cover"
+                              />) : (<div className="w-full h-full bg-gray-200"></div>)}
+                      </div>
+              ))}
+            </div>
 
-              <div className="flex flex-col items-center gap-2">
-                {isCompleted && (
-                        <div className={`text-lg font-bold ${score > 0 ? "text-green-600" : "text-red-600"}`}>
-                          {score > 0 ? <Trans>Success!</Trans> : <Trans>Failed!</Trans>}
-                        </div>
-                )}
+            <div className="flex flex-col items-center gap-2">
+              {isCompleted && (
+                      <div className={`text-lg font-bold ${score > 0 ? "text-green-600" : "text-red-600"}`}>
+                        {score > 0 ? <Trans>Success!</Trans> : <Trans>Failed!</Trans>}
+                      </div>
+              )}
 
-                {feedbackMsg && <div className="text-red-600 text-sm mt-1">{feedbackMsg}</div>}
+              {feedbackMsg && <div className="text-red-600 text-sm mt-1">{feedbackMsg}</div>}
 
-                <Button onClick={submitAnswer} disabled={isCompleted}>
-                  <Trans>Send answer</Trans>
-                </Button>
+              <Button onClick={submitAnswer} disabled={isCompleted}>
+                <Trans>Send answer</Trans>
+              </Button>
 
-                {!isCompleted && (
-                        <div className="text-sm text-gray-600 mt-1">
-                          <Trans>Current score: </Trans>{score}
-                        </div>
-                )}
-              </div>
+              {!isCompleted && (
+                      <div className="text-sm text-gray-600 mt-1">
+                        <Trans>Current score: {score}</Trans>
+                      </div>
+              )}
             </div>
           </div>
-            );
-            };
+  );
+};

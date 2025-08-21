@@ -1,7 +1,7 @@
-import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 import "./Modal.css";
 import {t} from "@lingui/core/macro";
 import {Trans} from "@lingui/react/macro";
+import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
@@ -17,13 +17,10 @@ export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback
 
   return (
           <>
-            <h3>
+            <h1>
               <Trans>Smarte Beleuchtung</Trans>
-            </h3>
+            </h1>
             <div className="modal-content">
-              <h1>
-                <Trans>Smarte Beleuchtung Mission</Trans>
-              </h1>
               <h3>
                 <Trans>Beantworte die folgenden Fragen ...</Trans>
               </h3>

@@ -1,7 +1,6 @@
 import {Sprite, Text, Graphics, TilingSprite} from '@pixi/react';
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
-import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {Button} from "./Button.tsx";
 import {EventMode, FederatedPointerEvent} from 'pixi.js';
 import {TextStyle, Graphics as PIXIGraphics, Sprite as PIXISprite} from "pixi.js";
@@ -28,7 +27,6 @@ type InteractiveSprite = PIXISprite & {
 };
 
 export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setTotalPoints}) => {
-  const [showButton, setShowButton] = useState(false);
   const [hovered, setHovered] = useState("");
   const [dragged, setDragged] = useState("");
   const [spriteToMarkerMap, setSpriteToMarkerMap] = useState<Record<string, string>>({});
@@ -99,16 +97,6 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
   });
 
   const {textures} = useLoadTextures(texturePaths);
-  const { typedText, typingDone, showCursor } = useTypingText(instruction, 35);
-
-  useEffect(() => {
-    if (typingDone) {
-      const delay = setTimeout(() => setShowButton(true), 500);
-      return () => clearTimeout(delay);
-    } else {
-      setShowButton(false);
-    }
-  }, [typingDone]);
 
   const drawMarker = (g : PIXIGraphics, marker : Marker) => {
     g.clear();
@@ -310,30 +298,30 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
                         y={220}
                 />
                 <Text
-                        text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
+                        text={instruction.toUpperCase()}
                         x={75}
                         y={70}
                         style={
                           new TextStyle({
-                            fontFamily:'micro5',
-                            fontSize:32,
+                            fontFamily:'LoResRegular',
+                            fontSize:24,
                             wordWrap:true,
                             wordWrapWidth:400,
                           })}
                         anchor={{ x: 0, y: 0 }}
                 />
 
-                {(showButton &&
-                        <Button
-                                x={370}
-                                y={275}
-                                color={0xdcc08e}
-                                lineColor={0x5d3c1a}
-                                width={90}
-                                height={35}
-                                label={"Weiter"}
-                                action={pageUP}
-                        />)}
+
+                <Button
+                   x={370}
+                   y={275}
+                   color={0xdcc08e}
+                   lineColor={0x5d3c1a}
+                   width={90}
+                   height={35}
+                   label={"Weiter"}
+                   action={pageUP}
+                />
               </>
       )
     }

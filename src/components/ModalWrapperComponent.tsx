@@ -29,7 +29,7 @@ export const ModalWrapperComponent = forwardRef(({content, onClose}: ModalWrappe
                         <button
                                 className="close-modal"
                                 onClick={closeModal}
-                                aria-label="Schliessen"
+                                aria-label="Close"
                         >
                           ×
                         </button>

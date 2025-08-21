@@ -280,7 +280,9 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col gap-4 md:gap-6 lg:gap-8 bg-amber-600 font-mono relative">
+    <div className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col gap-4 md:gap-6 lg:gap-8 bg-amber-600 relative"
+         style={{ fontFamily: 'LoResRegular, sans-serif' }}
+    >
       <div className="flex justify-center w-full h-32 mt-4 md:mt-6 lg:mt-8">
         {currentItem && (
           <div
@@ -288,7 +290,10 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
             onDragStart={(e) => handleDragStart(e, currentItem)}
             className="w-[90%] sm:w-[70%] md:w-[60%] max-w-[600px] cursor-grab p-3 sm:p-4 md:p-5 text-amber-900 bg-white rounded-lg shadow-md"
           >
-            <h6 className="text-lg sm:text-xl md:text-2xl font-mono">
+            <h6
+                    className="text-lg sm:text-xl md:text-2xl"
+                    style={{fontFamily: 'LoResRegular, sans-serif'}}
+            >
               {currentItem.text}
             </h6>
           </div>
@@ -308,8 +313,9 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
             {feedback.explanation}
           </p>
           <button
-            onClick={handleCloseFeedback}
-            className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded w-full"
+                  onClick={handleCloseFeedback}
+                  className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded w-full"
+                  style={{fontFamily: 'LoResBold, sans-serif'}}
           >
             <Trans>Close</Trans>
           </button>

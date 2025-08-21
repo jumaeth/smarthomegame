@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {Button} from "./Button.tsx";
-import {useTypingText} from "../../hooks/useTypingText.tsx";
 import {TextStyle} from "pixi.js";
 import {Text, Sprite} from "@pixi/react";
 import {Stages} from "@/components/cookingGame/Stages.ts";
@@ -101,8 +100,6 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
   });
   const [calcFinished, setCalcFinished] = useState(false);
   const [instruction,setInstruction] = useState(instructions[0]);
-  const { typedText, typingDone, showCursor } = useTypingText(text, 30);
-  const [showButton, setShowButton] = useState(false);
   const offset = explanations.length;
   const [background, setBackground] = useState("book");
   const [buttonOrders] = useState(() => Array.from({length: btnTexts.length}, () => shuffledRange(4)));
@@ -141,15 +138,6 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
     }
   }, [scores.quality, calcFinished]);
 
-  useEffect(() => {
-    if (typingDone) {
-      const delay = setTimeout(() => setShowButton(true), 500);
-
-      return () => clearTimeout(delay);
-    } else {
-      setShowButton(false);
-    }
-  }, [typingDone]);
 
   useEffect(() => setText(explanations[page - 1]), [page]);
 
@@ -177,7 +165,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
     threeOptionsEval(avgTotal)
   ];
 
-  useEffect(() => setBtnText(conclusion[choices[3]]), [typingDone]);
+  useEffect(() => setBtnText(conclusion[choices[3]]));
 
   const assembleSummaryText = () => {
     const assembled = finalMessage
@@ -225,19 +213,19 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
         }
         return <>
           <Text
-                  text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
+                  text={text.toUpperCase()}
                   x={85}
                   y={65}
                   style={
                     new TextStyle({
-                      fontFamily:'micro5',
-                      fontSize:30,
+                      fontFamily:'LoResRegular',
+                      fontSize:24,
                       wordWrap:true,
                       wordWrapWidth: 400,
                     })}
                   anchor={{x: 0, y: 0}}
           />
-          {showButton &&
+
                   <Button
                           x={375}
                           y={275}
@@ -247,7 +235,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
                           height={35}
                           label={"Weiter"}
                           action={action}
-                  />}
+                  />
         </>
       }
   };
@@ -278,11 +266,11 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
         {<Text
                 text={instruction.toUpperCase()}
                 x={272}
-                y={25}
+                y={30}
                 style={
                   new TextStyle({
-                    fontFamily:'micro5',
-                    fontSize:36,
+                    fontFamily:'LoResRegular',
+                    fontSize:20,
                     wordWrap:true,
                     wordWrapWidth: 400,
                     fill: 0xEEEEEE
@@ -301,20 +289,20 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
         setBackground("book");
       }
       return <>
-        <Text
-                text={(typedText + (showCursor ? '|' : '')).toUpperCase()}
+        {text && <Text
+                text={text.toUpperCase()}
                 x={85}
                 y={65}
                 style={
                   new TextStyle({
-                    fontFamily:'micro5',
-                    fontSize:30,
+                    fontFamily:'LoResRegular',
+                    fontSize:24,
                     wordWrap:true,
                     wordWrapWidth:400,
                   })}
                 anchor={{x: 0, y: 0}}
-        />
-        {showButton &&
+        />}
+
                 <Button
                         x={235}
                         y={275}
@@ -324,7 +312,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
                         lineColor={0x5d3c1a}
                         label={btnText}
                         action={action}
-                />}
+                />
       </>
     }
   };

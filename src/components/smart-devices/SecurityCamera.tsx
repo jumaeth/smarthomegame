@@ -1,8 +1,8 @@
-import {CaptchaComponent} from "@/components/mini-game/CaptchaComponent.tsx";
-import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 import {useState} from "react";
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
+import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
+import {CaptchaComponent} from "@/components/mini-game/CaptchaComponent.tsx";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
