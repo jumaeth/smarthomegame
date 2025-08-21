@@ -87,15 +87,14 @@ export const Character = forwardRef(({
             interactiveElement.interaction();
         }
     }
-  };
 
-  useImperativeHandle(ref, () => ({
-    moveUp: () => setNextTarget("UP"),
-    moveDown: () => setNextTarget("DOWN"),
-    moveLeft: () => setNextTarget("LEFT"),
-    moveRight: () => setNextTarget("RIGHT"),
-    interact: () => checkForInteraction(),
-  }));
+    useImperativeHandle(ref, () => ({
+      moveUp: () => setNextTarget("UP"),
+      moveDown: () => setNextTarget("DOWN"),
+      moveLeft: () => setNextTarget("LEFT"),
+      moveRight: () => setNextTarget("RIGHT"),
+      interact: () => checkForInteraction(),
+    }));
 
     useTick((delta) => {
         if (isPaused) {
@@ -140,4 +139,4 @@ export const Character = forwardRef(({
             </Container>
         </>
     );
-}
+})

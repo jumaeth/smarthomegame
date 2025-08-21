@@ -15,9 +15,7 @@ import {Position} from "@/types/movement";
 import {Door} from "@/pixi/levels/Door";
 import {DoorState} from "@/types/door";
 import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {HeadUpDisplay} from "@/pixi/components/HeadUpDisplay.tsx";
-import {GameService} from "@/services/GameService.ts";
 
 export const MainContainer = forwardRef(({
                                            canvasSize,
