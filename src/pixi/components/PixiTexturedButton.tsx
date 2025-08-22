@@ -1,5 +1,5 @@
 import {Container, Sprite} from "@pixi/react";
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, {  useMemo, useRef } from 'react';
 import {Texture, Rectangle} from "@pixi/core";
 
 interface PixiTexturedButtonProps {
