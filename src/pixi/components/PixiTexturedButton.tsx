@@ -1,6 +1,6 @@
 import {Container, Sprite} from "@pixi/react";
-import React, {useRef} from "react";
-import {Texture} from "@pixi/core";
+import React, { useEffect, useMemo, useRef } from 'react';
+import {Texture, Rectangle} from "@pixi/core";
 
 interface PixiTexturedButtonProps {
   x: number;
@@ -38,6 +38,13 @@ export const PixiTexturedButton: React.FC<PixiTexturedButtonProps> = ({
     }
   };
 
+  const hitArea = useMemo(() => {
+    const hitScale:number=2;
+    const w: number = width * hitScale;
+    const h: number = height * hitScale;
+    return new Rectangle(-w / 2, -h / 2, w, h);
+  }, [width, height]);
+
   return (
           <Container
                   x={x}
@@ -47,7 +54,8 @@ export const PixiTexturedButton: React.FC<PixiTexturedButtonProps> = ({
                   pointertap={onClick}
                   pointerdown={handlePointerDown}
                   pointerup={handlePointerUp}
-                  pointerupoutside={handlePointerUp} // Stoppt auch, wenn der Zeiger außerhalb losgelassen wird
+                  pointerupoutside={handlePointerUp}
+                  hitArea={hitArea}
           >
             <Sprite
                     interactive={false}
