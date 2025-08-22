@@ -17,6 +17,7 @@ import {DoorState} from "@/types/door";
 import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
 import {HeadUpDisplay} from "@/pixi/components/HeadUpDisplay.tsx";
 import {GameService} from "@/services/GameService.ts";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 
 interface MainContainerProps {
   canvasSize: { width: number; height: number };
@@ -26,7 +27,7 @@ interface MainContainerProps {
   isPaused?: boolean;
   children?: React.ReactNode;
   gameService: GameService;
-  interactiveElements?: any[];
+  interactiveElements?: InteractivePixiElement[];
 }
 
 export const MainContainer = forwardRef<unknown, MainContainerProps>(({
