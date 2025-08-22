@@ -1,4 +1,4 @@
-import React, {forwardRef, useCallback, useEffect, useImperativeHandle, useRef} from "react";
+import {forwardRef, useCallback, useEffect, useImperativeHandle, useRef} from "react";
 import {Texture} from "pixi.js";
 import {Container, Sprite, useTick} from "@pixi/react";
 import {ANIMATION_SPEED, MOVE_SPEED, TILE_SIZE} from "@/pixi/constants/world-settings";

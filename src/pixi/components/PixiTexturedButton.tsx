@@ -7,7 +7,7 @@ interface PixiTexturedButtonProps {
   y: number;
   width: number;
   height: number;
-  onClick: () => void;
+  onClick?: () => void;
   onHold?: () => void;
   texture: Texture;
 }
