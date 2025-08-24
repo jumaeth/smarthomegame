@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import {Container, Sprite} from "@pixi/react";
 import handsUp from "@/assets/tutorial/explanationPages/handsUp.png";
+import pointLeft from "@/assets/tutorial/explanationPages/pointLeft.png";
 import leftKey from "@/assets/tutorial/explanationPages/leftKey.png";
 import rightKey from "@/assets/tutorial/explanationPages/rightKey.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
@@ -17,7 +18,7 @@ import {
   Graphics as PixiGraphics,
   Text as PixiText,
   TextStyle, TextStyleAlign,
-  TextStyleFontWeight,
+  TextStyleFontWeight
 } from "pixi.js";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
@@ -35,8 +36,9 @@ export const Explanation_1: React.FC<PageProps> = ({
        setNextPage
            }: PropsWithChildren<PageProps>) => {
 
-  enum Anims {IDLE, INTRO, OUTRO}
-  const textureRobot = useMemo(() => loadTexture(handsUp), []);
+  enum Anims {IDLE, INTRO, SWITCH, OUTRO}
+  const textureHandsUp = useMemo(() => loadTexture(handsUp), []);
+  const texturePointLeft = useMemo(() => loadTexture(pointLeft), []);
   const textureLeftArr = useMemo(() => loadTexture(leftKey), []);
   const textureRightArr = useMemo(() => loadTexture(rightKey), []);
   const leftArrRef = useRef<PixiSprite | null>(null);
@@ -56,13 +58,16 @@ export const Explanation_1: React.FC<PageProps> = ({
   const leftContRef = useRef<PixiContainer | null>(null);
   const rightContRef = useRef<PixiContainer | null>(null);
   const [decision, setDecision] = useState(0);
+  const fill = "#054388";
+  const stroke = "#009CDD";
 
 
   const textsTemp = [
           "That's all you need to know! Time for a quick practice. Your task is to find and solve the first smart device."+
           " Now it's your decision",
           "Guided introduction",
-          "Explore yourself"
+          "Explore yourself",
+          "Okay, try to walk to the smartTV and solve the challenge using the controls you just learned. I’ll meet you there"
 
 ]
 
@@ -86,6 +91,7 @@ export const Explanation_1: React.FC<PageProps> = ({
       drawTexts();
       setupSprites();
       setOnLoad(false);
+      firstSprite();
       setAnimation(Anims.INTRO);
     }
   }, [showExpl]);
@@ -117,13 +123,13 @@ export const Explanation_1: React.FC<PageProps> = ({
 
     const growLeft = {
       startX: 0.5 * windowWidth, startY: windowHeight * 0.9,
-      endX: windowWidth * 0.435, endY: windowHeight * 0.6,
+      endX: windowWidth * 0.415, endY: windowHeight * 0.59,
       startS: 0.05, endS: 0.2, showOthers: true, duration: durationIn
     } as GrowProps
 
     const growRight = {
       startX: 0.5 * windowWidth, startY: windowHeight * 0.9,
-      endX: windowWidth * 0.565, endY: windowHeight * 0.6,
+      endX: windowWidth * 0.585, endY: windowHeight * 0.59,
       startS: 0.05, endS: 0.2, showOthers: true, duration: durationIn
     } as GrowProps
 
@@ -146,7 +152,7 @@ export const Explanation_1: React.FC<PageProps> = ({
       () => growAnimation(mgr, sprite, grow)
     ]);
   };
-  const runOutroAnimations = async (sprite: PixiSprite) => {
+  const runFadeOutAnim = async (sprite: PixiSprite) => {
     const mgr = mgrRef.current!;
     const midC = midContRef.current;
     const midT = midTextRef.current;
@@ -181,6 +187,28 @@ export const Explanation_1: React.FC<PageProps> = ({
     ]);
   };
 
+  const runFadeInAnim = async (sprite: PixiSprite) => {
+    const mgr = mgrRef.current!;
+    const midC = midContRef.current;
+    const midT = midTextRef.current;
+    const spriteC = spriteContainerRef.current;
+
+    if (!midC || !midT || !spriteC) return;
+
+    const durationOut = 500;
+
+    const fadeIn = {
+      duration: durationOut,
+      startA: 0,
+      endA: 1,
+    } as FadeProps
+
+    await mgr.parallel([
+      () => fadeAnimation(mgr, midT, fadeIn),
+      () => fadeAnimation(mgr, midC, fadeIn),
+      () => fadeAnimation(mgr, spriteC, fadeIn),
+    ]);
+  };
 
   //----------user input----------
 
@@ -190,9 +218,6 @@ export const Explanation_1: React.FC<PageProps> = ({
 
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
-        case "Space":
-          setAnimation(Anims.IDLE);
-          return;
         case "ArrowLeft":
           if (showExpl){
             leftOnClick()}
@@ -233,7 +258,14 @@ export const Explanation_1: React.FC<PageProps> = ({
           break;
 
         case 2:
-          await runOutroAnimations(sprite);
+          await runFadeOutAnim(sprite);
+          secondSprite();
+          await runFadeInAnim(sprite);
+          setAnimation(Anims.IDLE);
+          break;
+
+        case 3:
+          await runFadeOutAnim(sprite);
           setShowExpl(false);
           setAnimating(true);
           setShowSprite(false);
@@ -257,7 +289,7 @@ export const Explanation_1: React.FC<PageProps> = ({
 
   //store line properties in pixiGraphic
   const setupTexts = (text: string, x: number, y: number, fontSize: number, fontWeight: TextStyleFontWeight,
-                      wrap: number, align: TextStyleAlign, ref) => {
+                      wrap: number, align: TextStyleAlign, ref, anchor:number) => {
     const t1 = new PixiText();
     t1.text = text;
     t1.x = x;
@@ -271,6 +303,7 @@ export const Explanation_1: React.FC<PageProps> = ({
       fontFamily: "LoResRegular",
       fill: "#FFFFFF"
     })
+    t1.anchor.set(x = anchor, y = anchor);
 
     const parent = ref?.current;
     if (!parent) return;
@@ -282,15 +315,15 @@ export const Explanation_1: React.FC<PageProps> = ({
   const drawTexts = () => {
 
     setupTexts(textsTemp[0], windowWidth*0.33, windowHeight*0.165, 0.04, "normal", 0.35,
-            "center", midTextRef);
+            "center", midTextRef, 0);
     setupTexts(textsTemp[1], windowWidth*0.34, windowHeight*0.42, 0.03, "bold", 0.1,
-            "center", leftTextRef);
+            "center", leftTextRef, 0);
     setupTexts(textsTemp[2], windowWidth*0.58, windowHeight*0.42, 0.03, "bold", 0.1,
-            "center", rightTextRef);
+            "center", rightTextRef, 0);
   }
 
-  const setupGraphics = (x: number, y: number, width: number, height: number, radius: number, fill: string,
-                         stroke: string, ref, hoverEnabled: boolean, onClick: () => void) => {
+  const setupGraphics = (x: number, y: number, width: number, height: number, radius: number,
+                         ref, hoverEnabled: boolean, onClick: () => void) => {
 
     const g = new PixiGraphics();
     g.clear();
@@ -313,11 +346,11 @@ export const Explanation_1: React.FC<PageProps> = ({
 
   const drawGraphics = () =>{
     setupGraphics(windowWidth*0.3, windowHeight * 0.125, windowWidth*0.4, windowHeight *0.25, 10,
-            "#054388", "#009CDD", midContRef, false, null);
+            midContRef, false, null);
     setupGraphics(windowWidth*0.3125, windowHeight * 0.4, windowWidth*0.15, windowHeight *0.1, 10,
-            "#054388", "#009CDD", leftContRef, true, leftOnClick);
+            leftContRef, true, leftOnClick);
     setupGraphics(windowWidth*0.5375, windowHeight * 0.4, windowWidth*0.15, windowHeight *0.1, 10,
-            "#054388", "#009CDD", rightContRef, true, rightOnClick);
+            rightContRef, true, rightOnClick);
   }
 
   const setupSprites = () =>{
@@ -374,17 +407,48 @@ export const Explanation_1: React.FC<PageProps> = ({
   }
 
   const rightOnClick = () => {
-      setDecision(1);
-      setAnimation(Anims.OUTRO);
+      setAnimation(Anims.SWITCH);
+  }
+
+  const firstSprite = () => {
+    const sprite = charRef.current;
+    if (!sprite) return;
+    console.log("firstSprite");
+    sprite.texture = textureHandsUp;
+  }
+  const secondSprite = () => {
+    const sprite = charRef.current;
+    if (!sprite) return;
+    sprite.x = windowWidth * 0.8;
+    sprite.y = windowHeight * 0.6;
+    sprite.texture = texturePointLeft;
+    sprite.scale.set(1);
+
+    const graphic = midContRef.current;
+    if (!graphic) return;
+    graphic.removeChildren();
+    setupGraphics(windowWidth*0.275, windowHeight*0.3,windowWidth*0.45, windowHeight*0.2, 10,
+            midContRef, false, null);
+
+    const textC = midTextRef.current;
+    if (!textC) return;
+    textC.removeChildren();
+    setupTexts(textsTemp[textsTemp.length-1], windowWidth*0.5,windowHeight*0.4, 0.04, "normal",
+            0.4, "center", midTextRef, 0.5);
+  }
+
+  const sprite = () => {
+   return (
+           <Container ref={spriteContainerRef}>
+             {showSprite && <Sprite texture={textureHandsUp} ref={charRef} />}
+           </Container>)
   }
 
   return (
       <>
-        <Container ref={spriteContainerRef}>
-          {showSprite && textureRobot && <Sprite texture={textureRobot} ref={charRef} />}
-        </Container>
-        {arrowKeys()}
         {graphics()}
+        {sprite()}
+        {arrowKeys()}
       </>
   )
 };

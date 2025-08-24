@@ -7,14 +7,17 @@ import {PAGE_COMPONENTS, PageProps} from "@/pixi/components/Tutorial/Pages/pageR
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
 import {spotlightTween} from "@/pixi/components/Tutorial/anim/spotlightTween.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeTween.ts";
-import {blinkAnimation} from "@/pixi/components/Tutorial/anim/blinkTween.ts";
-import {Simulate} from "react-dom/test-utils";
-import submit = Simulate.submit;
+import {GameService} from "@/services/GameService.ts";
+import {useTutorialEnabled} from "@/utils/tutorialEnabled.ts";
+import {characterPositionStore} from "@/utils/characterPosition.ts";
 
 interface TutorialProps {
   windowWidth: number;
   windowHeight: number;
   characterPositon: { x: number, y: number };
+  tutorialEnabled: React.MutableRefObject<boolean>;
+  gameService: GameService;           // add this, since you use it
+  onClose: () => void;
 }
 
 
@@ -22,7 +25,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
        windowWidth,
        windowHeight,
        gameService,
-       characterPositon
+       onClose
            }: PropsWithChildren<TutorialProps>) => {
 
   type SpotRect = { x: number; y: number; width: number; height: number; r: number };
@@ -49,12 +52,123 @@ export const Tutorial: React.FC<TutorialProps> = ({
   const mgrRef = useRef<AnimationManager | null>(null);
   const pressedRef = useRef<boolean>(false);
 
+  //manage animations
+  useEffect(() => {
+    if (!mgrRef.current) return;
+
+    let timeoutId: number | undefined;
+    let cancelled = false;
+
+    const run = async () => {
+      switch (nextPage) {
+
+        case 1: {
+          if (!explRef.current) return;
+          if (explRef.current instanceof Text) {
+            const b = explRef.current.getBounds();
+
+            const b2 = instrRef.current?.getBounds();
+            const start = {
+              x: b.x - 10,
+              y: b.y - 10,
+              width: b.width + 20,
+              height: b.height + (b2?.height ?? 0) + 20,
+              r: 10,
+            };
+            const end = computeEndRect(1)!;
+
+            setShowSpotlight(true);
+            await runSpotlightAnim(drawSpotlight, start, end, 1000);
+            if (cancelled) return;
+
+            setShowSpotlight(false);
+            drawBackground();
+
+            setKeyControl(Pages.CHARACTER);
+            setNextPage(0);
+
+            return;
+          }
+          return;
+        }
+
+        case 2: {
+          const start = computeEndRect(1)!;
+          const end = computeEndRect(2)!;
+
+          setShowSpotlight(true);
+          drawSpotlight(spotRectRef.current);
+
+          timeoutId = window.setTimeout(async () => {
+            setShowSpotlight(false);
+            await runSpotlightAnim(drawSpotlight, start, end, 1000);
+            if (cancelled) return;
+            setShowSpotlight(false);
+            drawBackground();
+
+            setKeyControl(Pages.SCORES);
+            setNextPage(0);
+          }, 250);
+          return;
+        }
+
+        case 3: {
+          const start = computeEndRect(2)!;
+          const end = computeEndRect(3)!;
+
+          setShowSpotlight(true);
+          drawSpotlight(spotRectRef.current);
+
+          timeoutId = window.setTimeout(async () => {
+            await runSpotlightAnim(drawSpotlight, start, end, 1000);
+            if (cancelled) return;
+            setShowSpotlight(false);
+            drawBackground();
+
+            setKeyControl(Pages.SMARTPHONE );
+            setNextPage(0);
+          }, 250);
+          return;
+        }
+
+        case 4: {
+          setKeyControl(Pages.EXPLANATION1);
+          return;
+        }
+        case 5: {
+          runClearBGAnim();
+          gameService.resumeGame();
+          setKeyControl(Pages.MORE_EXPL);
+          return;
+        }
+
+        case 6: {
+          await runClearBGAnim();
+          setKeyControl(Pages.LESS_EXPL);
+          return;
+        }
+        case 7: {
+          console.log("7");
+          onClose();
+          return;
+        }
+      }
+    };
+
+    run();
+
+    return () => {
+      cancelled = true;
+      if (timeoutId !== undefined) clearTimeout(timeoutId);
+    };
+  }, [nextPage]);
 
 
   //----------init----------
 
   //pause game at beginning of tutorial
   useEffect(() => {
+    characterPositionStore.teleport({x: 8*TILE_SIZE, y: 5*TILE_SIZE});
     gameService.pauseGame();
   }, [gameService]);
 
@@ -182,30 +296,6 @@ export const Tutorial: React.FC<TutorialProps> = ({
     }
   }, [showInstruction]);
 
-  //instruction blinking
-  // useEffect(() => {
-  //   if (!instrBlinking || !showInstruction) return;
-  //
-  //   let rafId: number;
-  //   const dir = { current: -1 as 1 | -1 };
-  //   const speed = 0.008;
-  //   const tick = () => {
-  //
-  //     const t = instrRef.current;
-  //     if (t) {
-  //       t.alpha += dir.current * speed;
-  //
-  //       if (t.alpha <= 0) { t.alpha = 0; dir.current = 1; }
-  //       else if (t.alpha >= 1) { t.alpha = 1; dir.current = -1; }
-  //     }
-  //
-  //     rafId = requestAnimationFrame(tick);
-  //   };
-  //
-  //   rafId = requestAnimationFrame(tick);
-  //   return () => cancelAnimationFrame(rafId);
-  // }, [instrBlinking, showInstruction]);
-
 
   useEffect(() => {
     const mgr = mgrRef.current;
@@ -274,8 +364,6 @@ export const Tutorial: React.FC<TutorialProps> = ({
     )
   }
 
-
-
   //----------user input----------
 
   //resize window
@@ -342,109 +430,6 @@ export const Tutorial: React.FC<TutorialProps> = ({
       events.forEach(func => window.removeEventListener("keydown", func));
     };
   }, [keyControl, gameService, windowWidth, windowHeight]);
-
-  //manage animations
-  useEffect(() => {
-    if (!mgrRef.current) return;
-
-    let timeoutId: number | undefined;
-    let cancelled = false;
-
-    const run = async () => {
-      switch (nextPage) {
-
-        case 1: {
-          if (!explRef.current) return;
-          if (explRef.current instanceof Text) {
-            const b = explRef.current.getBounds();
-
-          const b2 = instrRef.current?.getBounds();
-          const start = {
-            x: b.x - 10,
-            y: b.y - 10,
-            width: b.width + 20,
-            height: b.height + (b2?.height ?? 0) + 20,
-            r: 10,
-          };
-          const end = computeEndRect(1)!;
-
-          setShowSpotlight(true);
-          await runSpotlightAnim(drawSpotlight, start, end, 1000);
-          if (cancelled) return;
-
-          setShowSpotlight(false);
-          drawBackground();
-
-          setKeyControl(Pages.CHARACTER);
-          setNextPage(0);
-
-          return;
-          }
-          return;
-        }
-
-        case 2: {
-          const start = computeEndRect(1)!;
-          const end = computeEndRect(2)!;
-
-          setShowSpotlight(true);
-          drawSpotlight(spotRectRef.current);
-
-          timeoutId = window.setTimeout(async () => {
-            setShowSpotlight(false);
-            await runSpotlightAnim(drawSpotlight, start, end, 1000);
-            if (cancelled) return;
-            setShowSpotlight(false);
-            drawBackground();
-
-            setKeyControl(Pages.SCORES);
-            setNextPage(0);
-          }, 250);
-          return;
-        }
-
-        case 3: {
-          const start = computeEndRect(2)!;
-          const end = computeEndRect(3)!;
-
-          setShowSpotlight(true);
-          drawSpotlight(spotRectRef.current);
-
-          timeoutId = window.setTimeout(async () => {
-            await runSpotlightAnim(drawSpotlight, start, end, 1000);
-            if (cancelled) return;
-            setShowSpotlight(false);
-            drawBackground();
-
-            setKeyControl(Pages.SMARTPHONE );
-            setNextPage(0);
-          }, 250);
-          return;
-        }
-
-        case 4: {
-          setKeyControl(Pages.EXPLANATION1);
-          return;
-        }
-        case 5: {
-          console.log("to be implemented")
-          return;
-        }
-
-        case 6: {
-          await runClearBGAnim();
-          return;
-        }
-      }
-    };
-
-    run();
-
-    return () => {
-      cancelled = true;
-      if (timeoutId !== undefined) clearTimeout(timeoutId);
-    };
-  }, [nextPage]);
 
   const runClearBGAnim = async () => {
 

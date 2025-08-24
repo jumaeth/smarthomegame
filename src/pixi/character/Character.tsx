@@ -1,6 +1,6 @@
 import {Texture} from "pixi.js";
 import {Container, Sprite, useTick} from "@pixi/react";
-import {useCallback, useEffect, useRef} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {ANIMATION_SPEED, MOVE_SPEED, TILE_SIZE} from "@/pixi/constants/world-settings";
 import {useCharacterControls} from "@/hooks/character/useCharacterControls";
 import {Direction, Position} from "@/types/movement";
@@ -57,9 +57,20 @@ export const Character = ({texture, onMove, collisionMap, spawnPosition, isPause
         }
     }, []);
 
+  useEffect(() => {
+    const off = characterPositionStore.onTeleport((next) => {
+      position.current = next;
+      targetPosition.current = null;
+      isMoving.current = false;
+      currentDirection.current = 'DOWN' as Direction;
+    });
+    return () => { off(); };
+  }, []);
+
     useEffect(() => {
         teleportTo(spawnPosition)
     }, [spawnPosition, teleportTo]);
+
 
     function checkForInteraction() {
         if (!position.current) {

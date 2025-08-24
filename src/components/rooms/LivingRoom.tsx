@@ -22,6 +22,8 @@ export const LivingRoom = () => {
   const smartDevices : SmartDevice[] = gameService.getDeviceForRoom(roomName);
 
   const [activeDevice, setActiveDevice] = useState<string | null>(null);
+  const [tutorialEnabled, setTutorialEnabled] = useState(true);
+
 
   const smartDeviceCallback = (isCompleted:boolean):void => {
     if (!activeDevice) return;
@@ -99,6 +101,8 @@ export const LivingRoom = () => {
                       interactiveElements={interactiveElements}
                       isPaused={isPaused}
                       gameService={gameService}
+                      tutorialEnabled={tutorialEnabled}
+                      finishTutorial={() => setTutorialEnabled(false)}
               />
             </Stage>
           </>
