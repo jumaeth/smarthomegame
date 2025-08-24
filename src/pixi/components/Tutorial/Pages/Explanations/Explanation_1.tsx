@@ -36,7 +36,7 @@ export const Explanation_1: React.FC<PageProps> = ({
        setNextPage
            }: PropsWithChildren<PageProps>) => {
 
-  enum Anims {IDLE, INTRO, SWITCH, OUTRO}
+  enum Anims {IDLE, INTRO, SWITCH, OUTRO_LESS,OUTRO_MORE}
   const textureHandsUp = useMemo(() => loadTexture(handsUp), []);
   const texturePointLeft = useMemo(() => loadTexture(pointLeft), []);
   const textureLeftArr = useMemo(() => loadTexture(leftKey), []);
@@ -57,9 +57,10 @@ export const Explanation_1: React.FC<PageProps> = ({
   const midContRef = useRef<PixiContainer | null>(null);
   const leftContRef = useRef<PixiContainer | null>(null);
   const rightContRef = useRef<PixiContainer | null>(null);
-  const [decision, setDecision] = useState(0);
   const fill = "#054388";
   const stroke = "#009CDD";
+  const [decisionReady, setDecisionReady] = useState(false);
+  const [lessExplReady, setLessExplReady] = useState(false);
 
 
   const textsTemp = [
@@ -187,7 +188,7 @@ export const Explanation_1: React.FC<PageProps> = ({
     ]);
   };
 
-  const runFadeInAnim = async (sprite: PixiSprite) => {
+  const runFadeAnim = async (sprite: PixiSprite, fadeProps: FadeProps) => {
     const mgr = mgrRef.current!;
     const midC = midContRef.current;
     const midT = midTextRef.current;
@@ -197,16 +198,10 @@ export const Explanation_1: React.FC<PageProps> = ({
 
     const durationOut = 500;
 
-    const fadeIn = {
-      duration: durationOut,
-      startA: 0,
-      endA: 1,
-    } as FadeProps
-
     await mgr.parallel([
-      () => fadeAnimation(mgr, midT, fadeIn),
-      () => fadeAnimation(mgr, midC, fadeIn),
-      () => fadeAnimation(mgr, spriteC, fadeIn),
+      () => fadeAnimation(mgr, midT, fadeProps),
+      () => fadeAnimation(mgr, midC, fadeProps),
+      () => fadeAnimation(mgr, spriteC, fadeProps),
     ]);
   };
 
@@ -219,12 +214,20 @@ export const Explanation_1: React.FC<PageProps> = ({
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
         case "ArrowLeft":
-          if (showExpl){
-            leftOnClick()}
+          if (showExpl && decisionReady){
+            leftOnClick();
+            setDecisionReady(false);
+          }
           return;
         case "ArrowRight":
-          if (showExpl){
-            rightOnClick()}
+          if (showExpl && decisionReady){
+            rightOnClick();
+            setDecisionReady(false);
+          }
+          return;
+        case "Space":
+          if (lessExplReady){
+            setAnimation(3)}
           return;
       }
     }
@@ -235,7 +238,7 @@ export const Explanation_1: React.FC<PageProps> = ({
     return () => {
       window.removeEventListener("keydown", onSpecialPressed);
     };
-  }, [keyControl, animating, showExpl]);
+  }, [keyControl, animating, showExpl, decisionReady, lessExplReady]);
 
   //manage animations
   useEffect(() => {
@@ -245,32 +248,47 @@ export const Explanation_1: React.FC<PageProps> = ({
     let timeoutId: number | undefined;
     let cancelled = false;
 
+    const duration = 500;
+
+    const fadeIn = {duration: duration, startA: 0, endA: 1} as FadeProps
+
+    const fadeOut = {duration: duration, startA: 1, endA: 0} as FadeProps
+
     const run = async () => {
 
       const sprite = charRef.current;
       if (!sprite) return;
 
       switch (animation) {
-        case 1:
+        case Anims.INTRO:
 
           await runIntroAnim(sprite);
+          setDecisionReady(true);
           setAnimation(Anims.IDLE);
           break;
 
-        case 2:
+        case Anims.SWITCH:
           await runFadeOutAnim(sprite);
           secondSprite();
-          await runFadeInAnim(sprite);
+          await runFadeAnim(sprite, fadeIn);
           setAnimation(Anims.IDLE);
+          setLessExplReady(true);
           break;
 
-        case 3:
-          await runFadeOutAnim(sprite);
-          setShowExpl(false);
+        case Anims.OUTRO_LESS:
           setAnimating(true);
-          setShowSprite(false);
+          await runFadeOutAnim(sprite);
+          setAnimating(false);
           setKeyControl(Pages.MAIN);
-          setNextPage(decision == 0 ? 5 : 6);
+          setNextPage(5);
+          break;
+
+        case Anims.OUTRO_MORE:
+          setAnimating(true);
+          await runFadeAnim(sprite, fadeOut);
+          setAnimating(false);
+          setKeyControl(Pages.MAIN);
+          setNextPage(6);
           break;
       }
     };
@@ -402,18 +420,16 @@ export const Explanation_1: React.FC<PageProps> = ({
   }
 
   const leftOnClick = () => {
-    setDecision(0);
-    setAnimation(Anims.OUTRO);
+    setAnimation(Anims.OUTRO_LESS);
   }
 
   const rightOnClick = () => {
-      setAnimation(Anims.SWITCH);
+    setAnimation(Anims.SWITCH);
   }
 
   const firstSprite = () => {
     const sprite = charRef.current;
     if (!sprite) return;
-    console.log("firstSprite");
     sprite.texture = textureHandsUp;
   }
   const secondSprite = () => {

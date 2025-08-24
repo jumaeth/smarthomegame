@@ -1,6 +1,6 @@
 import React, {KeyboardEvent, PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Graphics, Sprite, Text} from "@pixi/react";
-import scoresImage from "@/assets/tutorial/scoresPage/scores.png";
+import tvImage from "@/assets/tutorial/explainTVPage/tv.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
@@ -15,8 +15,8 @@ import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
 import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growTween.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import {Simulate} from "react-dom/test-utils";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
+import {spotlightTween, SpotRect} from "@/pixi/components/Tutorial/anim/spotlightTween.ts";
 
 
 export const More_Expl: React.FC<PageProps> = ({
@@ -27,9 +27,9 @@ export const More_Expl: React.FC<PageProps> = ({
        setNextPage
            }: PropsWithChildren<PageProps>) => {
 
-  const texture = useMemo(() => loadTexture(scoresImage), []);
+  const texture = useMemo(() => loadTexture(tvImage), []);
   const charRef = useRef<PixiSprite | null >(null);
-  const [animation, setAnimation] = useState(1);
+  const [animation, setAnimation] = useState(0);
   const [showExpl, setShowExpl] = useState(false);
   const [pixiTexts, setPixiTexts] = useState([]);
   const conRef = useRef<PixiContainer|null>(null);
@@ -53,10 +53,10 @@ export const More_Expl: React.FC<PageProps> = ({
   useEffect(() => {
     if (onLoad) {
       drawTexts();
+      setAnimation(1);
       setOnLoad(false);
     }
   }, [onLoad]);
-
 
 
   //----------animations----------
@@ -86,9 +86,22 @@ export const More_Expl: React.FC<PageProps> = ({
     if (!sprite) return;
 
     const run = async () => {
+
       switch (animation) {
         case 1:
-          teleport();
+
+          const anim1 = {
+            startX:  windowWidth*0.2425, startY: windowHeight*0.0925,
+            endX: windowWidth * 0.25, endY: windowHeight * 0.3,
+            startS: 1, endS: 1.5, showOthers: false, duration: 750
+          } as GrowProps
+
+          setAnimating(true);
+          await runGrowAnimation(sprite, anim1);
+          setAnimating(false);
+          setAnimation(0);
+          break;
+        case 2:
           setKeyControl(Pages.MAIN);
           setNextPage(7);
       }
@@ -115,12 +128,12 @@ export const More_Expl: React.FC<PageProps> = ({
 
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
+        // case "Space":
+        //   teleport();
+        //   break;
         case "Space":
-          teleport();
-          break;
-        case "b":
-          setKeyControl(Pages.MAIN);
-          setNextPage(7);
+          setAnimation(0);
+          setAnimation(1);
           break;
       }
     }
@@ -174,19 +187,20 @@ export const More_Expl: React.FC<PageProps> = ({
     conRef.current = c;
   }
 
-  const drawSpotlight = () => {
+  const drawSpotlight = (rect: SpotRect) => {
     const g = backgroundRef.current;
-    if (!g) return;
+    //spotRectRef.current = rect;
+    if (!g || !rect) return;
 
     g.clear();
     g.alpha = 0.7;
     g.beginFill(0x000000);
     g.drawRect(0, 0, windowWidth, windowHeight);
     g.beginHole();
-    g.drawRoundedRect(windowWidth*0.1, windowHeight*0.05, windowWidth*0.1, windowWidth*0.1, 10);
+    g.drawRoundedRect(rect.x, rect.y, rect.width, rect.height, rect.r);
     g.endHole();
     g.endFill();
-  }
+  };
 
   const drawBackground = ()=> {
     const g = backgroundRef.current;
@@ -235,13 +249,18 @@ export const More_Expl: React.FC<PageProps> = ({
     )
   }
 
+  //        {showChar && texture && <Sprite
+  //           texture={texture}
+  //           ref={charRef}
+  //         />}
+
   return (
       <>
-        {background()}
         {showChar && texture && <Sprite
           texture={texture}
           ref={charRef}
         />}
+        {background()}
       </>
   )
 };

@@ -5,7 +5,7 @@ import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {PAGE_COMPONENTS, PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
-import {spotlightTween} from "@/pixi/components/Tutorial/anim/spotlightTween.ts";
+import {spotlightTween, SpotRect} from "@/pixi/components/Tutorial/anim/spotlightTween.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeTween.ts";
 import {GameService} from "@/services/GameService.ts";
 import {useTutorialEnabled} from "@/utils/tutorialEnabled.ts";
@@ -136,14 +136,28 @@ export const Tutorial: React.FC<TutorialProps> = ({
           return;
         }
         case 5: {
-          runClearBGAnim();
-          gameService.resumeGame();
+          const start = {
+            x: windowWidth*0.5,
+            y: windowHeight*0.5,
+            width: windowWidth * 0.065,
+            height: windowHeight * 0.19,
+            r: 10
+          }as SpotRect
+
+          const end = computeEndRect(4)!;
+
+          setShowSpotlight(true);
+          await runSpotlightAnim(drawSpotlight, start, end, 1000);
+          if (cancelled) return;
+          drawBackground();
+
           setKeyControl(Pages.MORE_EXPL);
           return;
         }
 
         case 6: {
           await runClearBGAnim();
+          gameService.resumeGame();
           setKeyControl(Pages.LESS_EXPL);
           return;
         }
@@ -170,7 +184,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
   useEffect(() => {
     characterPositionStore.teleport({x: 8*TILE_SIZE, y: 5*TILE_SIZE});
     gameService.pauseGame();
-  }, [gameService]);
+  }, []);
 
   //draw bg on load
   useEffect(() => {
@@ -350,6 +364,15 @@ export const Tutorial: React.FC<TutorialProps> = ({
           width: TILE_SIZE*8,
           height: TILE_SIZE*12,
           r: 10,
+        } as SpotRect;
+
+      case 4:
+        return {
+          x: windowWidth*0.165,
+          y: 0,
+          width: windowWidth * 0.155,
+          height: windowHeight * 0.21,
+          r: 10
         } as SpotRect;
     }
 
