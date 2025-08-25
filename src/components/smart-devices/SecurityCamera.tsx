@@ -16,10 +16,10 @@ export const SecurityCamera = ({onCompletion}: { onCompletion: onCompletionCallb
 
     const MultipleChoiceProps = {
         questions: [
-            t`Would you like to activate Internet access?`,
-            t`Do you want to activate the phone usage?`,
-            t`Would you like to transfer the image data for storage and processing?`,
-            t`Would you like to activate image recognition?`
+            t`internet connection`,
+            t`smartphone connection`,
+            t`cloud backup`,
+            t`AI image recognition`
         ],
         solutions: [
             true,
