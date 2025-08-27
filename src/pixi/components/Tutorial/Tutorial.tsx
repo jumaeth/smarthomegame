@@ -1,31 +1,31 @@
 import React, {PropsWithChildren, useEffect, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
-import {Container as PixiContainer, Graphics as PixiGraphics, Rectangle, Text, TextStyle} from "pixi.js";
+import {Container as PixiContainer, Graphics as PixiGraphics, Text, TextStyle} from "pixi.js";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {PAGE_COMPONENTS, PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
-import {spotlightTween, SpotRect} from "@/pixi/components/Tutorial/anim/spotlightTween.ts";
+import {spotlightTween} from "@/pixi/components/Tutorial/anim/spotlightTween.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeTween.ts";
 import {GameService} from "@/services/GameService.ts";
-import {useTutorialEnabled} from "@/utils/tutorialEnabled.ts";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
+import {movementStore} from "@/utils/movementEnabled.ts";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 
 interface TutorialProps {
   windowWidth: number;
   windowHeight: number;
-  characterPositon: { x: number, y: number };
-  tutorialEnabled: React.MutableRefObject<boolean>;
-  gameService: GameService;           // add this, since you use it
+  gameService: GameService;
   onClose: () => void;
+  interactiveElements:  InteractivePixiElement[];
 }
-
 
 export const Tutorial: React.FC<TutorialProps> = ({
        windowWidth,
        windowHeight,
        gameService,
-       onClose
+       onClose,
+        interactiveElements
            }: PropsWithChildren<TutorialProps>) => {
 
   type SpotRect = { x: number; y: number; width: number; height: number; r: number };
@@ -46,7 +46,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
   const backgroundRef = useRef<PixiGraphics | null>(null);
   const [keyControl, setKeyControl] = useState(Pages.MAIN)
 
-  const commonProps: PageProps = { windowWidth, windowHeight, keyControl, setKeyControl, setNextPage };
+  const commonProps: PageProps = { windowWidth, windowHeight, keyControl, setKeyControl, setNextPage, interactiveElements, gameService };
   const ActivePage = PAGE_COMPONENTS[keyControl]; // Component or null
 
   const mgrRef = useRef<AnimationManager | null>(null);
@@ -132,7 +132,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
         }
 
         case 4: {
-          setKeyControl(Pages.EXPLANATION1);
+          setKeyControl(Pages.DECISION);
           return;
         }
         case 5: {
@@ -162,7 +162,17 @@ export const Tutorial: React.FC<TutorialProps> = ({
           return;
         }
         case 7: {
-          console.log("7");
+          await runClearBGAnim();
+          gameService.resumeGame();
+          setKeyControl(Pages.More_Expl_SD);
+          return;
+        }
+        case 8: {
+          console.log("case 8");
+          return;
+        }
+
+        case 9: {
           onClose();
           return;
         }
@@ -179,6 +189,18 @@ export const Tutorial: React.FC<TutorialProps> = ({
 
 
   //----------init----------
+
+  const disableMovement = () => {
+    if (movementStore.getSnapshot().movementEnabled){
+      movementStore.disable();
+    }
+  }
+
+  const enableMovement = () => {
+    if (!movementStore.getSnapshot().movementEnabled){
+      movementStore.enable();
+    }
+  }
 
   //pause game at beginning of tutorial
   useEffect(() => {
@@ -245,6 +267,22 @@ export const Tutorial: React.FC<TutorialProps> = ({
         instrRef.current = null;
       };
     }
+  }, []);
+
+  useEffect(() => {
+    const devices = gameService.getDeviceForRoom("livingroom");
+    console.log(devices.map(e => e.name));
+    const tv = devices.find(d => d.name === "SmartTv");
+
+    if (!tv) return;
+
+    const unsubscribe = tv.subscribe(device => {
+      if (device.getIsCompleted()) {
+        setKeyControl(Pages.EXPL3)
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
 
@@ -387,6 +425,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
     )
   }
 
+
   //----------user input----------
 
   //resize window
@@ -426,26 +465,8 @@ export const Tutorial: React.FC<TutorialProps> = ({
       }
     }
 
-    const onLetterPressed = (e: KeyboardEvent) => {
-      if(e.key == "p"){
-        if(!gameService.isPaused()){
-          gameService.pauseGame();
-        }else{
-          gameService.resumeGame();
-        }
-      }
 
-      if (e.key == "c"){
-        switch (curFeature){
-          case 1:
-            drawBackground();
-            setKeyControl(Pages.CHARACTER);
-        }
-      }
-    }
-
-
-    const events = [onSpacePressed, onLetterPressed];
+    const events = [onSpacePressed];
 
 
     events.forEach(func => window.addEventListener("keydown", func));

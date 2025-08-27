@@ -32,7 +32,7 @@ interface MainContainerProps {
     isPaused?: boolean;
     children?: React.ReactNode;
     interactiveElements?: InteractivePixiElement[];
-  gameService: GameService;
+    gameService: GameService;
 }
 
 export const MainContainer = ({
@@ -136,8 +136,8 @@ export const MainContainer = ({
                       windowWidth={canvasSize.width}
                       windowHeight={canvasSize.height}
                       gameService={gameService}
-                      characterPositon={characterTile}
                       onClose={closeTutorial}
+                      interactiveElements={interactiveElements  as InteractivePixiElement[]}
               />}
             </Container>
           </>

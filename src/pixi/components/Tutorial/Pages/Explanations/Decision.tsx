@@ -28,7 +28,7 @@ import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeTwee
 import '@pixi/events';
 import type {} from '@pixi/events';
 
-export const Explanation_1: React.FC<PageProps> = ({
+export const Decision: React.FC<PageProps> = ({
        windowWidth,
        windowHeight,
        keyControl,
@@ -209,7 +209,7 @@ export const Explanation_1: React.FC<PageProps> = ({
 
   //keyControls
   useEffect(() => {
-    if(keyControl != Pages.EXPLANATION1 || animating)return;
+    if(keyControl != Pages.DECISION || animating)return;
 
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
@@ -227,7 +227,9 @@ export const Explanation_1: React.FC<PageProps> = ({
           return;
         case "Space":
           if (lessExplReady){
-            setAnimation(3)}
+            setAnimation(Anims.OUTRO_LESS);
+            setLessExplReady(false);
+          }
           return;
       }
     }
@@ -275,7 +277,7 @@ export const Explanation_1: React.FC<PageProps> = ({
           setLessExplReady(true);
           break;
 
-        case Anims.OUTRO_LESS:
+        case Anims.OUTRO_MORE:
           setAnimating(true);
           await runFadeOutAnim(sprite);
           setAnimating(false);
@@ -283,7 +285,7 @@ export const Explanation_1: React.FC<PageProps> = ({
           setNextPage(5);
           break;
 
-        case Anims.OUTRO_MORE:
+        case Anims.OUTRO_LESS:
           setAnimating(true);
           await runFadeAnim(sprite, fadeOut);
           setAnimating(false);
@@ -420,7 +422,7 @@ export const Explanation_1: React.FC<PageProps> = ({
   }
 
   const leftOnClick = () => {
-    setAnimation(Anims.OUTRO_LESS);
+    setAnimation(Anims.OUTRO_MORE);
   }
 
   const rightOnClick = () => {

@@ -20,7 +20,7 @@ import {characterPositionStore} from "@/utils/characterPosition.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeTween.ts";
 
 
-export const More_Expl: React.FC<PageProps> = ({
+export const Score_Changes: React.FC<PageProps> = ({
        windowWidth,
        windowHeight,
        keyControl,

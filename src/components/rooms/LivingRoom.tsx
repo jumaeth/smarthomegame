@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {useGameService} from "@/hooks/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {RoomName} from "@/objects/Room.ts";
@@ -13,6 +13,7 @@ import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
+import {usePauseState} from "@/hooks/usePauseState.ts";
 
 export const LivingRoom = () => {
   const roomName: RoomName = "livingroom"
@@ -23,21 +24,23 @@ export const LivingRoom = () => {
 
   const [activeDevice, setActiveDevice] = useState<string | null>(null);
   const [tutorialEnabled, setTutorialEnabled] = useState(true);
-
+  const paused = usePauseState();
 
   const smartDeviceCallback = (isCompleted:boolean):void => {
     if (!activeDevice) return;
     const device = smartDevices.find((d) => d.name === activeDevice);
     if (!device) return;
     if (isCompleted) device.complete();
-    setIsPaused(false);
+    gameService.resumeGame();
+    //setIsPaused(false);
     setActiveDevice(null);
     checkForRoomCompletion();
   }
 
   const handleDeviceOpen = (deviceName: string):void => {
     setActiveDevice(deviceName);
-    setIsPaused(true);
+    gameService.pauseGame();
+    //setIsPaused(true);
   };
 
   const checkForRoomCompletion = () => {
@@ -48,8 +51,10 @@ export const LivingRoom = () => {
   };
 
   function onModalClose() {
+    if (gameService.isPaused())return;
     setActiveDevice(null);
-    setIsPaused(false);
+    gameService.resumeGame();
+    //setIsPaused(false);
   }
 
   const interactiveElements = [
@@ -76,7 +81,7 @@ export const LivingRoom = () => {
     return () => {
       window.removeEventListener("resize", updateCanvasSize);
     }
-  }, [updateCanvasSize, collisionMap])
+  }, [updateCanvasSize, collisionMap]);
 
   const deviceComponents: Record<string, JSX.Element> = {
     SmartTv: <SmartTv onCompletion={(completed) => smartDeviceCallback(completed)} />,
@@ -90,6 +95,8 @@ export const LivingRoom = () => {
                       isOpen={!!activeDevice}
                       content={activeDevice ? deviceComponents[activeDevice] : null}
                       onClose={onModalClose}
+                      showBg={!(tutorialEnabled && paused)}
+
               />
             </div>
             <Stage width={canvasSize.width} height={canvasSize.height}>
@@ -99,7 +106,7 @@ export const LivingRoom = () => {
                       collisionMap={collisionMap}
                       onMapChange={handleMapChange}
                       interactiveElements={interactiveElements}
-                      isPaused={isPaused}
+                      isPaused={paused}
                       gameService={gameService}
                       tutorialEnabled={tutorialEnabled}
                       finishTutorial={() => setTutorialEnabled(false)}

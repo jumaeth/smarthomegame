@@ -9,6 +9,8 @@ import {useCharacterAnimation} from "@/hooks/character/useCharacterAnimation";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
 import {useMovementStore} from "@/utils/movementEnabled.ts";
+import {usePauseState} from "@/hooks/usePauseState.ts";
+import {GameService} from "@/services/GameService.ts";
 
 interface CharacterProps {
     texture: Texture;
@@ -24,7 +26,7 @@ export const Character = ({texture, onMove, collisionMap, spawnPosition, isPause
     const targetPosition = useRef<Position | null>(null);
     const currentDirection = useRef<Direction | null>(null);
 
-    const {getControlsDirection} = useCharacterControls()
+    const {direction} = useCharacterControls();
 
     const isMoving = useRef(false);
     const {sprite, updateSprite} = useCharacterAnimation({
@@ -101,7 +103,6 @@ export const Character = ({texture, onMove, collisionMap, spawnPosition, isPause
         const pauseRequested = isPaused || !movementEnabled;
 
         if(!pauseRequested){
-          const direction = getControlsDirection();
           if (direction && direction == 'INTERACT') {
             checkForInteraction()
           } else if (direction) {

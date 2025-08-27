@@ -3,12 +3,15 @@ import {Room, RoomName} from "../objects/Room";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore.ts";
 import {CookieService} from "@/services/CookieService.ts";
-import {movementStore, useMovementStore} from "@/utils/movementEnabled.ts";
+import {movementStore} from "@/utils/movementEnabled.ts";
+
+type PauseListener = (paused: boolean) => void;
 
 export class GameService {
   private game: Game;
   private navigate: (path: string) => void;
-  private paused: boolean;
+  private paused: boolean = false;
+  private pauseListeners = new Set<PauseListener>();
 
   constructor(navigate: (path: string) => void) {
     const saveGame = CookieService.get<Game>('save_game');
@@ -81,23 +84,20 @@ export class GameService {
   }
 
   pauseGame(): void {
-
     this.paused = true;
-
-    //disable movement
     if (movementStore.getSnapshot().movementEnabled){
       movementStore.disable();
     }
+    this.emitPause();
+
   }
 
   resumeGame(): void {
-
     this.paused = false;
-
-    //enable movement
     if (!movementStore.getSnapshot().movementEnabled){
       movementStore.enable();
     }
+    this.emitPause();
   }
 
   toogleRoomIsLocked(roomName: RoomName): void {
@@ -123,6 +123,20 @@ export class GameService {
 
   isPaused(): boolean {
     return this.paused;
+  }
+
+  subscribePause(listener: PauseListener): () => void {
+    this.pauseListeners.add(listener);
+    listener(this.paused);
+
+    return () => {
+      this.pauseListeners.delete(listener);
+    };
+
+  }
+
+  private emitPause() {
+    for (const l of this.pauseListeners) l(this.paused);
   }
 
   getScore():GameScore {
