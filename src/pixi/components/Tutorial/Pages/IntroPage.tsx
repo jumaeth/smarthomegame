@@ -1,0 +1,140 @@
+import React, {PropsWithChildren, useEffect, useRef, useState} from "react";
+import {Container as PixiContainer, Graphics as PixiGraphics, Text, TextStyle} from "pixi.js";
+import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
+import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
+import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {Container, Graphics} from "@pixi/react";
+import {drawBackground} from "@/pixi/components/Tutorial/util/drawings.tsx";
+import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+
+
+export const IntroPage: React.FC<PageProps> = ({
+        windowWidth,
+        windowHeight,
+        keyControl,
+        setKeyControl,
+        setNextPage
+           }: PropsWithChildren<PageProps>) => {
+
+  //states
+  const [showInstruction, setShowInstruction] = useState(true);
+  const [instrBlinking, setInstrBlinking] = useState(true);
+
+  //refs
+  const pressedRef = useRef<boolean>(false);
+  const rootRef = useRef<PixiContainer | null>(null);
+  const explRef = useRef<Text | null>(null);
+  const instrRef = useRef<Text | null>(null);
+  const backgroundRef = useRef<PixiGraphics | null>(null);
+
+  //hooks
+  const mgrRef = useAnimationManager();
+
+  //init explanation
+  useEffect(() => {
+    if (!rootRef.current || explRef.current) return;
+
+    if (rootRef.current instanceof PixiContainer) {
+      const t = new Text("Welcome to the tutorial", new TextStyle({
+        fontFamily: "LoResRegular",
+        fontSize: Math.min(windowWidth, windowHeight) * 0.06,
+        fill: "#ffffff"
+      }));
+      t.anchor.set(0.5);
+      t.alpha = 1;
+      t.x = windowWidth / 2;
+      t.y = windowHeight / 3;
+
+      rootRef.current.addChild(t);
+      explRef.current = t;
+
+
+      return () => {
+        if (t.parent && t.parent instanceof PixiContainer) t.parent.removeChild(t);
+        if (!rootRef.current?.destroyed && !t.destroyed) t.destroy();
+        explRef.current = null;
+      };
+    }
+  }, []);
+
+  //init instruction
+  useEffect(() => {
+    if (!rootRef.current || instrRef.current) return;
+
+    if (rootRef.current instanceof PixiContainer) {
+      const t = new Text("Press space to advance", new TextStyle({
+        fontFamily: "LoResRegular",
+        fontSize: Math.min(windowWidth, windowHeight) * 0.0475,
+        fill: "#ffffff"
+      }));
+      t.anchor.set(0.5);
+      t.alpha = 1;
+      t.x = windowWidth / 2;
+      t.y = windowHeight / 3 + windowHeight * 0.075;
+
+      rootRef.current.addChild(t);
+      instrRef.current = t;
+
+
+      return () => {
+        if (t.parent && t.parent instanceof PixiContainer) t.parent.removeChild(t);
+        if (!rootRef.current?.destroyed && !t.destroyed) t.destroy();
+        instrRef.current = null;
+      };
+    }
+  }, []);
+
+  //animate texts
+  useEffect(() => {
+    const mgr = mgrRef.current;
+    const txt = instrRef.current;
+    if (!mgr || !txt || !instrBlinking || !showInstruction)return;
+
+    const speed = 2000;
+
+    const { promise } = mgr.runUntil(
+            () => {
+              return [
+                () => ({
+
+                  promise: mgr.sequence([
+                    () => fadeAnimation(mgr, txt, {duration: speed, startA: 0.8, endA: 0}),
+                    () => fadeAnimation(mgr, txt, {duration: speed, startA: 0, endA: 0.8})
+                  ])
+                }),
+              ];
+            },
+            { mode: "sequence", until: () => pressedRef.current, delayMs: 100 }
+    );
+  }, [instrBlinking, showInstruction]);
+
+  //key controls
+  useEffect(() => {
+    if(keyControl != Pages.INTRO)return;
+    const onSpacePressed = (e: KeyboardEvent) => {
+      if(e.code == "Space"){
+        setInstrBlinking(false);
+        setShowInstruction(false);
+        pressedRef.current = true;
+        setNextPage(PageOrder.CHARACTER);
+        setKeyControl(Pages.MAIN);
+      }
+    }
+
+
+    const events = [onSpacePressed];
+
+
+    events.forEach(func => window.addEventListener("keydown", func));
+    return () => {
+      events.forEach(func => window.removeEventListener("keydown", func));
+    };
+  }, [keyControl, windowWidth, windowHeight]);
+
+  return (
+      <>
+        <Container ref={rootRef}/>
+      </>
+  )
+};

@@ -1,20 +1,28 @@
-import React, {KeyboardEvent, PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {
+  KeyboardEvent,
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 import {Container, Graphics, Sprite, Text} from "@pixi/react";
 import scoresImage from "@/assets/tutorial/scoresPage/scores.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
-import {
-  Container as PixiContainer,
-  Graphics as PixiGraphics,
-  Sprite as PixiSprite,
-  Text as PixiText,
-  TextStyle,
-  TextStyleFontWeight
-} from "pixi.js";
+import {Container as PixiContainer, Graphics as PixiGraphics, Sprite as PixiSprite, TextStyle} from "pixi.js";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
-import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growTween.ts";
+import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
+import {TextProps} from "@/pixi/components/Tutorial/util/Types.ts";
+import {GROW_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
+import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
+import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
+import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 
 
 export const ScoresPage: React.FC<PageProps> = ({
@@ -25,19 +33,27 @@ export const ScoresPage: React.FC<PageProps> = ({
        setNextPage
            }: PropsWithChildren<PageProps>) => {
 
+  const enum Animations { GROW, SHRINK, END}
+
+  //memo
   const texture = useMemo(() => loadTexture(scoresImage), []);
-  const charRef = useRef<PixiSprite | null >(null);
-  const [animation, setAnimation] = useState(1);
-  const [showExpl, setShowExpl] = useState(false);
-  const [pixiTexts, setPixiTexts] = useState([]);
-  const conRef = useRef<PixiContainer|null>(null);
+
+  //state
+  const [allTexts, setAllTexts] = useState<TextProps[]>([]);
   const [onLoad, setOnLoad] = useState(true);
   const [animating, setAnimating] = useState(false);
   const [showChar, setShowChar] = useState(true);
-  const mgrRef = useRef<AnimationManager | null>(null);
+  const [animation, setAnimation] = useState(Animations.GROW);
+
+  //refs
+  const graphicRef = useRef<PixiContainer|null>(null);
+  const mgrRef = useAnimationManager();
+  const textRef = useRef<PixiContainer|null>(null);
+  const charRef = useRef<PixiSprite | null >(null);
 
 
-  const textsTemp = [
+  //others
+  const textArr = [
           "Your privacy score", "It indicates the safety of your data. Evil attackers always try to steal your data and" +
           " use it to attack you and your personal space. A high privacy score makes it harder for them!",
           "Your comfort score", "A smarthome does a great deal to make your life more comfortable. It can automate" +
@@ -45,75 +61,66 @@ export const ScoresPage: React.FC<PageProps> = ({
           "The scores"
   ]
 
-  //----------init----------
-
   //init graphics/texts
   useEffect(() => {
     if (onLoad) {
-      drawTexts();
+      setupTexts();
       setOnLoad(false);
     }
   }, [onLoad]);
 
-
-
-  //----------animations----------
-
-  //cleanup animations
-  useEffect(() => {
-    mgrRef.current = new AnimationManager();
-    return () => mgrRef.current?.cancelAll();
+  //hide explanations  on init
+  useLayoutEffect(() => {
+    toggleExplanations([textRef.current, graphicRef.current], false);
   }, []);
-
-  //run grow/shrink animation
-  const runGrowAnimation = async (sprite: PixiSprite, growProps: GrowProps) => {
-    const mgr = mgrRef.current!;
-
-    await mgr.sequence([
-      () => growAnimation(mgr, sprite, growProps),
-    ]);
-  };
 
   //manage animations
   useEffect(() => {
-    if (!mgrRef.current) return;
-
     let timeoutId: number | undefined;
     let cancelled = false;
+
+    const mgr = mgrRef.current!;
     const sprite = charRef.current;
-    if (!sprite) return;
+    const texts = textRef.current;
+    const graphics = graphicRef.current;
+    if (!sprite || !mgr || !texts ||  !graphics) return;
 
     const run = async () => {
       switch (animation) {
-        case 1:
-          const anim1 = {
+
+        case Animations.GROW:
+          const growChar = {
             startX: 0.9275 * windowWidth, startY: windowHeight * 0.063,
-            endX: windowHeight, endY: windowHeight * 0.3,
-            startS: 0.275, endS: 1, showOthers: true, duration: 750
+            endX: windowWidth  * 0.55, endY: windowHeight * 0.3,
+            startS: 0.275, endS: 1, showOthers: true, duration: GROW_DURATION
           } as GrowProps
 
           setAnimating(true);
-          await runGrowAnimation(sprite, anim1);
+          await mgr.sequence([() => growAnimation(mgr, sprite, growChar)]);
+          toggleExplanations([texts, graphics], true);
+          await mgr.parallel([() => fadeAnimation(mgr, [texts, graphics], FADE_IN)]);
           setAnimating(false);
-          setAnimation(0);
-          setShowExpl(true);
           break;
-        case 2:
-          const anim2 = {
-            startX: windowHeight, startY: windowHeight * 0.3,
+
+        case Animations.SHRINK:
+          const shrinkChar = {
+            startX: windowWidth * 0.55, startY: windowHeight * 0.3,
             endX: 0.9275 * windowWidth, endY: windowHeight * 0.063,
-            startS: 1, endS: 0.275, showOthers: false, duration: 750
+            startS: 1, endS: 0.275, showOthers: false, duration: GROW_DURATION
           } as GrowProps
 
-          setShowExpl(false);
           setAnimating(true);
-          await runGrowAnimation(sprite, anim2);
+          await mgr.parallel([
+            () => fadeAnimation(mgr, [texts, graphics], FADE_OUT),
+            () => growAnimation(mgr, sprite, shrinkChar)]);
           setAnimating(false);
-          setAnimation(3);
+          toggleExplanations([texts, graphics], false);
+          setAnimation(Animations.END);
           break;
-        case 3:
+
+        case Animations.END:
           setKeyControl(Pages.MAIN);
-          setNextPage(3);
+          setNextPage(PageOrder.PHONE);
           setAnimating(true);
           setShowChar(false);
           break;
@@ -129,8 +136,6 @@ export const ScoresPage: React.FC<PageProps> = ({
   }, [animation]);
 
 
-  //----------user input----------
-
   //keyControls
   useEffect(() => {
     if(keyControl != Pages.SCORES || animating)return;
@@ -138,7 +143,7 @@ export const ScoresPage: React.FC<PageProps> = ({
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
         case "Space":
-          setAnimation(2);
+          setAnimation(Animations.SHRINK);
       }
     }
 
@@ -151,47 +156,18 @@ export const ScoresPage: React.FC<PageProps> = ({
   }, [keyControl, animating]);
 
 
+  //setup graphics
+  const setupTexts = () => {
+    setAllTexts(prev => [
+      ...prev,
+      { text: textArr[0], x: windowWidth*0.2,   y: windowHeight*0.6,  fontSize: 0.04, fontWeight: "bold"   },
+      { text: textArr[2], x: windowWidth*0.67, y: windowHeight*0.625,  fontSize: 0.04, fontWeight: "bold"   },
+      { text: textArr[1], x: windowWidth*0.2525,   y: windowHeight*0.71,  fontSize: 0.03, fontWeight: "lighter"},
+      { text: textArr[3], x: windowWidth*0.7425, y: windowHeight*0.73,  fontSize: 0.03, fontWeight: "lighter", wrap: 0.36},
+      { text: textArr[4], x: windowWidth*0.55+TILE_SIZE*3, y: windowHeight*0.1, fontSize: 0.07, fontWeight: "bold" },
+    ]);
+  };
 
-  //----------drawings----------
-
-  //store line properties in pixiGraphic
-  const setupTexts = (text: string, x: number, y: number, fontSize: number, fontWeight: TextStyleFontWeight, wrap: number) => {
-    const t1 = new PixiText();
-    t1.text = text;
-    t1.x = x;
-    t1.y = y;
-    t1.style = new TextStyle({
-      fontSize: Math.min(windowWidth, windowHeight) * fontSize,
-      fontWeight: fontWeight,
-      wordWrapWidth: windowWidth * wrap
-    })
-
-    setPixiTexts(prev => [...prev, t1]);
-
-  }
-
-  //define text properties
-  const drawTexts = () => {
-
-    const c = new PixiContainer();
-
-    setupTexts(textsTemp[0], windowWidth*0.2, windowHeight*0.6, 0.04, "bold", 0.3);
-    setupTexts(textsTemp[2], windowWidth*0.67, windowHeight*0.625, 0.04, "bold", 0.3);
-
-    setupTexts(textsTemp[1], windowWidth*0.2525, windowHeight*0.71, 0.03, "lighter", 0.3);
-    setupTexts(textsTemp[3], windowWidth*0.7425, windowHeight*0.73, 0.03, "lighter", 0.36);
-
-    setupTexts(textsTemp[4], windowWidth*0.55+TILE_SIZE*3, windowHeight*0.1, 0.07, "bold", 0.3);
-
-    pixiTexts.forEach(t => c.addChild(t));
-    c.width = windowWidth;
-    c.height = windowHeight;
-    c.x = 0;
-    c.y = 0;
-    conRef.current = c;
-  }
-
-  //define line properties
   const drawLines =  useCallback( (g: PixiGraphics) => {
     g.clear();
 
@@ -207,30 +183,32 @@ export const ScoresPage: React.FC<PageProps> = ({
 
   }, [])
 
-  //stranslate lines to react
   const lines = () => {
-    return (<Graphics draw={drawLines}/>)
+    return (
+            <Container ref={graphicRef}>
+              <Graphics draw={drawLines}/>
+            </Container>
+    )
   }
 
-  //translate texts to react
   const texts = () => {
     return (
-            <Container>
-              {pixiTexts.map((msg, i) => (
+            <Container ref={textRef}>
+              {allTexts.map((text, i) => (
                       <Text
                               key={i}
-                              text={msg.text}
-                              x={msg.x}
-                              y={msg.y}
+                              text={text.text}
+                              x={text.x}
+                              y={text.y}
                               anchor={0.5}
                               style={new TextStyle({
                                 fontFamily: "LoResRegular",
-                                fontSize: msg.style.fontSize,
-                                fontWeight: msg.style.fontWeight,
+                                fontSize: Math.min(windowWidth, windowHeight) * text.fontSize,
+                                fontWeight: text.fontWeight,
                                 fill: "#FFFFFF",
                                 align: "left",
                                 wordWrap: true,
-                                wordWrapWidth: msg.style.wordWrapWidth
+                                wordWrapWidth: text.wrap ? windowWidth * text.wrap : windowWidth * 0.3
                               })
                               }
                       />
@@ -245,8 +223,8 @@ export const ScoresPage: React.FC<PageProps> = ({
           texture={texture}
           ref={charRef}
         />}
-        {showExpl && lines()}
-        {showExpl && texts()}
+        {lines()}
+        {texts()}
       </>
   )
 };

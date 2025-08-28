@@ -1,11 +1,14 @@
 // anim/spotlightTweens.ts
 import { AnimationManager, easeInOutQuad } from "./AnimationManager";
+import {drawSpotlight} from "@/pixi/components/Tutorial/util/drawings.tsx";
 
 export type SpotRect = { x: number; y: number; width: number; height: number; r: number };
 
-export function spotlightTween(
+export function spotlightAnimation(
         mgr: AnimationManager,
-        drawHole: (rect: SpotRect) => void,
+        bgRef,
+        windowWith: number,
+        windowHeight: number,
         from: SpotRect,
         to: SpotRect,
         duration: number,
@@ -17,13 +20,13 @@ export function spotlightTween(
     duration,
     ease,
     onUpdate: (p) => {
-      drawHole({
+      drawSpotlight({
         x: lerp(from.x, to.x, p),
         y: lerp(from.y, to.y, p),
         width: lerp(from.width, to.width, p),
         height: lerp(from.height, to.height, p),
         r: lerp(from.r, to.r, p),
-      });
+      }, bgRef, windowWith, windowHeight);
     },
   });
 }

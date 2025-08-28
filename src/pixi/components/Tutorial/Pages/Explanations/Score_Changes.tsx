@@ -13,10 +13,11 @@ import {
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
-import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growTween.ts";
+import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
-import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeTween.ts";
+import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 
 
 export const Score_Changes: React.FC<PageProps> = ({
@@ -33,7 +34,7 @@ export const Score_Changes: React.FC<PageProps> = ({
   const [pixiTexts, setPixiTexts] = useState([]);
   const [onLoad, setOnLoad] = useState(true);
   const [animating, setAnimating] = useState(false);
-  const mgrRef = useRef<AnimationManager | null>(null);
+  const mgrRef = useAnimationManager();
   const fill = "#054388";
   const stroke = "#009CDD";
   const graphicRef = useRef<PixiContainer | null>(null);
@@ -52,6 +53,7 @@ export const Score_Changes: React.FC<PageProps> = ({
   //init graphics/texts
   useEffect(() => {
     if (onLoad) {
+      console.log("loaded")
       //setAnimation(1);
       setOnLoad(false);
     }
@@ -64,15 +66,6 @@ export const Score_Changes: React.FC<PageProps> = ({
     setupRobot();
     setAnimation(1);
   }, [textRef]);
-
-
-  //----------animations----------
-
-  //cleanup animations
-  useEffect(() => {
-    mgrRef.current = new AnimationManager();
-    return () => mgrRef.current?.cancelAll();
-  }, []);
 
   //run grow/shrink animation
   const runIntroAnim = async (robot: PixiSprite, growProps: GrowProps, fadeIn: FadeProps) => {

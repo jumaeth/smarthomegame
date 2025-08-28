@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {Trans} from "@lingui/react/macro";
-import {useGameService} from "@/hooks/useGameService.tsx";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 
 type MultipleChoiceProps = {
   questions: string[];

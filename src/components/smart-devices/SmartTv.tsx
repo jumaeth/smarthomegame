@@ -1,5 +1,5 @@
 import "./Modal.css";
-import {useGameService} from "@/hooks/useGameService.tsx";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
 import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";

@@ -1,4 +1,13 @@
-import React, {KeyboardEvent, PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {
+  KeyboardEvent,
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 import {Container, Graphics, Sprite, Text} from "@pixi/react";
 import phoneImage from "@/assets/tutorial/phonePage/phone.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
@@ -12,8 +21,14 @@ import {
 } from "pixi.js";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
-import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growTween.ts";
+import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
+import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
+import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
+import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 
 
 
@@ -25,19 +40,26 @@ export const PhonePage: React.FC<PageProps> = ({
        setNextPage
            }: PropsWithChildren<PageProps>) => {
 
+  const enum Animations { GROW, SHRINK, END}
+
+  //memo
   const texture = useMemo(() => loadTexture(phoneImage), []);
-  const charRef = useRef<PixiSprite | null >(null);
-  const [animation, setAnimation] = useState(1);
-  const [showExpl, setShowExpl] = useState(false);
-  const [pixiTexts, setPixiTexts] = useState([]);
-  const conRef = useRef<PixiContainer|null>(null);
+
+  //state
+  const [animation, setAnimation] = useState(Animations.GROW);
+  const [allTexts, setAllTexts] = useState([]);
   const [onLoad, setOnLoad] = useState(true);
   const [animating, setAnimating] = useState(false);
   const [showChar, setShowChar] = useState(true);
-  const mgrRef = useRef<AnimationManager | null>(null);
+
+  //refs
+  const charRef = useRef<PixiSprite | null >(null);
+  const textRef = useRef<PixiContainer|null>(null);
+  const mgrRef = useAnimationManager();
+  const graphicRef = useRef<PixiContainer|null>(null);
 
 
-  const textsTemp = [
+  const textArr = [
           "The help app", "Want to see this tutorial again or find out how to control the game? - Use the help app!",
           "The progress app", "Use this app to check on the smart devices and your overall progress within the game",
           "The settings", "Use this app to change the settings, including language, sound or touch controls",
@@ -46,97 +68,67 @@ export const PhonePage: React.FC<PageProps> = ({
 
 ]
 
-  //----------init----------
-
   //init graphics/texts
   useEffect(() => {
     if (onLoad) {
-      drawTexts();
+      setupTexts();
       setOnLoad(false);
     }
   }, [onLoad]);
 
-
-
-  //----------animations----------
-
-  //cleanup animations
-  useEffect(() => {
-    mgrRef.current = new AnimationManager();
-    return () => mgrRef.current?.cancelAll();
+  //hide explanations  on init
+  useLayoutEffect(() => {
+    toggleExplanations([textRef.current, graphicRef.current], false);
   }, []);
-
-  //run grow/shrink animation
-  const runGrowAnimation = async (sprite: PixiSprite, growProps: GrowProps) => {
-    const mgr = mgrRef.current!;
-
-    await mgr.sequence([
-      () => growAnimation(mgr, sprite, growProps),
-    ]);
-  };
-
-
-  //----------user input----------
-
-  //keyControls
-  useEffect(() => {
-    if(keyControl != Pages.SMARTPHONE || animating)return;
-
-    const onSpecialPressed = (e: KeyboardEvent) => {
-      switch (e.code) {
-        case "Space":
-          setAnimation(2);
-      }
-    }
-
-    const events = [onSpecialPressed];
-
-    events.forEach(func => window.addEventListener("keydown", func));
-    return () => {
-      events.forEach(func => window.removeEventListener("keydown", func));
-    };
-  }, [keyControl, animating]);
 
   //manage animations
   useEffect(() => {
-    if (!mgrRef.current) return;
 
     let timeoutId: number | undefined;
     let cancelled = false;
+
+    const mgr = mgrRef.current!;
     const sprite = charRef.current;
-    if (!sprite) return;
+    const texts = textRef.current;
+    const graphics = graphicRef.current;
+    if (!sprite || !mgr || !texts ||  !graphics) return;
 
     const run = async () => {
       switch (animation) {
-        case 1:
-          const anim1 = {
+
+        case Animations.GROW:
+          const growChar = {
             startX: 0.04 * windowWidth, startY: windowHeight * 0.1,
             endX: windowWidth * 0.5, endY: windowHeight * 0.5,
             startS: 0.25, endS: 1, showOthers: true, duration: 750
           } as GrowProps
 
           setAnimating(true);
-          await runGrowAnimation(sprite, anim1);
+          await mgr.sequence([() => growAnimation(mgr, sprite, growChar)]);
+          toggleExplanations([texts, graphics], true);
+          await mgr.parallel([() => fadeAnimation(mgr, [texts, graphics], FADE_IN)]);
           setAnimating(false);
-          setAnimation(0);
-          setShowExpl(true);
           break;
-        case 2:
-          const anim2 = {
+
+        case Animations.SHRINK:
+          const shrinkChar = {
             startX: windowWidth * 0.5, startY: windowHeight * 0.5,
             endX: 0.04 * windowWidth, endY: windowHeight * 0.1,
             startS: 1, endS: 0.275, showOthers: false, duration: 750
           } as GrowProps
 
-          setShowExpl(false);
           setAnimating(true);
-          await runGrowAnimation(sprite, anim2);
+          await mgr.parallel([
+            () => fadeAnimation(mgr, [texts, graphics], FADE_OUT),
+            () => growAnimation(mgr, sprite, shrinkChar)]);
           setAnimating(false);
-          setAnimation(3);
+          toggleExplanations([texts, graphics], false);
+          setAnimation(Animations.END);
           break;
-        case 3:
+
+        case Animations.END:
           setKeyControl(Pages.MAIN);
-          setNextPage(4);
+          setNextPage(PageOrder.DECISION);
           setAnimating(true);
           setShowChar(false);
           break;
@@ -153,48 +145,42 @@ export const PhonePage: React.FC<PageProps> = ({
 
 
 
-  //----------drawings----------
+  //keyControls
+  useEffect(() => {
+    if(keyControl != Pages.SMARTPHONE || animating)return;
 
-  //store line properties in pixiGraphic
-  const setupTexts = (text: string, x: number, y: number, fontSize: number, fontWeight: TextStyleFontWeight, wrap: number) => {
-    const t1 = new PixiText();
-    t1.text = text;
-    t1.x = x;
-    t1.y = y;
-    t1.style = new TextStyle({
-      fontSize: Math.min(windowWidth, windowHeight) * fontSize,
-      fontWeight: fontWeight,
-      wordWrapWidth: windowWidth * wrap
-    })
+    const onSpecialPressed = (e: KeyboardEvent) => {
+      switch (e.code) {
+        case "Space":
+          setAnimation(Animations.SHRINK);
+      }
+    }
 
-    setPixiTexts(prev => [...prev, t1]);
+    const events = [onSpecialPressed];
 
-  }
+    events.forEach(func => window.addEventListener("keydown", func));
+    return () => {
+      events.forEach(func => window.removeEventListener("keydown", func));
+    };
+  }, [keyControl, animating]);
 
-  //define text properties
-  const drawTexts = () => {
+  //setup graphics
+  const setupTexts = () => {
+    setAllTexts(prev => [
+      ...prev,
+      { text: textArr[0], x: windowWidth*0.12,   y: windowHeight*0.2,  fontSize: 0.035, fontWeight: "bold"   },
+      { text: textArr[2], x: windowWidth*0.14, y: windowHeight*0.7,  fontSize: 0.035, fontWeight: "bold"   },
+      { text: textArr[4], x: windowWidth*0.725, y: windowHeight*0.3,  fontSize: 0.035, fontWeight: "bold"   },
+      { text: textArr[6], x: windowWidth*0.75, y: windowHeight*0.75,  fontSize: 0.035, fontWeight: "bold"   },
 
-    const c = new PixiContainer();
+      { text: textArr[1], x: windowWidth*0.188,   y: windowHeight*0.265,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.25},
+      { text: textArr[3], x: windowWidth*0.2, y: windowHeight*0.755,  fontSize: 0.025, fontWeight: "lighter"},
+      { text: textArr[5], x: windowWidth*0.785,   y: windowHeight*0.365,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.28},
+      { text: textArr[7], x: windowWidth*0.8125, y: windowHeight*0.815,  fontSize: 0.025, fontWeight: "lighter"},
 
-    setupTexts(textsTemp[0], windowWidth*0.12, windowHeight*0.2, 0.035, "bold", 0.3);
-    setupTexts(textsTemp[2], windowWidth*0.14, windowHeight*0.7, 0.035, "bold", 0.3);
-    setupTexts(textsTemp[4], windowWidth*0.725, windowHeight*0.3, 0.035, "bold", 0.3);
-    setupTexts(textsTemp[6], windowWidth*0.75, windowHeight*0.75, 0.035, "bold", 0.3);
-
-    setupTexts(textsTemp[1], windowWidth*0.188, windowHeight*0.265, 0.025, "lighter", 0.25);
-    setupTexts(textsTemp[3], windowWidth*0.2, windowHeight*0.755, 0.025, "lighter", 0.3);
-    setupTexts(textsTemp[5], windowWidth*0.785, windowHeight*0.365, 0.025, "lighter", 0.28);
-    setupTexts(textsTemp[7], windowWidth*0.8125, windowHeight*0.815, 0.025, "lighter", 0.3);
-
-    setupTexts(textsTemp[8], windowWidth*0.5, windowHeight*0.125, 0.06, "bold", 0.3);
-
-    pixiTexts.forEach(t => c.addChild(t));
-    c.width = windowWidth;
-    c.height = windowHeight;
-    c.x = 0;
-    c.y = 0;
-    conRef.current = c;
-  }
+      { text: textArr[8], x: windowWidth*0.5, y: windowHeight*0.125, fontSize: 0.06, fontWeight: "bold" },
+    ]);
+  };
 
   //define line properties
   const drawLines =  useCallback( (g: PixiGraphics) => {
@@ -203,49 +189,53 @@ export const PhonePage: React.FC<PageProps> = ({
     //top left
     g.lineStyle(5, "#135690", 1);
     g.moveTo(windowWidth*0.4475, windowHeight*0.395);
-    g.bezierCurveTo(windowWidth*0.4, windowHeight*0.4, windowWidth*0.275, windowHeight*0.3, windowWidth*0.275, windowHeight*0.3);
+    g.lineTo(windowWidth*0.275, windowHeight*0.3);
 
     //bottom left
-    g.lineStyle(6, "#1C557D", 1);//#1C557D
+    g.lineStyle(6, "#1C557D", 1);
     g.moveTo(windowWidth*0.45, windowHeight*0.46);
-    g.bezierCurveTo(windowWidth*0.35, windowHeight*0.5, windowWidth*0.25, windowHeight*0.6, windowWidth*0.225, windowHeight*0.675);
+    g.lineTo(windowWidth*0.225, windowHeight*0.675);
 
     //bottom right
-    g.lineStyle(6, "#7CB3D3", 1);//#1C557D
+    g.lineStyle(6, "#7CB3D3", 1);
     g.moveTo(windowWidth*0.55, windowHeight*0.475);
-    g.bezierCurveTo(windowWidth*0.6, windowHeight*0.475, windowWidth*0.675, windowHeight*0.625, windowWidth*0.7, windowHeight*0.7);
+    g.lineTo(windowWidth*0.7, windowHeight*0.7);
 
     //top right
     g.lineStyle(5, "#EB992E", 1);
     g.moveTo(windowWidth*0.55, windowHeight*0.34);
-    g.bezierCurveTo(windowWidth*0.6, windowHeight*0.3, windowWidth*0.625, windowHeight*0.3, windowWidth*0.655, windowHeight*0.3);
+    g.lineTo(windowWidth*0.655, windowHeight*0.3);
 
   }, [])
 
-  //translate lines to react
+
   const lines = () => {
-    return (<Graphics draw={drawLines}/>)
+    return (
+            <Container ref={graphicRef}>
+              <Graphics draw={drawLines}/>
+            </Container>
+    )
   }
 
-  //translate texts to react
+
   const texts = () => {
     return (
-            <Container>
-              {pixiTexts.map((msg, i) => (
+            <Container ref={textRef}>
+              {allTexts.map((text, i) => (
                       <Text
                               key={i}
-                              text={msg.text}
-                              x={msg.x}
-                              y={msg.y}
+                              text={text.text}
+                              x={text.x}
+                              y={text.y}
                               anchor={0.5}
                               style={new TextStyle({
                                 fontFamily: "LoResRegular",
-                                fontSize: msg.style.fontSize,
-                                fontWeight: msg.style.fontWeight,
+                                fontSize: Math.min(windowWidth, windowHeight) * text.fontSize,
+                                fontWeight: text.fontWeight,
                                 fill: "#FFFFFF",
                                 align: "left",
                                 wordWrap: true,
-                                wordWrapWidth: msg.style.wordWrapWidth
+                                wordWrapWidth: text.wrap ? windowWidth * text.wrap : windowWidth * 0.3
                               })
                               }
                       />
@@ -260,8 +250,8 @@ export const PhonePage: React.FC<PageProps> = ({
           texture={texture}
           ref={charRef}
         />}
-        {showExpl && lines()}
-        {showExpl && texts()}
+        {lines()}
+        {texts()}
       </>
   )
 };

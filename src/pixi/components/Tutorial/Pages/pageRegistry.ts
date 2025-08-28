@@ -10,6 +10,7 @@ import {More_Expl_SD} from "@/pixi/components/Tutorial/Pages/Explanations/More_E
 import {GameService} from "@/services/GameService.ts";
 import {Score_Changes} from "@/pixi/components/Tutorial/Pages/Explanations/Score_Changes.tsx";
 import {Final_Message} from "@/pixi/components/Tutorial/Pages/Explanations/Final_Message.tsx";
+import {IntroPage} from "@/pixi/components/Tutorial/Pages/IntroPage.tsx";
 
 export interface PageProps {
   windowWidth: number;
@@ -23,6 +24,7 @@ export interface PageProps {
 
 export const PAGE_COMPONENTS: {
   [Pages.MAIN]: null;
+  [Pages.INTRO]: React.FunctionComponent<PageProps>;
   [Pages.CHARACTER]: React.FunctionComponent<PageProps>;
   [Pages.SCORES]: React.FunctionComponent<PageProps>;
   [Pages.SMARTPHONE]: React.FunctionComponent<PageProps>;
@@ -34,6 +36,7 @@ export const PAGE_COMPONENTS: {
 
 } = {
   [Pages.MAIN]: null,
+  [Pages.INTRO]: IntroPage,
   [Pages.CHARACTER]: CharacterPage,
   [Pages.SCORES]: ScoresPage,
   [Pages.SMARTPHONE]: PhonePage,

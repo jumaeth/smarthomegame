@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {useGameService} from "@/hooks/useGameService.tsx";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {RoomName} from "@/objects/Room.ts";
 
@@ -13,8 +13,8 @@ import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
-import {useSmarDevicesEnabledState} from "@/hooks/useSmarDevicesEnabledState.ts";
-import {usePauseState} from "@/hooks/usePauseState.ts";
+import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState.ts";
+import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
 
 export const LivingRoom = () => {
   const roomName: RoomName = "livingroom"

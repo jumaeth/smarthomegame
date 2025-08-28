@@ -1,17 +1,20 @@
 import React, {PropsWithChildren, useEffect, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
-import {Container as PixiContainer, Graphics as PixiGraphics, Text, TextStyle} from "pixi.js";
+import {Container as PixiContainer, Graphics as PixiGraphics, Text} from "pixi.js";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {PAGE_COMPONENTS, PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
-import {spotlightTween} from "@/pixi/components/Tutorial/anim/spotlightTween.ts";
-import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeTween.ts";
+import {spotlightAnimation} from "@/pixi/components/Tutorial/anim/spotlightAnimation.ts";
+import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {GameService} from "@/services/GameService.ts";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
 import {movementStore} from "@/utils/movementEnabled.ts";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {Position} from "@/types/movement.ts";
+import {drawBackground, drawSpotlight} from "@/pixi/components/Tutorial/util/drawings.tsx";
+import {introText, phone, player, scores, tv, tv2} from "@/pixi/components/Tutorial/util/spotLightPositions.ts";
+import {SPOTLIGHT_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
+import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 
 interface TutorialProps {
   windowWidth: number;
@@ -20,6 +23,9 @@ interface TutorialProps {
   onClose: () => void;
   interactiveElements:  InteractivePixiElement[];
 }
+
+export enum PageOrder {IDLE,INTRO, CHARACTER, SCORES, PHONE, DECISION, MORE_EXPL,
+LESS_EXPL, More_Expl_SD, SCORE_CHANGES, END}
 
 export const Tutorial: React.FC<TutorialProps> = ({
        windowWidth,
@@ -36,8 +42,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
   const [showBackground, setShowBackground] = useState(true);
   const [showSpotlight, setShowSpotlight] = useState(false);
   const [instrBlinking, setInstrBlinking] = useState(true);
-  const [nextPage, setNextPage] = useState(0);
-  const [curFeature, setcurFeature] = useState(0);
+  const [nextPage, setNextPage] = useState(PageOrder.INTRO);
 
   const rootRef = useRef<PixiContainer | null>(null);
   const explRef = useRef<Text | null>(null);
@@ -50,131 +55,188 @@ export const Tutorial: React.FC<TutorialProps> = ({
   const commonProps: PageProps = { windowWidth, windowHeight, keyControl, setKeyControl, setNextPage, interactiveElements, gameService };
   const ActivePage = PAGE_COMPONENTS[keyControl]; // Component or null
 
-  const mgrRef = useRef<AnimationManager | null>(null);
+  const mgrRef = useAnimationManager();
   const pressedRef = useRef<boolean>(false);
+  const isAnimatingRef = useRef<boolean>(false);
+
+  //initBackground
+  useEffect(() => {
+    if (backgroundRef.current){
+      drawBackground(backgroundRef, windowWidth, windowHeight);
+    }
+  }, [backgroundRef.current]);
+
 
   //manage animations
   useEffect(() => {
-    if (!mgrRef.current) return;
 
     let timeoutId: number | undefined;
     let cancelled = false;
 
     const run = async () => {
+
+      const mgr = mgrRef.current;
+      if (!mgr)return;
+
       switch (nextPage) {
 
-        case 1: {
-          if (!explRef.current) return;
-          if (explRef.current instanceof Text) {
-            const b = explRef.current.getBounds();
+        case PageOrder.INTRO: {
 
-            const b2 = instrRef.current?.getBounds();
-            const start = {
-              x: b.x - 10,
-              y: b.y - 10,
-              width: b.width + 20,
-              height: b.height + (b2?.height ?? 0) + 20,
-              r: 10,
-            };
-            const end = computeEndRect(1)!;
+          setKeyControl(Pages.INTRO);
+          break;
+        }
 
-            setShowSpotlight(true);
-            await runSpotlightAnim(drawSpotlight, start, end, 1000);
-            if (cancelled) return;
-
-            setShowSpotlight(false);
-            drawBackground();
-
-            setKeyControl(Pages.CHARACTER);
-            setNextPage(0);
-
-            return;
-          }
+        case PageOrder.CHARACTER: {
+          isAnimatingRef.current = true;
+          await mgr.sequence([
+            () => spotlightAnimation(mgr, backgroundRef, windowWidth, windowHeight, introText(windowWidth, windowHeight),
+                    player(windowWidth, windowHeight), SPOTLIGHT_DURATION)
+          ]);
+          isAnimatingRef.current = false;
+          drawBackground(backgroundRef, windowWidth, windowHeight);
+          // if (!explRef.current) return;
+          // if (explRef.current instanceof Text) {
+          //   const b = explRef.current.getBounds();
+          //
+          //   const b2 = instrRef.current?.getBounds();
+          //   const start = {
+          //     x: b.x - 10,
+          //     y: b.y - 10,
+          //     width: b.width + 20,
+          //     height: b.height + (b2?.height ?? 0) + 20,
+          //     r: 10,
+          //   };
+          //   const end = computeEndRect(1)!;
+          //
+          //   setShowSpotlight(true);
+          //   await runSpotlightAnim(drawSpotlight, start, end, 1000);
+          //   if (cancelled) return;
+          //
+          //   setShowSpotlight(false);
+          //   drawBackground();
+          //
+          //   setKeyControl(Pages.CHARACTER);
+          //   setNextPage(0);
+          //
+          //   return;
+          // }
+          setKeyControl(Pages.CHARACTER);
           return;
         }
 
-        case 2: {
-          const start = computeEndRect(1)!;
-          const end = computeEndRect(2)!;
-
-          setShowSpotlight(true);
-          drawSpotlight(spotRectRef.current);
-
-          timeoutId = window.setTimeout(async () => {
-            setShowSpotlight(false);
-            await runSpotlightAnim(drawSpotlight, start, end, 1000);
-            if (cancelled) return;
-            setShowSpotlight(false);
-            drawBackground();
-
-            setKeyControl(Pages.SCORES);
-            setNextPage(0);
-          }, 250);
+        case PageOrder.SCORES: {
+          await mgr.sequence([
+            () => spotlightAnimation(mgr, backgroundRef, windowWidth, windowHeight, player(windowWidth, windowHeight),
+                    scores(windowWidth, windowHeight), SPOTLIGHT_DURATION)
+          ]);
+          drawBackground(backgroundRef, windowWidth, windowHeight);
+          setKeyControl(Pages.SCORES);
+          // const start = computeEndRect(1)!;
+          // const end = computeEndRect(2)!;
+          //
+          // setShowSpotlight(true);
+          // drawSpotlight(spotRectRef.current, backgroundRef, windowWidth, windowHeight);
+          //
+          // timeoutId = window.setTimeout(async () => {
+          //   setShowSpotlight(false);
+          //   await runSpotlightAnim(start, end, 1000);
+          //   if (cancelled) return;
+          //   setShowSpotlight(false);
+          //   drawBackground(backgroundRef, windowWidth, windowHeight);
+          //
+          //   setKeyControl(Pages.SCORES);
+          //   setNextPage(0);
+          // }, 250);
           return;
         }
 
-        case 3: {
-          const start = computeEndRect(2)!;
-          const end = computeEndRect(3)!;
+        case PageOrder.PHONE: {
+          // const start = computeEndRect(2)!;
+          // const end = computeEndRect(3)!;
+          //
+          // setShowSpotlight(true);
+          // drawSpotlight(spotRectRef.current, backgroundRef, windowWidth, windowHeight);
+          //
+          // timeoutId = window.setTimeout(async () => {
+          //   await runSpotlightAnim( start, end, 1000);
+          //   if (cancelled) return;
+          //   setShowSpotlight(false);
+          //   drawBackground(backgroundRef, windowWidth, windowHeight);
+          //
+          //   setKeyControl(Pages.SMARTPHONE );
+          //   setNextPage(0);
+          // }, 250);
 
-          setShowSpotlight(true);
-          drawSpotlight(spotRectRef.current);
+          isAnimatingRef.current = true;
+          await mgr.sequence([
+            () => spotlightAnimation(mgr, backgroundRef, windowWidth, windowHeight, scores(windowWidth, windowHeight),
+                    phone(windowWidth, windowHeight), SPOTLIGHT_DURATION*1.5)
+          ]);
+          isAnimatingRef.current = false;
+          drawBackground(backgroundRef, windowWidth, windowHeight);
+          setKeyControl(Pages.SMARTPHONE)
 
-          timeoutId = window.setTimeout(async () => {
-            await runSpotlightAnim(drawSpotlight, start, end, 1000);
-            if (cancelled) return;
-            setShowSpotlight(false);
-            drawBackground();
-
-            setKeyControl(Pages.SMARTPHONE );
-            setNextPage(0);
-          }, 250);
           return;
         }
 
-        case 4: {
+        case PageOrder.DECISION: {
+          drawBackground(backgroundRef, windowWidth, windowHeight);
           setKeyControl(Pages.DECISION);
           return;
         }
-        case 5: {
-          const start = {
-            x: windowWidth*0.5,
-            y: windowHeight*0.5,
-            width: windowWidth * 0.065,
-            height: windowHeight * 0.19,
-            r: 10
-          }as SpotRect
-
-          const end = computeEndRect(4);
-
-          setShowSpotlight(true);
-          await runSpotlightAnim(drawSpotlight, start, end, 1000);
-          if (cancelled) return;
-          drawBackground();
-
+        case PageOrder.MORE_EXPL: {
+          // const start = {
+          //   x: windowWidth*0.5,
+          //   y: windowHeight*0.5,
+          //   width: windowWidth * 0.065,
+          //   height: windowHeight * 0.19,
+          //   r: 10
+          // }as SpotRect
+          //
+          // const end = computeEndRect(4);
+          //
+          // setShowSpotlight(true);
+          // await runSpotlightAnim(drawSpotlight, start, end, 1000);
+          // if (cancelled) return;
+          // drawBackground();
+          //
+          // setKeyControl(Pages.MORE_EXPL);
+          // return;
+          isAnimatingRef.current = true;
+          await mgr.sequence([
+            () => spotlightAnimation(mgr, backgroundRef, windowWidth, windowHeight, player(windowWidth, windowHeight),
+                    tv(windowWidth, windowHeight), SPOTLIGHT_DURATION)
+          ]);
+          isAnimatingRef.current = false;
+          drawBackground(backgroundRef, windowWidth, windowHeight);
           setKeyControl(Pages.MORE_EXPL);
           return;
         }
 
-        case 6: {
+        case PageOrder.LESS_EXPL: {
           await runClearBGAnim();
           gameService.resumeGame();
           return;
         }
-        case 7: {
+
+        case PageOrder.More_Expl_SD: {
           await runClearBGAnim();
           gameService.resumeGame();
           setKeyControl(Pages.More_Expl_SD);
           return;
         }
-        case 8: {
+        case PageOrder.SCORE_CHANGES: {
           const start = computeEndRect(5);
           const end = computeEndRect(2);
 
           characterPositionStore.teleport({x: 5*TILE_SIZE, y: 3*TILE_SIZE});
-          setShowSpotlight(true);
-          await runSpotlightAnim(drawSpotlight, start, end, 750);
-          if (cancelled) return;
+          isAnimatingRef.current = true;
+          await mgr.sequence([
+            () => spotlightAnimation(mgr, backgroundRef, windowWidth, windowHeight, tv2(windowWidth, windowHeight),
+                    scores(windowWidth, windowHeight), SPOTLIGHT_DURATION*1.5)
+          ]);
+          isAnimatingRef.current = false;
+          drawBackground(backgroundRef, windowWidth, windowHeight);
 
           const bg = backgroundRef.current;
           if (!bg) return;
@@ -184,7 +246,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
           return;
         }
 
-        case 9: {
+        case PageOrder.END: {
           onClose();
           return;
         }
@@ -222,65 +284,65 @@ export const Tutorial: React.FC<TutorialProps> = ({
   }, []);
 
   //draw bg on load
-  useEffect(() => {
-    if (backgroundRef.current){
-      drawBackground();
-    }
-  }, [backgroundRef.current]);
+  // useEffect(() => {
+  //   if (backgroundRef.current){
+  //     drawBackground();
+  //   }
+  // }, [backgroundRef.current]);
 
   //explanation initialisation
-  useEffect(() => {
-    if (!rootRef.current || explRef.current) return;
-
-    if (rootRef.current instanceof PixiContainer) {
-      const t = new Text("Welcome to the tutorial", new TextStyle({
-        fontFamily: "LoResRegular",
-        fontSize: Math.min(windowWidth, windowHeight) * 0.06,
-        fill: "#ffffff"
-      }));
-      t.anchor.set(0.5);
-      t.alpha = 1;
-      t.x = windowWidth / 2;
-      t.y = windowHeight / 3;
-
-      rootRef.current.addChild(t);
-      explRef.current = t;
-
-
-        return () => {
-          if (t.parent && t.parent instanceof PixiContainer) t.parent.removeChild(t);
-            if (!rootRef.current?.destroyed && !t.destroyed) t.destroy();
-              explRef.current = null;
-         };
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!rootRef.current || explRef.current) return;
+  //
+  //   if (rootRef.current instanceof PixiContainer) {
+  //     const t = new Text("Welcome to the tutorial", new TextStyle({
+  //       fontFamily: "LoResRegular",
+  //       fontSize: Math.min(windowWidth, windowHeight) * 0.06,
+  //       fill: "#ffffff"
+  //     }));
+  //     t.anchor.set(0.5);
+  //     t.alpha = 1;
+  //     t.x = windowWidth / 2;
+  //     t.y = windowHeight / 3;
+  //
+  //     rootRef.current.addChild(t);
+  //     explRef.current = t;
+  //
+  //
+  //       return () => {
+  //         if (t.parent && t.parent instanceof PixiContainer) t.parent.removeChild(t);
+  //           if (!rootRef.current?.destroyed && !t.destroyed) t.destroy();
+  //             explRef.current = null;
+  //        };
+  //   }
+  // }, []);
 
   //instruction initialisation
-  useEffect(() => {
-    if (!rootRef.current || instrRef.current) return;
-
-    if (rootRef.current instanceof PixiContainer) {
-      const t = new Text("Press space to advance", new TextStyle({
-        fontFamily: "LoResRegular",
-        fontSize: Math.min(windowWidth, windowHeight) * 0.0475,
-        fill: "#ffffff"
-      }));
-      t.anchor.set(0.5);
-      t.alpha = 1;
-      t.x = windowWidth / 2;
-      t.y = windowHeight / 3 + windowHeight * 0.075;
-
-      rootRef.current.addChild(t);
-      instrRef.current = t;
-
-
-      return () => {
-        if (t.parent && t.parent instanceof PixiContainer) t.parent.removeChild(t);
-        if (!rootRef.current?.destroyed && !t.destroyed) t.destroy();
-        instrRef.current = null;
-      };
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!rootRef.current || instrRef.current) return;
+  //
+  //   if (rootRef.current instanceof PixiContainer) {
+  //     const t = new Text("Press space to advance", new TextStyle({
+  //       fontFamily: "LoResRegular",
+  //       fontSize: Math.min(windowWidth, windowHeight) * 0.0475,
+  //       fill: "#ffffff"
+  //     }));
+  //     t.anchor.set(0.5);
+  //     t.alpha = 1;
+  //     t.x = windowWidth / 2;
+  //     t.y = windowHeight / 3 + windowHeight * 0.075;
+  //
+  //     rootRef.current.addChild(t);
+  //     instrRef.current = t;
+  //
+  //
+  //     return () => {
+  //       if (t.parent && t.parent instanceof PixiContainer) t.parent.removeChild(t);
+  //       if (!rootRef.current?.destroyed && !t.destroyed) t.destroy();
+  //       instrRef.current = null;
+  //     };
+  //   }
+  // }, []);
 
   useEffect(() => {
     const devices = gameService.getDeviceForRoom("livingroom");
@@ -290,7 +352,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
 
     const unsubscribe = tv.subscribe(device => {
       if (device.getIsCompleted()) {
-        setNextPage(8);
+        setNextPage(PageOrder.SCORE_CHANGES);
       }
     });
 
@@ -311,40 +373,40 @@ export const Tutorial: React.FC<TutorialProps> = ({
   }, []);
 
   //run animations
-  const runSpotlightAnim = async (drawSpotlight:  (rect: SpotRect) => void, start: SpotRect, end: SpotRect, duration: number ) => {
+  const runSpotlightAnim = async (start: SpotRect, end: SpotRect, duration: number ) => {
     const mgr = mgrRef.current!;
 
     await mgr.sequence([
-      () => spotlightTween(mgr, drawSpotlight, start, end, duration),
+      () => spotlightAnimation(mgr, backgroundRef, windowWidth, windowHeight, start, end, duration),
     ]);
   };
 
   //draw backgrounds
-  const drawSpotlight = (rect: SpotRect) => {
-    const g = backgroundRef.current;
-    spotRectRef.current = rect;
-    if (!g || !rect) return;
+  // const drawSpotlight = (rect: SpotRect) => {
+  //   const g = backgroundRef.current;
+  //   spotRectRef.current = rect;
+  //   if (!g || !rect) return;
+  //
+  //   g.clear();
+  //   g.alpha = 0.7;
+  //   g.beginFill(0x000000);
+  //   g.drawRect(0, 0, windowWidth, windowHeight);
+  //   g.beginHole();
+  //   g.drawRoundedRect(rect.x, rect.y, rect.width, rect.height, rect.r);
+  //   g.endHole();
+  //   g.endFill();
+  // };
 
-    g.clear();
-    g.alpha = 0.7;
-    g.beginFill(0x000000);
-    g.drawRect(0, 0, windowWidth, windowHeight);
-    g.beginHole();
-    g.drawRoundedRect(rect.x, rect.y, rect.width, rect.height, rect.r);
-    g.endHole();
-    g.endFill();
-  };
-
-  const drawBackground = ()=> {
-    const g = backgroundRef.current;
-    if (g) {
-      g.clear();
-      g.alpha = 0.7;
-      g.beginFill(0x000000);
-      g.drawRect(0, 0, windowWidth, windowHeight);
-      g.endFill();
-    }
-  }
+  // const drawBackground = ()=> {
+  //   const g = backgroundRef.current;
+  //   if (g) {
+  //     g.clear();
+  //     g.alpha = 0.7;
+  //     g.beginFill(0x000000);
+  //     g.drawRect(0, 0, windowWidth, windowHeight);
+  //     g.endFill();
+  //   }
+  // }
 
   //show/hide explanation
   useEffect(() => {
@@ -361,29 +423,29 @@ export const Tutorial: React.FC<TutorialProps> = ({
   }, [showInstruction]);
 
 
-  useEffect(() => {
-    const mgr = mgrRef.current;
-    const txt = instrRef.current;
-    if (!mgr || !txt)return;
-    if (!instrBlinking || !showInstruction) return;
-
-    const speed = 2000;
-
-    const { promise } = mgr.runUntil(
-            () => {
-              return [
-                () => ({
-
-                  promise: mgr.sequence([
-                    () => fadeAnimation(mgr, txt, {duration: speed, startA: 0.8, endA: 0}),
-                    () => fadeAnimation(mgr, txt, {duration: speed, startA: 0, endA: 0.8})
-                  ])
-                }),
-              ];
-            },
-            { mode: "sequence", until: () => pressedRef.current, delayMs: 100 }
-    );
-  }, [instrBlinking, showInstruction]);
+  // useEffect(() => {
+  //   const mgr = mgrRef.current;
+  //   const txt = instrRef.current;
+  //   if (!mgr || !txt)return;
+  //   if (!instrBlinking || !showInstruction) return;
+  //
+  //   const speed = 2000;
+  //
+  //   const { promise } = mgr.runUntil(
+  //           () => {
+  //             return [
+  //               () => ({
+  //
+  //                 promise: mgr.sequence([
+  //                   () => fadeAnimation(mgr, txt, {duration: speed, startA: 0.8, endA: 0}),
+  //                   () => fadeAnimation(mgr, txt, {duration: speed, startA: 0, endA: 0.8})
+  //                 ])
+  //               }),
+  //             ];
+  //           },
+  //           { mode: "sequence", until: () => pressedRef.current, delayMs: 100 }
+  //   );
+  // }, [instrBlinking, showInstruction]);
 
   //compute end of animation
   const computeEndRect = (anim: number) => {
@@ -437,13 +499,13 @@ export const Tutorial: React.FC<TutorialProps> = ({
   };
 
   //background
-  const background = () => {
-    return (
-            <>
-              <Graphics ref={backgroundRef} />
-            </>
-    )
-  }
+  // const background = () => {
+  //   return (
+  //           <>
+  //             <Graphics ref={backgroundRef} />
+  //           </>
+  //   )
+  // }
 
 
   //----------user input----------
@@ -462,29 +524,26 @@ export const Tutorial: React.FC<TutorialProps> = ({
     }
 
     if(showBackground){
-      drawBackground();
+      drawBackground(backgroundRef, windowWidth, windowHeight);
     }
 
     if(showSpotlight){
       spotRectRef.current = computeEndRect(nextPage);
-      drawSpotlight(spotRectRef.current);
+      drawSpotlight(spotRectRef.current, backgroundRef, windowWidth, windowHeight);
     }
   }, [windowWidth, windowHeight]);
 
   //key events
   useEffect(() => {
-    if(keyControl != Pages.MAIN)return;
+    if(keyControl != Pages.MAIN || isAnimatingRef.current)return;
     const onSpacePressed = (e: KeyboardEvent) => {
       if(e.code == "Space" && showExplanation){
-        setShowBackground(false);
-        setInstrBlinking(false);
-        setShowExplanation(false);
-        setShowInstruction(false);
-        setShowSpotlight(true);
-        setNextPage(1);
-      }
-      if(e.code == "a"){
-        setNextPage(8);
+        // setShowBackground(false);
+        // setInstrBlinking(false);
+        // setShowExplanation(false);
+        // setShowInstruction(false);
+        // setShowSpotlight(true);
+        // setNextPage(1);
       }
     }
 
@@ -518,6 +577,14 @@ export const Tutorial: React.FC<TutorialProps> = ({
     ]);
   }
 
+  const background = () => {
+    return (
+            <>
+              <Graphics ref={backgroundRef} />
+            </>
+    )
+  }
+
   return (
       <>
         {background()}
@@ -525,4 +592,6 @@ export const Tutorial: React.FC<TutorialProps> = ({
         {ActivePage && <ActivePage key={keyControl} {...commonProps} />}
       </>
   )
+
+  //{background()}
 };

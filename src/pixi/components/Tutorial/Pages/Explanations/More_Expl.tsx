@@ -14,10 +14,11 @@ import {
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
-import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growTween.ts";
+import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
-import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeTween.ts";
+import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
 
 
 export const More_Expl: React.FC<PageProps> = ({
@@ -85,9 +86,7 @@ export const More_Expl: React.FC<PageProps> = ({
 
     await mgr.parallel([
       () => growAnimation(mgr, sprite, growProps),
-      () => fadeAnimation(mgr, robot, fadeIn),
-      () => fadeAnimation(mgr, graphic, fadeIn),
-      () => fadeAnimation(mgr, text, fadeIn),
+      () => fadeAnimation(mgr, [robot, graphic, text], fadeIn),
     ]);
   };
 
@@ -149,7 +148,7 @@ export const More_Expl: React.FC<PageProps> = ({
           setAnimating(false);
           setAnimation(0);
           setKeyControl(Pages.MAIN);
-          setNextPage(7);
+          setNextPage(PageOrder.More_Expl_SD);
           break;
       }
     };

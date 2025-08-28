@@ -1,4 +1,13 @@
-import React, {KeyboardEvent, PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {
+  KeyboardEvent,
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 import {Container, Graphics, Sprite, Text, useTick} from "@pixi/react";
 import {loadTexture} from "@/utils/loadTexture.ts";
 import {
@@ -10,14 +19,18 @@ import {
 } from "pixi.js";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
-import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growTween.ts";
+import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {useCharacterControls} from "@/hooks/character/useCharacterControls.ts";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {useCharacterPosition} from "@/hooks/character/useCharacterPosition.ts";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeTween.ts";
+import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import robot from "@/assets/tutorial/explainTVPage/pointing.png";
+import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
+import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
+import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
 
 
 
@@ -30,115 +43,97 @@ export const More_Expl_SD: React.FC<PageProps> = ({
         interactiveElements,
         gameService
            }: PropsWithChildren<PageProps>) => {
+  const enum Animations { INTRO, OUTRO, END}
 
+
+  //other
   const textureRobot = useMemo(() => loadTexture(robot), []);
-  const [onLoad, setOnLoad] = useState(true);
-  const {ePressed} = useCharacterControls();
-  const pos = useCharacterPosition();
-  const mgrRef = useRef<AnimationManager | null>(null);
-  const graphicRef = useRef<PixiContainer | null>(null);
-  const textRef = useRef<PixiContainer | null>(null);
-  const [animating, setAnimating] = useState(false);
-  const [animation, setAnimation] = useState(0);
-  const [showExpl, setShowExpl] = useState(false);
-  const robotRef = useRef<PixiSprite | null >(null);
-  const [pixiTexts, setPixiTexts] = useState([]);
-  const backgroundRef = useRef<PixiContainer | null>(null);
   const fill = "#054388";
   const stroke = "#009CDD";
   const explText = "Deselect the right options to restore a balance between privacy and comfort." +
           " Different decisions will have different affects on your scores."
 
+  //state
+  const [onLoad, setOnLoad] = useState(true);
+  const [animating, setAnimating] = useState(false);
+  const [animation, setAnimation] = useState(Animations.INTRO);
+  const [showExpl, setShowExpl] = useState(false);
+  const [pixiTexts, setPixiTexts] = useState([]);
 
+  //refs
+  const graphicRef = useRef<PixiContainer | null>(null);
+  const textRef = useRef<PixiContainer | null>(null);
+  const robotRef = useRef<PixiSprite | null >(null);
+  const backgroundRef = useRef<PixiContainer | null>(null);
 
-  //----------init----------
+  //hooks
+  const {ePressed} = useCharacterControls();
+  const pos = useCharacterPosition();
+  const mgrRef = useAnimationManager();
 
-  //init graphics/texts
   useEffect(() => {
-    if (onLoad) {
-      setOnLoad(false);
+    if (showExpl) {
+      setupTexts();
+      setupGraphics();
+      setupBg();
+      setAnimation(Animations.INTRO);
     }
-  }, [onLoad]);
+  }, [showExpl]);
 
-  useEffect(() => {
-    mgrRef.current = new AnimationManager();
-    return () => mgrRef.current?.cancelAll();
+  const ready =
+          showExpl &&
+          !!mgrRef.current &&
+          !!robotRef.current &&
+          !!textRef.current &&
+          !!graphicRef.current;
+
+
+  //hide explanations  on init
+  useLayoutEffect(() => {
+    toggleExplanations([textRef.current, graphicRef.current], false);
   }, []);
 
-  const runIntroAnim = async (robot: PixiSprite, growProps: GrowProps, fadeIn: FadeProps) => {
-    const mgr = mgrRef.current!;
-    const graphic = graphicRef.current;
-    const text = textRef.current;
-    if (!graphic || !text)return;
-
-    await mgr.parallel([
-      () => growAnimation(mgr, robot, growProps),
-      () => fadeAnimation(mgr, graphic, fadeIn),
-      () => fadeAnimation(mgr, text, fadeIn),
-    ]);
-  };
-
-  const runOutroAnim = async (robot: PixiSprite, fadeOut: FadeProps) => {
-    const mgr = mgrRef.current!;
-    const graphic = graphicRef.current;
-    const text = textRef.current;
-    if (!graphic || !text)return;
-
-    await mgr.parallel([
-      () => fadeAnimation(mgr, robot, fadeOut),
-      () => fadeAnimation(mgr, graphic, fadeOut),
-      () => fadeAnimation(mgr, text, fadeOut),
-    ]);
-  };
-
+  //manageAnimations
   useEffect(() => {
-    if (!mgrRef.current) return;
-
     let timeoutId: number | undefined;
     let cancelled = false;
+
+    const mgr = mgrRef.current!;
     const robot = robotRef.current;
-    if (!robot) return;
+    const texts = textRef.current;
+    const graphics = graphicRef.current;
+    if (!robot || !mgr || !texts ||  !graphics || !ready) return;
 
     const run = async () => {
 
       switch (animation) {
-        case 1:
-          const anim1 = {
-            startX:  windowWidth*0.9, startY: windowHeight*0.9,
+        case Animations.INTRO:
+          const growChar = {
+            startX:  windowWidth*0.825, startY: windowHeight*0.725,
             endX: windowWidth * 0.8, endY: windowHeight * 0.7,
-            startS: 0.5, endS: 0.8, showOthers: false, duration: 750
+            startS: 0.6, endS: 0.8, showOthers: false, duration: 750
           } as GrowProps
 
-          const fadeIn = {
-            duration: 500,
-            startA: 0,
-            endA: 1,
-          } as FadeProps
-
           setAnimating(true);
-          await runIntroAnim(robot, anim1, fadeIn);
+          toggleExplanations([texts, graphics], true);
+          //await mgr.sequence([() => growAnimation(mgr, robot, growChar)]);
+          await mgr.parallel([() => growAnimation(mgr, robot, growChar),
+            () => fadeAnimation(mgr, [texts, graphics], FADE_IN)]);
           setAnimating(false);
-          setAnimation(0);
           break;
-        case 2:
-          const fadeOut = {
-            duration: 500,
-            startA: 1,
-            endA: 0,
-          } as FadeProps
-
+        case Animations.OUTRO:
           setAnimating(true);
-          await runOutroAnim(robot, fadeOut);
+          await mgr.parallel([() => fadeAnimation(mgr, [texts, graphics, robot], FADE_OUT)]);
+          setAnimating(false);
           setShowExpl(false);
-          setAnimating(false);
-          setAnimation(0);
-          //gameService?.resumeGame();
+          toggleExplanations([texts, graphics], false);
           gameService?.enableSD();
+          setAnimation(Animations.END);
           break;
 
-        case 3:
+        case Animations.END:
           setKeyControl(Pages.MAIN);
-          setNextPage(8);
+          setNextPage(PageOrder.SCORE_CHANGES);
           break;
       }
     };
@@ -149,7 +144,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
       cancelled = true;
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation]);
+  }, [ready, animation]);
 
   useEffect(() => {
     if(keyControl != Pages.More_Expl_SD || animating)return;
@@ -157,7 +152,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
         case "Space":
-          setAnimation(2);
+          setAnimation(Animations.OUTRO);
           break;
       }
     }
@@ -170,35 +165,8 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     };
   }, [keyControl, animating]);
 
-  const setupTexts = () => {
-    const t1 = new PixiText();
-    t1.text = explText;
-    t1.x = windowWidth*0.825;
-    t1.y = windowHeight*0.35;
-    t1.style = new TextStyle({
-      fontSize: Math.min(windowWidth, windowHeight) * 0.035,
-      fontWeight: "normal",
-      wordWrapWidth: windowWidth * 0.25
-    })
 
-    setPixiTexts(prev => [...prev, t1]);
-
-  }
-  const setupGraphics = () => {
-
-    const g = new PixiGraphics();
-    g.clear();
-    g.beginFill(fill, 1);
-    g.lineStyle(3, stroke);
-    g.drawRoundedRect(windowWidth*0.7, windowHeight*0.2, windowWidth*0.25, windowHeight*0.3, 10);
-    g.endFill();
-
-    const parent = graphicRef?.current;
-    if (!parent) return;
-
-    parent.addChild(g);
-  }
-
+  //smartDeviceDetection
   const checkFoundSmartTV = (): boolean => {
     if (!pos) {
       return;
@@ -228,6 +196,44 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     }
   }
 
+  useEffect(() => {
+    if (ePressed && checkFoundSmartTV()){
+      setShowExpl(true);
+      gameService?.disableSD();
+    }
+  }, [ePressed]);
+
+
+  //setup graphics
+  const setupTexts = () => {
+    const t1 = new PixiText();
+    t1.text = explText;
+    t1.x = windowWidth*0.825;
+    t1.y = windowHeight*0.35;
+    t1.style = new TextStyle({
+      fontSize: Math.min(windowWidth, windowHeight) * 0.035,
+      fontWeight: "normal",
+      wordWrapWidth: windowWidth * 0.25
+    })
+
+    setPixiTexts(prev => [...prev, t1]);
+
+  }
+  const setupGraphics = () => {
+
+    const g = new PixiGraphics();
+    g.clear();
+    g.beginFill(fill, 1);
+    g.lineStyle(3, stroke);
+    g.drawRoundedRect(windowWidth*0.7, windowHeight*0.2, windowWidth*0.25, windowHeight*0.3, 10);
+    g.endFill();
+
+    const parent = graphicRef?.current;
+    if (!parent) return;
+
+    parent.addChild(g);
+  }
+
   const setupBg = () => {
     const bg = new PixiGraphics();
 
@@ -242,26 +248,11 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     parent.addChild(bg);
   }
 
-  useEffect(() => {
-    if (ePressed && checkFoundSmartTV()){
-      setShowExpl(true);
-      gameService?.disableSD();
-      //gameService?.pauseGame();
-    }
-  }, [ePressed]);
-
-  useEffect(() => {
-    if (showExpl) {
-      setupTexts();
-      setupGraphics();
-      setupBg();
-      setAnimation(1);
-    }
-  }, [showExpl]);
 
   const graphics = () => {
     if (!showExpl)return null;
-    return (<Container ref={graphicRef}/>)
+    return (<Container ref={graphicRef} renderable={false}/>)
+    return (<Container ref={graphicRef} renderable={false}/>)
   }
 
 
@@ -276,7 +267,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
   const texts = () => {
     if (!showExpl)return null;
     return (
-            <Container ref={textRef}>
+            <Container ref={textRef} renderable={false}>
               {pixiTexts.map((msg, i) => (
                       <Text
                               key={i}

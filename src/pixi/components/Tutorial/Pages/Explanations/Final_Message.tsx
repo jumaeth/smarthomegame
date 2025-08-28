@@ -1,5 +1,5 @@
 import React, {KeyboardEvent, PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
-import {Container, Graphics, Sprite, Text} from "@pixi/react";
+import {Container, Sprite, Text} from "@pixi/react";
 import waving from "@/assets/tutorial/finalExpl/waving.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
 import {
@@ -7,16 +7,15 @@ import {
   Graphics as PixiGraphics,
   Sprite as PixiSprite,
   Text as PixiText,
-  TextStyle,
-  TextStyleFontWeight
+  TextStyle
 } from "pixi.js";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
-import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growTween.ts";
+import {GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
-import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeTween.ts";
+import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 
 
 export const Final_Message: React.FC<PageProps> = ({
