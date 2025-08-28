@@ -22,7 +22,7 @@ export const MultipleChoiceComponent = ({
 
 
   const handleAnswer = (i: number, answer: boolean) => {
-    if (gameService.isPaused())return;
+    if (!gameService.areSdEnabled())return;
     const next = [...answers];
     next[i] = answer;
     setAnswers(next);
@@ -34,7 +34,7 @@ export const MultipleChoiceComponent = ({
   };
 
   const submitAnswer = () => {
-    if (gameService.isPaused())return;
+    if (!gameService.areSdEnabled())return;
     const isAllCorrect = answers.every((ans, i) => ans === solutions[i]);
     setSubmitted(true);
     onComplete(isAllCorrect);

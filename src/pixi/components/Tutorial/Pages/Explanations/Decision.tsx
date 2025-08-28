@@ -213,13 +213,13 @@ export const Decision: React.FC<PageProps> = ({
 
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
-        case "ArrowLeft":
+        case "ArrowLeft"|| "a":
           if (showExpl && decisionReady){
             leftOnClick();
             setDecisionReady(false);
           }
           return;
-        case "ArrowRight":
+        case "ArrowRight" || "d":
           if (showExpl && decisionReady){
             rightOnClick();
             setDecisionReady(false);

@@ -9,8 +9,6 @@ import {useCharacterAnimation} from "@/hooks/character/useCharacterAnimation";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
 import {useMovementStore} from "@/utils/movementEnabled.ts";
-import {usePauseState} from "@/hooks/usePauseState.ts";
-import {GameService} from "@/services/GameService.ts";
 
 interface CharacterProps {
     texture: Texture;

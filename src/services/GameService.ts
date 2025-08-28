@@ -5,13 +5,16 @@ import {GameScore, ScoreType} from "@/objects/GameScore.ts";
 import {CookieService} from "@/services/CookieService.ts";
 import {movementStore} from "@/utils/movementEnabled.ts";
 
-type PauseListener = (paused: boolean) => void;
+type Listener = (paused: boolean) => void;
 
 export class GameService {
   private game: Game;
   private navigate: (path: string) => void;
   private paused: boolean = false;
-  private pauseListeners = new Set<PauseListener>();
+  private pauseListeners  = new Set<Listener>();
+  private sdEnabled = true;
+  private sdEnabledListeners  = new Set<Listener>();
+
 
   constructor(navigate: (path: string) => void) {
     const saveGame = CookieService.get<Game>('save_game');
@@ -100,6 +103,16 @@ export class GameService {
     this.emitPause();
   }
 
+  disableSD(): void {
+    this.sdEnabled = false;
+    this.emitSdEnable();
+  }
+
+  enableSD(): void {
+    this.sdEnabled = true;
+    this.emitSdEnable();
+  }
+
   toogleRoomIsLocked(roomName: RoomName): void {
     const room: Room | undefined = this.findRoomByName(roomName);
     if (room) room.toggleIsLocked();
@@ -125,7 +138,21 @@ export class GameService {
     return this.paused;
   }
 
-  subscribePause(listener: PauseListener): () => void {
+  areSdEnabled(): boolean {
+    return this.sdEnabled;
+  }
+
+  subscribeSdEnabled(listener: Listener): () => void {
+    this.sdEnabledListeners.add(listener);
+    listener(this.sdEnabled);
+
+    return () => {
+      this.sdEnabledListeners.delete(listener);
+    };
+
+  }
+
+  subscribePause(listener: Listener): () => void {
     this.pauseListeners.add(listener);
     listener(this.paused);
 
@@ -137,6 +164,10 @@ export class GameService {
 
   private emitPause() {
     for (const l of this.pauseListeners) l(this.paused);
+  }
+
+  private emitSdEnable() {
+    for (const l of this.sdEnabledListeners) l(this.sdEnabled);
   }
 
   getScore():GameScore {

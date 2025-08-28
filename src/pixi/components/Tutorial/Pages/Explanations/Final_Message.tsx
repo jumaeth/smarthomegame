@@ -1,6 +1,6 @@
 import React, {KeyboardEvent, PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Graphics, Sprite, Text} from "@pixi/react";
-import pointing from "@/assets/tutorial/finalExpl/pointing.png";
+import waving from "@/assets/tutorial/finalExpl/waving.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
@@ -19,7 +19,7 @@ import {characterPositionStore} from "@/utils/characterPosition.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeTween.ts";
 
 
-export const Score_Changes: React.FC<PageProps> = ({
+export const Final_Message: React.FC<PageProps> = ({
        windowWidth,
        windowHeight,
        keyControl,
@@ -27,7 +27,7 @@ export const Score_Changes: React.FC<PageProps> = ({
        setNextPage
            }: PropsWithChildren<PageProps>) => {
 
-  const textureRobot = useMemo(() => loadTexture(pointing), []);
+  const textureRobot = useMemo(() => loadTexture(waving), []);
   const robotRef = useRef<PixiSprite | null >(null);
   const [animation, setAnimation] = useState(0);
   const [pixiTexts, setPixiTexts] = useState([]);
@@ -43,8 +43,7 @@ export const Score_Changes: React.FC<PageProps> = ({
 
 
   const textsTemp = [
-          "Saw that? Your solution increased the scores. But be careful," +
-          " bad decisions decrease them! Make sure you always keep a good balance."
+          "Thats it, now you are ready to save the smart home and make that movie night possible!"
   ]
 
   //----------init----------
@@ -82,7 +81,7 @@ export const Score_Changes: React.FC<PageProps> = ({
     if (!graphic || !text)return;
 
     await mgr.parallel([
-      () => growAnimation(mgr, robot, growProps),
+      () => fadeAnimation(mgr, robot, fadeIn),
       () => fadeAnimation(mgr, graphic, fadeIn),
       () => fadeAnimation(mgr, text, fadeIn),
     ]);
@@ -91,10 +90,12 @@ export const Score_Changes: React.FC<PageProps> = ({
   const runOutroAnim = async (robot: PixiSprite, fadeOut: FadeProps) => {
     const mgr = mgrRef.current!;
     const graphic = graphicRef.current;
+    const bg = backgroundRef.current;
     const text = textRef.current;
-    if (!graphic || !text)return;
+    if (!graphic || !text || !bg)return;
 
     await mgr.parallel([
+      () => fadeAnimation(mgr, bg, fadeOut),
       () => fadeAnimation(mgr, robot, fadeOut),
       () => fadeAnimation(mgr, graphic, fadeOut),
       () => fadeAnimation(mgr, text, fadeOut),
@@ -143,7 +144,8 @@ export const Score_Changes: React.FC<PageProps> = ({
           await runOutroAnim(robot, fadeOut);
           setAnimating(false);
           setAnimation(0);
-          setKeyControl(Pages.FINAL_MESSAGE);
+          setKeyControl(Pages.MAIN);
+          setNextPage(9);
           break;
       }
     };
@@ -165,7 +167,7 @@ export const Score_Changes: React.FC<PageProps> = ({
 
   //keyControls
   useEffect(() => {
-    if(keyControl != Pages.SCORE_CHANGES || animating)return;
+    if(keyControl != Pages.FINAL_MESSAGE || animating)return;
 
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
@@ -191,12 +193,12 @@ export const Score_Changes: React.FC<PageProps> = ({
   const setupTexts = () => {
     const t1 = new PixiText();
     t1.text = textsTemp[0];
-    t1.x = windowWidth*0.8;
-    t1.y = windowHeight*0.525;
+    t1.x = windowWidth*0.5;
+    t1.y = windowHeight*0.575;
     t1.style = new TextStyle({
       fontSize: Math.min(windowWidth, windowHeight) * 0.035,
       fontWeight: "normal",
-      wordWrapWidth: windowWidth * 0.25
+      wordWrapWidth: windowWidth * 0.295
     })
 
     setPixiTexts(prev => [...prev, t1]);
@@ -211,9 +213,6 @@ export const Score_Changes: React.FC<PageProps> = ({
     b.clear();
     b.beginFill("#000000", 0.7);
     b.drawRect(0, 0, windowWidth, windowHeight);
-    b.beginHole();
-    b.drawRoundedRect(windowWidth*0.86, (0.01*windowHeight)-TILE_SIZE*0.25, TILE_SIZE*16.5, TILE_SIZE*7.5, 10);
-    b.endHole();
     b.endFill();
 
     parent.addChild(b);
@@ -228,7 +227,7 @@ export const Score_Changes: React.FC<PageProps> = ({
     g.clear();
     g.beginFill(fill, 1);
     g.lineStyle(3, stroke);
-    g.drawRoundedRect(windowWidth*0.675, windowHeight*0.4, windowWidth*0.25, windowHeight*0.25, 12);
+    g.drawRoundedRect(windowWidth*0.35, windowHeight*0.5, windowWidth*0.3, windowHeight*0.15, 12);
     g.endFill();
 
     parent.addChild(g);
@@ -240,8 +239,9 @@ export const Score_Changes: React.FC<PageProps> = ({
     if (!r)return;
 
     r.anchor.set(0.5, 0.5);
-    r.x = windowWidth * 0.775;
-    r.y = windowHeight * 0.7;
+    r.x = windowWidth * 0.5;
+    r.y = windowHeight * 0.3;
+    r.scale.set(0.75);
     r.texture = textureRobot;
 
   }

@@ -132,7 +132,8 @@ export const More_Expl_SD: React.FC<PageProps> = ({
           setShowExpl(false);
           setAnimating(false);
           setAnimation(0);
-          gameService?.resumeGame();
+          //gameService?.resumeGame();
+          gameService?.enableSD();
           break;
 
         case 3:
@@ -149,12 +150,6 @@ export const More_Expl_SD: React.FC<PageProps> = ({
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
   }, [animation]);
-
-  useEffect(() => {
-    const devices = gameService?.getDeviceForRoom("livingroom");
-    if (!devices)return;
-    const smartTV = devices?.find(d => d.name === "SmartTv");
-  }, []);
 
   useEffect(() => {
     if(keyControl != Pages.More_Expl_SD || animating)return;
@@ -250,7 +245,8 @@ export const More_Expl_SD: React.FC<PageProps> = ({
   useEffect(() => {
     if (ePressed && checkFoundSmartTV()){
       setShowExpl(true);
-      gameService?.pauseGame();
+      gameService?.disableSD();
+      //gameService?.pauseGame();
     }
   }, [ePressed]);
 

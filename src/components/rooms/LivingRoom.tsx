@@ -13,6 +13,7 @@ import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
+import {useSmarDevicesEnabledState} from "@/hooks/useSmarDevicesEnabledState.ts";
 import {usePauseState} from "@/hooks/usePauseState.ts";
 
 export const LivingRoom = () => {
@@ -24,6 +25,7 @@ export const LivingRoom = () => {
 
   const [activeDevice, setActiveDevice] = useState<string | null>(null);
   const [tutorialEnabled, setTutorialEnabled] = useState(true);
+  const sdEnabled = useSmarDevicesEnabledState();
   const paused = usePauseState();
 
   const smartDeviceCallback = (isCompleted:boolean):void => {
@@ -95,7 +97,7 @@ export const LivingRoom = () => {
                       isOpen={!!activeDevice}
                       content={activeDevice ? deviceComponents[activeDevice] : null}
                       onClose={onModalClose}
-                      showBg={!(tutorialEnabled && paused)}
+                      showBg={sdEnabled}
 
               />
             </div>

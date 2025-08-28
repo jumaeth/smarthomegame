@@ -9,5 +9,6 @@ export enum Pages{
   MORE_EXPL,
   LESS_EXPL,
   More_Expl_SD,
-  SCORE_CHANGES
+  SCORE_CHANGES,
+  FINAL_MESSAGE
 }

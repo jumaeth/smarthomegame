@@ -11,6 +11,7 @@ import {GameService} from "@/services/GameService.ts";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
 import {movementStore} from "@/utils/movementEnabled.ts";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
+import {Position} from "@/types/movement.ts";
 
 interface TutorialProps {
   windowWidth: number;
@@ -144,7 +145,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
             r: 10
           }as SpotRect
 
-          const end = computeEndRect(4)!;
+          const end = computeEndRect(4);
 
           setShowSpotlight(true);
           await runSpotlightAnim(drawSpotlight, start, end, 1000);
@@ -158,7 +159,6 @@ export const Tutorial: React.FC<TutorialProps> = ({
         case 6: {
           await runClearBGAnim();
           gameService.resumeGame();
-          setKeyControl(Pages.LESS_EXPL);
           return;
         }
         case 7: {
@@ -168,7 +168,19 @@ export const Tutorial: React.FC<TutorialProps> = ({
           return;
         }
         case 8: {
-          console.log("case 8");
+          const start = computeEndRect(5);
+          const end = computeEndRect(2);
+
+          characterPositionStore.teleport({x: 5*TILE_SIZE, y: 3*TILE_SIZE});
+          setShowSpotlight(true);
+          await runSpotlightAnim(drawSpotlight, start, end, 750);
+          if (cancelled) return;
+
+          const bg = backgroundRef.current;
+          if (!bg) return;
+          bg.clear();
+
+          setKeyControl(Pages.SCORE_CHANGES);
           return;
         }
 
@@ -176,6 +188,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
           onClose();
           return;
         }
+
       }
     };
 
@@ -271,14 +284,13 @@ export const Tutorial: React.FC<TutorialProps> = ({
 
   useEffect(() => {
     const devices = gameService.getDeviceForRoom("livingroom");
-    console.log(devices.map(e => e.name));
     const tv = devices.find(d => d.name === "SmartTv");
 
     if (!tv) return;
 
     const unsubscribe = tv.subscribe(device => {
       if (device.getIsCompleted()) {
-        setKeyControl(Pages.EXPL3)
+        setNextPage(8);
       }
     });
 
@@ -412,6 +424,14 @@ export const Tutorial: React.FC<TutorialProps> = ({
           height: windowHeight * 0.21,
           r: 10
         } as SpotRect;
+      case 5:
+        return {
+          x: windowWidth*0.42,
+          y: windowHeight*0.325,
+          width: windowWidth * 0.1475,
+          height: windowHeight * 0.21,
+          r: 10
+        } as SpotRect;
     }
 
   };
@@ -462,6 +482,9 @@ export const Tutorial: React.FC<TutorialProps> = ({
         setShowInstruction(false);
         setShowSpotlight(true);
         setNextPage(1);
+      }
+      if(e.code == "a"){
+        setNextPage(8);
       }
     }
 
