@@ -19,6 +19,7 @@ import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {FADE_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
 
 
 export const More_Expl: React.FC<PageProps> = ({
@@ -97,10 +98,7 @@ export const More_Expl: React.FC<PageProps> = ({
     if (!graphic || !text)return;
 
     await mgr.parallel([
-      () => fadeAnimation(mgr, sprite, fadeOut),
-      () => fadeAnimation(mgr, robot, fadeOut),
-      () => fadeAnimation(mgr, graphic, fadeOut),
-      () => fadeAnimation(mgr, text, fadeOut),
+      () => fadeAnimation(mgr, [sprite, robot, graphic, text], fadeOut),
     ]);
   };
 

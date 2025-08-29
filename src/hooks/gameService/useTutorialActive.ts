@@ -14,18 +14,18 @@ class BoolStore {
     return () => { this.listeners.delete(fn); };
   }
 }
-export const tutorialEnabledStore = new BoolStore();
+export const tutorialActiveStore = new BoolStore();
 
 // Hook
 import { useSyncExternalStore } from "react";
-export function useTutorialEnabled() {
+export function useTutorialActive() {
   const enabled = useSyncExternalStore(
-          cb => tutorialEnabledStore.subscribe(cb),
-          () => tutorialEnabledStore.get()
+          cb => tutorialActiveStore.subscribe(cb),
+          () => tutorialActiveStore.get()
   );
   return {
     enabled,
-    close: () => tutorialEnabledStore.set(false),
-    open:  () => tutorialEnabledStore.set(true),
+    close: () => tutorialActiveStore.set(false),
+    open:  () => tutorialActiveStore.set(true),
   };
 }

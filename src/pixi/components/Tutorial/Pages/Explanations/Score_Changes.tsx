@@ -18,6 +18,7 @@ import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+import {FADE_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
 
 
 export const Score_Changes: React.FC<PageProps> = ({
@@ -25,14 +26,15 @@ export const Score_Changes: React.FC<PageProps> = ({
        windowHeight,
        keyControl,
        setKeyControl,
-       setNextPage
+        gameService
            }: PropsWithChildren<PageProps>) => {
+
+  const enum Animations {IDLE, INTRO, OUTRO}
 
   const textureRobot = useMemo(() => loadTexture(pointing), []);
   const robotRef = useRef<PixiSprite | null >(null);
-  const [animation, setAnimation] = useState(0);
+  const [animation, setAnimation] = useState(Animations.INTRO);
   const [pixiTexts, setPixiTexts] = useState([]);
-  const [onLoad, setOnLoad] = useState(true);
   const [animating, setAnimating] = useState(false);
   const mgrRef = useAnimationManager();
   const fill = "#054388";
@@ -50,21 +52,13 @@ export const Score_Changes: React.FC<PageProps> = ({
 
   //----------init----------
 
-  //init graphics/texts
-  useEffect(() => {
-    if (onLoad) {
-      console.log("loaded")
-      //setAnimation(1);
-      setOnLoad(false);
-    }
-  }, [onLoad]);
-
   useEffect(() => {
     setupBackground();
     setupTexts();
     setupGraphics();
     setupRobot();
-    setAnimation(1);
+    setAnimation(Animations.INTRO);
+    gameService?.pauseGame();
   }, [textRef]);
 
   //run grow/shrink animation
@@ -76,8 +70,7 @@ export const Score_Changes: React.FC<PageProps> = ({
 
     await mgr.parallel([
       () => growAnimation(mgr, robot, growProps),
-      () => fadeAnimation(mgr, graphic, fadeIn),
-      () => fadeAnimation(mgr, text, fadeIn),
+      () => fadeAnimation(mgr, [graphic, text], fadeIn),
     ]);
   };
 
@@ -88,9 +81,7 @@ export const Score_Changes: React.FC<PageProps> = ({
     if (!graphic || !text)return;
 
     await mgr.parallel([
-      () => fadeAnimation(mgr, robot, fadeOut),
-      () => fadeAnimation(mgr, graphic, fadeOut),
-      () => fadeAnimation(mgr, text, fadeOut),
+      () => fadeAnimation(mgr, [robot, graphic, text], fadeOut),
     ]);
   };
 
@@ -106,7 +97,7 @@ export const Score_Changes: React.FC<PageProps> = ({
     const run = async () => {
 
       switch (animation) {
-        case 1:
+        case Animations.INTRO:
 
           const anim1 = {
             startX:  windowWidth*0.625, startY: windowHeight*0.45,
@@ -123,9 +114,9 @@ export const Score_Changes: React.FC<PageProps> = ({
           setAnimating(true);
           await runIntroAnim(robot, anim1, fadeIn);
           setAnimating(false);
-          setAnimation(0);
+          setAnimation(Animations.IDLE);
           break;
-        case 2:
+        case Animations.OUTRO:
           const fadeOut = {
             duration: 500,
             startA: 1,
@@ -135,7 +126,7 @@ export const Score_Changes: React.FC<PageProps> = ({
           setAnimating(true);
           await runOutroAnim(robot, fadeOut);
           setAnimating(false);
-          setAnimation(0);
+          setAnimation(Animations.IDLE);
           setKeyControl(Pages.FINAL_MESSAGE);
           break;
       }
@@ -163,7 +154,7 @@ export const Score_Changes: React.FC<PageProps> = ({
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
         case "Space":
-          setAnimation(2);
+          setAnimation(Animations.OUTRO);
           break;
       }
     }

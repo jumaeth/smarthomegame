@@ -7,6 +7,7 @@ import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
 import {Container, Graphics} from "@pixi/react";
 import {drawBackground} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+import {blinkingAnimation} from "@/pixi/components/Tutorial/anim/blinkingAnimation.ts";
 
 
 export const IntroPage: React.FC<PageProps> = ({
@@ -93,20 +94,11 @@ export const IntroPage: React.FC<PageProps> = ({
 
     const speed = 2000;
 
-    const { promise } = mgr.runUntil(
-            () => {
-              return [
-                () => ({
+    const run = async () => {
+      await mgr.sequence([ () => blinkingAnimation(mgr, txt, speed, pressedRef)]);
+    }
+    run();
 
-                  promise: mgr.sequence([
-                    () => fadeAnimation(mgr, txt, {duration: speed, startA: 0.8, endA: 0}),
-                    () => fadeAnimation(mgr, txt, {duration: speed, startA: 0, endA: 0.8})
-                  ])
-                }),
-              ];
-            },
-            { mode: "sequence", until: () => pressedRef.current, delayMs: 100 }
-    );
   }, [instrBlinking, showInstruction]);
 
   //key controls

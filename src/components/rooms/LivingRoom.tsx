@@ -15,16 +15,16 @@ import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
 import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState.ts";
 import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
+import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
 
 export const LivingRoom = () => {
   const roomName: RoomName = "livingroom"
-  const [isPaused, setIsPaused] = useState(false);
 
   const gameService = useGameService();
   const smartDevices : SmartDevice[] = gameService.getDeviceForRoom(roomName);
 
   const [activeDevice, setActiveDevice] = useState<string | null>(null);
-  const [tutorialEnabled, setTutorialEnabled] = useState(true);
+  const tutorialActive = useTutorialActive();
   const sdEnabled = useSmarDevicesEnabledState();
   const paused = usePauseState();
 
@@ -34,15 +34,14 @@ export const LivingRoom = () => {
     if (!device) return;
     if (isCompleted) device.complete();
     gameService.resumeGame();
-    //setIsPaused(false);
     setActiveDevice(null);
     checkForRoomCompletion();
   }
 
   const handleDeviceOpen = (deviceName: string):void => {
+    if (tutorialActive.enabled && (deviceName !== "SmartTv"))return;
     setActiveDevice(deviceName);
     gameService.pauseGame();
-    //setIsPaused(true);
   };
 
   const checkForRoomCompletion = () => {
@@ -53,10 +52,8 @@ export const LivingRoom = () => {
   };
 
   function onModalClose() {
-    if (gameService.isPaused())return;
     setActiveDevice(null);
     gameService.resumeGame();
-    //setIsPaused(false);
   }
 
   const interactiveElements = [
@@ -74,6 +71,7 @@ export const LivingRoom = () => {
   }, [])
 
   function handleMapChange(newMap: MapKey): boolean {
+    if (tutorialActive.enabled)return ;
     console.log(newMap); //ToDo remove
     return gameService.leaveRoom(roomName);
   }
@@ -110,8 +108,8 @@ export const LivingRoom = () => {
                       interactiveElements={interactiveElements}
                       isPaused={paused}
                       gameService={gameService}
-                      tutorialEnabled={tutorialEnabled}
-                      finishTutorial={() => setTutorialEnabled(false)}
+                      tutorialEnabled={tutorialActive}
+                      finishTutorial={() =>tutorialActive.close()}
               />
             </Stage>
           </>

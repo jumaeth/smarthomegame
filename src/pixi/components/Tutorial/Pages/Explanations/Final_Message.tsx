@@ -16,6 +16,8 @@ import {GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import {FADE_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
+import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
 
 
 export const Final_Message: React.FC<PageProps> = ({
@@ -80,9 +82,7 @@ export const Final_Message: React.FC<PageProps> = ({
     if (!graphic || !text)return;
 
     await mgr.parallel([
-      () => fadeAnimation(mgr, robot, fadeIn),
-      () => fadeAnimation(mgr, graphic, fadeIn),
-      () => fadeAnimation(mgr, text, fadeIn),
+      () => fadeAnimation(mgr, [robot, graphic, text], fadeIn),
     ]);
   };
 
@@ -94,10 +94,7 @@ export const Final_Message: React.FC<PageProps> = ({
     if (!graphic || !text || !bg)return;
 
     await mgr.parallel([
-      () => fadeAnimation(mgr, bg, fadeOut),
-      () => fadeAnimation(mgr, robot, fadeOut),
-      () => fadeAnimation(mgr, graphic, fadeOut),
-      () => fadeAnimation(mgr, text, fadeOut),
+      () => fadeAnimation(mgr, [bg, robot, graphic, text], fadeOut),
     ]);
   };
 
@@ -144,7 +141,7 @@ export const Final_Message: React.FC<PageProps> = ({
           setAnimating(false);
           setAnimation(0);
           setKeyControl(Pages.MAIN);
-          setNextPage(9);
+          setNextPage(PageOrder.END);
           break;
       }
     };

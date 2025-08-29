@@ -17,7 +17,6 @@ import {loadTexture} from "@/utils/loadTexture.ts";
 import {Container as PixiContainer, Graphics as PixiGraphics, Sprite as PixiSprite, TextStyle} from "pixi.js";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import {Texture} from "@pixi/core";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {ImageProps, TextProps} from "@/pixi/components/Tutorial/util/Types.ts";
 import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
@@ -49,10 +48,6 @@ export const CharacterPage: React.FC<PageProps> = ({
     duration: number
   }
 
-  type SpriteData = {
-    x: number, y: number, texture: Texture, scale: number, anchor: number
-  }
-
   const enum Animations {GROW, SHRINK, END}
 
   //states
@@ -68,6 +63,7 @@ export const CharacterPage: React.FC<PageProps> = ({
   const imageRef = useRef<PixiContainer|null>(null);
   const charRef = useRef<PixiSprite | null >(null);
   const graphicRef = useRef<PixiContainer|null>(null);
+  const pressedRef = useRef<boolean>(false);
 
   //others
   const textsTemp = [
@@ -101,6 +97,7 @@ export const CharacterPage: React.FC<PageProps> = ({
     const onSpecialPressed = (e: KeyboardEvent) => {
       switch (e.code) {
         case "Space":
+          pressedRef.current = true;
           setAnimation(Animations.SHRINK);
       }
     }
@@ -112,6 +109,7 @@ export const CharacterPage: React.FC<PageProps> = ({
       events.forEach(func => window.removeEventListener("keydown", func));
     };
   }, [keyControl, animating]);
+
 
   //manage animations
   useEffect(() => {
@@ -140,6 +138,7 @@ export const CharacterPage: React.FC<PageProps> = ({
           toggleExplanations([texts, images, graphics], true);
           await mgr.parallel([() => fadeAnimation(mgr, [texts, images, graphics], FADE_IN)]);
           setAnimating(false);
+
           break;
 
         case Animations.SHRINK:
@@ -267,6 +266,7 @@ export const CharacterPage: React.FC<PageProps> = ({
             </Container>
     )
   }
+
 
 
   return (

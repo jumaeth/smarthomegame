@@ -19,7 +19,7 @@ import {HeadUpDisplay} from "@/pixi/components/HeadUpDisplay.tsx";
 import {GameService} from "@/services/GameService.ts";
 import {Tutorial} from "@/pixi/components/Tutorial/Tutorial.tsx";
 import {characterPositionStore, useCharacterPosition} from "@/utils/characterPosition.ts";
-import {useTutorialEnabled} from "@/utils/tutorialEnabled.ts";
+import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
 
 interface MainContainerProps {
     canvasSize: {
@@ -52,7 +52,7 @@ export const MainContainer = ({
   const characterTexture = useMemo(() => loadTexture(characterImage), []);
   const { levelTexture, overlayTexture, doorTexture } = useLevelTextures(map);
   const { tile: characterTile } = useCharacterPosition();
-  const { enabled: tutorialEnabled, close: closeTutorial } = useTutorialEnabled();
+  const { enabled: tutorialActive, close: closeTutorial } = useTutorialActive();
 
 
   const [spawnPosition, setSpawnPosition] = useState<Position>({
@@ -67,7 +67,7 @@ export const MainContainer = ({
     const tileY = Math.floor(pos.y / TILE_SIZE);
     const transition = getMapTransition(map, tileX, tileY);
 
-    if (transition) {
+    if (transition && !tutorialActive) {
       const spawn = getSpawnForMap(transition.to, map);
       const nextSpawn: Position = spawn?.pos
               ? { x: spawn.pos.x * TILE_SIZE, y: spawn.pos.y * TILE_SIZE }
@@ -111,7 +111,7 @@ export const MainContainer = ({
                 <Door textures={doorTexture} state={DoorState.Open} />
               </Camera>
 
-              <TransitionOverlay
+              {!tutorialActive && <TransitionOverlay
                       width={canvasSize.width}
                       height={canvasSize.height}
                       inTransition={inTransition}
@@ -125,14 +125,14 @@ export const MainContainer = ({
                         }
                       }}
                       onTransitionEnd={() => setInTransition(false)}
-              />
+              />}
 
               <HeadUpDisplay
                       windowWidth={canvasSize.width}
                       windowHeight={canvasSize.height}
                       gameService={gameService}
               />
-              {tutorialEnabled && <Tutorial
+              {tutorialActive && <Tutorial
                       windowWidth={canvasSize.width}
                       windowHeight={canvasSize.height}
                       gameService={gameService}
