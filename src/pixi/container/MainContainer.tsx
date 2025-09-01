@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useCallback, useMemo, useState} from "react";
+import React, {PropsWithChildren, useMemo, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
 import {Level} from "@/pixi/levels/Level";
 import characterImage from "@/assets/character/character_movement.png";
@@ -20,6 +20,7 @@ import {GameService} from "@/services/GameService.ts";
 import {Tutorial} from "@/pixi/components/Tutorial/Tutorial.tsx";
 import {characterPositionStore, useCharacterPosition} from "@/utils/characterPosition.ts";
 import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
+import {MovementButtons} from "@/components/general-ui/MovementButtons.tsx";
 
 interface MainContainerProps {
     canvasSize: {
@@ -53,24 +54,11 @@ export const MainContainer = ({
      * State to track the spawn position of the character.
      */
     const [spawnPosition, setSpawnPosition] = useState<Position>({x: DEFAULT_POS_X, y: DEFAULT_POS_Y});
-    /**
-     * State to track the character's position in tile coordinates for the camera
-     */
-    const [characterPosition, setCharacterPosition] = useState({
-        x: Math.floor(spawnPosition.x / TILE_SIZE),
-        y: Math.floor(spawnPosition.y / TILE_SIZE)
-    });
 
     const characterTexture = useMemo(() => loadTexture(characterImage), []);
     const {levelTexture, overlayTexture, doorTexture} = useLevelTextures(map);
   const { tile: characterTile } = useCharacterPosition();
   const { enabled: tutorialActive, close: closeTutorial } = useTutorialActive();
-
-    const updateCharacterPosition = useCallback((pos: Position) => {
-        const tileX = Math.floor(pos.x / TILE_SIZE);
-        const tileY = Math.floor(pos.y / TILE_SIZE);
-        setCharacterPosition({x: tileX, y: tileY});
-    }, []);
 
   const handleCharacterMove = (pos: Position) => {
     characterPositionStore.set(pos);

@@ -2,7 +2,7 @@ import "./Modal.css";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
-import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
+import {useState} from "react";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
@@ -189,7 +189,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
       </div>
 
       <div style={{maxHeight: '400px', overflowY: 'auto', marginBottom: '20px'}}>
-        {options.map((option) => (
+        {options.map((option: SmartTvOption) => (
           <div key={option.id} style={{marginBottom: '10px', padding: '10px', border: '1px solid #ddd', borderRadius: '5px'}}>
             <label style={{display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
               <input
