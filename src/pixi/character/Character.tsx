@@ -1,6 +1,6 @@
+import {forwardRef, useCallback, useEffect, useImperativeHandle, useRef} from "react";
 import {Texture} from "pixi.js";
 import {Container, Sprite, useTick} from "@pixi/react";
-import {useCallback, useEffect, useRef} from "react";
 import {ANIMATION_SPEED, MOVE_SPEED, TILE_SIZE} from "@/pixi/constants/world-settings";
 import {useCharacterControls} from "@/hooks/character/useCharacterControls";
 import {Direction, Position} from "@/types/movement";
@@ -19,10 +19,17 @@ interface CharacterProps {
     interactiveElements?: InteractivePixiElement[];
 }
 
-export const Character = ({texture, onMove, collisionMap, spawnPosition, isPaused = false, interactiveElements}: CharacterProps) => {
-    const position = useRef<Position>({...spawnPosition});
-    const targetPosition = useRef<Position | null>(null);
-    const currentDirection = useRef<Direction | null>(null);
+export const Character = forwardRef(({
+                                       texture,
+                                       onMove,
+                                       collisionMap,
+                                       spawnPosition,
+                                       isPaused = false,
+                                       interactiveElements
+                                     }: CharacterProps, ref) => {
+  const position = useRef<Position>({...spawnPosition});
+  const targetPosition = useRef<Position | null>(null);
+  const currentDirection = useRef<Direction | null>(null);
 
     const {direction} = useCharacterControls();
 
@@ -97,6 +104,14 @@ export const Character = ({texture, onMove, collisionMap, spawnPosition, isPause
         }
     }
 
+    useImperativeHandle(ref, () => ({
+      moveUp: () => setNextTarget("UP"),
+      moveDown: () => setNextTarget("DOWN"),
+      moveLeft: () => setNextTarget("LEFT"),
+      moveRight: () => setNextTarget("RIGHT"),
+      interact: () => checkForInteraction(),
+    }));
+
     useTick((delta) => {
         const pauseRequested = isPaused || !movementEnabled;
 
@@ -143,4 +158,4 @@ export const Character = ({texture, onMove, collisionMap, spawnPosition, isPause
             </Container>
         </>
     );
-}
+})
