@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {RoomName} from "@/objects/Room.ts";
@@ -71,7 +71,7 @@ export const LivingRoom = () => {
   }, [])
 
   function handleMapChange(newMap: MapKey): boolean {
-    if (tutorialActive.enabled)return ;
+    if (tutorialActive.enabled)return false;
     console.log(newMap); //ToDo remove
     return gameService.leaveRoom(roomName);
   }
@@ -108,8 +108,6 @@ export const LivingRoom = () => {
                       interactiveElements={interactiveElements}
                       isPaused={paused}
                       gameService={gameService}
-                      tutorialEnabled={tutorialActive}
-                      finishTutorial={() =>tutorialActive.close()}
               />
             </Stage>
           </>

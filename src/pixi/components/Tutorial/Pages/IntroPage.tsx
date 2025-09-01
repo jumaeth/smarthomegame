@@ -1,11 +1,9 @@
 import React, {PropsWithChildren, useEffect, useRef, useState} from "react";
-import {Container as PixiContainer, Graphics as PixiGraphics, Text, TextStyle} from "pixi.js";
+import {Container as PixiContainer, Text, TextStyle} from "pixi.js";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
-import {Container, Graphics} from "@pixi/react";
-import {drawBackground} from "@/pixi/components/Tutorial/util/drawings.tsx";
+import {Container} from "@pixi/react";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {blinkingAnimation} from "@/pixi/components/Tutorial/anim/blinkingAnimation.ts";
 
@@ -27,7 +25,6 @@ export const IntroPage: React.FC<PageProps> = ({
   const rootRef = useRef<PixiContainer | null>(null);
   const explRef = useRef<Text | null>(null);
   const instrRef = useRef<Text | null>(null);
-  const backgroundRef = useRef<PixiGraphics | null>(null);
 
   //hooks
   const mgrRef = useAnimationManager();

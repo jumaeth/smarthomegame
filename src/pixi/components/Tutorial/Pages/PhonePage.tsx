@@ -1,26 +1,9 @@
-import React, {
-  KeyboardEvent,
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react";
+import React, {PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
 import {Container, Graphics, Sprite, Text} from "@pixi/react";
 import phoneImage from "@/assets/tutorial/phonePage/phone.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
-import {
-  Container as PixiContainer,
-  Graphics as PixiGraphics,
-  Sprite as PixiSprite,
-  Text as PixiText,
-  TextStyle,
-  TextStyleFontWeight
-} from "pixi.js";
+import {Container as PixiContainer, Graphics as PixiGraphics, Sprite as PixiSprite, TextStyle} from "pixi.js";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
 import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
@@ -28,8 +11,7 @@ import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
-import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
-
+import {TextProps} from "@/pixi/components/Tutorial/util/Types.ts";
 
 
 export const PhonePage: React.FC<PageProps> = ({
@@ -47,7 +29,7 @@ export const PhonePage: React.FC<PageProps> = ({
 
   //state
   const [animation, setAnimation] = useState(Animations.GROW);
-  const [allTexts, setAllTexts] = useState([]);
+  const [allTexts, setAllTexts] = useState<TextProps[]>([]);
   const [onLoad, setOnLoad] = useState(true);
   const [animating, setAnimating] = useState(false);
   const [showChar, setShowChar] = useState(true);
@@ -78,14 +60,16 @@ export const PhonePage: React.FC<PageProps> = ({
 
   //hide explanations  on init
   useLayoutEffect(() => {
-    toggleExplanations([textRef.current, graphicRef.current], false);
+    const text = textRef.current;
+    const graphic = graphicRef.current;
+    if (!text || !graphic)return;
+    toggleExplanations([text, graphic], false);
   }, []);
 
   //manage animations
   useEffect(() => {
 
     let timeoutId: number | undefined;
-    let cancelled = false;
 
     const mgr = mgrRef.current!;
     const sprite = charRef.current;
@@ -96,7 +80,7 @@ export const PhonePage: React.FC<PageProps> = ({
     const run = async () => {
       switch (animation) {
 
-        case Animations.GROW:
+        case Animations.GROW: {
           const growChar = {
             startX: 0.04 * windowWidth, startY: windowHeight * 0.1,
             endX: windowWidth * 0.5, endY: windowHeight * 0.5,
@@ -109,8 +93,9 @@ export const PhonePage: React.FC<PageProps> = ({
           await mgr.parallel([() => fadeAnimation(mgr, [texts, graphics], FADE_IN)]);
           setAnimating(false);
           break;
+        }
 
-        case Animations.SHRINK:
+        case Animations.SHRINK: {
           const shrinkChar = {
             startX: windowWidth * 0.5, startY: windowHeight * 0.5,
             endX: 0.04 * windowWidth, endY: windowHeight * 0.1,
@@ -125,6 +110,7 @@ export const PhonePage: React.FC<PageProps> = ({
           toggleExplanations([texts, graphics], false);
           setAnimation(Animations.END);
           break;
+        }
 
         case Animations.END:
           setKeyControl(Pages.MAIN);
@@ -138,7 +124,6 @@ export const PhonePage: React.FC<PageProps> = ({
     run();
 
     return () => {
-      cancelled = true;
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
   }, [animation]);
@@ -149,7 +134,7 @@ export const PhonePage: React.FC<PageProps> = ({
   useEffect(() => {
     if(keyControl != Pages.SMARTPHONE || animating)return;
 
-    const onSpecialPressed = (e: KeyboardEvent) => {
+    const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
       switch (e.code) {
         case "Space":
           setAnimation(Animations.SHRINK);
@@ -221,7 +206,7 @@ export const PhonePage: React.FC<PageProps> = ({
   const texts = () => {
     return (
             <Container ref={textRef}>
-              {allTexts.map((text, i) => (
+              {allTexts.map((text: TextProps, i) => (
                       <Text
                               key={i}
                               text={text.text}

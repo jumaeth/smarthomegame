@@ -1,13 +1,4 @@
-import React, {
-  KeyboardEvent,
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react";
+import React, {PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
 import {Container, Graphics, Sprite, Text} from "@pixi/react";
 import characterImage from "@/assets/tutorial/characterPage/cp_character.png";
 import arrowKeys from "@/assets/tutorial/characterPage/cp_arrow_keys.png";
@@ -71,7 +62,7 @@ export const CharacterPage: React.FC<PageProps> = ({
           "Discovery", "Interactive objects light up if you walk next to them", "The Player"
   ]
   const texture = useMemo(() => loadTexture(characterImage), []);
-  const imageSource: arrowKeys = [arrowKeys, eKey, highlighting];
+  const imageSource: typeof arrowKeys[] = [arrowKeys, eKey, highlighting];
 
   //hooks
   const mgrRef = useAnimationManager();
@@ -87,14 +78,18 @@ export const CharacterPage: React.FC<PageProps> = ({
 
   //hide explanations  on init
   useLayoutEffect(() => {
-    toggleExplanations([textRef.current, imageRef.current, graphicRef.current], false);
+    const text = textRef.current;
+    const graphic = graphicRef.current;
+    const image = graphicRef.current;
+    if (!text || !graphic || !image)return;
+    toggleExplanations([text, image, graphic], false);
   }, []);
 
   //keyControls
   useEffect(() => {
     if(keyControl != Pages.CHARACTER || animating)return;
 
-    const onSpecialPressed = (e: KeyboardEvent) => {
+    const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
       switch (e.code) {
         case "Space":
           pressedRef.current = true;
@@ -114,7 +109,6 @@ export const CharacterPage: React.FC<PageProps> = ({
   //manage animations
   useEffect(() => {
     let timeoutId: number | undefined;
-    let cancelled = false;
 
     const mgr = mgrRef.current!;
     const sprite = charRef.current;
@@ -126,7 +120,7 @@ export const CharacterPage: React.FC<PageProps> = ({
     const run = async () => {
       switch (animation) {
 
-        case Animations.GROW:
+        case Animations.GROW: {
           const growChar = {
             startX: windowWidth / 2 + TILE_SIZE * 4, startY: windowHeight / 2 + TILE_SIZE * 5.9,
             endX: windowWidth * 0.5 + TILE_SIZE * 3, endY: windowHeight * 0.5,
@@ -140,8 +134,9 @@ export const CharacterPage: React.FC<PageProps> = ({
           setAnimating(false);
 
           break;
+        }
 
-        case Animations.SHRINK:
+        case Animations.SHRINK: {
           const shrinkChar = {
             startX: windowWidth * 0.5 + TILE_SIZE * 3, startY: windowHeight * 0.5,
             endX: windowWidth / 2 + TILE_SIZE * 4, endY: windowHeight / 2 + TILE_SIZE * 5.9,
@@ -149,12 +144,13 @@ export const CharacterPage: React.FC<PageProps> = ({
           } as animProps
           setAnimating(true);
           await mgr.parallel([
-                  () => fadeAnimation(mgr, [texts, images, graphics], FADE_OUT),
-                  () => growAnimation(mgr, sprite, shrinkChar)])
+            () => fadeAnimation(mgr, [texts, images, graphics], FADE_OUT),
+            () => growAnimation(mgr, sprite, shrinkChar)])
           setAnimating(false);
           toggleExplanations([texts, images, graphics], false);
           setAnimation(Animations.END)
           break;
+        }
 
         case Animations.END:
           setKeyControl(Pages.MAIN);
@@ -162,12 +158,12 @@ export const CharacterPage: React.FC<PageProps> = ({
           setAnimating(true);
           setShowChar(false);
           break;
+
       }
     }
 
     run();
     return () => {
-      cancelled = true;
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
   }, [animation]);

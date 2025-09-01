@@ -1,4 +1,4 @@
-import React, {KeyboardEvent, PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
+import React, {PropsWithChildren, RefObject, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Sprite} from "@pixi/react";
 import handsUp from "@/assets/tutorial/explanationPages/handsUp.png";
 import pointLeft from "@/assets/tutorial/explanationPages/pointLeft.png";
@@ -15,7 +15,6 @@ import {
   TextStyleFontWeight
 } from "pixi.js";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
 import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
@@ -44,7 +43,6 @@ export const Decision: React.FC<PageProps> = ({
   const [showExpl, setShowExpl] = useState(false);
   const [onLoad, setOnLoad] = useState(true);
   const [animating, setAnimating] = useState(false);
-  const [showSprite, setShowSprite] = useState(true);
   const mgrRef = useAnimationManager();
   const spriteContainerRef = useRef(null)
   const midTextRef = useRef<PixiContainer | null>(null);
@@ -133,7 +131,7 @@ export const Decision: React.FC<PageProps> = ({
   };
 
   //run fadeOut of first text
-  const runFadeOutAnim = async (sprite: PixiSprite) => {
+  const runFadeOutAnim = async () => {
     const mgr = mgrRef.current!;
     const midC = midContRef.current;
     const midT = midTextRef.current;
@@ -152,7 +150,7 @@ export const Decision: React.FC<PageProps> = ({
     ]);
   };
 
-  const runFadeAnim = async (sprite: PixiSprite, fadeProps: FadeProps) => {
+  const runFadeAnim = async (fadeProps: FadeProps) => {
     const mgr = mgrRef.current!;
     const midC = midContRef.current;
     const midT = midTextRef.current;
@@ -173,7 +171,7 @@ export const Decision: React.FC<PageProps> = ({
   useEffect(() => {
     if(keyControl != Pages.DECISION || animating)return;
 
-    const onSpecialPressed = (e: KeyboardEvent) => {
+    const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
       switch (e.code) {
         case "ArrowLeft":
         case "KeyA":
@@ -212,7 +210,6 @@ export const Decision: React.FC<PageProps> = ({
     if (onLoad) return;
 
     let timeoutId: number | undefined;
-    let cancelled = false;
 
     const run = async () => {
 
@@ -228,16 +225,16 @@ export const Decision: React.FC<PageProps> = ({
           break;
 
         case Anims.SWITCH:
-          await runFadeOutAnim(sprite);
+          await runFadeOutAnim();
           secondRobotSprite();
-          await runFadeAnim(sprite, FADE_IN);
+          await runFadeAnim(FADE_IN);
           setAnimation(Anims.IDLE);
           setLessExplReady(true);
           break;
 
         case Anims.OUTRO_MORE:
           setAnimating(true);
-          await runFadeOutAnim(sprite);
+          await runFadeOutAnim();
           setAnimating(false);
           setKeyControl(Pages.MAIN);
           setNextPage(PageOrder.MORE_EXPL);
@@ -245,7 +242,7 @@ export const Decision: React.FC<PageProps> = ({
 
         case Anims.OUTRO_LESS:
           setAnimating(true);
-          await runFadeAnim(sprite, FADE_OUT);
+          await runFadeAnim(FADE_OUT);
           setAnimating(false);
           setKeyControl(Pages.MAIN);
           setNextPage(PageOrder.LESS_EXPL);
@@ -256,7 +253,6 @@ export const Decision: React.FC<PageProps> = ({
     run();
 
     return () => {
-      cancelled = true;
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
   }, [animation]);
@@ -300,13 +296,13 @@ export const Decision: React.FC<PageProps> = ({
   }
 
   const setupGraphics = (x: number, y: number, width: number, height: number, radius: number,
-                         ref, hoverEnabled: boolean, onClick: () => void) => {
+                         ref: RefObject<PixiContainer>, hoverEnabled: boolean, onClick: () => void) => {
 
     const g = new PixiGraphics();
     g.clear();
     g.beginFill(fill, 1);
     g.lineStyle(3, stroke);
-    g.drawRoundedRect(x, y, width, height, 8);
+    g.drawRoundedRect(x, y, width, height, radius);
     g.endFill();
 
     if (hoverEnabled){
@@ -323,7 +319,7 @@ export const Decision: React.FC<PageProps> = ({
 
   const drawGraphics = () =>{
     setupGraphics(windowWidth*0.3, windowHeight * 0.125, windowWidth*0.4, windowHeight *0.25, 10,
-            midContRef, false, null);
+            midContRef, false, () => null);
     setupGraphics(windowWidth*0.3125, windowHeight * 0.4, windowWidth*0.15, windowHeight *0.1, 10,
             leftContRef, true, leftOnClick);
     setupGraphics(windowWidth*0.5375, windowHeight * 0.4, windowWidth*0.15, windowHeight *0.1, 10,
@@ -331,7 +327,7 @@ export const Decision: React.FC<PageProps> = ({
   }
 
   const setupTexts = (text: string, x: number, y: number, fontSize: number, fontWeight: TextStyleFontWeight,
-                      wrap: number, align: TextStyleAlign, ref, anchor:number) => {
+                      wrap: number, align: TextStyleAlign, ref: RefObject<PixiContainer>, anchor:number) => {
     const t1 = new PixiText();
     t1.text = text;
     t1.x = x;
@@ -380,7 +376,7 @@ export const Decision: React.FC<PageProps> = ({
     if (!graphic) return;
     graphic.removeChildren();
     setupGraphics(windowWidth*0.275, windowHeight*0.3,windowWidth*0.45, windowHeight*0.2, 10,
-            midContRef, false, null);
+            midContRef, false, () => null);
 
     const textC = midTextRef.current;
     if (!textC) return;
@@ -394,7 +390,7 @@ export const Decision: React.FC<PageProps> = ({
   const sprite = () => {
    return (
            <Container ref={spriteContainerRef}>
-             {showSprite && <Sprite texture={textureHandsUp} ref={charRef} />}
+             {<Sprite texture={textureHandsUp} ref={charRef} />}
            </Container>)
   }
 

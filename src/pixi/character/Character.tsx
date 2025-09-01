@@ -1,6 +1,6 @@
 import {Texture} from "pixi.js";
 import {Container, Sprite, useTick} from "@pixi/react";
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef} from "react";
 import {ANIMATION_SPEED, MOVE_SPEED, TILE_SIZE} from "@/pixi/constants/world-settings";
 import {useCharacterControls} from "@/hooks/character/useCharacterControls";
 import {Direction, Position} from "@/types/movement";
@@ -35,7 +35,7 @@ export const Character = ({texture, onMove, collisionMap, spawnPosition, isPause
         animationSpeed: ANIMATION_SPEED,
     })
 
-    const { movementEnabled, disable } = useMovementStore();
+    const { movementEnabled } = useMovementStore();
 
     const setNextTarget = useCallback((direction: Direction) => {
         if (targetPosition.current) return

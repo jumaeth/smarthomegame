@@ -1,4 +1,4 @@
-import React, {KeyboardEvent, PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
+import React, {PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Sprite, Text} from "@pixi/react";
 import waving from "@/assets/tutorial/finalExpl/waving.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
@@ -9,15 +9,12 @@ import {
   Text as PixiText,
   TextStyle
 } from "pixi.js";
-import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
-import {GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import {characterPositionStore} from "@/utils/characterPosition.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
-import {FADE_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 
 
 export const Final_Message: React.FC<PageProps> = ({
@@ -28,11 +25,12 @@ export const Final_Message: React.FC<PageProps> = ({
        setNextPage
            }: PropsWithChildren<PageProps>) => {
 
+  const enum Animations {IDLE, INTRO, OUTRO}
+
   const textureRobot = useMemo(() => loadTexture(waving), []);
   const robotRef = useRef<PixiSprite | null >(null);
-  const [animation, setAnimation] = useState(0);
-  const [pixiTexts, setPixiTexts] = useState([]);
-  const [onLoad, setOnLoad] = useState(true);
+  const [animation, setAnimation] = useState(Animations.IDLE);
+  const [pixiTexts, setPixiTexts] = useState<PixiText[]>([]);
   const [animating, setAnimating] = useState(false);
   const mgrRef = useRef<AnimationManager | null>(null);
   const fill = "#054388";
@@ -47,22 +45,12 @@ export const Final_Message: React.FC<PageProps> = ({
           "Thats it, now you are ready to save the smart home and make that movie night possible!"
   ]
 
-  //----------init----------
-
-  //init graphics/texts
-  useEffect(() => {
-    if (onLoad) {
-      //setAnimation(1);
-      setOnLoad(false);
-    }
-  }, [onLoad]);
-
   useEffect(() => {
     setupBackground();
     setupTexts();
     setupGraphics();
     setupRobot();
-    setAnimation(1);
+    setAnimation(Animations.INTRO);
   }, [textRef]);
 
 
@@ -75,7 +63,7 @@ export const Final_Message: React.FC<PageProps> = ({
   }, []);
 
   //run grow/shrink animation
-  const runIntroAnim = async (robot: PixiSprite, growProps: GrowProps, fadeIn: FadeProps) => {
+  const runIntroAnim = async (robot: PixiSprite, fadeIn: FadeProps) => {
     const mgr = mgrRef.current!;
     const graphic = graphicRef.current;
     const text = textRef.current;
@@ -103,60 +91,39 @@ export const Final_Message: React.FC<PageProps> = ({
     if (!mgrRef.current) return;
 
     let timeoutId: number | undefined;
-    let cancelled = false;
     const robot = robotRef.current;
     if (!robot) return;
 
     const run = async () => {
 
       switch (animation) {
-        case 1:
-
-          const anim1 = {
-            startX:  windowWidth*0.625, startY: windowHeight*0.45,
-            endX: windowWidth * 0.625, endY: windowHeight * 0.45,
-            startS: 0.4, endS: 0.5, showOthers: false, duration: 750
-          } as GrowProps
-
-          const fadeIn = {
-            duration: 500,
-            startA: 0,
-            endA: 1,
-          } as FadeProps
+        case Animations.INTRO: {
 
           setAnimating(true);
-          await runIntroAnim(robot, anim1, fadeIn);
+          await runIntroAnim(robot, FADE_IN);
           setAnimating(false);
-          setAnimation(0);
+          setAnimation(Animations.IDLE);
           break;
-        case 2:
-          const fadeOut = {
-            duration: 500,
-            startA: 1,
-            endA: 0,
-          } as FadeProps
+        }
+        case Animations.OUTRO: {
 
           setAnimating(true);
-          await runOutroAnim(robot, fadeOut);
+          await runOutroAnim(robot, FADE_OUT);
           setAnimating(false);
-          setAnimation(0);
+          setAnimation(Animations.IDLE);
           setKeyControl(Pages.MAIN);
           setNextPage(PageOrder.END);
           break;
+        }
       }
     };
 
     run();
 
     return () => {
-      cancelled = true;
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
   }, [animation]);
-
-  const teleport = () => {
-    characterPositionStore.teleport({x: 10*TILE_SIZE, y: 5*TILE_SIZE})
-  };
 
 
   //----------user input----------
@@ -165,10 +132,10 @@ export const Final_Message: React.FC<PageProps> = ({
   useEffect(() => {
     if(keyControl != Pages.FINAL_MESSAGE || animating)return;
 
-    const onSpecialPressed = (e: KeyboardEvent) => {
+    const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
       switch (e.code) {
         case "Space":
-          setAnimation(2);
+          setAnimation(Animations.OUTRO);
           break;
       }
     }

@@ -1,14 +1,5 @@
-import React, {
-  KeyboardEvent,
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react";
-import {Container, Graphics, Sprite, Text, useTick} from "@pixi/react";
+import React, {PropsWithChildren, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
+import {Container, Sprite, Text} from "@pixi/react";
 import {loadTexture} from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
@@ -18,20 +9,17 @@ import {
   TextStyle
 } from "pixi.js";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
 import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {useCharacterControls} from "@/hooks/character/useCharacterControls.ts";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {useCharacterPosition} from "@/hooks/character/useCharacterPosition.ts";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import robot from "@/assets/tutorial/explainTVPage/pointing.png";
 import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
-
 
 
 export const More_Expl_SD: React.FC<PageProps> = ({
@@ -54,11 +42,10 @@ export const More_Expl_SD: React.FC<PageProps> = ({
           " Different decisions will have different affects on your scores."
 
   //state
-  const [onLoad, setOnLoad] = useState(true);
   const [animating, setAnimating] = useState(false);
   const [animation, setAnimation] = useState(Animations.INTRO);
   const [showExpl, setShowExpl] = useState(false);
-  const [pixiTexts, setPixiTexts] = useState([]);
+  const [pixiTexts, setPixiTexts] = useState<PixiText[]>([]);
 
   //refs
   const graphicRef = useRef<PixiContainer | null>(null);
@@ -90,13 +77,15 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
   //hide explanations  on init
   useLayoutEffect(() => {
-    toggleExplanations([textRef.current, graphicRef.current], false);
+    const text = textRef.current;
+    const graphic = graphicRef.current;
+    if (!text || !graphic)return;
+    toggleExplanations([text, graphic], false);
   }, []);
 
   //manageAnimations
   useEffect(() => {
     let timeoutId: number | undefined;
-    let cancelled = false;
 
     const mgr = mgrRef.current!;
     const robot = robotRef.current;
@@ -107,9 +96,9 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     const run = async () => {
 
       switch (animation) {
-        case Animations.INTRO:
+        case Animations.INTRO: {
           const growChar = {
-            startX:  windowWidth*0.825, startY: windowHeight*0.725,
+            startX: windowWidth * 0.825, startY: windowHeight * 0.725,
             endX: windowWidth * 0.8, endY: windowHeight * 0.7,
             startS: 0.6, endS: 0.8, showOthers: false, duration: 750
           } as GrowProps
@@ -121,6 +110,8 @@ export const More_Expl_SD: React.FC<PageProps> = ({
             () => fadeAnimation(mgr, [texts, graphics], FADE_IN)]);
           setAnimating(false);
           break;
+        }
+
         case Animations.OUTRO:
           setAnimating(true);
           await mgr.parallel([() => fadeAnimation(mgr, [texts, graphics, robot], FADE_OUT)]);
@@ -141,7 +132,6 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     run();
 
     return () => {
-      cancelled = true;
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
   }, [ready, animation]);
@@ -149,7 +139,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
   useEffect(() => {
     if(keyControl != Pages.More_Expl_SD || animating)return;
 
-    const onSpecialPressed = (e: KeyboardEvent) => {
+    const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
       switch (e.code) {
         case "Space":
           setAnimation(Animations.OUTRO);
@@ -168,18 +158,16 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
   //smartDeviceDetection
   const checkFoundSmartTV = (): boolean => {
-    if (!pos) {
-      return;
-    }
+    if (!pos || !interactiveElements?.length) return false;
 
     const targetX = pos.x / TILE_SIZE;
     const targetY = pos.y / TILE_SIZE;
 
-    const interactiveElement: InteractivePixiElement = interactiveElements?.find(element => {
-      const elementLeft = element.x-1;
-      const elementRight = element.x + (element.width ) ;
-      const elementTop = element.y-1;
-      const elementBottom = element.y + (element.height) ;
+    const interactiveElement = interactiveElements.find((element) => {
+      const elementLeft = element.x - 1;
+      const elementRight = element.x + element.width;
+      const elementTop = element.y - 1;
+      const elementBottom = element.y + element.height;
       return (
               targetX >= elementLeft &&
               targetX <= elementRight &&
@@ -188,13 +176,12 @@ export const More_Expl_SD: React.FC<PageProps> = ({
       );
     });
 
-    if (interactiveElement && interactiveElement.x === 4 && interactiveElement.y === 2) {
+    if (interactiveElement?.x === 4 && interactiveElement.y === 2) {
       interactiveElement.interaction();
       return true;
-    }else{
-      return false;
     }
-  }
+    return false;
+  };
 
   useEffect(() => {
     if (ePressed && checkFoundSmartTV()){

@@ -1,12 +1,14 @@
 // anim/spotlightTweens.ts
 import { AnimationManager, easeInOutQuad } from "./AnimationManager";
 import {drawSpotlight} from "@/pixi/components/Tutorial/util/drawings.tsx";
+import {RefObject} from "react";
+import {Graphics as PixiGraphics} from "pixi.js"
 
 export type SpotRect = { x: number; y: number; width: number; height: number; r: number };
 
 export function spotlightAnimation(
         mgr: AnimationManager,
-        bgRef,
+        bgRef: RefObject<PixiGraphics>,
         windowWith: number,
         windowHeight: number,
         from: SpotRect,

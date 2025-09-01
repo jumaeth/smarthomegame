@@ -24,7 +24,7 @@ export function fadeAnimation(
   const sprites = Array.isArray(targets) ? targets : [targets];
 
   sprites.forEach(s => {
-    (s as any).alpha = props.startA;
+    s.alpha = props.startA;
   });
   onStart?.();
 
@@ -34,7 +34,7 @@ export function fadeAnimation(
             ease,
             onUpdate: (p) => {
               const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-              (s as any).alpha = lerp(props.startA, props.endA, p);
+              s.alpha = lerp(props.startA, props.endA, p);
             },
           })
   );

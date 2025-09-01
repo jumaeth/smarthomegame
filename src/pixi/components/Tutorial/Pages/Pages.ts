@@ -1,5 +1,3 @@
-import {More_Expl_SD} from "@/pixi/components/Tutorial/Pages/Explanations/More_Expl_SD.tsx";
-
 export enum Pages{
   MAIN,
   INTRO,

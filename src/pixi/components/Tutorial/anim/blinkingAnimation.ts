@@ -1,27 +1,20 @@
-import type { DisplayObject as PixiDisplayObject, Sprite as PixiSprite } from "pixi.js";
-import type { Ease } from "./AnimationManager";
-import { AnimationManager, easeInOutQuad } from "./AnimationManager";
+import type {DisplayObject as PixiDisplayObject} from "pixi.js";
+import {AnimationManager} from "./AnimationManager";
 import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
-import {FADE_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
-
-export type GrowProps = {
-  duration: number;
-  startX: number; startY: number; startS: number;
-  endX: number; endY: number; endS: number;
-  ease?: Ease;
-};
+import {RefObject} from "react";
 
 export function blinkingAnimation(
         mgr: AnimationManager,
         sprite: PixiDisplayObject,
         speed: number,
-        pressedRef,
+        pressedRef: RefObject<boolean>,
         onStart?: () => void,
-        onComplete?: () => void
 ): { promise: Promise<void> } {
 
   onStart?.();
 
+  const pressed = pressedRef.current;
+  if (!pressed) return { promise: Promise.resolve() };
   const { promise } = mgr.runUntil(
           () => {
             return [
@@ -34,7 +27,7 @@ export function blinkingAnimation(
               }),
             ];
           },
-          { mode: "sequence", until: () => pressedRef.current, delayMs: 100 }
+          { mode: "sequence", until: () => pressed, delayMs: 100 }
   );
 
   return { promise };

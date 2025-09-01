@@ -1,19 +1,17 @@
 import React, {PropsWithChildren, useEffect, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
-import {Container as PixiContainer, Graphics as PixiGraphics, Text} from "pixi.js";
+import {Container as PixiContainer, Graphics as PixiGraphics} from "pixi.js";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {PAGE_COMPONENTS, PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
 import {spotlightAnimation} from "@/pixi/components/Tutorial/anim/spotlightAnimation.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {GameService} from "@/services/GameService.ts";
 import {characterPositionStore} from "@/utils/characterPosition.ts";
-import {movementStore} from "@/utils/movementEnabled.ts";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {drawBackground, drawSpotlight} from "@/pixi/components/Tutorial/util/drawings.tsx";
+import {drawBackground} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {introText, phone, player, scores, tv, tv2} from "@/pixi/components/Tutorial/util/spotLightPositions.ts";
-import {FADE_DURATION, SPOTLIGHT_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
+import {SPOTLIGHT_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 
 interface TutorialProps {
@@ -66,7 +64,6 @@ export const Tutorial: React.FC<TutorialProps> = ({
   useEffect(() => {
 
     let timeoutId: number | undefined;
-    let cancelled = false;
 
     const run = async () => {
 
@@ -181,7 +178,6 @@ export const Tutorial: React.FC<TutorialProps> = ({
     run();
 
     return () => {
-      cancelled = true;
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
   }, [nextPage]);

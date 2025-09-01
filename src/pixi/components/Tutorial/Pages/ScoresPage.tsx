@@ -1,13 +1,4 @@
-import React, {
-  KeyboardEvent,
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react";
+import React, {PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
 import {Container, Graphics, Sprite, Text} from "@pixi/react";
 import scoresImage from "@/assets/tutorial/scoresPage/scores.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
@@ -71,13 +62,13 @@ export const ScoresPage: React.FC<PageProps> = ({
 
   //hide explanations  on init
   useLayoutEffect(() => {
+    if (!textRef.current || !graphicRef.current)return;
     toggleExplanations([textRef.current, graphicRef.current], false);
   }, []);
 
   //manage animations
   useEffect(() => {
     let timeoutId: number | undefined;
-    let cancelled = false;
 
     const mgr = mgrRef.current!;
     const sprite = charRef.current;
@@ -88,8 +79,8 @@ export const ScoresPage: React.FC<PageProps> = ({
     const run = async () => {
       switch (animation) {
 
-        case Animations.GROW:
-          const growChar = {
+        case Animations.GROW: {
+          const growChar= {
             startX: 0.9275 * windowWidth, startY: windowHeight * 0.063,
             endX: windowWidth  * 0.55, endY: windowHeight * 0.3,
             startS: 0.275, endS: 1, showOthers: true, duration: GROW_DURATION
@@ -101,8 +92,9 @@ export const ScoresPage: React.FC<PageProps> = ({
           await mgr.parallel([() => fadeAnimation(mgr, [texts, graphics], FADE_IN)]);
           setAnimating(false);
           break;
+        }
 
-        case Animations.SHRINK:
+        case Animations.SHRINK: {
           const shrinkChar = {
             startX: windowWidth * 0.55, startY: windowHeight * 0.3,
             endX: 0.9275 * windowWidth, endY: windowHeight * 0.063,
@@ -117,6 +109,7 @@ export const ScoresPage: React.FC<PageProps> = ({
           toggleExplanations([texts, graphics], false);
           setAnimation(Animations.END);
           break;
+        }
 
         case Animations.END:
           setKeyControl(Pages.MAIN);
@@ -130,7 +123,6 @@ export const ScoresPage: React.FC<PageProps> = ({
     run();
 
     return () => {
-      cancelled = true;
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
   }, [animation]);
@@ -140,7 +132,7 @@ export const ScoresPage: React.FC<PageProps> = ({
   useEffect(() => {
     if(keyControl != Pages.SCORES || animating)return;
 
-    const onSpecialPressed = (e: KeyboardEvent) => {
+    const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
       switch (e.code) {
         case "Space":
           setAnimation(Animations.SHRINK);

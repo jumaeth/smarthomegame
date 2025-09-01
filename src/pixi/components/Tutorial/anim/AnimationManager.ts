@@ -1,4 +1,3 @@
-// anim/AnimationManager.ts
 export type Ease = (t: number) => number;
 export const linear: Ease = t => t;
 export const easeInOutQuad: Ease = t => (t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2);
@@ -98,7 +97,12 @@ export class AnimationManager {
         }
         if (p >= 1) {
           this.anims.delete(a.id);
-          try { a.onComplete?.(); } catch {}
+          try { a.onComplete?.(); } catch (e){
+            if (e instanceof Error) {
+              console.log(e.stack);
+            } else {
+              console.log("Unknown error", e);
+            }}
           a.resolve();
         }
       }

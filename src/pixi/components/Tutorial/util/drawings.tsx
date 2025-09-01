@@ -1,6 +1,8 @@
 import {SpotRect} from "@/pixi/components/Tutorial/anim/spotlightAnimation.ts";
+import type {DisplayObject as PixiDisplayObject, Graphics as PixiGraphics} from "pixi.js";
+import {RefObject} from "react";
 
-export const drawBackground = (backgroundRef, windowWidth: number, windowHeight: number)=> {
+export const drawBackground = (backgroundRef: RefObject<PixiGraphics>, windowWidth: number, windowHeight: number)=> {
   const g = backgroundRef.current;
   if (g) {
     g.clear();
@@ -11,7 +13,7 @@ export const drawBackground = (backgroundRef, windowWidth: number, windowHeight:
   }
 }
 
-export const drawSpotlight = (rect: SpotRect, backgroundRef, windowWidth: number, windowHeight: number) => {
+export const drawSpotlight = (rect: SpotRect, backgroundRef: RefObject<PixiGraphics>, windowWidth: number, windowHeight: number) => {
   const g = backgroundRef.current;
   if (!g || !rect) return;
 
@@ -25,7 +27,7 @@ export const drawSpotlight = (rect: SpotRect, backgroundRef, windowWidth: number
   g.endFill();
 };
 
-export const toggleExplanations = (refs, visibility: boolean) => {
+export const toggleExplanations = (refs: PixiDisplayObject[], visibility: boolean) => {
   refs.forEach(c => {
     if (!c) return;
     c.alpha = visibility ? 1 : 0;
