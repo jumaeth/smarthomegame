@@ -80,7 +80,7 @@ export const CharacterPage: React.FC<PageProps> = ({
   useLayoutEffect(() => {
     const text = textRef.current;
     const graphic = graphicRef.current;
-    const image = graphicRef.current;
+    const image = imageRef.current;
     if (!text || !graphic || !image)return;
     toggleExplanations([text, image, graphic], false);
   }, []);

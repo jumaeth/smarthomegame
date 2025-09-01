@@ -148,6 +148,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
         case PageOrder.SCORE_CHANGES: {
 
           gameService.pauseGame();
+          drawBackground(backgroundRef, windowWidth, windowHeight);
 
           characterPositionStore.teleport({x: 5*TILE_SIZE, y: 3*TILE_SIZE});
           isAnimatingRef.current = true;
@@ -192,13 +193,13 @@ export const Tutorial: React.FC<TutorialProps> = ({
     if (!tv) return;
 
     const unsubscribe = tv.subscribe(device => {
-      if (device.getIsCompleted()) {
+      if (device.getIsCompleted() && nextPage === PageOrder.LESS_EXPL) {
         setNextPage(PageOrder.SCORE_CHANGES);
       }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [nextPage]);
 
 
 

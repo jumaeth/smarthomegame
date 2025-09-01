@@ -85,6 +85,13 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
   //manageAnimations
   useEffect(() => {
+
+    if (animation === Animations.END) {
+      setKeyControl(Pages.MAIN);
+      setNextPage(PageOrder.SCORE_CHANGES);
+      return;
+    }
+
     let timeoutId: number | undefined;
 
     const mgr = mgrRef.current!;
@@ -99,13 +106,12 @@ export const More_Expl_SD: React.FC<PageProps> = ({
         case Animations.INTRO: {
           const growChar = {
             startX: windowWidth * 0.825, startY: windowHeight * 0.725,
-            endX: windowWidth * 0.8, endY: windowHeight * 0.7,
+            endX: windowWidth * 0.85, endY: windowHeight * 0.7,
             startS: 0.6, endS: 0.8, showOthers: false, duration: 750
           } as GrowProps
 
           setAnimating(true);
           toggleExplanations([texts, graphics], true);
-          //await mgr.sequence([() => growAnimation(mgr, robot, growChar)]);
           await mgr.parallel([() => growAnimation(mgr, robot, growChar),
             () => fadeAnimation(mgr, [texts, graphics], FADE_IN)]);
           setAnimating(false);
@@ -115,16 +121,11 @@ export const More_Expl_SD: React.FC<PageProps> = ({
         case Animations.OUTRO:
           setAnimating(true);
           await mgr.parallel([() => fadeAnimation(mgr, [texts, graphics, robot], FADE_OUT)]);
+          setAnimation(Animations.END);
           setAnimating(false);
           setShowExpl(false);
           toggleExplanations([texts, graphics], false);
           gameService?.enableSD();
-          setAnimation(Animations.END);
-          break;
-
-        case Animations.END:
-          setKeyControl(Pages.MAIN);
-          setNextPage(PageOrder.SCORE_CHANGES);
           break;
       }
     };
@@ -142,7 +143,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
       switch (e.code) {
         case "Space":
-          setAnimation(Animations.OUTRO);
+          //setAnimation(Animations.OUTRO);
           break;
       }
     }
@@ -190,17 +191,33 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     }
   }, [ePressed]);
 
+  //listen for smartTvDone
+  useEffect(() => {
+    if (!gameService)return;
+    const devices = gameService.getDeviceForRoom("livingroom");
+    const tv = devices.find(d => d.name === "SmartTv");
+
+    if (!tv) return;
+
+    const unsubscribe = tv.subscribe(device => {
+      if (device.getIsCompleted()) {
+        setAnimation(Animations.OUTRO);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   //setup graphics
   const setupTexts = () => {
     const t1 = new PixiText();
     t1.text = explText;
-    t1.x = windowWidth*0.825;
+    t1.x = windowWidth*0.875;
     t1.y = windowHeight*0.35;
     t1.style = new TextStyle({
       fontSize: Math.min(windowWidth, windowHeight) * 0.035,
       fontWeight: "normal",
-      wordWrapWidth: windowWidth * 0.25
+      wordWrapWidth: windowWidth * 0.22
     })
 
     setPixiTexts(prev => [...prev, t1]);
@@ -212,7 +229,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     g.clear();
     g.beginFill(fill, 1);
     g.lineStyle(3, stroke);
-    g.drawRoundedRect(windowWidth*0.7, windowHeight*0.2, windowWidth*0.25, windowHeight*0.3, 10);
+    g.drawRoundedRect(windowWidth*0.76, windowHeight*0.2, windowWidth*0.225, windowHeight*0.3, 10);
     g.endFill();
 
     const parent = graphicRef?.current;
@@ -238,8 +255,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
   const graphics = () => {
     if (!showExpl)return null;
-    return (<Container ref={graphicRef} renderable={false}/>)
-    return (<Container ref={graphicRef} renderable={false}/>)
+    return (<Container ref={graphicRef} renderable={false} alpha={0}/>)
   }
 
 

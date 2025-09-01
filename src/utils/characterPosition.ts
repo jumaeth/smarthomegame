@@ -77,8 +77,10 @@ export function useCharacterPosition() {
           () => characterPositionStore.get()
   );
 
-  // derive tiles once here so everyone gets a stable pair
-  const tile = useMemo(() => characterPositionStore.getTile(), []);
+   const tile = useMemo(() => ({
+             x: Math.floor(pos.x / TILE_SIZE),
+            y: Math.floor(pos.y / TILE_SIZE),
+           }), [pos]);
 
   return { pos, tile };
 }

@@ -87,7 +87,6 @@ export class GameService {
   }
 
   pauseGame(): void {
-    console.log("paused");
     this.paused = true;
     if (movementStore.getSnapshot().movementEnabled){
       movementStore.disable();
@@ -97,7 +96,6 @@ export class GameService {
   }
 
   resumeGame(): void {
-    console.log("resumed");
     this.paused = false;
     if (!movementStore.getSnapshot().movementEnabled){
       movementStore.enable();
