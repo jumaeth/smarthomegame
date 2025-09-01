@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {useGameService} from "@/hooks/useGameService.tsx";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {calculateCanvasSize} from "@/utils/movment.ts";
 import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
