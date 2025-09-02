@@ -1,33 +1,49 @@
 import {t} from "@lingui/core/macro";
 import {Trans} from "@lingui/react/macro";
+import {useGameService} from "@/hooks/useGameService.tsx";
+import {newSolution, Solution} from "@/types/solution.ts";
 import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
 export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
+  const gameService = useGameService();
+  const importanceMultiplier = 1.5;
+
   const handleQuizCompletion = (isCompleted: boolean) => {
     if (isCompleted) {
       onCompletion(isCompleted);
+      gameService.changeScore(10 * importanceMultiplier,'privacy')
+      gameService.changeScore(10 * importanceMultiplier,'comfort')
     }
   };
+
+  const solutions: Solution[] = [
+    newSolution(true, t`this setting is acceptable`, 5, 0, 1, -5),
+    newSolution(true, t`this setting is acceptable`, 5, 0, 1, -5),
+    newSolution(false, t`this setting is not acceptable`, 10, -2, -10, +2),
+    newSolution(false, t`this setting is not acceptable`, 10, -6, +10, +6),
+  ];
+
+  const questions: string[] = [
+    t`activate Bluetooth`,
+    t`activate WiFi`,
+    t`record energy consumption`,
+    t`connect to smart app`,
+  ];
 
   return (
           <>
             <h1>
-              <Trans>Smarte Beleuchtung</Trans>
+              <Trans>Smart Lighting</Trans>
             </h1>
-            <div className="modal-content">
+            <div>
               <h3>
-                <Trans>Berechtigungen verwalten:</Trans>
+                <Trans>Manage permissions:</Trans>
               </h3>
               <MultipleChoiceComponent
-                      questions={[
-                        t`Bluetooth aktivieren`,
-                        t`Wifi aktivieren`,
-                        t`Energieverbrauch aufzeichnen`,
-                        t`Smart App verbinden`,
-                      ]}
-                      solutions={[true, true, false, false]}
+                      questions={questions}
+                      solutions={solutions}
                       onComplete={handleQuizCompletion}
               />
             </div>
