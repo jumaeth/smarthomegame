@@ -1,92 +1,91 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Trans} from "@lingui/react/macro";
 import {loadImagesFromFolder} from "@/utils/loadImages.ts";
 import Button from "@/components/general-ui/Button.tsx";
+import {Solution} from "@/types/solution.ts";
+import {useGameService} from "@/hooks/useGameService.tsx";
 
 type CaptchaProps = {
   pictureFolder: string;
-  solutions: (boolean | string)[];
+  solutions: Solution[];
   onComplete: (isCompleted: boolean) => void;
 };
 
 export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: CaptchaProps) => {
-  const images = loadImagesFromFolder(pictureFolder);
-  const imageList = Object.values(images);
+  const gameService = useGameService();
+  const imageList = loadImagesFromFolder(pictureFolder);
   const [feedbackMsg, setFeedbackMsg] = useState<string>("");
+  const [feedbackMsgColor, setFeedbackMsgColor] = useState<string>("black");
 
-  const [displayedIndices, setDisplayedIndices] = useState<number[]>([]);
-  const [score, setScore] = useState<number>(0);
-  const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [answers, setAnswers] = useState<boolean[]>(new Array(solutions.length).fill(true));
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  // Initialize the grid with first 9 images
-  useEffect(() => {
-    setDisplayedIndices(Array.from({length: 9}, (_, i) => i));
-  }, []);
-
+  const [imageGrid, setImageGrid] = useState<number[]>(Array.from({length: 9}, (_, i) => i));
+  const [nextImage, setNextImage] = useState<number>(9);
 
   const handleImageClick = (gridIndex: number) => {
-    if (isCompleted) return;
-    const imageIndex = displayedIndices[gridIndex];
+    if (isSubmitted) return;
+    const imageIndex = imageGrid[gridIndex];
     if (imageIndex < solutions.length) {
-      setScore(prevScore => prevScore + (solutions[imageIndex] ? 1 : -1));
-
-      if (solutions[imageIndex] !== true && solutions[imageIndex] !== false && typeof solutions[imageIndex] === "string") {
-        setFeedbackMsg(solutions[imageIndex].toString());
-      } else {
-        setFeedbackMsg("");
-      }
+      const next = [...answers];
+      next[imageIndex] = true;
+      setAnswers(next);
+      setFeedbackMsgColor(solutions[imageIndex].booleanSolution ? "green" : "red");
+      setFeedbackMsg(solutions[imageIndex].solutionMessage);
+      setImageGrid(prev => {
+        const updated = [...prev];
+        updated[gridIndex] = nextImage < imageList.length ? nextImage : -1;
+        return updated;
+      });
+      setNextImage(prev => prev + 1);
     }
-
-    setDisplayedIndices(prev => {
-      const updated = [...prev];
-      const nextImageIndex = Math.max(...prev) + 1;
-      updated[gridIndex] = nextImageIndex < imageList.length ? nextImageIndex : -1;
-      return updated;
-    });
   };
 
+
   const submitAnswer = () => {
-    setIsCompleted(true);
-    onComplete(score > 0);
+    setIsSubmitted(true);
+  };
+
+  const continueGame = () => {
+    let privacyScore: number = 0;
+    let comfortScore: number = 0;
+    answers.map((b, i) => {
+      if (b === solutions[i].booleanSolution) {
+        privacyScore += solutions[i].privacyScoreGain
+        comfortScore += solutions[i].privacyScoreGain
+      } else {
+        privacyScore += solutions[i].privacyScorePenalty
+        comfortScore += solutions[i].privacyScorePenalty
+      }
+    });
+    gameService.changeScore(privacyScore, 'privacy');
+    gameService.changeScore(comfortScore, 'comfort');
+    onComplete(true);
   };
 
   return (
           <div className="flex flex-col items-center gap-6">
             <div className="grid grid-cols-3 gap-4">
-              {displayedIndices.map((imageIndex, gridIndex) => (
-                      <div key={gridIndex} className={`w-30 h-30 flex items-center justify-center rounded-lg overflow-hidden
-              ${imageIndex >= 0 && !isCompleted ? "cursor-pointer hover:opacity-80 border-2 border-gray-300" : "bg-gray-100"}
-              transition-all duration-200
-            `}
-                           onClick={() => imageIndex >= 0 && !isCompleted && handleImageClick(gridIndex)}
-                      >{imageIndex >= 0 && imageIndex < imageList.length ? (
-                              <img
-                                      src={imageList[imageIndex]}
-                                      alt={`question-${imageIndex}`}
-                                      className="w-full h-full object-cover"
-                              />) : (<div className="w-full h-full bg-gray-200"></div>)}
+              {imageGrid.map((imageIndex, gridIndex) => (
+                      <div
+                              key={gridIndex}
+                              className={`w-30 h-30 flex items-center justify-center rounded-lg overflow-hidden ${imageIndex >= 0 && !isSubmitted ? "cursor-pointer hover:opacity-80 border-2 border-gray-300" : "bg-gray-100"}
+              transition-all duration-200`}
+                              onClick={() => imageIndex >= 0 && !isSubmitted && handleImageClick(gridIndex)}
+                      >
+                        {imageIndex >= 0 && imageIndex < imageList.length ? (
+                                <img
+                                        src={imageList[imageIndex]}
+                                        alt={`question-${imageIndex}`}
+                                        className="w-full h-full object-cover"
+                                />) : (<div className="w-full h-full bg-gray-200"></div>)}
                       </div>
               ))}
             </div>
-
             <div className="flex flex-col items-center gap-2">
-              {isCompleted && (
-                      <div className={`text-lg font-bold ${score > 0 ? "text-green-600" : "text-red-600"}`}>
-                        {score > 0 ? <Trans>Success!</Trans> : <Trans>Failed!</Trans>}
-                      </div>
-              )}
-
-              {feedbackMsg && <div className="text-red-600 text-sm mt-1">{feedbackMsg}</div>}
-
-              <Button onClick={submitAnswer} disabled={isCompleted}>
-                <Trans>Send answer</Trans>
-              </Button>
-
-              {!isCompleted && (
-                      <div className="text-sm text-gray-600 mt-1">
-                        <Trans>Current score: {score}</Trans>
-                      </div>
-              )}
+              {feedbackMsg && <p className={`text-${feedbackMsgColor}-600 text-m mt-1`}>{feedbackMsg}</p>}
+              {!isSubmitted ? <Button onClick={submitAnswer}><Trans>Send answer</Trans></Button> :
+                      <Button onClick={continueGame}><Trans>Continue game</Trans></Button>}
             </div>
           </div>
   );
