@@ -1,20 +1,15 @@
 import {t} from "@lingui/core/macro";
 import {Trans} from "@lingui/react/macro";
-import {useGameService} from "@/hooks/useGameService.tsx";
 import {newSolution, Solution} from "@/types/solution.ts";
 import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
 export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
-  const gameService = useGameService();
-  const importanceMultiplier = 1.5;
 
   const handleQuizCompletion = (isCompleted: boolean) => {
     if (isCompleted) {
       onCompletion(isCompleted);
-      gameService.changeScore(10 * importanceMultiplier,'privacy')
-      gameService.changeScore(10 * importanceMultiplier,'comfort')
     }
   };
 
