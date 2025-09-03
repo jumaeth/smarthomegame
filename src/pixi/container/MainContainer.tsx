@@ -120,6 +120,7 @@ export const MainContainer = ({
                       canvasSize={canvasSize}
                       shouldSnap={shouldSnapCamera}
                       onSnapComplete={() => setShouldSnapCamera(false)}
+                      tutorialEnabled={tutorialActive}
               >
                 <Level texture={levelTexture} />
                 <ProximityHighlight interactiveElements={interactiveElements}/>

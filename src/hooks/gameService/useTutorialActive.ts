@@ -1,7 +1,7 @@
 type Listener = () => void;
 
 class BoolStore {
-  private value = false;
+  private value = true;
   private listeners = new Set<Listener>();
   get() { return this.value; }
   set(v: boolean) {
