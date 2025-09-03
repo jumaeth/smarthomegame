@@ -21,6 +21,7 @@ import {Tutorial} from "@/pixi/components/Tutorial/Tutorial.tsx";
 import {characterPositionStore, useCharacterPosition} from "@/utils/characterPosition.ts";
 import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
 import {MovementButtons} from "@/components/general-ui/MovementButtons.tsx";
+import {ProximityHighlight} from "@/pixi/components/ProximityHighlight.tsx";
 
 interface MainContainerProps {
     canvasSize: {
@@ -121,6 +122,7 @@ export const MainContainer = ({
                       onSnapComplete={() => setShouldSnapCamera(false)}
               >
                 <Level texture={levelTexture} />
+                <ProximityHighlight interactiveElements={interactiveElements}/>
                 <Character
                         texture={characterTexture}
                         onMove={handleCharacterMove}
