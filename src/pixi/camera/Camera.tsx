@@ -9,7 +9,7 @@ interface CameraProps {
   canvasSize: { width: number; height: number }
   shouldSnap: boolean;
   onSnapComplete: () => void;
-  tutorialEnabled
+  tutorialEnabled: boolean;
 }
 
 export const Camera = ({
