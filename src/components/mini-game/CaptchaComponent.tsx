@@ -131,7 +131,7 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
                       </p>
               )}
 
-              {inRange && (
+              {inRange && feedbackMsg && (
                       <div className="flex space-x-2">
                         <span>{formatWithSign.format(privacyDelta)}</span>
                         <img src={privacyIcon} className="h-6" alt="privacy-icon"/>
