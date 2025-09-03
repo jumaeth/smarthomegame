@@ -16,6 +16,7 @@ import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnim
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {t} from "@lingui/core/macro";
 
 
 export const More_Expl: React.FC<PageProps> = ({
@@ -46,9 +47,7 @@ export const More_Expl: React.FC<PageProps> = ({
 
 
   const textsTemp = [
-          "Oh no! See the smartTV? It is controlled by the attacker and shows only red images.\n" +
-          "\n" + "Let’s use the learned to navigate to the smart device and solve the challenge to" +
-          " regain control."
+    t`Oh no! See the smartTV? It is controlled by the attacker and shows only red images.\n\nLet’s use the learned to navigate to the smart device and solve the challenge to regain control.`
   ]
 
   //----------init----------

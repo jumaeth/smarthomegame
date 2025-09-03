@@ -15,6 +15,7 @@ import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnim
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+import {t} from "@lingui/core/macro";
 
 
 export const Score_Changes: React.FC<PageProps> = ({
@@ -42,8 +43,7 @@ export const Score_Changes: React.FC<PageProps> = ({
 
 
   const textsTemp = [
-          "Saw that? Your solution increased the scores. But be careful," +
-          " bad decisions decrease them! Make sure you always keep a good balance."
+    t`Saw that? Your solution increased the scores. But be careful, bad decisions decrease them! Make sure you always keep a good balance.`
   ]
 
   //----------init----------

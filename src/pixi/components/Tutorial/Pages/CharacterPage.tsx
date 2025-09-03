@@ -17,6 +17,7 @@ import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
 import {GROW_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
+import {t} from "@lingui/core/macro";
 
 export const CharacterPage: React.FC<PageProps> = ({
        windowWidth,
@@ -58,8 +59,8 @@ export const CharacterPage: React.FC<PageProps> = ({
 
   //others
   const textsTemp = [
-          "Movement", "Use the arrow keys or WASD to move around", "Interaction", 'Use the “E” key to interact with objects',
-          "Discovery", "Interactive objects light up if you walk next to them", "The Player"
+          t`Movement`, t`Use the arrow keys or WASD to move around`, t`Interaction`, t`Use the “E” key to interact with objects`,
+          t`Discovery`, t`Interactive objects light up if you walk next to them`, t`The Player`
   ]
   const texture = useMemo(() => loadTexture(characterImage), []);
   const imageSource: typeof arrowKeys[] = [arrowKeys, eKey, highlighting];

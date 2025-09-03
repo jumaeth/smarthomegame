@@ -6,6 +6,7 @@ import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
 import {Container} from "@pixi/react";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {blinkingAnimation} from "@/pixi/components/Tutorial/anim/blinkingAnimation.ts";
+import {t} from "@lingui/core/macro";
 
 
 export const IntroPage: React.FC<PageProps> = ({
@@ -26,6 +27,9 @@ export const IntroPage: React.FC<PageProps> = ({
   const explRef = useRef<Text | null>(null);
   const instrRef = useRef<Text | null>(null);
 
+  const welcomeMsg = t`Welcome to the tutorial`
+  const instrMsg = t`Press space to advance`
+
   //hooks
   const mgrRef = useAnimationManager();
 
@@ -34,7 +38,7 @@ export const IntroPage: React.FC<PageProps> = ({
     if (!rootRef.current || explRef.current) return;
 
     if (rootRef.current instanceof PixiContainer) {
-      const t = new Text("Welcome to the tutorial", new TextStyle({
+      const t = new Text(welcomeMsg, new TextStyle({
         fontFamily: "LoResRegular",
         fontSize: Math.min(windowWidth, windowHeight) * 0.06,
         fill: "#ffffff"
@@ -61,7 +65,7 @@ export const IntroPage: React.FC<PageProps> = ({
     if (!rootRef.current || instrRef.current) return;
 
     if (rootRef.current instanceof PixiContainer) {
-      const t = new Text("Press space to advance", new TextStyle({
+      const t = new Text(instrMsg, new TextStyle({
         fontFamily: "LoResRegular",
         fontSize: Math.min(windowWidth, windowHeight) * 0.0475,
         fill: "#ffffff"

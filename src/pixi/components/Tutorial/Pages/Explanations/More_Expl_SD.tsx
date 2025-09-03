@@ -20,6 +20,7 @@ import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {t} from "@lingui/core/macro";
 
 
 export const More_Expl_SD: React.FC<PageProps> = ({
@@ -38,8 +39,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
   const textureRobot = useMemo(() => loadTexture(robot), []);
   const fill = "#054388";
   const stroke = "#009CDD";
-  const explText = "Deselect the right options to restore a balance between privacy and comfort." +
-          " Different decisions will have different affects on your scores."
+  const explText = t`Deselect the right options to restore a balance between privacy and comfort. Different decisions will have different affects on your scores.`
 
   //state
   const [animating, setAnimating] = useState(false);

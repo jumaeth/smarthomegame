@@ -12,6 +12,7 @@ import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
 import {TextProps} from "@/pixi/components/Tutorial/util/Types.ts";
+import {t} from "@lingui/core/macro";
 
 
 export const PhonePage: React.FC<PageProps> = ({
@@ -42,11 +43,15 @@ export const PhonePage: React.FC<PageProps> = ({
 
 
   const textArr = [
-          "The help app", "Want to see this tutorial again or find out how to control the game? - Use the help app!",
-          "The progress app", "Use this app to check on the smart devices and your overall progress within the game",
-          "The settings", "Use this app to change the settings, including language, sound or touch controls",
-          "The smart assistant", "Want to learn more about a topic? Use this app to talk to an expert in Data Security" +
-          " – The Datapro LLM!", "The Phone"
+    t`The help app`,
+    t`Want to see this tutorial again or find out how to control the game? - Use the help app!`,
+    t`The progress app`,
+    t`Use this app to check on the smart devices and your overall progress within the game`,
+    t`The settings`,
+    t`Use this app to change the settings, including language, sound or touch controls`,
+    t`The smart assistant`,
+    t`Want to learn more about a topic? Use this app to talk to an expert in Data Security – The Datapro LLM!`,
+    t`The Phone`
 
 ]
 

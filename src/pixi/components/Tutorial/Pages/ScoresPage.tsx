@@ -14,6 +14,7 @@ import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+import {t} from "@lingui/core/macro";
 
 
 export const ScoresPage: React.FC<PageProps> = ({
@@ -45,11 +46,11 @@ export const ScoresPage: React.FC<PageProps> = ({
 
   //others
   const textArr = [
-          "Your privacy score", "It indicates the safety of your data. Evil attackers always try to steal your data and" +
-          " use it to attack you and your personal space. A high privacy score makes it harder for them!",
-          "Your comfort score", "A smarthome does a great deal to make your life more comfortable. It can automate" +
-          " routines or know your prefferences even better than yourself. A high comfort score makes your life easier!",
-          "The scores"
+    t`Your privacy score`,
+    t`It indicates the safety of your data. Evil attackers always try to steal your data and use it to attack you and your personal space. A high privacy score makes it harder for them!`,
+    t`Your comfort score`,
+    t`A smarthome does a great deal to make your life more comfortable. It can automate routines or know your preferences even better than yourself. A high comfort score makes your life easier!`,
+    t`The scores`
   ]
 
   //init graphics/texts

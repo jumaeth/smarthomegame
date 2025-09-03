@@ -22,6 +22,7 @@ import '@pixi/events';
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+import {t} from "@lingui/core/macro";
 
 export const Decision: React.FC<PageProps> = ({
        windowWidth,
@@ -58,11 +59,10 @@ export const Decision: React.FC<PageProps> = ({
 
 
   const textsTemp = [
-          "That's all you need to know! Time for a quick practice. Your task is to find and solve the first smart device."+
-          " Now it's your decision",
-          "Guided introduction",
-          "Explore yourself",
-          "Okay, try to walk to the smartTV and solve the challenge using the controls you just learned. I’ll meet you there"
+    t`That's all you need to know! Time for a quick practice. Your task is to find and solve the first smart device. Now it's your decision`,
+    t`Guided introduction`,
+    t`Explore yourself`,
+    t`Okay, try to walk to the smartTV and solve the challenge using the controls you just learned. I’ll meet you there`
 
 ]
 

@@ -15,6 +15,7 @@ import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
+import {t} from "@lingui/core/macro";
 
 
 export const Final_Message: React.FC<PageProps> = ({
@@ -42,7 +43,7 @@ export const Final_Message: React.FC<PageProps> = ({
 
 
   const textsTemp = [
-          "Thats it, now you are ready to save the smart home and make that movie night possible!"
+    t`That's it, now you are ready to save the smart home and make that movie night possible!`
   ]
 
   useEffect(() => {
