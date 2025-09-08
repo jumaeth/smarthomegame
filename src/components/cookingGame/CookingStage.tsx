@@ -1,5 +1,5 @@
- import {AlphaFilter, Graphics as PIXIGraphics, TextStyle} from 'pixi.js'
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import {AlphaFilter, Graphics as PIXIGraphics, TextStyle} from 'pixi.js'
+import React, {RefObject, useCallback, useEffect, useMemo, useState} from "react";
 import {Button} from "./Button.tsx";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {Graphics, Sprite, Text} from '@pixi/react';
@@ -11,18 +11,18 @@ import wallImg from '@/assets/cooking-sprites/wall.png';
 import cookingFieldImg from '@/assets/cooking-sprites/cookingfield.png';
 import foodProcessorImg from '@/assets/cooking-sprites/foodprocessor.png';
 import microwaveImg from '@/assets/cooking-sprites/microwave.png';
-import steamerImg from '@/assets/cooking-sprites/steamer.png';
 import {t} from "@lingui/core/macro";
+import {Score} from "@/components/cookingGame/CookingGameComponent.tsx";
 
 interface CookingStageProps {
     setStage: (stage: Stages) => void;
-    setTotalPoints: React.Dispatch<React.SetStateAction<number>>;
+    setTotalPoints: RefObject<Map<Score, number>>;
 }
 
 export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoints}) => {
 
     const [page, setPage] = useState(1);
-    const [label] = useState("weiter");
+    const [label] = useState(t`continue`);
     const [showInfo, setShowInfo] = useState(true);
     const [hoveredId, setHoveredId] = useState(Devices.NONE);
     const [allHoverable, setAllHoverable] = useState(true);
@@ -30,7 +30,6 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     const [infoText, setInfoText] = useState("");
     const [infoTitles, setInfoTitles] = useState("");
     const [infoComment, setInfoComment] = useState("");
-    const [retry, setRetry] = useState(false);
 
     const instruction = t`\nOkay, let's make a dish out of it. \n\nOur Smartkitchen can prepare all the ingredients but we have to choose the right machine to cook the dish`;
 
@@ -41,7 +40,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
         cookingField: cookingFieldImg,
         foodProcessor: foodProcessorImg,
         microwave: microwaveImg,
-        steamer: steamerImg
+        steamer: "/src/assets/cooking-sprites/steamer.png"
     }), []);
 
 
@@ -186,36 +185,16 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
         }
     }, [hoveredId]);
 
-    const evaluatePoints = () => {
-        let points = 0;
-        if (selected !== Devices.NONE) {
-            for (let i = 0; i < stars[selected].length; i++) {
-                points += (stars[selected][i] * 20 / criterias.length);
-            }
-        } else {
-            points = 0;
-        }
-        return points;
-    }
-
     const endGame = () => {
-        if (selected === Devices.MICROWAVE) {
-            setRetry(true);
-        } else if (!retry) {
-            setRetry(false);
-            setTotalPoints((prev: number) => prev + evaluatePoints());
-            setStage(Stages.GAME);
-        }
+      const setPoints = setTotalPoints.current;
+      const comfort = ((stars[selected][3]-3) + (stars[selected][2])-3) / 2;
+      const privacy = stars[selected][1]-3
+      if (setPoints) {
+        setPoints.set(Score.Privacy, (setPoints.get(Score.Privacy)??0)+privacy);
+        setPoints.set(Score.Comfort, (setPoints.get(Score.Comfort)??0)+comfort);
+      }
+      setStage(Stages.GAME);
     };
-
-    useEffect(() => {
-        if (retry) {
-            setRetry(false);
-            setSelected(Devices.NONE);
-            setAllHoverable(true);
-            setPage(2);
-        }
-    }, [retry]);
 
 
     const instructionPage = () => {
