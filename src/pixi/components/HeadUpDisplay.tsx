@@ -2,12 +2,13 @@ import assistantPhone from "@/assets/assistant-phone/assistant_phone_background.
 import privacyCoin from "@/assets/coins/privacy_coin.png";
 import comfortCoin from "@/assets/coins/comfort_coin.png";
 import {PixiTexturedButton} from "@/pixi/components/PixiTexturedButton.tsx";
-import {PixiProgressBar} from "@/pixi/components/PixiProgressBar.tsx";
+import {PixiScoreBar} from "@/pixi/components/PixiScoreBar.tsx";
 import {Texture} from "@pixi/core";
 import React, {PropsWithChildren, useEffect, useMemo, useState} from "react";
 import {AssistantPhone} from "@/pixi/components/AssistantPhone.tsx";
 import {Graphics} from "@pixi/react";
 import {GameService} from "@/services/GameService.ts";
+import {ProgressBar} from "@/pixi/components/ProgressBar/ProgressBar.tsx";
 
 interface HeadUpDisplayProps {
   windowWidth: number;
@@ -49,11 +50,15 @@ export const HeadUpDisplay: React.FC<HeadUpDisplayProps> = ({
     gameService.resumeGame();
   }
 
-  const assistantPhoneIconWidth: number = 150;
+  const assistantPhoneIconWidth: number = windowWidth * 0.1;
   const assistantPhoneIconHeight: number = assistantPhoneIconWidth * 1.5;
   const assistantPhoneIconPosX: number = 0;
   const assistantPhoneIconPosY: number = 0;
-  const ProgressBarWidth: number = 250;
+  const ProgressBarWidth: number = windowWidth * 0.13;
+
+  useEffect(() => {
+    console.log(ProgressBarWidth);
+  }, []);
 
   return (
           <>
@@ -88,20 +93,26 @@ export const HeadUpDisplay: React.FC<HeadUpDisplayProps> = ({
                     </>
 
             )}
-            <PixiProgressBar
+            <PixiScoreBar
                     x={windowWidth - ProgressBarWidth - 10}
                     y={10}
                     width={ProgressBarWidth}
                     progress={privacyScore}
                     texture={textures[1]}
             />
-            <PixiProgressBar
+            <PixiScoreBar
                     x={windowWidth - ProgressBarWidth - 10}
                     y={10 + ProgressBarWidth / 5 + 10}
                     width={ProgressBarWidth}
                     progress={comfortScore}
                     texture={textures[2]}
             />
+            <ProgressBar
+                    x={windowWidth*0.085}
+                    y={windowHeight*0.001}
+                    windowWidth={windowWidth}
+                    windowHeight={windowHeight}
+                    gameService={gameService}/>
           </>
   )
 };

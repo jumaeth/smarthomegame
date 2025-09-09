@@ -4,9 +4,12 @@ import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore.ts";
 import {CookieService} from "@/services/CookieService.ts";
 
+type DeviceListener = (device: SmartDevice) => void;
+
 export class GameService {
   private game: Game;
   private navigate: (path: string) => void;
+  private deviceListeners = new Set<DeviceListener>();
 
   constructor(navigate: (path: string) => void) {
     const saveGame = CookieService.get<Game>('save_game');
@@ -32,6 +35,11 @@ export class GameService {
         new SmartDevice("SecurityCamera"),
       ]),
     ];
+  }
+
+  getAllRooms(): Room[] {
+    return (["livingroom", "kitchen"] as const)
+            .flatMap(name => this.findRoomByName(name) ?? []);
   }
 
   findRoomByName(roomName: RoomName): Room | undefined {
@@ -109,5 +117,15 @@ export class GameService {
 
   getScore():GameScore {
     return this.game.getScore();
+  }
+
+  completeDevice(device: SmartDevice): void {
+    device.complete();
+    this.deviceListeners.forEach(cb => cb(device));
+  }
+
+  onDeviceStateChanged(listener: DeviceListener): () => void {
+    this.deviceListeners.add(listener);
+    return () => this.deviceListeners.delete(listener);
   }
 }

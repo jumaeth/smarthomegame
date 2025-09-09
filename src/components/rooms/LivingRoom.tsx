@@ -27,7 +27,7 @@ export const LivingRoom = () => {
     if (!activeDevice) return;
     const device = smartDevices.find((d) => d.name === activeDevice);
     if (!device) return;
-    if (isCompleted) device.complete();
+    if (isCompleted) gameService.completeDevice(device);
     setIsPaused(false);
     setActiveDevice(null);
     checkForRoomCompletion();
