@@ -1,4 +1,3 @@
-// position-store.ts
 import { Position } from "@/types/movement";
 import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings";
 
