@@ -3,7 +3,7 @@ type device = {
   icon: string;
   silhouette: string;
 }
-export function getDeviceTexture(name: string, completed: boolean): String{
+export function getDeviceTexture(name: string, completed: boolean): string{
   const devices: device[] = [
     {
       name:"SmartTv",

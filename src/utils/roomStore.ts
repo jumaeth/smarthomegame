@@ -8,13 +8,12 @@ class roomStore {
  private rooms: Room[];
  private listeners = new Set<Listener>();
  constructor(initial: Room[]) {
-   console.log("new store")
-   if (initial){ this.rooms = initial; }
+   this.rooms = initial ? initial : [];
  }
 
   getAll(): Room[] { return this.rooms; }
 
-  getRoom(name: String): Room { return <Room>this.rooms.find(r => r.name === name); }
+  getRoom(name: string): Room { return <Room>this.rooms.find(r => r.name === name); }
 
   getAllDevices(): SmartDevice[] {
    return this.rooms.flatMap(r => r.devices);

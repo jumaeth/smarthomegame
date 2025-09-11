@@ -132,7 +132,7 @@ export class GameService {
     return this.game.getScore();
   }
 
-  completeDevice(name: String): void {
+  completeDevice(name: string): void {
     const device = allRoomStore.getDevice(name);
     if (device){
       device.complete();
