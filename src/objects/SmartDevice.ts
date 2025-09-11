@@ -1,10 +1,10 @@
-import {StatBlock} from "@/objects/StatBlock.ts";
+import {StatBlock} from "./StatBlock";
 
 export class SmartDevice {
   constructor(
           public name: string,
           private isCompleted: boolean = false,
-          public statBlock?: StatBlock
+          public statBlock: StatBlock = new StatBlock()
   ) {
   }
 

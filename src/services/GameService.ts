@@ -1,5 +1,6 @@
 import {Game} from "../objects/Game";
-import {Room, RoomName} from "../objects/Room";
+import {Room} from "../objects/Room";
+import {RoomNames} from "../objects/RoomNames";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore.ts";
 import {CookieService} from "@/services/CookieService.ts";
@@ -21,12 +22,12 @@ export class GameService {
 
   setUpRooms(): Room[] {
     return [
-      new Room("livingroom", [
+      new Room(RoomNames.LIVINGROOM, [
         new SmartDevice("SmartTv"),
         new SmartDevice("SmartLights"),
         new SmartDevice("SecurityCamera")
       ]),
-      new Room("kitchen", [
+      new Room(RoomNames.KITCHEN, [
         new SmartDevice("SmartHomeHub"),
         new SmartDevice("SmartKitchen"),
         new SmartDevice("SecurityCamera"),
@@ -34,11 +35,11 @@ export class GameService {
     ];
   }
 
-  findRoomByName(roomName: RoomName): Room | undefined {
+  findRoomByName(roomName: RoomNames): Room | undefined {
     return this.game.getRooms().find((r: Room): boolean => r.name === roomName);
   }
 
-  completeRoom(roomName: RoomName): void {
+  completeRoom(roomName: RoomNames): void {
     const room: Room | undefined = this.findRoomByName(roomName);
     if (!room) return;
     room.complete();
@@ -58,7 +59,7 @@ export class GameService {
     return this.game.getRooms().every((room: Room): boolean => room.isCompleted);
   }
 
-  getDeviceForRoom(roomName: RoomName): SmartDevice[] {
+  getDeviceForRoom(roomName: RoomNames): SmartDevice[] {
     const room: Room | undefined = this.findRoomByName(roomName);
     return room ? room.devices : [];
   }
@@ -86,13 +87,13 @@ export class GameService {
     //TODO
   }
 
-  toogleRoomIsLocked(roomName: RoomName): void {
+  toogleRoomIsLocked(roomName: RoomNames): void {
     const room: Room | undefined = this.findRoomByName(roomName);
     if (room) room.toggleIsLocked();
     this.onGameStateChange();
   }
 
-  leaveRoom(roomName: RoomName): boolean {
+  leaveRoom(roomName: RoomNames): boolean {
     const room: Room | undefined = this.findRoomByName(roomName);
     if (room?.isLocked == false) {
       this.navigate('/game');
@@ -107,7 +108,7 @@ export class GameService {
     this.onGameStateChange();
   }
 
-  getScore():GameScore {
+  getScore(): GameScore {
     return this.game.getScore();
   }
 }

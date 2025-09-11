@@ -1,7 +1,7 @@
-import {StatsKeys} from "@/objects/StatsKeys.ts";
+import {StatsKeys} from "./StatsKeys";
 
 export class StatBlock {
-  private values: Map<StatsKeys | string, string>;
+  private readonly values: Map<StatsKeys | string, string>;
   private startTimeTimestamp: number = 0;
 
 
@@ -9,11 +9,11 @@ export class StatBlock {
     this.values = new Map<StatsKeys | string, string>();
   }
 
-  public findByName(name: string): string {
+  public findByName(name: StatsKeys | string): string {
     return this.values.get(name) ?? "";
   }
 
-  public setValue(name: string, value: string): void {
+  public setValue(name: StatsKeys | string, value: string): void {
     this.values.set(name, value);
   }
 
@@ -23,7 +23,7 @@ export class StatBlock {
 
   public startTimer(): void {
     this.startTimeTimestamp = Date.now();
-    const amountOfSessions = Number(this.values.get(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS)) ?? 0;
+    const amountOfSessions = Number(this.values.get(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS) ?? "0");
     this.values.set(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS, String(amountOfSessions + 1))
   }
 
@@ -36,4 +36,6 @@ export class StatBlock {
     this.values.set(StatsKeys.TIME_IN_DEVICE, String(previousTime + elapsed));
     this.startTimeTimestamp = 0;
   }
+
+
 }
