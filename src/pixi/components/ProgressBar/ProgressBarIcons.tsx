@@ -65,7 +65,7 @@ export const ProgressBarIcons: React.FC<ProgressBarIconsProps> = ({
         g.drawRoundedRect(
             x + windowWidth * 0.05,
             y + windowHeight * 0.05,
-                windowWidth * 0.01 + windowWidth * 0.031 * Object.entries(texturePaths).length,
+                windowWidth * 0.0175 + windowWidth * 0.031 * Object.entries(texturePaths).length,
             windowHeight * 0.07,
             8
         );
@@ -76,7 +76,7 @@ export const ProgressBarIcons: React.FC<ProgressBarIconsProps> = ({
 
       const barX = x + windowWidth * 0.055;
       const barY = y + windowHeight * 0.055;
-      const full = windowWidth * 0.031 * Object.entries(texturePaths).length * 0.96;
+      const full = windowWidth * 0.0325 * Object.entries(texturePaths).length * 0.97;
 
 
       g.clear();
@@ -84,7 +84,7 @@ export const ProgressBarIcons: React.FC<ProgressBarIconsProps> = ({
       g.drawRoundedRect(
               barX,
               barY,
-              windowWidth * 0.031 * Object.entries(texturePaths).length,
+              windowWidth * 0.0325 * Object.entries(texturePaths).length,
               windowHeight * 0.015,
               10
       );

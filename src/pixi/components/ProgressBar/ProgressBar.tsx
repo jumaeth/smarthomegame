@@ -29,7 +29,6 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   const [hovered, setHovered] = useState<boolean>(false);
 
   const action = () => {
-    console.log("Progress bar expand");
     setShowIcons(!showIcons);
   }
 

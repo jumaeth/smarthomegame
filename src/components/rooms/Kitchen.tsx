@@ -38,6 +38,7 @@ export const Kitchen = () => {
 
     const smartHomeHubCallback = (isCompleted: boolean) => {
         setSmartHomeHubCompleted(isCompleted);
+        gameService.completeDevice("SmartHomeHub");
         setIsPaused(false);
         smartHomeHubModalRef.current?.toggleModal();
         checkForCompletion();
@@ -52,6 +53,7 @@ export const Kitchen = () => {
 
   const securityCameraCallback = (isCompleted: boolean) => {
     setSecurityCameraCompleted(isCompleted);
+    gameService.completeDevice("SecurityCamera");
     setIsPaused(false);
     securityCameraModalRef.current?.toggleModal();
     checkForCompletion();
@@ -65,15 +67,14 @@ export const Kitchen = () => {
   }
 
   const smartKitchenCallback = (isCompleted: boolean) => {
-    console.log("smartKitchenCallback");
     setSmartKitchenCompleted(isCompleted);
+    gameService.completeDevice("SmartKitchen");
     setIsPaused(false);
     smartKitchenModalRef.current?.toggleModal();
     checkForCompletion();
   };
 
   const openSmartKitchen = () => {
-    console.log("openSmartKitchen");
     if (smartKitchenModalRef.current) {
       setIsPaused(true);
       smartKitchenModalRef.current.toggleModal();

@@ -56,10 +56,6 @@ export const HeadUpDisplay: React.FC<HeadUpDisplayProps> = ({
   const assistantPhoneIconPosY: number = 0;
   const ProgressBarWidth: number = windowWidth * 0.13;
 
-  useEffect(() => {
-    console.log(ProgressBarWidth);
-  }, []);
-
   return (
           <>
             {!assistantPhoneIsOpen && (

@@ -29,11 +29,11 @@ export function getDeviceTexture(name: string, completed: boolean): String{
       silhouette: "/src/assets/progressBar/progressBarIcons/silhouettes/lightsSilhouette.png"
     } as device,
 
-    // {
-    //   name:"SmartHomeHub",
-    //   icon:"/src/assets/progressBar/progressBarIcons/icons/smartHomeHubCam.png",
-    //   silhouette: "/src/assets/progressBar/progressBarIcons/silhouettes/smartHomeHubSilhouette.png"
-    // } as device,
+    {
+      name:"SmartHomeHub",
+      icon:"/src/assets/progressBar/progressBarIcons/icons/hub.png",
+      silhouette: "/src/assets/progressBar/progressBarIcons/silhouettes/hubSilhouette.png"
+    } as device,
 
   ]
 
