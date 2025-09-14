@@ -54,7 +54,11 @@ export class StatsService {
   }
 
   generateDeviceSpecificValuesLines(devices: SmartDevice[]): string {
-    let deviceSpecificValuesLines: string[] = [];
+    const deviceSpecificValuesLines: string[] = [];
+    const ammountOfLines: number = devices.reduce((max, device) => {
+      const statCount = device.getStatBlock().getValuesReadOnly().size;
+      return Math.max(max, statCount);
+    }, 0);
 
     devices.forEach(device => {
       let i: number = 0;
@@ -68,6 +72,11 @@ export class StatsService {
           i++;
         }
       })
+
+      while(i!== ammountOfLines - 1) {
+        deviceSpecificValuesLines[i] += this.CSV_SEPARATOR+this.CSV_SEPARATOR;
+        i++;
+      }
     })
     return deviceSpecificValuesLines.join(this.LINE_BREAK);
   }
