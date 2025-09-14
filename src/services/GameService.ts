@@ -12,8 +12,8 @@ export class GameService {
   private navigate: (path: string) => void;
   private paused: boolean = false;
   private pauseListeners  = new Set<Listener>();
-  private sdEnabled = true;
-  private sdEnabledListeners  = new Set<Listener>();
+  private smartDevicesEnabled = true;
+  private smartDevicesEnabledListeners  = new Set<Listener>();
 
 
   constructor(navigate: (path: string) => void) {
@@ -103,14 +103,14 @@ export class GameService {
     this.emitPause();
   }
 
-  disableSD(): void {
-    this.sdEnabled = false;
-    this.emitSdEnable();
+  disableSmartDevices(): void {
+    this.smartDevicesEnabled = false;
+    this.emitSmartDevicesEnable();
   }
 
-  enableSD(): void {
-    this.sdEnabled = true;
-    this.emitSdEnable();
+  enableSmartDevices(): void {
+    this.smartDevicesEnabled = true;
+    this.emitSmartDevicesEnable();
   }
 
   toogleRoomIsLocked(roomName: RoomName): void {
@@ -138,16 +138,16 @@ export class GameService {
     return this.paused;
   }
 
-  areSdEnabled(): boolean {
-    return this.sdEnabled;
+  areSmartDevicesEnabled(): boolean {
+    return this.smartDevicesEnabled;
   }
 
-  subscribeSdEnabled(listener: Listener): () => void {
-    this.sdEnabledListeners.add(listener);
-    listener(this.sdEnabled);
+  subscribeSmartDevicesEnabled(listener: Listener): () => void {
+    this.smartDevicesEnabledListeners.add(listener);
+    listener(this.smartDevicesEnabled);
 
     return () => {
-      this.sdEnabledListeners.delete(listener);
+      this.smartDevicesEnabledListeners.delete(listener);
     };
 
   }
@@ -166,8 +166,8 @@ export class GameService {
     for (const l of this.pauseListeners) l(this.paused);
   }
 
-  private emitSdEnable() {
-    for (const l of this.sdEnabledListeners) l(this.sdEnabled);
+  private emitSmartDevicesEnable() {
+    for (const l of this.smartDevicesEnabledListeners) l(this.smartDevicesEnabled);
   }
 
   getScore():GameScore {

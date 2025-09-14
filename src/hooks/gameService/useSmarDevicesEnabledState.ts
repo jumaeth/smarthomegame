@@ -3,10 +3,10 @@ import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 
 export function useSmarDevicesEnabledState() {
   const gameService = useGameService();
-  const [sdEnabled, setSdEnabled] = useState<boolean>(() => gameService.areSdEnabled());
+  const [sdEnabled, setSdEnabled] = useState<boolean>(() => gameService.areSmartDevicesEnabled());
 
   useEffect(() => {
-    const unsubscribe = gameService.subscribeSdEnabled(setSdEnabled);
+    const unsubscribe = gameService.subscribeSmartDevicesEnabled(setSdEnabled);
     return () => {
       unsubscribe();
     };

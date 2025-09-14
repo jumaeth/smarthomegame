@@ -125,7 +125,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
           setAnimating(false);
           setShowExpl(false);
           toggleExplanations([texts, graphics], false);
-          gameService?.enableSD();
+          gameService?.enableSmartDevices();
           break;
       }
     };
@@ -187,7 +187,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
   useEffect(() => {
     if (ePressed && checkFoundSmartTV()){
       setShowExpl(true);
-      gameService?.disableSD();
+      gameService?.disableSmartDevices();
     }
   }, [ePressed]);
 
