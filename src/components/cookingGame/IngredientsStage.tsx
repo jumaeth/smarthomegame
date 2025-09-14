@@ -12,9 +12,14 @@ import {t} from "@lingui/core/macro";
 interface IngredientsStageProps {
   setStage: (stage: Stages) => void;
   setTotalPoints: React.Dispatch<React.SetStateAction<number>>;
+  awardScore: (privacy: number, comfort: number) => void;
 }
 
-export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, setTotalPoints }) => {
+export const IngredientsStage: React.FC<IngredientsStageProps> = ({
+                                                                    setStage,
+                                                                    setTotalPoints,
+                                                                    awardScore,
+                                                                  }) => {
 
   const texturePaths= useMemo(() => ({
     recipeopen: recipeopenImg,
@@ -24,8 +29,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
 
   const explanations = [
     t`First, let's buy the ingredients we need. For good pasta we need: \n\n\t1. Spaghetti\n\t2. Tomatoes\n\t3. Spices\n\t4. Cheese`,
-    t`You need to consider various criteria such as cost, time and quality. \n\nBe careful about using your data to ` +
-    t`achieve better results.`
+    t`You need to consider various criteria such as cost, time and quality. \n\nBe careful about using your data to achieve better results.`
   ];
 
   const btnTexts = [
@@ -59,6 +63,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
             .sort(() => Math.random() - 0.5).map(i => i-1);
   }
 
+  // ---- Per-choice point tables (unchanged) ----
   const qualityPoints = [
     [75,65, 100, 50], //Spaghetti
     [100,75, 50, 25], //Tomato
@@ -80,6 +85,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
     [0,50, 65, 75] // Cheese
   ];
 
+  // Interpreted as “privacy-friendliness” factor per choice
   const privacyPoints = [
     [0.2,0.05, 0.15, 0.15], //Spaghetti
     [0.25,0.1, 0.2, 0.25], //Tomato
@@ -138,7 +144,6 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
     }
   }, [scores.quality, calcFinished]);
 
-
   useEffect(() => setText(explanations[page - 1]), [page]);
 
   const threeOptionsEval = (average: number) => {
@@ -171,9 +176,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
     const assembled = finalMessage
             .map((msg, i) => msg + " "+(evalChoices[i]?.[choices[i]] ?? ''))
             .join(' ');
-
     return assembled;
-
   };
 
   const retry = () => {
@@ -182,22 +185,31 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
     setScores({ quality: 0, time: 0, price: 0 , privacy: 0});
     setCalcFinished(false);
     setPage(3);
-
   };
 
+  const computeScoreDeltas = () => {
+    const avgPrivacyFactor = scores.privacy / btnTexts.length; // ~0.10–0.25
+    const privacyDelta = Math.max(0, Math.min(5, Math.round(avgPrivacyFactor * 20)));
+    const comfortNormalized = Math.min(1, (avgQuality * 0.6 + avgTime * 0.4) / 100);
+    const comfortDelta = Math.max(0, Math.round(comfortNormalized * 6));
+    return { privacyDelta, comfortDelta };
+  };
 
   const action = () => {
-    if(page < offset + btnTexts.length){
-      setPage(page+1);
-    }
-    else if(choices[3] === 2){
+    if (page < offset + btnTexts.length) {
+      setPage(page + 1);
+    } else if (choices[3] === 2) {
+      // Try again → no score
       retry();
-    }else{
-      setTotalPoints((prev : number) => prev+avgTotalWithPrivacy);
+    } else {
+      // SUCCESS → use awardScore instead of gameService directly
+      const { privacyDelta, comfortDelta } = computeScoreDeltas();
+      awardScore(privacyDelta, comfortDelta); // ← NEW
+
+      setTotalPoints((prev: number) => prev + avgTotalWithPrivacy);
       setStage(Stages.GAME);
     }
   };
-
 
   useEffect(() => {
     if (page === offset + 1 + btnTexts.length) {
@@ -205,39 +217,38 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
     }
   }, [page]);
 
-
   const texts =  () => {
-      if (page < offset+1) {
-        if(background != "book"){
-          setBackground("book");
-        }
-        return <>
-          <Text
-                  text={text.toUpperCase()}
-                  x={85}
-                  y={65}
-                  style={
-                    new TextStyle({
-                      fontFamily:'LoResRegular',
-                      fontSize:24,
-                      wordWrap:true,
-                      wordWrapWidth: 400,
-                    })}
-                  anchor={{x: 0, y: 0}}
-          />
-
-                  <Button
-                          x={375}
-                          y={275}
-                          color={0xdcc08e}
-                          lineColor={0x5d3c1a}
-                          width={90}
-                          height={35}
-                          label={"Weiter"}
-                          action={action}
-                  />
-        </>
+    if (page < offset+1) {
+      if(background != "book"){
+        setBackground("book");
       }
+      return <>
+        <Text
+                text={text.toUpperCase()}
+                x={85}
+                y={65}
+                style={
+                  new TextStyle({
+                    fontFamily:'LoResRegular',
+                    fontSize:24,
+                    wordWrap:true,
+                    wordWrapWidth: 400,
+                  })}
+                anchor={{x: 0, y: 0}}
+        />
+
+        <Button
+                x={375}
+                y={275}
+                color={0xdcc08e}
+                lineColor={0x5d3c1a}
+                width={90}
+                height={35}
+                label={"Weiter"}
+                action={action}
+        />
+      </>
+    }
   };
 
   const buttons = () => {
@@ -282,7 +293,6 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
     }
   };
 
-
   const summary =  () => {
     if (page === offset + 1 + btnTexts.length) {
       if(background != "book"){
@@ -303,16 +313,16 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
                 anchor={{x: 0, y: 0}}
         />}
 
-                <Button
-                        x={235}
-                        y={275}
-                        width={100}
-                        height={35}
-                        color={0xdcc08e}
-                        lineColor={0x5d3c1a}
-                        label={btnText}
-                        action={action}
-                />
+        <Button
+                x={235}
+                y={275}
+                width={100}
+                height={35}
+                color={0xdcc08e}
+                lineColor={0x5d3c1a}
+                label={btnText}
+                action={action}
+        />
       </>
     }
   };
@@ -333,27 +343,26 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
       }else if(background === "market"){
         return (
                 <>
-                <Sprite
-                        eventMode={'static'}
-                        scale={0.6}
-                        texture={textures.marketBackground}
-                        x={0}
-                        y={-200}
-                />
-                <Sprite
-                        anchor={0.5}
-                        eventMode={'static'}
-                        scale={0.45}
-                        texture={textures.market}
-                        x={272}
-                        y={170}
-                />
+                  <Sprite
+                          eventMode={'static'}
+                          scale={0.6}
+                          texture={textures.marketBackground}
+                          x={0}
+                          y={-200}
+                  />
+                  <Sprite
+                          anchor={0.5}
+                          eventMode={'static'}
+                          scale={0.45}
+                          texture={textures.market}
+                          x={272}
+                          y={170}
+                  />
                 </>
         )
       }
     }
   };
-
 
   return <>
     {backgrounds()}
