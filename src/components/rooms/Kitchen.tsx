@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {useGameService} from "@/hooks/useGameService.tsx";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {calculateCanvasSize} from "@/utils/movment.ts";
 import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
@@ -11,10 +11,11 @@ import {SmartHomeHub} from "@/components/smart-devices/SmartHomeHub.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {SmartKitchen} from "@/components/smart-devices/SmartKitchen.tsx";
 import {SecurityCamera} from "@/components/smart-devices/SecurityCamera.tsx";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 export const Kitchen = () => {
     const gameService = useGameService();
-    const roomName = "kitchen"; //ToDo find better way to match with GameService
+    const roomName = RoomNames.KITCHEN
     const [isPaused, setIsPaused] = useState(false);
 
     const smartHomeHubModalRef = useRef<{ toggleModal: () => void }>(null);
@@ -81,9 +82,9 @@ export const Kitchen = () => {
   };
 
   const interactiveElements = [
-    new InteractivePixiElement(14, 4, 1, 1, openSmartHomeHub),
-    new InteractivePixiElement(1, 2, 1, 1, openSecurityCameraHomeHub),
-    new InteractivePixiElement(10, 3, 1, 1, openSmartKitchen)
+    new InteractivePixiElement(14, 4, 1, 1, "SmartHomeHub", openSmartHomeHub),
+    new InteractivePixiElement(1, 2, 1, 1, "SecurityCamera", openSecurityCameraHomeHub),
+    new InteractivePixiElement(9, 3, 1, 1, "SmartKitchen", openSmartKitchen)
   ]
 
     //Render Code

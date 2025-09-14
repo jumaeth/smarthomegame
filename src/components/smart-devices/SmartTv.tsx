@@ -1,8 +1,8 @@
 import "./Modal.css";
-import {useGameService} from "@/hooks/useGameService.tsx";
-import {useState} from "react";
-import {t} from "@lingui/core/macro";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {Trans} from "@lingui/react/macro";
+import {t} from "@lingui/core/macro";
+import {useState} from "react";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
@@ -22,7 +22,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
   const [showReconfigureWarning, setShowReconfigureWarning] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [calculatedScores, setCalculatedScores] = useState({privacy: 0, comfort: 0});
-  
+
   const [options, setOptions] = useState<SmartTvOption[]>([
     {
       id: "faceId",
@@ -111,8 +111,8 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
     if (!checked && option?.warning) {
       setShowWarning(option.warning);
     }
-    
-    setOptions((prev: SmartTvOption[]) => prev.map((opt: SmartTvOption) => 
+
+    setOptions((prev: SmartTvOption[]) => prev.map((opt: SmartTvOption) =>
       opt.id === id ? { ...opt, checked } : opt
     ));
   };
@@ -122,13 +122,13 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
     const totalPrivacyScore = options.reduce((total: number, opt: SmartTvOption) => {
       return total + (opt.checked ? opt.privacyScore : 0);
     }, 0);
-    
+
     const totalComfortScore = options.reduce((total: number, opt: SmartTvOption) => {
       return total + (opt.checked ? opt.comfortScore : 0);
     }, 0);
-    
+
     setCalculatedScores({privacy: totalPrivacyScore, comfort: totalComfortScore});
-    
+
     // Check if privacy loss is higher than comfort gain
     const privacyLoss = Math.abs(totalPrivacyScore); // Convert negative to positive
     if (privacyLoss > totalComfortScore) {
@@ -139,7 +139,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
       gameService.changeScore(totalComfortScore, 'comfort');
       setShowSuccessMessage(true);
     }
-    
+
     console.log("Smart TV settings calculated!");
     console.log(`Privacy Score: ${totalPrivacyScore}, Comfort Score: ${totalComfortScore}`);
   };
@@ -183,13 +183,13 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
   return (
     <div className="modal-content">
       <h1><Trans>Smart TV Settings</Trans></h1>
-      
+
       <div style={{marginBottom: '20px'}}>
         <p><Trans>Select which features you want to enable for your Smart TV:</Trans></p>
       </div>
 
       <div style={{maxHeight: '400px', overflowY: 'auto', marginBottom: '20px'}}>
-        {options.map((option) => (
+        {options.map((option: SmartTvOption) => (
           <div key={option.id} style={{marginBottom: '10px', padding: '10px', border: '1px solid #ddd', borderRadius: '5px'}}>
             <label style={{display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
               <input
@@ -204,7 +204,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
         ))}
       </div>
 
-      <button 
+      <button
         onClick={handleSubmit}
         style={{
           padding: '12px 24px',
@@ -230,7 +230,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
         }}>
           <h4 style={{marginTop: 0, color: '#856404'}}><Trans>⚠️ Warning</Trans></h4>
           <p style={{marginBottom: '15px', color: '#333'}}>{showWarning}</p>
-          <button 
+          <button
             onClick={closeWarning}
             style={{
               padding: '8px 16px'
@@ -260,7 +260,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
             <Trans>Your current settings result in a higher privacy loss than comfort gain. This may not be the optimal balance for your privacy.</Trans>
           </p>
           <div style={{display: 'flex', gap: '10px', justifyContent: 'center'}}>
-            <button 
+            <button
               onClick={handleReconfigure}
               style={{
                 padding: '10px 20px',
@@ -273,7 +273,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
             >
               <Trans>Reconfigure</Trans>
             </button>
-            <button 
+            <button
               onClick={handleConfirmSettings}
               style={{
                 padding: '10px 20px',
@@ -306,11 +306,11 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
         }}>
           <h4 style={{marginTop: 0, color: '#28a745', fontSize: '18px', fontWeight: 'bold', marginBottom: '12px'}}><Trans>✅ Device Configured</Trans></h4>
           <p style={{marginBottom: '20px', color: '#333', lineHeight: '1.5', fontSize: '14px'}}>
-            {calculatedScores.privacy < 0 && Math.abs(calculatedScores.privacy) > calculatedScores.comfort 
+            {calculatedScores.privacy < 0 && Math.abs(calculatedScores.privacy) > calculatedScores.comfort
               ? <Trans>Your Smart TV has been configured with your chosen settings.</Trans>
               : <Trans>Your Smart TV has been configured with a good balance of privacy and comfort!</Trans>}
           </p>
-          <button 
+          <button
             onClick={handleSuccessMessageClose}
             style={{
               padding: '10px 20px',
