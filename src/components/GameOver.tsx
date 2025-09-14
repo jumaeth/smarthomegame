@@ -1,5 +1,5 @@
 import { Trans } from "@lingui/react/macro";
-import {useGameService} from "../hooks/useGameService.tsx";
+import {useGameService} from "../hooks/gameService/useGameService.tsx";
 
 export function GameOver() {
   const gameService = useGameService();

@@ -3,10 +3,18 @@ import {Room, RoomName} from "../objects/Room";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore.ts";
 import {CookieService} from "@/services/CookieService.ts";
+import {movementStore} from "@/utils/movementEnabled.ts";
+
+type Listener = (paused: boolean) => void;
 
 export class GameService {
   private game: Game;
   private navigate: (path: string) => void;
+  private paused: boolean = false;
+  private pauseListeners  = new Set<Listener>();
+  private smartDevicesEnabled = true;
+  private smartDevicesEnabledListeners  = new Set<Listener>();
+
 
   constructor(navigate: (path: string) => void) {
     const saveGame = CookieService.get<Game>('save_game');
@@ -79,11 +87,30 @@ export class GameService {
   }
 
   pauseGame(): void {
-    //TODO
+    this.paused = true;
+    if (movementStore.getSnapshot().movementEnabled){
+      movementStore.disable();
+    }
+    this.emitPause();
+
   }
 
   resumeGame(): void {
-    //TODO
+    this.paused = false;
+    if (!movementStore.getSnapshot().movementEnabled){
+      movementStore.enable();
+    }
+    this.emitPause();
+  }
+
+  disableSmartDevices(): void {
+    this.smartDevicesEnabled = false;
+    this.emitSmartDevicesEnable();
+  }
+
+  enableSmartDevices(): void {
+    this.smartDevicesEnabled = true;
+    this.emitSmartDevicesEnable();
   }
 
   toogleRoomIsLocked(roomName: RoomName): void {
@@ -105,6 +132,42 @@ export class GameService {
     if (scoreType === 'privacy') this.game.modifyScore(scoreDelta, 0);
     if (scoreType === 'comfort') this.game.modifyScore(0, scoreDelta);
     this.onGameStateChange();
+  }
+
+  isPaused(): boolean {
+    return this.paused;
+  }
+
+  areSmartDevicesEnabled(): boolean {
+    return this.smartDevicesEnabled;
+  }
+
+  subscribeSmartDevicesEnabled(listener: Listener): () => void {
+    this.smartDevicesEnabledListeners.add(listener);
+    listener(this.smartDevicesEnabled);
+
+    return () => {
+      this.smartDevicesEnabledListeners.delete(listener);
+    };
+
+  }
+
+  subscribePause(listener: Listener): () => void {
+    this.pauseListeners.add(listener);
+    listener(this.paused);
+
+    return () => {
+      this.pauseListeners.delete(listener);
+    };
+
+  }
+
+  private emitPause() {
+    for (const l of this.pauseListeners) l(this.paused);
+  }
+
+  private emitSmartDevicesEnable() {
+    for (const l of this.smartDevicesEnabledListeners) l(this.smartDevicesEnabled);
   }
 
   getScore():GameScore {

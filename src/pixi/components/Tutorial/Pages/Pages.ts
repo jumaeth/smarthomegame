@@ -1,0 +1,12 @@
+export enum Pages{
+  MAIN,
+  INTRO,
+  CHARACTER,
+  SCORES,
+  SMARTPHONE,
+  DECISION,
+  MORE_EXPL,
+  More_Expl_SD,
+  SCORE_CHANGES,
+  FINAL_MESSAGE
+}
