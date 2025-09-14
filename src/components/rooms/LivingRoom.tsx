@@ -57,8 +57,8 @@ export const LivingRoom = () => {
   }
 
   const interactiveElements = [
-    new InteractivePixiElement(4, 2, 2, 1, ():void => handleDeviceOpen("SmartTv")),
-    new InteractivePixiElement(1, 2, 1, 1, ():void => handleDeviceOpen("SmartLights"))
+    new InteractivePixiElement(4, 2, 2, 1, "SmartTv",():void => handleDeviceOpen("SmartTv")),
+    new InteractivePixiElement(1, 2, 1, 1, "SmartLights",():void => handleDeviceOpen("SmartLights"))
   ]
 
   //Render Code

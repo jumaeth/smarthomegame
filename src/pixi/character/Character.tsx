@@ -84,24 +84,36 @@ export const Character = forwardRef(({
             return;
         }
 
-        const targetX = position.current.x / TILE_SIZE;
-        const targetY = position.current.y / TILE_SIZE;
+        const interactiveElement = checkForProximity();
 
-        const interactiveElement = interactiveElements?.find(element => {
-            const elementLeft = element.x-1;
-            const elementRight = element.x + (element.width ) ;
-            const elementTop = element.y-1;
-            const elementBottom = element.y + (element.height) ;
-            return (
+        if (interactiveElement) {
+            interactiveElement.interaction();
+        }
+    }
+
+    const checkForProximity = () => {
+      if (!position.current) {
+        return null;
+      }
+
+      const targetX = position.current.x / TILE_SIZE;
+      const targetY = position.current.y / TILE_SIZE;
+
+      const interactiveElement = interactiveElements?.find(element => {
+        const elementLeft = element.x-1;
+        const elementRight = element.x + (element.width ) ;
+        const elementTop = element.y-1;
+        const elementBottom = element.y + (element.height) ;
+        return (
                 targetX >= elementLeft &&
                 targetX <= elementRight &&
                 targetY >= elementTop &&
                 targetY <= elementBottom
-            );
-        });
-        if (interactiveElement) {
-            interactiveElement.interaction();
-        }
+        );
+      });
+
+      if (interactiveElement)return interactiveElement;
+      else return null;
     }
 
     useImperativeHandle(ref, () => ({
