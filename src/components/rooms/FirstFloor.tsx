@@ -5,7 +5,7 @@ import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {useNavigate} from "react-router-dom";
-import {useGameService} from "@/hooks/useGameService.tsx";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 
 export const FirstFloor = () => {
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());

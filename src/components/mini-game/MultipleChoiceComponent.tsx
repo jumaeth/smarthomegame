@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {Trans} from "@lingui/react/macro";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 
 type MultipleChoiceProps = {
   questions: string[];
@@ -17,9 +18,11 @@ export const MultipleChoiceComponent = ({
   );
   const [submitted, setSubmitted] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<string>("");
+  const gameService = useGameService();
 
 
   const handleAnswer = (i: number, answer: boolean) => {
+    if (!gameService.areSmartDevicesEnabled())return;
     const next = [...answers];
     next[i] = answer;
     setAnswers(next);
@@ -31,6 +34,7 @@ export const MultipleChoiceComponent = ({
   };
 
   const submitAnswer = () => {
+    if (!gameService.areSmartDevicesEnabled())return;
     const isAllCorrect = answers.every((ans, i) => ans === solutions[i]);
     setSubmitted(true);
     onComplete(isAllCorrect);

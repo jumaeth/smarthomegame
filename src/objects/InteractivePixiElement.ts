@@ -3,6 +3,6 @@ export class InteractivePixiElement {
               public y: number,
               public width: number,
               public height: number,
-              public interaction: () => void) {
-  }
+              public name: string,
+              public interaction: () => void) {}
 }
