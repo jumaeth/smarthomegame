@@ -5,6 +5,7 @@ import {GameScore, ScoreType} from "@/objects/GameScore.ts";
 import {CookieService} from "@/services/CookieService.ts";
 import {allRoomStore} from "@/utils/roomStore.ts";
 import {movementStore} from "@/utils/movementEnabled.ts";
+import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive.ts";
 
 
 type DeviceListener = (device: SmartDevice) => void;
@@ -21,10 +22,12 @@ export class GameService {
 
   constructor(navigate: (path: string) => void) {
     const saveGame = CookieService.get<Game>('save_game');
+    const tutorialCookie = CookieService.get<boolean>('tutorialState');
     if (saveGame) {
       const game = Game.fromSerialized(saveGame);
       this.game = game;
       allRoomStore.set(game.getRooms());
+      if(tutorialCookie)tutorialActiveStore.set(tutorialCookie);
     } else {
       const newRooms = this.setUpRooms();
       this.game = new Game(newRooms);
@@ -38,6 +41,7 @@ export class GameService {
       rooms:  allRoomStore.getAll().map(r => r.toSerialized()),
       score: this.game.getScore().toSerialized(),
     });
+    CookieService.set("tutorialState", tutorialActiveStore.get());
   }
 
   setUpRooms(): Room[] {

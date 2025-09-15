@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useMemo, useRef, useState} from "react";
+import React, {PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
 import {Level} from "@/pixi/levels/Level";
 import characterImage from "@/assets/character/character_movement.png";
@@ -79,6 +79,10 @@ export const MainContainer = ({
       setShouldSnapCamera(true);
     }
   };
+
+  useEffect(() => {
+    console.log(tutorialActive);
+  }, [tutorialActive]);
 
   const characterRef = useRef<{ moveUp: () => void; moveDown: () => void; moveLeft: () => void; moveRight: () => void; interact: () => void } | null>(null);
 
