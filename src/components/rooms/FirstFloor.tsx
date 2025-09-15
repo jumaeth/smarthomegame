@@ -15,7 +15,6 @@ export const FirstFloor = () => {
   const collisionMap = LEVEL_COLLISION_MAPS[roomName];
   const navigate = useNavigate();
 
-
   const updateCanvasSize = useCallback(() => {
     setCanvasSize(calculateCanvasSize());
   }, [])

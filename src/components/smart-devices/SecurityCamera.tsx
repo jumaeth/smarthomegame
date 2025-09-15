@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Trans } from "@lingui/react/macro";
 import { t } from "@lingui/core/macro";
 import { CaptchaComponent } from "@/components/mini-game/CaptchaComponent.tsx";
-import { useGameService } from "@/hooks/useGameService.tsx";
+import { useGameService } from "@/hooks/gameService/useGameService.tsx";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 

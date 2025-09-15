@@ -17,6 +17,15 @@ export class Room {
     return room;
   }
 
+  toSerialized(): object {
+    return {
+      name: this.name,
+      devices: this.devices.map((device: SmartDevice) => device.toSerialized()),
+      isLocked: this.isLocked,
+      isCompleted: this.isCompleted
+    };
+  }
+
   complete(): void {
     this.isCompleted = true;
   }
