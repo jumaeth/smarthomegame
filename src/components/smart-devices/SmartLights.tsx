@@ -3,7 +3,7 @@ import "./Modal.css";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
-import { useGameService } from "@/hooks/useGameService.tsx";
+import { useGameService } from "@/hooks/gameService/useGameService.tsx";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 

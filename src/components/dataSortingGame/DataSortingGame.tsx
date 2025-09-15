@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Trans } from "@lingui/react/macro";
 import { t } from "@lingui/core/macro";
-import { useGameService } from "@/hooks/useGameService.tsx";
+import { useGameService } from "@/hooks/gameService/useGameService.tsx";
 
 interface DataSortingGameProps {
   onCompletion: () => void;
