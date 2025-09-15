@@ -27,7 +27,7 @@ export class GameService {
       const game = Game.fromSerialized(saveGame);
       this.game = game;
       allRoomStore.set(game.getRooms());
-      if(tutorialCookie)tutorialActiveStore.set(tutorialCookie);
+      if(tutorialCookie != null)tutorialActiveStore.set(tutorialCookie);
     } else {
       const newRooms = this.setUpRooms();
       this.game = new Game(newRooms);
