@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import {useGameService} from "@/hooks/useGameService.tsx";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {RoomName} from "@/objects/Room.ts";
 
@@ -13,29 +13,35 @@ import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
+import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState.ts";
+import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
+import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
 
 export const LivingRoom = () => {
   const roomName: RoomName = "livingroom"
-  const [isPaused, setIsPaused] = useState(false);
 
   const gameService = useGameService();
   const smartDevices : SmartDevice[] = gameService.getDeviceForRoom(roomName);
 
   const [activeDevice, setActiveDevice] = useState<string | null>(null);
+  const tutorialActive = useTutorialActive();
+  const sdEnabled = useSmarDevicesEnabledState();
+  const paused = usePauseState();
 
   const smartDeviceCallback = (isCompleted:boolean):void => {
     if (!activeDevice) return;
     const device = smartDevices.find((d) => d.name === activeDevice);
     if (!device) return;
-    if (isCompleted) device.complete();
-    setIsPaused(false);
+    if (isCompleted) gameService.completeDevice(device.name);
+    gameService.resumeGame();
     setActiveDevice(null);
     checkForRoomCompletion();
   }
 
   const handleDeviceOpen = (deviceName: string):void => {
+    if (tutorialActive.enabled && (deviceName !== "SmartTv"))return;
     setActiveDevice(deviceName);
-    setIsPaused(true);
+    gameService.pauseGame();
   };
 
   const checkForRoomCompletion = () => {
@@ -47,12 +53,12 @@ export const LivingRoom = () => {
 
   function onModalClose() {
     setActiveDevice(null);
-    setIsPaused(false);
+    gameService.resumeGame();
   }
 
   const interactiveElements = [
-    new InteractivePixiElement(4, 2, 2, 1, ():void => handleDeviceOpen("SmartTv")),
-    new InteractivePixiElement(1, 2, 1, 1, ():void => handleDeviceOpen("SmartLights"))
+    new InteractivePixiElement(4, 2, 2, 1, "SmartTv",():void => handleDeviceOpen("SmartTv")),
+    new InteractivePixiElement(1, 2, 1, 1, "SmartLights",():void => handleDeviceOpen("SmartLights"))
   ]
 
   //Render Code
@@ -65,6 +71,7 @@ export const LivingRoom = () => {
   }, [])
 
   function handleMapChange(newMap: MapKey): boolean {
+    if (tutorialActive.enabled)return false;
     console.log(newMap); //ToDo remove
     return gameService.leaveRoom(roomName);
   }
@@ -74,7 +81,7 @@ export const LivingRoom = () => {
     return () => {
       window.removeEventListener("resize", updateCanvasSize);
     }
-  }, [updateCanvasSize, collisionMap])
+  }, [updateCanvasSize, collisionMap]);
 
   const deviceComponents: Record<string, JSX.Element> = {
     SmartTv: <SmartTv onCompletion={(completed) => smartDeviceCallback(completed)} />,
@@ -88,6 +95,8 @@ export const LivingRoom = () => {
                       isOpen={!!activeDevice}
                       content={activeDevice ? deviceComponents[activeDevice] : null}
                       onClose={onModalClose}
+                      showBg={sdEnabled}
+
               />
             </div>
             <Stage width={canvasSize.width} height={canvasSize.height}>
@@ -97,7 +106,7 @@ export const LivingRoom = () => {
                       collisionMap={collisionMap}
                       onMapChange={handleMapChange}
                       interactiveElements={interactiveElements}
-                      isPaused={isPaused}
+                      isPaused={paused}
                       gameService={gameService}
               />
             </Stage>

@@ -8,6 +8,7 @@ import {ServeStage} from "./ServeStage.tsx";
 import {Stage, TilingSprite} from "@pixi/react";
 import {Stages} from "./Stages.ts"
 import counterImg from '@/assets/cooking-sprites/counter.png';
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 
 interface CookingGameComponentProps {
   onCompletion: () => void;
@@ -27,6 +28,12 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   const initStateRef=useRef(true);
   const[totalPoints,setTotalPoints]=useState(0);
   const [passedStages, setPassedStages] = useState(0);
+  const gameService = useGameService();
+
+  const awardScore = (privacy: number, comfort: number) => {
+    if (privacy) gameService.changeScore(privacy, "privacy");
+    if (comfort) gameService.changeScore(comfort, "comfort");
+  };
 
 
   const secureSetStage= (stage : Stages) =>{
@@ -86,12 +93,39 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   },[currentStage,dimensions,initStateRef]);
 
   const stageMap: { [key: number]: () => JSX.Element } = {
-    [Stages.GAME]:() => <GameStage setStage={secureSetStage} notificationProperties={notificationProperties}/>,
-    [Stages.RECIPE]:() => <RecipeStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
-    [Stages.INGREDIENTS]:()=><IngredientsStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
-    [Stages.COOK]:()=><CookingStage setStage={secureSetStage} setTotalPoints={setTotalPoints}/>,
-    [Stages.SERVE]:()=><ServeStage setStage={secureSetStage} dimensions={dimensions} setTotalPoints={setTotalPoints}/>
-};
+    [Stages.GAME]: () => (
+            <GameStage
+                    setStage={secureSetStage}
+                    notificationProperties={notificationProperties}
+            />
+    ),
+    [Stages.RECIPE]: () => (
+            <RecipeStage setStage={secureSetStage} setTotalPoints={setTotalPoints} />
+    ),
+    [Stages.INGREDIENTS]: () => (
+            // pass awardScore ↓↓↓
+            <IngredientsStage
+                    setStage={secureSetStage}
+                    setTotalPoints={setTotalPoints}
+                    awardScore={awardScore}
+            />
+    ),
+    [Stages.COOK]: () => (
+            // pass awardScore ↓↓↓
+            <CookingStage
+                    setStage={secureSetStage}
+                    setTotalPoints={setTotalPoints}
+                    awardScore={awardScore}
+            />
+    ),
+    [Stages.SERVE]: () => (
+            <ServeStage
+                    setStage={secureSetStage}
+                    dimensions={dimensions}
+                    setTotalPoints={setTotalPoints}
+            />
+    ),
+  };
 
   useEffect(()=>{
     if(passedStages === 4 && totalPoints/4>50){

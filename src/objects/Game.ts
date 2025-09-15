@@ -16,6 +16,13 @@ export class Game {
     return new Game(rooms, score);
   }
 
+  toSerialized(): object {
+    return {
+      rooms: this.rooms.map((room: Room) => room.toSerialized()),
+      score: this.score.toSerialized()
+    };
+  }
+
   getRooms(): Room[] {
     return this.rooms;
   }

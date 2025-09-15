@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useCallback, useMemo, useState} from "react";
+import React, {PropsWithChildren, useMemo, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
 import {Level} from "@/pixi/levels/Level";
 import characterImage from "@/assets/character/character_movement.png";
@@ -17,6 +17,11 @@ import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {HeadUpDisplay} from "@/pixi/components/HeadUpDisplay.tsx";
 import {GameService} from "@/services/GameService.ts";
+import {Tutorial} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {characterPositionStore, useCharacterPosition} from "@/utils/characterPosition.ts";
+import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
+import {MovementButtons} from "@/components/general-ui/MovementButtons.tsx";
+import {ProximityHighlight} from "@/pixi/components/ProximityHighlight.tsx";
 
 interface MainContainerProps {
     canvasSize: {
@@ -29,7 +34,7 @@ interface MainContainerProps {
     isPaused?: boolean;
     children?: React.ReactNode;
     interactiveElements?: InteractivePixiElement[];
-  gameService: GameService;
+    gameService: GameService;
 }
 
 export const MainContainer = ({
@@ -50,78 +55,76 @@ export const MainContainer = ({
      * State to track the spawn position of the character.
      */
     const [spawnPosition, setSpawnPosition] = useState<Position>({x: DEFAULT_POS_X, y: DEFAULT_POS_Y});
-    /**
-     * State to track the character's position in tile coordinates for the camera
-     */
-    const [characterPosition, setCharacterPosition] = useState({
-        x: Math.floor(spawnPosition.x / TILE_SIZE),
-        y: Math.floor(spawnPosition.y / TILE_SIZE)
-    });
 
     const characterTexture = useMemo(() => loadTexture(characterImage), []);
     const {levelTexture, overlayTexture, doorTexture} = useLevelTextures(map);
+  const { tile: characterTile } = useCharacterPosition();
+  const { enabled: tutorialActive, close: closeTutorial } = useTutorialActive();
 
-    const updateCharacterPosition = useCallback((pos: Position) => {
-        const tileX = Math.floor(pos.x / TILE_SIZE);
-        const tileY = Math.floor(pos.y / TILE_SIZE);
-        setCharacterPosition({x: tileX, y: tileY});
-    }, []);
+  const handleCharacterMove = (pos: Position) => {
+    characterPositionStore.set(pos);
 
-    const handleCharacterMove = (pos: Position) => {
-        const tileX = Math.floor(pos.x / TILE_SIZE);
-        const tileY = Math.floor(pos.y / TILE_SIZE);
+    const tileX = Math.floor(pos.x / TILE_SIZE);
+    const tileY = Math.floor(pos.y / TILE_SIZE);
+    const transition = getMapTransition(map, tileX, tileY);
 
-        const transition = getMapTransition(map, tileX, tileY);
+    if (transition && !tutorialActive) {
+      const spawn = getSpawnForMap(transition.to, map);
+      const nextSpawn: Position = spawn?.pos
+              ? { x: spawn.pos.x * TILE_SIZE, y: spawn.pos.y * TILE_SIZE }
+              : { x: DEFAULT_POS_X, y: DEFAULT_POS_Y };
 
-        if (transition) {
-            const spawn = getSpawnForMap(transition.to, map);
-            setPendingTransition({
-                to: transition.to,
-                spawn: spawn?.pos
-                    ? {x: spawn.pos.x * TILE_SIZE, y: spawn.pos.y * TILE_SIZE}
-                    : {x: DEFAULT_POS_X, y: DEFAULT_POS_Y}
-            });
-            setInTransition(true);
-            // if (spawn && spawn.pos) {
-            //   const newSpawnPosition = {
-            //     x: spawn.pos.x * TILE_SIZE,
-            //     y: spawn.pos.y * TILE_SIZE
-            //   }
-            //   setSpawnPosition(newSpawnPosition);
-            //   pos = newSpawnPosition;
-            // } else {
-            //   const newSpawnPosition = {
-            //     x: DEFAULT_POS_X,
-            //     y: DEFAULT_POS_Y
-            //   }
-            //   setSpawnPosition(newSpawnPosition);
-            //   pos = newSpawnPosition;
-            // }
-            setShouldSnapCamera(true);
-        }
-        updateCharacterPosition(pos);
-    };
+      setPendingTransition({ to: transition.to, spawn: nextSpawn });
+      setInTransition(true);
+      setShouldSnapCamera(true);
+    }
+  };
 
-    return (
-        <>
+  const characterRef = useRef<{ moveUp: () => void; moveDown: () => void; moveLeft: () => void; moveRight: () => void; interact: () => void } | null>(null);
+
+  const handleMoveUp = () => {
+    characterRef.current?.moveUp();
+  };
+
+  const handleMoveDown = () => {
+    characterRef.current?.moveDown();
+  };
+
+  const handleMoveLeft = () => {
+    characterRef.current?.moveLeft();
+  };
+
+  const handleMoveRight = () => {
+    characterRef.current?.moveRight();
+  };
+
+  const handleInteract = () => {
+    characterRef.current?.interact();
+  };
+
+  return (
+          <>
             <Container>
-                <Graphics
-                    draw={g => {
+              <Graphics
+                      draw={(g) => {
                         g.clear();
                         g.beginFill(0x38373a);
                         g.drawRect(0, 0, canvasSize.width, canvasSize.height);
                         g.endFill();
-                    }}
-                />
-                {children}
-                <Camera key={map}
-                        characterPosition={characterPosition}
-                        canvasSize={canvasSize}
-                        shouldSnap={shouldSnapCamera}
-                        onSnapComplete={() => setShouldSnapCamera(false)}
-                >
-                    <Level texture={levelTexture}/>
-                    <Character
+                      }}
+              />
+              {children}
+              <Camera
+                      key={map}
+                      characterPosition={characterTile}
+                      canvasSize={canvasSize}
+                      shouldSnap={shouldSnapCamera}
+                      onSnapComplete={() => setShouldSnapCamera(false)}
+                      tutorialEnabled={tutorialActive}
+              >
+                <Level texture={levelTexture} />
+                <ProximityHighlight interactiveElements={interactiveElements}/>
+                <Character
                         texture={characterTexture}
                         onMove={handleCharacterMove}
                         collisionMap={collisionMap}
@@ -132,7 +135,7 @@ export const MainContainer = ({
                     <LevelOverlay texture={overlayTexture}/>
                     <Door textures={doorTexture} state={DoorState.Open}/>
                 </Camera>
-                <TransitionOverlay
+                {!tutorialActive && <TransitionOverlay
                     width={canvasSize.width}
                     height={canvasSize.height}
                     inTransition={inTransition}
@@ -140,18 +143,33 @@ export const MainContainer = ({
                         if (pendingTransition) {
                             onMapChange(pendingTransition.to);
                             setSpawnPosition(pendingTransition.spawn);
-                            updateCharacterPosition(pendingTransition.spawn);
+                            characterPositionStore.teleport(pendingTransition.spawn);
                             setShouldSnapCamera(true);
                             setPendingTransition(null);
                         }
                     }}
                     onTransitionEnd={() => setInTransition(false)}
-                />
+                />}
               <HeadUpDisplay
                       windowWidth={canvasSize.width}
                       windowHeight={canvasSize.height}
                       gameService={gameService}
               />
+              <MovementButtons
+                      canvasSize={canvasSize}
+                      onMoveUp={handleMoveUp}
+                      onMoveDown={handleMoveDown}
+                      onMoveLeft={handleMoveLeft}
+                      onMoveRight={handleMoveRight}
+                      onInteract={handleInteract}
+              />
+              {tutorialActive && <Tutorial
+                      windowWidth={canvasSize.width}
+                      windowHeight={canvasSize.height}
+                      gameService={gameService}
+                      onClose={closeTutorial}
+                      interactiveElements={interactiveElements  as InteractivePixiElement[]}
+              />}
             </Container>
         </>
     );
