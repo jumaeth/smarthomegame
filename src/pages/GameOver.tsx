@@ -1,4 +1,4 @@
-import {useGameService} from "../hooks/useGameService.tsx";
+import {useGameService} from "../hooks/gameService/useGameService.tsx";
 import {GameScore} from "@/objects/GameScore.ts";
 import {GameService} from "@/services/GameService.ts";
 import {t} from '@lingui/core/macro';

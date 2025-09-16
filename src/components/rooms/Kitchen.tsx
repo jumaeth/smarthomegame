@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {useGameService} from "@/hooks/useGameService.tsx";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {calculateCanvasSize} from "@/utils/movment.ts";
 import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
@@ -38,6 +38,7 @@ export const Kitchen = () => {
 
     const smartHomeHubCallback = (isCompleted: boolean) => {
         setSmartHomeHubCompleted(isCompleted);
+        gameService.completeDevice("SmartHomeHub");
         setIsPaused(false);
         smartHomeHubModalRef.current?.toggleModal();
         checkForCompletion();
@@ -52,6 +53,7 @@ export const Kitchen = () => {
 
   const securityCameraCallback = (isCompleted: boolean) => {
     setSecurityCameraCompleted(isCompleted);
+    gameService.completeDevice("SecurityCamera");
     setIsPaused(false);
     securityCameraModalRef.current?.toggleModal();
     checkForCompletion();
@@ -65,15 +67,14 @@ export const Kitchen = () => {
   }
 
   const smartKitchenCallback = (isCompleted: boolean) => {
-    console.log("smartKitchenCallback");
     setSmartKitchenCompleted(isCompleted);
+    gameService.completeDevice("SmartKitchen");
     setIsPaused(false);
     smartKitchenModalRef.current?.toggleModal();
     checkForCompletion();
   };
 
   const openSmartKitchen = () => {
-    console.log("openSmartKitchen");
     if (smartKitchenModalRef.current) {
       setIsPaused(true);
       smartKitchenModalRef.current.toggleModal();
@@ -81,9 +82,9 @@ export const Kitchen = () => {
   };
 
   const interactiveElements = [
-    new InteractivePixiElement(14, 4, 1, 1, openSmartHomeHub),
-    new InteractivePixiElement(1, 2, 1, 1, openSecurityCameraHomeHub),
-    new InteractivePixiElement(10, 3, 1, 1, openSmartKitchen)
+    new InteractivePixiElement(14, 4, 1, 1, "SmartHomeHub", openSmartHomeHub),
+    new InteractivePixiElement(1, 2, 1, 1, "SecurityCamera", openSecurityCameraHomeHub),
+    new InteractivePixiElement(9, 3, 1, 1, "SmartKitchen", openSmartKitchen)
   ]
 
     //Render Code

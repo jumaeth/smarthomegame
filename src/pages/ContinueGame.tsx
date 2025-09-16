@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import {useGameService} from "../hooks/useGameService.tsx";
+import {useGameService} from "../hooks/gameService/useGameService.tsx";
 import {GameService} from "@/services/GameService.ts";
 import Button from "@/components/general-ui/Button.tsx";
 import {CookieService} from "@/services/CookieService.ts";

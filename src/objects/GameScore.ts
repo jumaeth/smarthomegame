@@ -11,6 +11,13 @@ export class GameScore {
     return new GameScore(data.privacyScore, data.comfortScore);
   }
 
+  toSerialized(): object {
+    return {
+      privacy: this.privacyScore,
+      comfort: this.comfortScore
+    };
+  }
+
   getPrivacyScore(): number {
     return this.privacyScore;
   }

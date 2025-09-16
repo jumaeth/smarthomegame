@@ -2,7 +2,7 @@ import {useState} from "react";
 import {Trans} from "@lingui/react/macro";
 import Toggle from "@/components/general-ui/Toggle.tsx";
 import Button from "@/components/general-ui/Button.tsx";
-import {useGameService} from "@/hooks/useGameService.tsx";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {GameService} from "@/services/GameService.ts";
 import privacyIcon from "@/assets/coins/privacy_coin.png";
 import comfortIcon from "@/assets/coins/comfort_coin.png";

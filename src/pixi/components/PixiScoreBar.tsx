@@ -5,7 +5,7 @@ import React from "react";
 import {Texture} from "@pixi/core";
 
 
-interface PixiProgressBarProps {
+interface PixiScoreBarProps {
   x: number;
   y: number;
   width: number;
@@ -13,13 +13,13 @@ interface PixiProgressBarProps {
   texture: Texture;
 }
 
-export const PixiProgressBar: React.FC<PixiProgressBarProps> = ({
+export const PixiScoreBar: React.FC<PixiScoreBarProps> = ({
                                                                   x,
                                                                   y,
                                                                   width,
                                                                   progress,
                                                                   texture
-                                                                }: PixiProgressBarProps) => {
+                                                                }: PixiScoreBarProps) => {
   const height = width / 5;
   if (progress > 100) {
     progress = 100

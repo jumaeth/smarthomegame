@@ -10,7 +10,7 @@ import {Stages} from "./Stages.ts"
 import counterImg from '@/assets/cooking-sprites/counter.png';
 import {OutroStage} from "@/components/cookingGame/OutroStage.tsx";
 import {IntroStage} from "@/components/cookingGame/IntroStage.tsx";
-import {useGameService} from "@/hooks/useGameService.tsx";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 
 interface CookingGameComponentProps {
   onCompletion: () => void;

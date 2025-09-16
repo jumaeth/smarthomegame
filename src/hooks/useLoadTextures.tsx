@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {Assets, Texture} from "pixi.js";
 
-type TextureMap = { [key: string]: string };
+export type TextureMap = { [key: string]: string };
 type LoadedTextures = { [key: string]: Texture };
 
 export const useLoadTextures = (texturePaths: TextureMap) => {

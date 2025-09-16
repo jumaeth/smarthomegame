@@ -14,6 +14,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const consent = CookieService.get("cookieConsent");
+    console.log("Consent: " + consent);
     if (consent === null) {
       setShowBanner(true);
     }
