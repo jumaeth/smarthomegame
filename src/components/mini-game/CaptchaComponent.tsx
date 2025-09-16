@@ -3,7 +3,7 @@ import {Trans} from "@lingui/react/macro";
 import {loadImagesFromFolder} from "@/utils/loadImages.ts";
 import Button from "@/components/general-ui/Button.tsx";
 import {Solution} from "@/types/solution.ts";
-import {useGameService} from "@/hooks/useGameService.tsx";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import privacyIcon from "@/assets/coins/privacy_coin.png";
 import comfortIcon from "@/assets/coins/comfort_coin.png";
 
