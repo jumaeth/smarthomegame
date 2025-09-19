@@ -74,6 +74,13 @@ export const ProgressBarIcons: React.FC<ProgressBarIconsProps> = ({
 
     const drawCompletionBars = useCallback((g: PixiGraphics) => {
 
+      const colours = [0x990000, 0xFF0000, 0xFF3300, 0xFF6600, 0xFF9900,
+                                 0xFFCC00, 0xFFFF00, 0xCCFF00, 0x99FF99, 0x00FF00]
+
+      const index = Math.min(Math.floor(completedPercentage / 10), colours.length - 1);
+      const progressColour = colours[index];
+
+
       const barX = x + windowWidth * 0.055;
       const barY = y + windowHeight * 0.055;
       const full = windowWidth * 0.0325 * Object.entries(texturePaths).length * 0.97;
@@ -88,7 +95,7 @@ export const ProgressBarIcons: React.FC<ProgressBarIconsProps> = ({
               windowHeight * 0.015,
               10
       );
-      g.beginFill(0xe89600, 1);
+      g.beginFill(progressColour, 1);
       g.drawRoundedRect(
               barX + windowWidth * 0.0025,
               barY + windowHeight * 0.005,
