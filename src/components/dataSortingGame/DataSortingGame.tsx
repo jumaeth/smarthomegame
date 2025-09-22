@@ -1,12 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import {Trans} from "@lingui/react/macro";
-import {t} from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
+import { t } from "@lingui/core/macro";
+import { useGameService } from "@/hooks/gameService/useGameService.tsx";
 
 interface DataSortingGameProps {
   onCompletion: () => void;
 }
 
 export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }) => {
+  const gameService = useGameService();
+
+  // Scoring knobs (tune to taste)
+  const SCORE = {
+    baseComfortOnCorrect: 1,
+    privacyOnCorrect: {
+      public: 1,
+      personal: 2,
+      sensitive: 3,
+    } as const,
+    firstTryBonusPrivacy: 1,
+    // Completion bonus scales with performance
+    completionBonus: (firstTryCount: number, total: number) => {
+      const accuracy = firstTryCount / total; // 0..1
+      const privacy = Math.round(4 * accuracy * total / 10);  // ~ up to +4 for perfect run
+      const comfort = Math.round(3 * accuracy * total / 10);  // ~ up to +3 for perfect run
+      return { privacy, comfort };
+    },
+  };
+
   // Define the data types and their corresponding colors and explanations
   const DATA_TYPES = {
     public: {
@@ -36,20 +57,20 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
     explanation: string;
   };
 
-// Sample data items to sort
+  // Sample data items to sort
   const DATA_ITEMS: DataItem[] = [
     // Sensitive data examples
     {
       id: 1,
-      text: t`Health data (e.g. medical history)`,
+      text: t`Health data (e.g., medical history)`,
       type: 'sensitive',
       explanation: t`Health data is particularly worthy of protection under the GDPR, as it contains very personal information and could be misused.`
     },
     {
       id: 2,
-      text: 'Biometrische Daten (z.B. Fingerabdruck)',
+      text: t`Biometric data (e.g., fingerprints)`,
       type: 'sensitive',
-      explanation: 'Biometrische Daten sind einzigartige Merkmale einer Person und können nicht geändert werden. Daher erfordern sie besonderen Schutz.'
+      explanation: t`Biometric data are unique characteristics of a person and cannot be changed, so they require special protection.`
     },
     {
       id: 3,
@@ -73,7 +94,7 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
       id: 6,
       text: t`Trade union membership`,
       type: 'sensitive',
-      explanation: 'Trade union membership is particularly worthy of protection as it could lead to discrimination in the workplace.'
+      explanation: t`Trade union membership is particularly worthy of protection as it could lead to workplace discrimination.`
     },
     {
       id: 7,
@@ -91,15 +112,15 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
     },
     {
       id: 9,
-      text: t`E-mail address`,
+      text: t`Email address`,
       type: 'personal',
-      explanation: t`E-mail addresses are personal data that can be used for identification and contact purposes.`
+      explanation: t`Email addresses are personal data that can be used for identification and contact purposes.`
     },
     {
       id: 10,
       text: t`Phone number`,
       type: 'personal',
-      explanation: t`Telephone numbers are personal data that can be used for identification and contact purposes.`
+      explanation: t`Phone numbers are personal data that can be used for identification and contact purposes.`
     },
     {
       id: 11,
@@ -159,12 +180,11 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
     },
     {
       id: 20,
-      text: t`Public cards`,
+      text: t`Public maps`,
       type: 'public',
       explanation: t`Public maps do not contain any personal information and are accessible to everyone.`
     }
   ];
-
 
   const [currentItem, setCurrentItem] = useState<DataItem | null>(null);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string; explanation: string } | null>(null);
@@ -209,133 +229,155 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
   const handleDrop = (e: React.DragEvent, type: keyof typeof DATA_TYPES) => {
     e.preventDefault();
     e.currentTarget.classList.remove('border-amber-800', 'bg-amber-100');
-    
+
     const item = JSON.parse(e.dataTransfer.getData('text/plain')) as DataItem;
     const isCorrect = item.type === type;
-    
+
+    // Track attempts & first-try
+    const isFirstAttempt = !attemptedItems.has(item.id);
+    setAttemptedItems(prev => new Set([...prev, item.id]));
+
     if (isCorrect) {
       setRemainingItems(prev => prev.filter(i => i.id !== item.id));
-      
-      // Check if this was the first attempt for this item
-      if (!attemptedItems.has(item.id)) {
-        setFirstTrySuccesses(prev => [...prev, item]);
-      }
-    }
+      if (isFirstAttempt) setFirstTrySuccesses(prev => [...prev, item]);
 
-    // Add to attempted items
-    setAttemptedItems(prev => new Set([...prev, item.id]));
+      // Award per-correct deltas
+      const privacyDelta = SCORE.privacyOnCorrect[item.type] + (isFirstAttempt ? SCORE.firstTryBonusPrivacy : 0);
+      const comfortDelta = SCORE.baseComfortOnCorrect;
+
+      gameService.changeScore(privacyDelta, 'privacy');
+      gameService.changeScore(comfortDelta, 'comfort');
+    } else {
+      // No penalty by default; uncomment to add gentle penalties
+      // gameService.changeScore(0, 'privacy');
+      // gameService.changeScore(0, 'comfort');
+    }
 
     setFeedback({
       type: isCorrect ? 'success' : 'error',
-      message: isCorrect ? t`Correct!` : t`Wrong! Try it again.`,
+      message: isCorrect ? t`Correct!` : t`Wrong! Try again.`,
       explanation: isCorrect ? item.explanation : DATA_TYPES[type].explanation
     });
   };
 
-  const handleCloseFeedback = () => {
-    setFeedback(null);
-  };
+  const handleCloseFeedback = () => setFeedback(null);
 
-  if (!isInitialized) {
-    return null; // Don't show anything until initialized
-  }
+  if (!isInitialized) return null;
 
   if (showSummary) {
+    // Compute completion bonus once (pure calc; apply on click below)
+    const bonus = SCORE.completionBonus(firstTrySuccesses.length, DATA_ITEMS.length);
+
+    const handleFinish = () => {
+      gameService.changeScore(bonus.privacy, 'privacy');
+      gameService.changeScore(bonus.comfort, 'comfort');
+      onCompletion();
+    };
+
     return (
-      <div className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col items-center justify-center gap-8 bg-amber-600 font-mono text-center">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl text-white mb-4">
-          <Trans>Congratulations!</Trans>
-        </h2>
+            <div className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col items-center justify-center gap-8 bg-amber-600 font-mono text-center">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl text-white mb-4">
+                <Trans>Congratulations!</Trans>
+              </h2>
 
-        <div className="bg-white/90 rounded-xl p-6 max-w-[600px] w-[90%]">
-          <h3 className="text-xl sm:text-2xl md:text-3xl text-amber-900 mb-4">
-            <Trans>Summary</Trans>
-          </h3>
+              <div className="bg-white/90 rounded-xl p-6 max-w-[600px] w-[90%]">
+                <h3 className="text-xl sm:text-2xl md:text-3xl text-amber-900 mb-4">
+                  <Trans>Summary</Trans>
+                </h3>
 
-          <p className="text-lg sm:text-xl md:text-2xl text-amber-900 mb-6">
-            <Trans>All questions were answered successfully!</Trans>
-          </p>
+                <p className="text-lg sm:text-xl md:text-2xl text-amber-900 mb-6">
+                  <Trans>All items were sorted successfully!</Trans>
+                </p>
 
-          {firstTrySuccesses.length > 0 && (
-            <p className="text-base sm:text-lg text-amber-900 mb-6">
-              <Trans>Answered correctly at the first attempt:</Trans> {firstTrySuccesses.length} <Trans>by</Trans> {DATA_ITEMS.length}
-            </p>
-          )}
+                {firstTrySuccesses.length > 0 && (
+                        <p className="text-base sm:text-lg text-amber-900 mb-2">
+                          <Trans>Answered correctly on the first attempt:</Trans> {firstTrySuccesses.length} <Trans>of</Trans> {DATA_ITEMS.length}
+                        </p>
+                )}
 
-          <p className="text-base sm:text-lg md:text-xl text-amber-900 mb-8">
-            <Trans>The Smart Home Hub is now unlocked!</Trans>
-          </p>
+                <p className="text-base sm:text-lg text-amber-900 mb-6">
+                  <Trans>Completion bonus:</Trans> +{bonus.privacy} <Trans>privacy</Trans>, +{bonus.comfort} <Trans>comfort</Trans>
+                </p>
 
-          <div className="flex justify-center">
-            <button
-              onClick={onCompletion}
-              className="px-6 py-3 bg-green-700 hover:bg-green-800 text-white rounded-xl transition-colors"
-            >
-              <Trans>Completed</Trans>
-            </button>
-          </div>
-        </div>
-      </div>
+                <p className="text-base sm:text-lg md:text-xl text-amber-900 mb-8">
+                  <Trans>The Smart Home Hub is now unlocked!</Trans>
+                </p>
+
+                <div className="flex justify-center">
+                  <button
+                          onClick={handleFinish}
+                          className="px-6 py-3 bg-green-700 hover:bg-green-800 text-white rounded-xl transition-colors"
+                  >
+                    <Trans>Completed</Trans>
+                  </button>
+                </div>
+              </div>
+            </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col gap-4 md:gap-6 lg:gap-8 bg-amber-600 relative"
-         style={{ fontFamily: 'LoResRegular, sans-serif' }}
-    >
-      <div className="flex justify-center w-full h-32 mt-4 md:mt-6 lg:mt-8">
-        {currentItem && (
           <div
-            draggable
-            onDragStart={(e) => handleDragStart(e, currentItem)}
-            className="w-[90%] sm:w-[70%] md:w-[60%] max-w-[600px] cursor-grab p-3 sm:p-4 md:p-5 text-amber-900 bg-white rounded-lg shadow-md"
+                  className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col gap-4 md:gap-6 lg:gap-8 bg-amber-600 relative"
+                  style={{ fontFamily: 'LoResRegular, sans-serif' }}
           >
-            <h6
-                    className="text-lg sm:text-xl md:text-2xl"
-                    style={{fontFamily: 'LoResRegular, sans-serif'}}
-            >
-              {currentItem.text}
-            </h6>
-          </div>
-        )}
-      </div>
+            <div className="flex justify-center w-full h-32 mt-4 md:mt-6 lg:mt-8">
+              {currentItem && (
+                      <div
+                              draggable
+                              onDragStart={(e) => handleDragStart(e, currentItem)}
+                              className="w-[90%] sm:w-[70%] md:w-[60%] max-w-[600px] cursor-grab p-3 sm:p-4 md:p-5 text-amber-900 bg-white rounded-lg shadow-md"
+                      >
+                        <h6
+                                className="text-lg sm:text-xl md:text-2xl"
+                                style={{ fontFamily: 'LoResRegular, sans-serif' }}
+                        >
+                          {currentItem.text}
+                        </h6>
+                      </div>
+              )}
+            </div>
 
-      {feedback && (
-        <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 rounded-lg shadow-lg z-10 ${
-          feedback.type === 'success' ? 'bg-green-100' : 'bg-red-100'
-        }`}>
-          <p className={`text-lg font-semibold ${
-            feedback.type === 'success' ? 'text-green-800' : 'text-red-800'
-          }`}>
-            {feedback.message}
-          </p>
-          <p className="text-sm mt-2 text-gray-700 max-w-md">
-            {feedback.explanation}
-          </p>
-          <button
-                  onClick={handleCloseFeedback}
-                  className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded w-full"
-                  style={{fontFamily: 'LoResBold, sans-serif'}}
-          >
-            <Trans>Close</Trans>
-          </button>
-        </div>
-      )}
+            {feedback && (
+                    <div
+                            className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 rounded-lg shadow-lg z-10 ${
+                                    feedback.type === 'success' ? 'bg-green-100' : 'bg-red-100'
+                            }`}
+                    >
+                      <p
+                              className={`text-lg font-semibold ${
+                                      feedback.type === 'success' ? 'text-green-800' : 'text-red-800'
+                              }`}
+                      >
+                        {feedback.message}
+                      </p>
+                      <p className="text-sm mt-2 text-gray-700 max-w-md">
+                        {feedback.explanation}
+                      </p>
+                      <button
+                              onClick={handleCloseFeedback}
+                              className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded w-full"
+                              style={{ fontFamily: 'LoResBold, sans-serif' }}
+                      >
+                        <Trans>Close</Trans>
+                      </button>
+                    </div>
+            )}
 
-      <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 lg:gap-8 mt-4 md:mt-6 lg:mt-8">
-        {Object.entries(DATA_TYPES).map(([type, { label, color, description }]) => (
-          <div
-            key={type}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={(e) => handleDrop(e, type as keyof typeof DATA_TYPES)}
-            className={`w-full md:w-1/3 p-4 rounded-lg ${color} text-white min-h-[200px] flex flex-col items-center justify-center text-center`}
-          >
-            <h3 className="text-xl font-bold mb-2">{label}</h3>
-            <p className="text-sm">{description}</p>
+            <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 lg:gap-8 mt-4 md:mt-6 lg:mt-8">
+              {Object.entries(DATA_TYPES).map(([type, { label, color, description }]) => (
+                      <div
+                              key={type}
+                              onDragOver={handleDragOver}
+                              onDragLeave={handleDragLeave}
+                              onDrop={(e) => handleDrop(e, type as keyof typeof DATA_TYPES)}
+                              className={`w-full md:w-1/3 p-4 rounded-lg ${color} text-white min-h-[200px] flex flex-col items-center justify-center text-center`}
+                      >
+                        <h3 className="text-xl font-bold mb-2">{label}</h3>
+                        <p className="text-sm">{description}</p>
+                      </div>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
-    </div>
   );
 };

@@ -3,39 +3,65 @@ import {Room, RoomName} from "../objects/Room";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore.ts";
 import {CookieService} from "@/services/CookieService.ts";
+import {allRoomStore} from "@/utils/roomStore.ts";
+import {movementStore} from "@/utils/movementEnabled.ts";
+
+
+type DeviceListener = (device: SmartDevice) => void;
+type Listener = (paused: boolean) => void;
 
 export class GameService {
   private game: Game;
   private navigate: (path: string) => void;
+  private paused: boolean = false;
+  private pauseListeners  = new Set<Listener>();
+  private smartDevicesEnabled = true;
+  private smartDevicesEnabledListeners  = new Set<Listener>();
+  private deviceListeners = new Set<DeviceListener>();
 
   constructor(navigate: (path: string) => void) {
     const saveGame = CookieService.get<Game>('save_game');
-    const savedGame = saveGame ? Game.fromSerialized(saveGame) : null;
-    this.game = savedGame ? Game.fromSerialized(savedGame) : new Game(this.setUpRooms());
+    if (saveGame) {
+      const game = Game.fromSerialized(saveGame);
+      this.game = game;
+      allRoomStore.set(game.getRooms());
+    } else {
+      const newRooms = this.setUpRooms();
+      this.game = new Game(newRooms);
+      if (allRoomStore.getAll().length === 0) allRoomStore.set(newRooms);
+    }
     this.navigate = navigate;
   }
 
   onGameStateChange(): void {
-    CookieService.set("save_game", this.game);
+    CookieService.set("save_game", {
+      rooms:  allRoomStore.getAll().map(r => r.toSerialized()),
+      score: this.game.getScore().toSerialized(),
+    });
   }
 
   setUpRooms(): Room[] {
-    return [
-      new Room("livingroom", [
-        new SmartDevice("SmartTv"),
-        new SmartDevice("SmartLights"),
-        new SmartDevice("SecurityCamera")
-      ]),
-      new Room("kitchen", [
-        new SmartDevice("SmartHomeHub"),
-        new SmartDevice("SmartKitchen"),
-        new SmartDevice("SecurityCamera"),
-      ]),
-    ];
+
+    const livingRoom = new Room("livingroom",[
+      new SmartDevice("SmartTv"),
+      new SmartDevice("SmartLights")
+    ]);
+
+    const kitchen= new Room("kitchen",[
+      new SmartDevice("SmartHomeHub"),
+      new SmartDevice("SmartKitchen"),
+      new SmartDevice("SecurityCamera"),
+    ]);
+
+    return [livingRoom, kitchen];
+  }
+
+  getAllRooms(): Room[] {
+    return allRoomStore.getAll();
   }
 
   findRoomByName(roomName: RoomName): Room | undefined {
-    return this.game.getRooms().find((r: Room): boolean => r.name === roomName);
+    return allRoomStore.getRoom(roomName);
   }
 
   completeRoom(roomName: RoomName): void {
@@ -55,7 +81,7 @@ export class GameService {
   }
 
   checkGameCompletionConditions(): boolean {
-    return this.game.getRooms().every((room: Room): boolean => room.isCompleted);
+    return allRoomStore.getAll().every((room: Room) => room.isCompleted);
   }
 
   getDeviceForRoom(roomName: RoomName): SmartDevice[] {
@@ -64,7 +90,9 @@ export class GameService {
   }
 
   reset(): boolean {
-    this.game = new Game(this.setUpRooms());
+    const newRooms = this.setUpRooms();
+    this.game = new Game(newRooms);
+    allRoomStore.set(newRooms);
     this.navigate('/');
     this.onGameStateChange();
     return true;
@@ -79,11 +107,30 @@ export class GameService {
   }
 
   pauseGame(): void {
-    //TODO
+    this.paused = true;
+    if (movementStore.getSnapshot().movementEnabled){
+      movementStore.disable();
+    }
+    this.emitPause();
+
   }
 
   resumeGame(): void {
-    //TODO
+    this.paused = false;
+    if (!movementStore.getSnapshot().movementEnabled){
+      movementStore.enable();
+    }
+    this.emitPause();
+  }
+
+  disableSmartDevices(): void {
+    this.smartDevicesEnabled = false;
+    this.emitSmartDevicesEnable();
+  }
+
+  enableSmartDevices(): void {
+    this.smartDevicesEnabled = true;
+    this.emitSmartDevicesEnable();
   }
 
   toogleRoomIsLocked(roomName: RoomName): void {
@@ -107,7 +154,57 @@ export class GameService {
     this.onGameStateChange();
   }
 
+  isPaused(): boolean {
+    return this.paused;
+  }
+
+  areSmartDevicesEnabled(): boolean {
+    return this.smartDevicesEnabled;
+  }
+
+  subscribeSmartDevicesEnabled(listener: Listener): () => void {
+    this.smartDevicesEnabledListeners.add(listener);
+    listener(this.smartDevicesEnabled);
+
+    return () => {
+      this.smartDevicesEnabledListeners.delete(listener);
+    };
+
+  }
+
+  subscribePause(listener: Listener): () => void {
+    this.pauseListeners.add(listener);
+    listener(this.paused);
+
+    return () => {
+      this.pauseListeners.delete(listener);
+    };
+
+  }
+
+  private emitPause() {
+    for (const l of this.pauseListeners) l(this.paused);
+  }
+
+  private emitSmartDevicesEnable() {
+    for (const l of this.smartDevicesEnabledListeners) l(this.smartDevicesEnabled);
+  }
+
   getScore():GameScore {
     return this.game.getScore();
+  }
+
+  completeDevice(name: string): void {
+    const device = allRoomStore.getDevice(name);
+    if (device){
+      device.complete();
+      this.deviceListeners.forEach(cb => cb(device));
+      this.onGameStateChange();
+    }
+  }
+
+  onDeviceStateChanged(listener: DeviceListener): () => void {
+    this.deviceListeners.add(listener);
+    return () => this.deviceListeners.delete(listener);
   }
 }

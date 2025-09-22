@@ -7,13 +7,15 @@ type BasicModalWrapperProps = {
   content: React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
+  showBg?: boolean
 };
 
-export const BasicModalWrapper = ({content, isOpen, onClose}: BasicModalWrapperProps) => {
+export const BasicModalWrapper = ({ content, isOpen, onClose, showBg }: BasicModalWrapperProps) => {
   if (!isOpen) return null;
 
   return (
           <div className="fixed inset-0">
+            {showBg && <div className="overlay" onClick={onClose} />}
             <div className="invisible ..."></div>
             <div className="col-span-2 bg-black/75 w-full h-full" onClick={onClose}/>
             <AvatarWithSpeach src={LlmAvatar}
@@ -23,6 +25,5 @@ export const BasicModalWrapper = ({content, isOpen, onClose}: BasicModalWrapperP
               <div className="bg-[#4a4a4a] px-[28px] py-[14px] rounded-[3px]">{content}</div>
             </div>
           </div>
-  )
-          ;
+  );
 };
