@@ -10,7 +10,7 @@ export const ProfileAvatar = ({ src, alt = "Profile Avatar", size = 64 }: Profil
           <img
                   src={src}
                   alt={alt}
-                  className="rounded-full object-cover border-2 border-gray-300"
+                  className="rounded-full object-cover border-2 border-gray-300 bg-black"
                   style={{ width: dimension, height: dimension }}
           />
   );

@@ -5,6 +5,7 @@ import {GameScore, ScoreType} from "@/objects/GameScore.ts";
 import {CookieService} from "@/services/CookieService.ts";
 import {allRoomStore} from "@/utils/roomStore.ts";
 import {movementStore} from "@/utils/movementEnabled.ts";
+import {t} from "@lingui/core/macro";
 
 
 type DeviceListener = (device: SmartDevice) => void;
@@ -43,14 +44,14 @@ export class GameService {
   setUpRooms(): Room[] {
 
     const livingRoom = new Room("livingroom",[
-      new SmartDevice("SmartTv"),
-      new SmartDevice("SmartLights")
+      new SmartDevice("SmartTv",t`This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Uncheck the permissions which you think are not necessary by clicking directly on the checkbox.`),
+      new SmartDevice("SmartLights",t`This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Modify your settings by clicking on the sliders. When you are satisfied with your choices continue by pressing the continue button`)
     ]);
 
     const kitchen= new Room("kitchen",[
-      new SmartDevice("SmartHomeHub"),
-      new SmartDevice("SmartKitchen"),
-      new SmartDevice("SecurityCamera"),
+      new SmartDevice("SmartHomeHub",t`You need to order each item into one onf the three categories. You can do this by draging the item and dropping it into the right category.`),
+      new SmartDevice("SmartKitchen",t`You need to cook a meal. lets try to focus on privacy friendly but still practical choices. The minigame will let you know what the next steps are to complet the game.`),
+      new SmartDevice("SecurityCamera",t`Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them.`),
     ]);
 
     return [livingRoom, kitchen];

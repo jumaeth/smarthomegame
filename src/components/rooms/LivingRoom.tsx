@@ -96,7 +96,7 @@ export const LivingRoom = () => {
                       content={activeDevice ? deviceComponents[activeDevice] : null}
                       onClose={onModalClose}
                       showBg={sdEnabled}
-
+                      activeDevice={smartDevices.find((d) => d.name === activeDevice)}
               />
             </div>
             <Stage width={canvasSize.width} height={canvasSize.height}>

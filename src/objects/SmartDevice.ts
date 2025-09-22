@@ -6,12 +6,13 @@ export class SmartDevice {
 
   constructor(
           public name: string,
-          private isCompleted: boolean = false
+          private helpText:string,
+          private isCompleted: boolean = false,
   ) {
   }
 
   static fromSerialized(data: SmartDevice): SmartDevice {
-    const sd = new SmartDevice(data.name);
+    const sd = new SmartDevice(data.name, data.helpText);
     sd.isCompleted = data.isCompleted;
     return sd;
   }
@@ -19,7 +20,8 @@ export class SmartDevice {
   toSerialized(): object {
     return {
       name: this.name,
-      isCompleted: this.isCompleted
+      helpText: this.helpText,
+      isCompleted: this.isCompleted,
     };
   }
 
@@ -30,6 +32,10 @@ export class SmartDevice {
 
   getIsCompleted():boolean{
     return this.isCompleted;
+  }
+
+  getHelpText():string{
+    return this.helpText;
   }
 
   subscribe(listener: DeviceListener): () => void {
