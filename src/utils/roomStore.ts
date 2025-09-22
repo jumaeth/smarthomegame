@@ -1,6 +1,6 @@
-import {SmartDevice} from "@/objects/SmartDevice.ts";
+import {SmartDevice} from "@/objects/SmartDevice";
 import {useMemo, useSyncExternalStore} from "react";
-import {Room} from "@/objects/Room.ts";
+import {Room} from "@/objects/Room";
 
 type Listener = () => void;
 
