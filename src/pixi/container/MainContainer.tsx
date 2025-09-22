@@ -125,6 +125,7 @@ export const MainContainer = ({
                 <Level texture={levelTexture} />
                 <ProximityHighlight interactiveElements={interactiveElements}/>
                 <Character
+                        ref={characterRef}
                         texture={characterTexture}
                         onMove={handleCharacterMove}
                         collisionMap={collisionMap}
