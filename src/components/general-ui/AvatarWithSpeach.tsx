@@ -10,11 +10,13 @@ type AvatarWithSpeechProps = {
   alt?: string;
   info: string;
   helpText: string;
+  onClose: () => void;
 };
 
-const AvatarWithSpeech = ({src, alt = "Profile", info, helpText}: AvatarWithSpeechProps) => {
+const AvatarWithSpeech = ({src, alt = "Profile", info, helpText, onClose}: AvatarWithSpeechProps) => {
   const [textMessage, setTextMessage] = useState(info);
   const [showAnswerButton, setshowAnswerButton] = useState(true);
+  const [showCloseButton, setshowCloseButton] = useState(false);
 
   const declineHelp: () => void = (): void => {
     setshowAnswerButton(false);
@@ -24,18 +26,24 @@ const AvatarWithSpeech = ({src, alt = "Profile", info, helpText}: AvatarWithSpee
   const acceptHelp: () => void = (): void => {
     setshowAnswerButton(false);
     setTextMessage(helpText);
+    setshowCloseButton(true);
   }
 
   return (
-          <div className="fixed top-5 left-20 h-20 w-100 flex items-start space-x-4">
-            <img className="fixed top-0 left-0 w-[150px] z-[-10]" src={assistantPhone} alt="assistant-phone"/>
+          <div className="fixed top-5 left-20 h-20 w-100 flex items-start space-x-4 z-[101]">
+            <img className="fixed top-0 left-0 w-[150px] z-[10]" src={assistantPhone} alt="assistant-phone"/>
             <ProfileAvatar src={src} alt={alt}/>
-            <div className="relative bg-gray-100 text-black text-l px-4 py-2 rounded-lg max-w-s font-['Micro_5',monospace]">
+            <div className="relative bg-gray-100 text-black text-l px-4 py-2 rounded-lg max-w-s font-['Micro_5',monospace] z-[101]">
               {textMessage}
               {showAnswerButton && (
                       <div>
                         <Button onClick={acceptHelp}><Trans>Yes</Trans></Button>
                         <Button onClick={declineHelp}><Trans>No</Trans></Button>
+                      </div>
+              )}
+              {showCloseButton && (
+                      <div>
+                        <Button onClick={onClose}><Trans>Close</Trans></Button>
                       </div>
               )}
               <div className="absolute left-0 top-2 -translate-x-full w-0 h-0 border-t-8 border-b-8 border-r-8 border-t-transparent border-b-transparent border-r-gray-100"/>
