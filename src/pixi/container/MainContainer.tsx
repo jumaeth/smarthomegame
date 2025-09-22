@@ -150,11 +150,6 @@ export const MainContainer = ({
                     }}
                     onTransitionEnd={() => setInTransition(false)}
                 />}
-              <HeadUpDisplay
-                      windowWidth={canvasSize.width}
-                      windowHeight={canvasSize.height}
-                      gameService={gameService}
-              />
               <MovementButtons
                       canvasSize={canvasSize}
                       onMoveUp={handleMoveUp}
@@ -162,6 +157,11 @@ export const MainContainer = ({
                       onMoveLeft={handleMoveLeft}
                       onMoveRight={handleMoveRight}
                       onInteract={handleInteract}
+              />
+              <HeadUpDisplay
+                      windowWidth={canvasSize.width}
+                      windowHeight={canvasSize.height}
+                      gameService={gameService}
               />
               {tutorialActive && <Tutorial
                       windowWidth={canvasSize.width}
