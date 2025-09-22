@@ -22,6 +22,8 @@ export const MultipleChoiceComponent = ({
   const gameService: GameService = useGameService();
   const [answers, setAnswers] = useState<boolean[]>(new Array(questions.length).fill(true));
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [fadeOut, setFadeOut] = useState<boolean>();
+  const fadeOutDuration: number = 2000;
 
   const handleAnswer = (i: number, answer: boolean) => {
     const next = [...answers];
@@ -31,6 +33,10 @@ export const MultipleChoiceComponent = ({
 
   const submitAnswer = () => {
     setIsSubmitted(true);
+    setFadeOut(false);
+    setTimeout(() => {
+      setFadeOut(true);
+    }, fadeOutDuration);
   };
 
   function continueGame() {
@@ -75,13 +81,21 @@ export const MultipleChoiceComponent = ({
                             </div>
                           </label>
                           {isSubmitted && (
-                                  < div className="flex space-x-2">
-                                    <span className="ml-8">{isCorrect ? "✅ " + solutions[i].solutionMessage
-                                            : "❌ " + solutions[i].solutionMessage}
-                                    </span>
-                                    <span>{isCorrect ? formatWithSign.format(solutions[i].privacyScoreGain) : formatWithSign.format(solutions[i].privacyScorePenalty)}</span>
+                                  <div
+                                          className={`flex space-x-2 transition-opacity duration-1000 ${
+                                                  fadeOut ? 'opacity-0' : 'opacity-100'
+                                          }`}
+                                  >
+                  <span className="ml-8">
+                    {isCorrect ? "✅ " + solutions[i].solutionMessage : "❌ " + solutions[i].solutionMessage}
+                  </span>
+                                    <span>
+                    {isCorrect ? formatWithSign.format(solutions[i].privacyScoreGain) : formatWithSign.format(solutions[i].privacyScorePenalty)}
+                  </span>
                                     <img src={privacyIcon} className="h-6" alt="privacy-icon"/>
-                                    <span>{isCorrect ? formatWithSign.format(solutions[i].comfortScoreGain) : formatWithSign.format(solutions[i].comfortScorePenalty)}</span>
+                                    <span>
+                    {isCorrect ? formatWithSign.format(solutions[i].comfortScoreGain) : formatWithSign.format(solutions[i].comfortScorePenalty)}
+                  </span>
                                     <img src={comfortIcon} className="h-6" alt="comfort-icon"/>
                                   </div>
                           )}
@@ -89,7 +103,6 @@ export const MultipleChoiceComponent = ({
                 );
               })}
             </ul>
-
             {!isSubmitted ? (
                     <Button onClick={submitAnswer}>
                       <Trans>Send answer</Trans>
