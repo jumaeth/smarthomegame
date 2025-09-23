@@ -80,10 +80,6 @@ export const MainContainer = ({
     }
   };
 
-  useEffect(() => {
-    console.log(tutorialActive);
-  }, [tutorialActive]);
-
   const characterRef = useRef<{ moveUp: () => void; moveDown: () => void; moveLeft: () => void; moveRight: () => void; interact: () => void } | null>(null);
 
   const handleMoveUp = () => {
