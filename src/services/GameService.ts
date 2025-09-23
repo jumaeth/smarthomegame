@@ -69,8 +69,7 @@ export class GameService {
   }
 
   completeRoom(roomName: RoomName): void {
-    const room: Room | undefined = this.findRoomByName(roomName);
-    if (!room) return;
+    const room: Room = this.findRoomByName(roomName)!;
     room.complete();
     this.navigateAfterComplete();
     this.onGameStateChange();
@@ -200,13 +199,17 @@ export class GameService {
 
   completeDevice(name: string): void {
     const device = allRoomStore.getDevice(name);
+    const room = allRoomStore.getRoomForDevice(name);
     if (device){
       device.complete();
       this.deviceListeners.forEach(cb => cb(device));
+      if(this.checkRoomCompleted(room))this.completeRoom(room);
       this.onGameStateChange();
-      console.log("Finishcondition: "+this.checkGameCompletionConditions());
-      if(this.checkGameCompletionConditions())this.finishGame();
     }
+  }
+
+  checkRoomCompleted(name: RoomName): boolean{
+    return allRoomStore.getRoom(name).devices.every(d => d.getIsCompleted());
   }
 
   onDeviceStateChanged(listener: DeviceListener): () => void {
