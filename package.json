@@ -17,7 +17,6 @@
     "@fontsource/pixelify-sans": "^5.2.6",
     "@lingui/format-json": "^5.3.1",
     "@lingui/macro": "^5.3.1",
-    "@lingui/react": "^5.3.1",
     "@pixi/assets": "^7.4.3",
     "@pixi/react": "^7.1.2",
     "@tailwindcss/vite": "^4.1.3",
