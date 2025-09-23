@@ -204,6 +204,8 @@ export class GameService {
       device.complete();
       this.deviceListeners.forEach(cb => cb(device));
       this.onGameStateChange();
+      console.log("Finishcondition: "+this.checkGameCompletionConditions());
+      if(this.checkGameCompletionConditions())this.finishGame();
     }
   }
 
