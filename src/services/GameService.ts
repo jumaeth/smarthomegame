@@ -6,6 +6,7 @@ import {CookieService} from "@/services/CookieService.ts";
 import {allRoomStore} from "@/utils/roomStore.ts";
 import {movementStore} from "@/utils/movementEnabled.ts";
 import {t} from "@lingui/core/macro";
+import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive.ts";
 
 
 type DeviceListener = (device: SmartDevice) => void;
@@ -22,10 +23,12 @@ export class GameService {
 
   constructor(navigate: (path: string) => void) {
     const saveGame = CookieService.get<Game>('save_game');
+    const tutorialCookie = CookieService.get<boolean>('tutorialState');
     if (saveGame) {
       const game = Game.fromSerialized(saveGame);
       this.game = game;
       allRoomStore.set(game.getRooms());
+      if(tutorialCookie != null)tutorialActiveStore.set(tutorialCookie);
     } else {
       const newRooms = this.setUpRooms();
       this.game = new Game(newRooms);
@@ -39,6 +42,7 @@ export class GameService {
       rooms:  allRoomStore.getAll().map(r => r.toSerialized()),
       score: this.game.getScore().toSerialized(),
     });
+    CookieService.set("tutorialState", tutorialActiveStore.get());
   }
 
   setUpRooms(): Room[] {
@@ -66,8 +70,7 @@ export class GameService {
   }
 
   completeRoom(roomName: RoomName): void {
-    const room: Room | undefined = this.findRoomByName(roomName);
-    if (!room) return;
+    const room: Room = this.findRoomByName(roomName)!;
     room.complete();
     this.navigateAfterComplete();
     this.onGameStateChange();
@@ -197,11 +200,17 @@ export class GameService {
 
   completeDevice(name: string): void {
     const device = allRoomStore.getDevice(name);
+    const room = allRoomStore.getRoomForDevice(name);
     if (device){
       device.complete();
       this.deviceListeners.forEach(cb => cb(device));
+      if(this.checkRoomCompleted(room))this.completeRoom(room);
       this.onGameStateChange();
     }
+  }
+
+  checkRoomCompleted(name: RoomName): boolean{
+    return allRoomStore.getRoom(name).devices.every(d => d.getIsCompleted());
   }
 
   onDeviceStateChanged(listener: DeviceListener): () => void {
