@@ -15,18 +15,18 @@ type AvatarWithSpeechProps = {
 
 const AvatarWithSpeech = ({src, alt = "Profile", info, helpText, onClose}: AvatarWithSpeechProps) => {
   const [textMessage, setTextMessage] = useState(info);
-  const [showAnswerButton, setshowAnswerButton] = useState(true);
-  const [showCloseButton, setshowCloseButton] = useState(false);
+  const [showAnswerButton, setShowAnswerButton] = useState(true);
+  const [showCloseButton, setShowCloseButton] = useState(false);
 
   const declineHelp: () => void = (): void => {
-    setshowAnswerButton(false);
+    setShowAnswerButton(false);
     setTextMessage(t`ok, understood`);
   }
 
   const acceptHelp: () => void = (): void => {
-    setshowAnswerButton(false);
+    setShowAnswerButton(false);
     setTextMessage(helpText);
-    setshowCloseButton(true);
+    setShowCloseButton(true);
   }
 
   return (
