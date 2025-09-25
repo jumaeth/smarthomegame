@@ -62,6 +62,7 @@ build-job:
   script:
     - echo "[JOB] Build"
     - npm run build
+    - npm run lingui:compile
     - cp -r dist/ build/
     - mkdir config
     - cp pipeline/cd/nginxDevelopment.conf config/nginxDevelopment.conf
