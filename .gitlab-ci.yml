@@ -163,8 +163,10 @@ deploy-test-job:
     - apk add openssh-client
   script:
     - echo "[JOB] Deploy"
-    - eval `ssh-agent`
-    - ssh-add <(echo "$SSH_PK_DEVELOPMENT")
+    - echo "$SSH_PK_DEVELOPMENT" > /tmp/id_rsa
+    - chmod 600 /tmp/id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add /tmp/id_rsa
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - touch ~/.ssh/known_hosts
@@ -242,8 +244,10 @@ deploy-dev-job:
     - apk add openssh-client
   script:
     - echo "[JOB] Deploy"
-    - eval `ssh-agent`
-    - ssh-add <(echo "$SSH_PK_DEVELOPMENT")
+    - echo "$SSH_PK_DEVELOPMENT" > /tmp/id_rsa
+    - chmod 600 /tmp/id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add /tmp/id_rsa
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - touch ~/.ssh/known_hosts
