@@ -64,7 +64,7 @@ build-job:
     - npm run extract
     - npm run compile
     - npm run build
-    - cp -r locales dist/locales
+    - cp -r src/locales dist/locales
     - cp -r dist/ build/
     - mkdir config
     - cp pipeline/cd/nginxDevelopment.conf config/nginxDevelopment.conf
