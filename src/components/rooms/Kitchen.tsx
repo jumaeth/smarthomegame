@@ -23,6 +23,10 @@ export const Kitchen = () => {
 
   const devices = gameService.getDeviceForRoom(roomName).map((device: SmartDevice) => device.name);
 
+  useEffect(() => {
+    if (!gameService.getRoom(roomName).isCompleted){gameService.getRoom(roomName).lockRoom()}
+  }, [gameService]);
+
     const smartHomeHubCallback = () => {
         gameService.completeDevice("SmartHomeHub");
         setIsPaused(false);
@@ -129,6 +133,7 @@ export const Kitchen = () => {
                       interactiveElements={interactiveElements}
                       isPaused={isPaused}
                       gameService={gameService}
+                      room={roomName}
               />
             </Stage>
         </>

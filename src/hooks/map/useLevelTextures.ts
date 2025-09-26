@@ -5,12 +5,14 @@ import { loadTexture } from '@/utils/loadTexture';
 
 export function useLevelTextures(map: MapKey) {
   return useMemo(() => {
-    const { level, overlay, door } = LEVEL_TEXTURES[map];
-    const doorTextures = door ? door.map(loadTexture) : undefined;
+    const { level, overlay, doorFloor, doorFrame } = LEVEL_TEXTURES[map];
+    const doorFloorTextures = doorFloor ? doorFloor.map(loadTexture) : undefined;
+    const doorFrameTextures = doorFrame ? doorFrame.map(loadTexture) : undefined;
     return {
       levelTexture: loadTexture(level),
       overlayTexture: loadTexture(overlay),
-      doorTexture: doorTextures,
+      doorFloorTexture: doorFloorTextures,
+      doorFrameTexture: doorFrameTextures
     };
   }, [map]);
 }

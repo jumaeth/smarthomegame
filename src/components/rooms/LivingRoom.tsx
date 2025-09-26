@@ -28,6 +28,10 @@ export const LivingRoom = () => {
   const sdEnabled = useSmarDevicesEnabledState();
   const paused = usePauseState();
 
+  useEffect(() => {
+    if (!gameService.getRoom(roomName).isCompleted){gameService.getRoom(roomName).lockRoom()}
+  }, []);
+
   const smartDeviceCallback = (isCompleted:boolean):void => {
     if (!activeDevice) return;
     const device = smartDevices.find((d) => d.name === activeDevice);
@@ -108,6 +112,7 @@ export const LivingRoom = () => {
                       interactiveElements={interactiveElements}
                       isPaused={paused}
                       gameService={gameService}
+                      room={roomName}
               />
             </Stage>
           </>

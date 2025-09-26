@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
+import React, {PropsWithChildren, useMemo, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
 import {Level} from "@/pixi/levels/Level";
 import characterImage from "@/assets/character/character_movement.png";
@@ -11,7 +11,6 @@ import {MapKey} from "@/types/maps";
 import {useLevelTextures} from "@/hooks/map/useLevelTextures";
 import {getMapTransition, getSpawnForMap} from "@/utils/mapTransition";
 import {Position} from "@/types/movement";
-import {Door} from "@/pixi/levels/Door";
 import {DoorState} from "@/types/door";
 import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
@@ -22,6 +21,10 @@ import {characterPositionStore, useCharacterPosition} from "@/utils/characterPos
 import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
 import {MovementButtons} from "@/components/general-ui/MovementButtons.tsx";
 import {ProximityHighlight} from "@/pixi/components/ProximityHighlight.tsx";
+import {DoorBlocker} from "@/pixi/components/DoorBlocker.tsx";
+import {RoomName} from "@/objects/Room.ts";
+import {DoorFloor} from "@/pixi/levels/DoorFloor.tsx";
+import {DoorFrame} from "@/pixi/levels/DoorFrame.tsx";
 
 interface MainContainerProps {
     canvasSize: {
@@ -35,6 +38,7 @@ interface MainContainerProps {
     children?: React.ReactNode;
     interactiveElements?: InteractivePixiElement[];
     gameService: GameService;
+    room: RoomName
 }
 
 export const MainContainer = ({
@@ -45,7 +49,8 @@ export const MainContainer = ({
                                   isPaused = false,
                                   children,
                                 interactiveElements,
-                                gameService
+                                gameService,
+                                room
                               }: PropsWithChildren<MainContainerProps>) => {
     const [inTransition, setInTransition] = useState(false);
     const [pendingTransition, setPendingTransition] = useState<{ to: MapKey, spawn: Position } | null>(null);
@@ -57,9 +62,10 @@ export const MainContainer = ({
     const [spawnPosition, setSpawnPosition] = useState<Position>({x: DEFAULT_POS_X, y: DEFAULT_POS_Y});
 
     const characterTexture = useMemo(() => loadTexture(characterImage), []);
-    const {levelTexture, overlayTexture, doorTexture} = useLevelTextures(map);
+  const { levelTexture, overlayTexture, doorFloorTexture, doorFrameTexture } = useLevelTextures(map);
   const { tile: characterTile } = useCharacterPosition();
   const { enabled: tutorialActive, close: closeTutorial } = useTutorialActive();
+  const [blockedDoorTile, setBlockedDoorTile] = useState<Position | null>(null);
 
   const handleCharacterMove = (pos: Position) => {
     characterPositionStore.set(pos);
@@ -67,6 +73,21 @@ export const MainContainer = ({
     const tileX = Math.floor(pos.x / TILE_SIZE);
     const tileY = Math.floor(pos.y / TILE_SIZE);
     const transition = getMapTransition(map, tileX, tileY);
+
+    if (!transition || tutorialActive) {
+      setBlockedDoorTile(null);
+      return;
+    }
+
+    const exitState = gameService.getExitState(map, transition.to);
+    const isLocked = exitState === DoorState.Closed;
+
+    if (isLocked) {
+      setBlockedDoorTile(transition.pos);
+      return;
+    }
+
+    setBlockedDoorTile(null);
 
     if (transition && !tutorialActive) {
       const spawn = getSpawnForMap(transition.to, map);
@@ -79,10 +100,6 @@ export const MainContainer = ({
       setShouldSnapCamera(true);
     }
   };
-
-  useEffect(() => {
-    console.log(tutorialActive);
-  }, [tutorialActive]);
 
   const characterRef = useRef<{ moveUp: () => void; moveDown: () => void; moveLeft: () => void; moveRight: () => void; interact: () => void } | null>(null);
 
@@ -106,6 +123,8 @@ export const MainContainer = ({
     characterRef.current?.interact();
   };
 
+  //<Door textures={doorTexture} state={doorState}/>
+
   return (
           <>
             <Container>
@@ -124,10 +143,10 @@ export const MainContainer = ({
                       canvasSize={canvasSize}
                       shouldSnap={shouldSnapCamera}
                       onSnapComplete={() => setShouldSnapCamera(false)}
-                      tutorialEnabled={tutorialActive}
               >
                 <Level texture={levelTexture} />
                 <ProximityHighlight interactiveElements={interactiveElements}/>
+                <DoorFloor room={room} map={map} gameService={gameService} textures={doorFloorTexture}/>
                 <Character
                         texture={characterTexture}
                         onMove={handleCharacterMove}
@@ -136,8 +155,9 @@ export const MainContainer = ({
                         isPaused={isPaused}
                         interactiveElements={interactiveElements}
                     />
-                    <LevelOverlay texture={overlayTexture}/>
-                    <Door textures={doorTexture} state={DoorState.Open}/>
+                <LevelOverlay texture={overlayTexture}/>
+                <DoorFrame textures={doorFrameTexture} map={map} gameService={gameService}/>
+                <DoorBlocker room={room} tile={blockedDoorTile} visible={!!blockedDoorTile} />
                 </Camera>
                 {!tutorialActive && <TransitionOverlay
                     width={canvasSize.width}
@@ -145,9 +165,9 @@ export const MainContainer = ({
                     inTransition={inTransition}
                     onMidTransition={() => {
                         if (pendingTransition) {
-                            onMapChange(pendingTransition.to);
                             setSpawnPosition(pendingTransition.spawn);
                             characterPositionStore.teleport(pendingTransition.spawn);
+                            onMapChange(pendingTransition.to);
                             setShouldSnapCamera(true);
                             setPendingTransition(null);
                         }

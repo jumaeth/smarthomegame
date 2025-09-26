@@ -10,3 +10,7 @@ export function getSpawnForMap(destinationMap: MapKey, previousMap: MapKey): Tra
   const transitions = MAP_TRANSITIONS[destinationMap] || [];
   return transitions.find(t => t.to === previousMap);
 }
+
+export function getTransitionsForMap(map: MapKey): Transition[] {
+  return MAP_TRANSITIONS[map] ?? [];
+}
