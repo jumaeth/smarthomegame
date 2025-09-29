@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import ButtonCloseModal from "@/components/general-ui/ButtonCloseModal.tsx";
+import CloseModalButton from "@/components/general-ui/CloseModalButton.tsx";
 import AvatarWithSpeach from "@/components/general-ui/AvatarWithSpeach.tsx";
 import LlmAvatar from "@/assets/tutorial/explanationPages/pointLeft.png";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
@@ -47,7 +47,7 @@ export const BasicModalWrapper = ({content, isOpen, onClose, showBg, activeDevic
                     />
             )}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#3a3a3a] border-4 border-white shadow-[0_0_0_6px_black] p-4 max-w-[90vw] text-[18px] leading-[1.4] z-[100] w-auto h-auto rounded-none overflow-visible">
-              <ButtonCloseModal onClick={onClose} ariaLabel={"Schliessen"}>x</ButtonCloseModal>
+              <CloseModalButton onClick={onClose} ariaLabel={"Schliessen"}>x</CloseModalButton>
               <div className="bg-[#4a4a4a] px-[28px] py-[14px] rounded-[3px]">{content}</div>
             </div>
           </div>

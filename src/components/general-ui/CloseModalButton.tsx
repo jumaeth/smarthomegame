@@ -4,7 +4,7 @@ type ButtonCloseModalProps = {
   children: React.ReactNode;
 };
 
-const ButtonCloseModal = ({onClick, ariaLabel, children}: ButtonCloseModalProps) => {
+const CloseModalButton = ({onClick, ariaLabel, children}: ButtonCloseModalProps) => {
   const baseStyles = "absolute top-[15px] right-[15px] w-[30px] h-[30px] p-0 pb-[6px] flex items-center justify-center bg-black border-none cursor-pointer text-white text-[42px] leading-[1]";
 
   return (
@@ -18,4 +18,4 @@ const ButtonCloseModal = ({onClick, ariaLabel, children}: ButtonCloseModalProps)
   );
 };
 
-export default ButtonCloseModal;
+export default CloseModalButton;
