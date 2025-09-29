@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import CloseModalButton from "@/components/general-ui/CloseModalButton.tsx";
 import AvatarWithSpeach from "@/components/general-ui/AvatarWithSpeach.tsx";
-import LlmAvatar from "@/assets/tutorial/explanationPages/pointLeft.png";
+import Avatar from "@/assets/tutorial/explanationPages/pointLeft.png";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {t} from "@lingui/core/macro";
 
@@ -40,7 +40,7 @@ export const BasicModalWrapper = ({content, isOpen, onClose, showBg, activeDevic
             <div className="col-span-2 bg-black/75 w-full h-full" onClick={onClose}/>
             {showAvatar && (
                     <AvatarWithSpeach
-                            src={LlmAvatar}
+                            src={Avatar}
                             info={"wow interesting task you got there, do you need help with anything?"}
                             helpText={activeDevice ? activeDevice.getHelpText() : t`this is more difficult than i thought, unfortunately I cannot support you with this.`}
                             onClose={onAvatarClose}
