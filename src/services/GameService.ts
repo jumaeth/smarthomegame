@@ -60,7 +60,7 @@ export class GameService {
     return allRoomStore.getAll();
   }
 
-  findRoomByName(roomName: RoomName): Room | undefined {
+  private findRoomByName(roomName: RoomName): Room | undefined {
     return allRoomStore.getRoom(roomName);
   }
 
@@ -72,7 +72,7 @@ export class GameService {
     this.onGameStateChange();
   }
 
-  navigateAfterComplete(): void {
+  private navigateAfterComplete(): void {
     if (this.checkGameCompletionConditions()) {
       this.finishGame();
     } else {
@@ -131,12 +131,6 @@ export class GameService {
   enableSmartDevices(): void {
     this.smartDevicesEnabled = true;
     this.emitSmartDevicesEnable();
-  }
-
-  toogleRoomIsLocked(roomName: RoomName): void {
-    const room: Room | undefined = this.findRoomByName(roomName);
-    if (room) room.toggleIsLocked();
-    this.onGameStateChange();
   }
 
   leaveRoom(roomName: RoomName): boolean {
