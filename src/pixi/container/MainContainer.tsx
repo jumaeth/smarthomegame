@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useMemo, useRef, useState} from "react";
+import React, {PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
 import {Level} from "@/pixi/levels/Level";
 import characterImage from "@/assets/character/character_movement.png";
@@ -9,7 +9,7 @@ import {LevelOverlay} from "@/pixi/levels/LevelOverlay";
 import {loadTexture} from "@/utils/loadTexture";
 import {MapKey} from "@/types/maps";
 import {useLevelTextures} from "@/hooks/map/useLevelTextures";
-import {getMapTransition, getSpawnForMap} from "@/utils/mapTransition";
+import {getMapTransition, getSpawnForMap, getTransitionsForMap} from "@/utils/mapTransition";
 import {Position} from "@/types/movement";
 import {DoorState} from "@/types/door";
 import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
@@ -25,6 +25,7 @@ import {DoorBlocker} from "@/pixi/components/DoorBlocker.tsx";
 import {RoomName} from "@/objects/Room.ts";
 import {DoorFloor} from "@/pixi/levels/DoorFloor.tsx";
 import {DoorFrame} from "@/pixi/levels/DoorFrame.tsx";
+import {Texture} from "@pixi/core";
 
 interface MainContainerProps {
     canvasSize: {
@@ -123,8 +124,6 @@ export const MainContainer = ({
     characterRef.current?.interact();
   };
 
-  //<Door textures={doorTexture} state={doorState}/>
-
   return (
           <>
             <Container>
@@ -156,7 +155,9 @@ export const MainContainer = ({
                         interactiveElements={interactiveElements}
                     />
                 <LevelOverlay texture={overlayTexture}/>
-                <DoorFrame textures={doorFrameTexture} map={map} gameService={gameService}/>
+                {getTransitionsForMap(map).map((tr,i)=> {
+                  return <DoorFrame textures={doorFrameTexture} map={map} gameService={gameService} index={i} transition={tr}/>
+                })}
                 <DoorBlocker room={room} tile={blockedDoorTile} visible={!!blockedDoorTile} />
                 </Camera>
                 {!tutorialActive && <TransitionOverlay

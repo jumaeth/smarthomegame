@@ -214,11 +214,9 @@ export class GameService {
     if (device){
       device.complete();
       this.deviceListeners.forEach(cb => cb(device));
-      if(this.getRoom(room).isCompleted) {
+
+      if (this.getRoom(room).devices.filter(d => !d.getIsCompleted()).map(d => d.name).length <= 0){
         this.completeRoom(room);
-        console.log(room+" completed");
-      }else{
-        console.log(this.getRoom(room).devices.filter(d => d.getIsCompleted()).map(d => d.name));
       }
       this.onGameStateChange();
     }
