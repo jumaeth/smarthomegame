@@ -130,11 +130,8 @@ build-new-dev-container-job:
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PIPELINE_BRANCH'
   needs:
-    - job: build-job
-      artifacts: true
+    - build-job
   before_script:
-    - ls -lah build
-    - ls -lah build/dist
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   script:
     - docker build -f pipeline/cd/NEW_nginx_DEV_Dockerfile --tag $CI_REGISTRY_IMAGE:app_dev-latest .
@@ -148,11 +145,8 @@ build-new-prod-container-job:
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PIPELINE_BRANCH'
   needs:
-    - job: build-job
-      artifacts: true
+    - build-job
   before_script:
-    - ls -lah build
-    - ls -lah build/dist
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   script:
     - docker build -f pipeline/cd/NEW_nginx_PROD_Dockerfile --tag $CI_REGISTRY_IMAGE:app_prod-latest .
