@@ -186,6 +186,7 @@ system-test-job:
 
 deploy-dev:
   stage: deploy
+  image: docker:28-cli
   tags: [docker_runner]
   rules: [ { if: '$CI_COMMIT_BRANCH == $PIPELINE_BRANCH' } ]
   script:
@@ -195,6 +196,7 @@ deploy-dev:
 
 deploy-prod:
   stage: deploy
+  image: docker:28-cli
   tags: [docker_runner]
   rules: [ { if: '$CI_COMMIT_BRANCH == $PIPELINE_BRANCH' } ]
   script:
