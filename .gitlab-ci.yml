@@ -4,6 +4,7 @@ variables:
   DEV_BRANCH_NAME: "development"
   TEST_BRANCH_NAME: "main"
   SCHEDULE: "schedule"
+  PIPELINE_BRANCH: "fix-simplify-pipeline"
 
 stages:
   - schedule
@@ -28,7 +29,7 @@ start-server-job:
     - export PATH=$PATH:/root/.local/bin
   script:
     - . pipeline/cd/IP34-25bb_SmartHomeEscape-openrc.sh
-    - . pipeline/cd/server_running.sh  
+    - . pipeline/cd/server_running.sh
 
 lint-job:
   stage: lint
@@ -119,6 +120,36 @@ build-testing-container-job:
     - docker push $CI_REGISTRY_IMAGE:testing_environment-latest
     - docker push $CI_REGISTRY_IMAGE:custom_nginx_testing-latest
 
+
+build-new-dev-container-job:
+  stage: build
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PIPELINE_BRANCH'
+  needs:
+    - build-job
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+  script:
+    - docker build -f pipeline/cd/NEW_nginx_DEV_Dockerfile --tag $CI_REGISTRY_IMAGE:app_dev-latest .
+    - docker push $CI_REGISTRY_IMAGE:app_dev-latest
+
+
+build-new-prod-container-job:
+  stage: build
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PIPELINE_BRANCH'
+  needs:
+    - build-job
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+  script:
+    - docker build -f pipeline/cd/NEW_nginx_PROD_Dockerfile --tag $CI_REGISTRY_IMAGE:app_prod-latest .
+    - docker push $CI_REGISTRY_IMAGE:app_prod-latest
+
+
+
+
+
 integrationTest-job:
   stage: integrationTest
   rules:
@@ -146,159 +177,21 @@ system-test-job:
     - echo "[JOB] System tests"
     - echo "[NOT IMPLEMENTED] System tests using Selenium"
 
-
-deploy-test-job:
+deploy-dev:
   stage: deploy
-  image: alpine:3.20
-  environment:
-    name: testing
-  rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
-  dependencies:
-    - build-testing-container-job
-    - system-test-job
-  services:
-    - docker:dind
-  before_script:
-    - apk add openssh-client
+  tags: [docker_runner]
+  rules: [ { if: '$CI_COMMIT_BRANCH == $PIPELINE_BRANCH' } ]
   script:
-    - echo "[JOB] Deploy"
-    - eval `ssh-agent`
-    - echo "$SSH_PK_DEVELOPMENT" | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - touch ~/.ssh/known_hosts
-    - chmod 600 ~/.ssh/known_hosts
-    - echo $SSH_HOST_KEY >> ~/.ssh/known_hosts
-    - |
-      ssh development@86.119.46.247 \
-      "export TESTING_IMAGE='$CI_REGISTRY_IMAGE:testing_environment-latest'; \
-      export TESTING_NGINX_IMAGE='$CI_REGISTRY_IMAGE:custom_nginx_testing-latest'; \
-      export CI_REGISTRY='$CI_REGISTRY'; \
-      export CI_REGISTRY_USER='$CI_REGISTRY_USER'; \
-      export CI_REGISTRY_PASSWORD='$CI_REGISTRY_PASSWORD'; \
-      bash -s" << 'SSH_COMMAND' 
-        cd /home/development
-      
-        echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-        docker pull "$TESTING_IMAGE"
-        docker pull "$TESTING_NGINX_IMAGE"
-      
-        TEST_CONTAINER_RUNNING=`docker ps -q -f name=test_container`
-        TEST_CONTAINER_EXISTING=`docker ps -qa -f name=test_container`
-      
-        if [ "$TEST_CONTAINER_RUNNING" ]; then
-            echo "[INFO] test_container is already running. Skipping creation."
-        elif [ "$TEST_CONTAINER_EXISTING" ]; then
-            echo "[INFO] test_container exists but is not running. Starting it..."
-            docker start test_container
-        else
-            echo "[INFO] test_container is not running. Creating it..."
-            docker ps -a
-            docker run -d --privileged -p 8080:8080 --name test_container "$TESTING_IMAGE"
-            sleep 5
-        fi
-      
-        docker exec \
-        -e TESTING_NGINX_IMAGE="$TESTING_NGINX_IMAGE" \
-        -e CI_REGISTRY_PASSWORD="$CI_REGISTRY_PASSWORD" \
-        -e CI_REGISTRY="$CI_REGISTRY" \
-        -e CI_REGISTRY_USER="$CI_REGISTRY_USER" \
-        test_container sh -c '
-          cd /home/deploy &&
-        
-          WEBSERVER_CONTAINER_RUNNING=`docker ps -q -f name=webserver`
-          WEBSERVER_CONTAINER_EXISTING=`docker ps -qa -f name=webserver`
-          
-          if [ "$WEBSERVER_CONTAINER_RUNNING" ]; then
-            echo "[INFO] Webserver is already running. Restarting..."
-          elif [ "$WEBSERVER_CONTAINER_EXISTING" ]; then
-            echo "[INFO] Webserver stopped. Removing old one..."
-          else
-            echo "[INFO] Webserver not existing. Creating new one..."
-          fi
-          
-          echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-          docker rm -f webserver 2>/dev/null || true
-          docker pull "$TESTING_NGINX_IMAGE"
-          docker run -d --privileged -p 8080:80 --name webserver "$TESTING_NGINX_IMAGE"
-        '
-      SSH_COMMAND
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    - docker compose -f docker-compose.deploy.yml --profile dev pull
+    - docker compose -f docker-compose.deploy.yml --profile dev up -d --remove-orphans
 
-
-deploy-dev-job:
+deploy-prod:
   stage: deploy
-  image: alpine:3.20
-  environment:
-    name: development
-  rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
-  dependencies:
-    - build-testing-container-job
-    - start-server-job
-  services:
-    - docker:dind
-  before_script:
-    - apk add openssh-client
+  tags: [docker_runner]
+  rules: [ { if: '$CI_COMMIT_BRANCH == $PIPELINE_BRANCH' } ]
   script:
-    - echo "[JOB] Deploy"
-    - eval `ssh-agent`
-    - echo "$SSH_PK_DEVELOPMENT" | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - touch ~/.ssh/known_hosts
-    - chmod 600 ~/.ssh/known_hosts
-    - echo $SSH_HOST_KEY >> ~/.ssh/known_hosts
-    - |
-      ssh development@86.119.46.247 \
-      "export DEV_IMAGE='$CI_REGISTRY_IMAGE:dev_environment-latest'; \
-      export DEV_NGINX_IMAGE='$CI_REGISTRY_IMAGE:custom_nginx_dev-latest'; \
-      export CI_REGISTRY='$CI_REGISTRY'; \
-      export CI_REGISTRY_USER='$CI_REGISTRY_USER'; \
-      export CI_REGISTRY_PASSWORD='$CI_REGISTRY_PASSWORD'; \
-      bash -s" << 'SSH_COMMAND' 
-        cd /home/development
-      
-        echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-        docker pull "$DEV_IMAGE"
-            
-        DEV_CONTAINER_RUNNING=`docker ps -q -f name=dev_container`
-        DEV_CONTAINER_EXISTING=`docker ps -qa -f name=dev_container`
-        
-        if [ "$DEV_CONTAINER_RUNNING" ]; then
-            echo "[INFO] dev_container is already running. Skipping creation."
-        elif [ "$DEV_CONTAINER_EXISTING" ]; then
-            echo "[INFO] dev_container exists but is not running. Starting it..."
-            docker start dev_container
-        else
-            echo "[INFO] dev_container is not running. Creating it..."
-            docker run -d --privileged -p 8090:8090 --name dev_container "$DEV_IMAGE"
-            sleep 5
-        fi
-        
-        docker exec \
-        -e DEV_NGINX_IMAGE="$DEV_NGINX_IMAGE" \
-        -e CI_REGISTRY_PASSWORD="$CI_REGISTRY_PASSWORD" \
-        -e CI_REGISTRY="$CI_REGISTRY" \
-        -e CI_REGISTRY_USER="$CI_REGISTRY_USER" \
-        dev_container sh -c '
-          cd /home/deploy &&
-      
-          WEBSERVER_CONTAINER_RUNNING=`docker ps -q -f name=webserver`
-          WEBSERVER_CONTAINER_EXISTING=`docker ps -qa -f name=webserver`
-      
-          if [ "$WEBSERVER_CONTAINER_RUNNING" ]; then
-            echo "[INFO] Webserver is already running. Restarting..."
-          elif [ "$WEBSERVER_CONTAINER_EXISTING" ]; then
-            echo "[INFO] Webserver stopped. Removing old one..."
-          else
-            echo "[INFO] Webserver not existing. Creating new one..."
-          fi
-          
-          echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-          docker rm -f webserver 2>/dev/null || true
-          docker pull "$DEV_NGINX_IMAGE"
-          docker run -d --privileged -p 8090:80 --name webserver "$DEV_NGINX_IMAGE"
-        '
-      SSH_COMMAND
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    - docker compose -f docker-compose.deploy.yml --profile prod pull
+    - docker compose -f docker-compose.deploy.yml --profile prod up -d --remove-orphans
 
