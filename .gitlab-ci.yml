@@ -15,16 +15,13 @@ stages:
   - systemTest
   - deploy
 
-before_script:
-  - npm install
-
 start-server-job:
   stage: schedule
   rules:
     - if: '$CI_PIPELINE_SOURCE == $SCHEDULE'
   before_script:
-    - apt update
-    - apt install -y python3-dev pipx
+    - apt-get update
+    - apt-get install -y python3-dev pipx
     - pipx install python-openstackclient
     - export PATH=$PATH:/root/.local/bin
   script:
@@ -35,6 +32,8 @@ lint-job:
   stage: lint
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
+  before_script:
+    - npm install
   script:
     - echo "[JOB] Linting"
     - npm run lint
@@ -47,8 +46,9 @@ test-job:
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
   before_script:
-    - npm install save-dev jest
-    - npm install save-dev ts-jest @types/jest typescript
+    - npm install
+    - npm install --save-dev jest
+    - npm install --save-dev ts-jest @types/jest typescript
   script:
     - echo "[JOB] Unit-tests"
     - npm test -- --passWithNoTests --testPathIgnorePatterns="IT"
@@ -60,6 +60,8 @@ build-job:
   stage: build
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
+  before_script:
+    - npm install
   script:
     - echo "[JOB] Build"
     - npm run extract
@@ -123,6 +125,8 @@ build-testing-container-job:
 
 build-new-dev-container-job:
   stage: build
+  image: docker:28-cli
+  tags: [docker_runner]
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PIPELINE_BRANCH'
   needs:
@@ -136,6 +140,8 @@ build-new-dev-container-job:
 
 build-new-prod-container-job:
   stage: build
+  image: docker:28-cli
+  tags: [docker_runner]
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PIPELINE_BRANCH'
   needs:
@@ -155,8 +161,9 @@ integrationTest-job:
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
   before_script:
-    - npm install save-dev jest
-    - npm install save-dev ts-jest @types/jest typescript
+    - npm install
+    - npm install --save-dev jest
+    - npm install --save-dev ts-jest @types/jest typescript
   script:
     - echo "[JOB] Integration testing"
     - npm test -- --passWithNoTests --testPathPattern="IT"
@@ -171,8 +178,8 @@ system-test-job:
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   before_script:
-    - npm install save-dev jest
-    - npm install save-dev ts-jest @types/jest typescript
+    - npm install --save-dev jest
+    - npm install --save-dev ts-jest @types/jest typescript
   script:
     - echo "[JOB] System tests"
     - echo "[NOT IMPLEMENTED] System tests using Selenium"
