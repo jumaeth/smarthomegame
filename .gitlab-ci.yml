@@ -2,9 +2,8 @@ image: node:23.11.0
 
 variables:
   DEV_BRANCH_NAME: "development"
-  TEST_BRANCH_NAME: "main"
+  PROD_BRANCH_NAME: "main"
   SCHEDULE: "schedule"
-  PIPELINE_BRANCH: "fix-simplify-pipeline"
 
 stages:
   - schedule
@@ -70,90 +69,41 @@ build-job:
     - cp -r dist/ build/
     - mkdir config
     - cp pipeline/cd/nginxDevelopment.conf config/nginxDevelopment.conf
-    - cp pipeline/cd/nginxTesting.conf config/nginxTesting.conf
+    - cp pipeline/cd/nginxProd.conf config/nginxProd.conf
   artifacts:
     paths:
       - build/
       - config/
-  after_script:
-    - ls -al
+
 
 build-dev-container-job:
   stage: build
-  tags:
-    - dind
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
+  image: docker:28-cli
+  tags: [docker_runner]
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
   needs:
     - build-job
   before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:
-    - docker build -f devEnvDockerfile --tag $CI_REGISTRY_IMAGE:dev_environment-latest .
-    - docker build -f pipeline/cd/nginxDevDockerfile --tag $CI_REGISTRY_IMAGE:custom_nginx_dev-latest .
-    - docker push $CI_REGISTRY_IMAGE:dev_environment-latest
-    - docker push $CI_REGISTRY_IMAGE:custom_nginx_dev-latest
-
-build-testing-container-job:
-  stage: build
-  tags:
-    - dind
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
-  rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
-  needs:
-    - build-job
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:
-    - docker build -f testingEnvDockerfile --tag $CI_REGISTRY_IMAGE:testing_environment-latest .
-    - docker build -f pipeline/cd/nginxTestingDockerfile --tag $CI_REGISTRY_IMAGE:custom_nginx_testing-latest .
-    - docker push $CI_REGISTRY_IMAGE:testing_environment-latest
-    - docker push $CI_REGISTRY_IMAGE:custom_nginx_testing-latest
-
-
-build-new-dev-container-job:
-  stage: build
-  image: docker:28-cli
-  tags: [docker_runner]
-  rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PIPELINE_BRANCH'
-  needs:
-    - build-job
-  before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   script:
-    - docker build -f pipeline/cd/NEW_nginx_DEV_Dockerfile --tag $CI_REGISTRY_IMAGE:app_dev-latest .
+    - docker build -f pipeline/cd/Dockerfile_dev --tag $CI_REGISTRY_IMAGE:app_dev-latest .
     - docker push $CI_REGISTRY_IMAGE:app_dev-latest
 
 
-build-new-prod-container-job:
+build-prod-container-job:
   stage: build
   image: docker:28-cli
   tags: [docker_runner]
   rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PIPELINE_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PROD_BRANCH_NAME'
   needs:
     - build-job
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   script:
-    - docker build -f pipeline/cd/NEW_nginx_PROD_Dockerfile --tag $CI_REGISTRY_IMAGE:app_prod-latest .
+    - docker build -f pipeline/cd/Dockerfile_prod --tag $CI_REGISTRY_IMAGE:app_prod-latest .
     - docker push $CI_REGISTRY_IMAGE:app_prod-latest
-
-
-
 
 
 integrationTest-job:
@@ -176,7 +126,7 @@ integrationTest-job:
 system-test-job:
   stage: systemTest
   rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PROD_BRANCH_NAME'
   before_script:
     - npm install --save-dev jest
     - npm install --save-dev ts-jest @types/jest typescript
@@ -188,7 +138,8 @@ deploy-dev:
   stage: deploy
   image: docker:28-cli
   tags: [docker_runner]
-  rules: [ { if: '$CI_COMMIT_BRANCH == $PIPELINE_BRANCH' } ]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
     - docker compose -f docker-compose.deploy.yml --profile dev pull
@@ -198,7 +149,8 @@ deploy-prod:
   stage: deploy
   image: docker:28-cli
   tags: [docker_runner]
-  rules: [ { if: '$CI_COMMIT_BRANCH == $PIPELINE_BRANCH' } ]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PROD_BRANCH_NAME'
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
     - docker compose -f docker-compose.deploy.yml --profile prod pull
