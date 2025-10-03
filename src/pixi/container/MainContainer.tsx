@@ -107,6 +107,7 @@ export const MainContainer = ({
 
   const handleCharacterMove = (pos: Position) => {
     characterPositionStore.set(pos);
+
     const tileX = Math.floor(pos.x / TILE_SIZE);
     const tileY = Math.floor(pos.y / TILE_SIZE);
     const transition = getMapTransition(map, tileX, tileY);
@@ -144,7 +145,6 @@ export const MainContainer = ({
   return (
           <>
             <Container>
-              {/* Background */}
               <Graphics
                       draw={(g) => {
                         g.clear();
@@ -153,9 +153,7 @@ export const MainContainer = ({
                         g.endFill();
                       }}
               />
-
               {children}
-
               <Camera
                       key={map}
                       characterPosition={characterTile}
@@ -226,16 +224,18 @@ export const MainContainer = ({
                       onMoveRight={handleMoveRight}
                       onInteract={handleInteract}
               />
-
-              {tutorialActive && (
-                      <Tutorial
-                              windowWidth={canvasSize.width}
-                              windowHeight={canvasSize.height}
-                              gameService={gameService}
-                              onClose={closeTutorial}
-                              interactiveElements={interactiveElements as InteractivePixiElement[]}
-                      />
-              )}
+              <HeadUpDisplay
+                      windowWidth={canvasSize.width}
+                      windowHeight={canvasSize.height}
+                      gameService={gameService}
+              />
+              {tutorialActive && <Tutorial
+                      windowWidth={canvasSize.width}
+                      windowHeight={canvasSize.height}
+                      gameService={gameService}
+                      onClose={closeTutorial}
+                      interactiveElements={interactiveElements  as InteractivePixiElement[]}
+              />}
             </Container>
           </>
   );
