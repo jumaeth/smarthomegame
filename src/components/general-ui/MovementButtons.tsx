@@ -32,9 +32,19 @@ export const MovementButtons: React.FC<MovementButtonsProps> = ({
 
   const inMobileDevice = window.navigator.maxTouchPoints > 2;
 
-  const buttonSize = 120; // Größere Buttons für Touchscreens
-  const centerX = canvasSize.width * 0.5;
-  const centerY = canvasSize.height * 0.8; // Buttons näher am unteren Bildschirmrand
+  let buttonSize: number; // Größere Buttons für Touchscreens
+  let centerX: number;
+  let centerY: number; // Buttons näher am unteren Bildschirmrand
+  if(canvasSize.height<=canvasSize.width){
+    centerY = canvasSize.height * 0.7
+    centerX = canvasSize.width * 0.15
+    buttonSize = canvasSize.height * 0.1
+  }else{
+    centerX = canvasSize.width * 0.25
+    centerY = canvasSize.height * 0.8
+    buttonSize      = canvasSize.width * 0.1
+
+  }
 
   return (
           <>

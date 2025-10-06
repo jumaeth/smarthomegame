@@ -3,13 +3,13 @@ import "./Modal.css";
 import React from 'react';
 
 interface SmartKitchenProps {
-  onCompletion: (isCompleted: boolean) => void;
+  completeDevice: () => void;
 }
 
-export const SmartKitchen: React.FC<SmartKitchenProps> = ({ onCompletion}) => {
+export const SmartKitchen: React.FC<SmartKitchenProps> = ({ completeDevice}) => {
 
   const handleGameComplete = () => {
-    onCompletion(true);
+    completeDevice();
   };
 
 
