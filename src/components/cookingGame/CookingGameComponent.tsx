@@ -8,11 +8,15 @@ import {ServeStage} from "./ServeStage.tsx";
 import {Stage, TilingSprite} from "@pixi/react";
 import {Stages} from "./Stages.ts"
 import counterImg from '@/assets/cooking-sprites/counter.png';
+import {OutroStage} from "@/components/cookingGame/OutroStage.tsx";
+import {IntroStage} from "@/components/cookingGame/IntroStage.tsx";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 
 interface CookingGameComponentProps {
   onCompletion: () => void;
 }
+
+export const enum Score {Privacy, Comfort}
 
 export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCompletion }) => {
 
@@ -21,25 +25,27 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   const[nextStage,setNextStage]=useState(1);
   const[currentStage,setCurrentStage]=useState(Stages.GAME);
   const[texture,setTexture]=useState(Texture.EMPTY);
-  const containerRef=useRef<HTMLDivElement>(null);
+  const containerRef=useRef<HTMLDivElement | null>(null);
   const[dimensions,setDimensions]=useState({width:0,height:0});
   const[isTextureLoaded,setIsTextureLoaded]=useState(false);
   const[notificationProperties,setNotificationProperties]=useState({x:0,y:0,alpha:0});
   const initStateRef=useRef(true);
-  const[totalPoints,setTotalPoints]=useState(0);
-  const [passedStages, setPassedStages] = useState(0);
+  const totalPoints=useRef<Map<Score, number>>(new Map<Score, number>);
   const gameService = useGameService();
-
-  const awardScore = (privacy: number, comfort: number) => {
-    if (privacy) gameService.changeScore(privacy, "privacy");
-    if (comfort) gameService.changeScore(comfort, "comfort");
-  };
 
 
   const secureSetStage= (stage : Stages) =>{
-    if(stage==Stages.GAME){
+    if(stage==Stages.GAME) {
       setCurrentStage(stage);
-      setPassedStages((prev: number) => prev+1);
+    }else if(stage === Stages.END){
+      const points = totalPoints.current;
+      if(totalPoints.current){
+        const privacy = points.get(Score.Privacy);
+        const comfort = points.get(Score.Comfort);
+        if (privacy)gameService.changeScore(privacy, "privacy");
+        if (comfort)gameService.changeScore(comfort, "comfort");
+      }
+      onCompletion();
     }else if(stage === nextStage){
       setNextStage(prev=>prev+1);
       setCurrentStage(stage);
@@ -71,10 +77,13 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
         case Stages.GAME:
           if(initStateRef.current){
             setTimeout(()=>{
-              setNotificationProperties({x: 130,y: 35,alpha:1});
+              setNotificationProperties({x: 380,y: 55,alpha:1});
               initStateRef.current=false;
             },10);
           }
+          break;
+        case Stages.INTRO:
+          setNotificationProperties({x: 130,y: 35,alpha:1});
           break;
         case Stages.RECIPE:
           setNotificationProperties({x:125,y:200,alpha:1});
@@ -88,50 +97,23 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
         case Stages.SERVE:
           setNotificationProperties({x:0,y:0,alpha:0});
           break;
+        case Stages.OUTRO:
+          setNotificationProperties({x:0,y:0,alpha:0});
+          break;
       }
     }
   },[currentStage,dimensions,initStateRef]);
 
   const stageMap: { [key: number]: () => JSX.Element } = {
-    [Stages.GAME]: () => (
-            <GameStage
-                    setStage={secureSetStage}
-                    notificationProperties={notificationProperties}
-            />
-    ),
-    [Stages.RECIPE]: () => (
-            <RecipeStage setStage={secureSetStage} setTotalPoints={setTotalPoints} />
-    ),
-    [Stages.INGREDIENTS]: () => (
-            // pass awardScore ↓↓↓
-            <IngredientsStage
-                    setStage={secureSetStage}
-                    setTotalPoints={setTotalPoints}
-                    awardScore={awardScore}
-            />
-    ),
-    [Stages.COOK]: () => (
-            // pass awardScore ↓↓↓
-            <CookingStage
-                    setStage={secureSetStage}
-                    setTotalPoints={setTotalPoints}
-                    awardScore={awardScore}
-            />
-    ),
-    [Stages.SERVE]: () => (
-            <ServeStage
-                    setStage={secureSetStage}
-                    dimensions={dimensions}
-                    setTotalPoints={setTotalPoints}
-            />
-    ),
-  };
+    [Stages.GAME]:() => <GameStage setStage={secureSetStage} notificationProperties={notificationProperties}/>,
+    [Stages.INTRO]:() => <IntroStage setStage={secureSetStage}/>,
+    [Stages.RECIPE]:() => <RecipeStage setStage={secureSetStage}/>,
+    [Stages.INGREDIENTS]:()=><IngredientsStage setStage={secureSetStage} setTotalPoints={totalPoints}/>,
+    [Stages.COOK]:()=><CookingStage setStage={secureSetStage} setTotalPoints={totalPoints}/>,
+    [Stages.SERVE]:()=><ServeStage setStage={secureSetStage} dimensions={dimensions} setTotalPoints={totalPoints}/>,
+    [Stages.OUTRO]:()=><OutroStage setStage={secureSetStage}/>
+};
 
-  useEffect(()=>{
-    if(passedStages === 4 && totalPoints/4>50){
-      setTimeout(()=>onCompletion(),100);
-    }
-  },[totalPoints]);
 
   return (
      <div ref={containerRef} className="h-[90%]mt-5">

@@ -1,27 +1,27 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
-import {Sprite, Text} from "@pixi/react"
-import {TextStyle} from "pixi.js";
+import {Graphics, Sprite, Text} from "@pixi/react"
+import {Graphics as PixiGraphics, TextStyle} from "pixi.js";
 import {Button} from "@/components/cookingGame/Button.tsx";
 import {Stages} from "@/components/cookingGame/Stages.ts";
 import {t} from "@lingui/core/macro";
 
-interface RecipeStageProps {
+interface IntroStageProps {
   setStage: (stage: Stages) => void;
 }
 
-export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage }) => {
+export const IntroStage:React.FC<IntroStageProps> =  ({ setStage }) => {
   const [text, setText] = useState('');
   const [page, setPage] = useState(1);
   const [label, setLabel] = useState(t`continue`);
 
 
   const texturePaths = useMemo(() => ({
-    recipeOpen: "/src/assets/cooking-sprites/recipeopen.png"
+    box: "/src/assets/cooking-sprites/empty_box.png"
   }), []);
 
   const pageTexts = useMemo(() => [
-    t`Welcome boss! \nToday we are cooking pasta!\n\nFortunately, our Smartkitchen can be equipped with the right settings do most of the work. We must follow the following steps: \n\n 1. Buying ingredients \n 2. Prepare and cook the dish \n 3. Serve the dish`
+    t`Hm, still no pizza in sight...\nBut isn't it hard to work if you're hungry? Let's make a simple dish before we continue to save our smart home`
   ], []);
 
   const {textures, loaded} = useLoadTextures(texturePaths);
@@ -43,34 +43,44 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage }) => {
     }
   };
 
-
+  const draw = React.useCallback((g: PixiGraphics) => {
+    g.clear();
+    g.beginFill(0xdcc08e, 1);
+    g.lineStyle(3, 0x5d3c1a);
+    g.drawRoundedRect(240, 60, 290, 150, 8);
+    g.endFill();
+  }, []);
 
   return (
           <>
-            {loaded && textures.recipeOpen && (<Sprite
-                    scale={0.6}
-                    texture={textures.recipeOpen}
-                    x={-33}
-                    y={-90}
+            {loaded && textures.box && (<Sprite
+                    scale={0.3}
+                    texture={textures.box}
+                    x={-20}
+                    y={20}
+            />)}
+            {loaded && (<Graphics
+                    draw={draw}
+                    anchor={{ x: 0, y: 0 }}
             />)}
 
-            {loaded && textures.recipeOpen &&(<Text
+            {loaded && (<Text
                     text={(text).toUpperCase()}
-                    x={75}
+                    x={250}
                     y={70}
                     style={
                       new TextStyle({
                         fontFamily:'LoResRegular',
                         fontSize: 20,
                         wordWrap:true,
-                        wordWrapWidth: 400,
+                        wordWrapWidth: 275,
                       })}
                     anchor={{x:0,y:0}}
             />)}
             {
                 <Button
-                        x={370}
-                        y={275}
+                        x={440}
+                        y={220}
                         color={0xdcc08e}
                         lineColor={0x5d3c1a}
                         width={90}

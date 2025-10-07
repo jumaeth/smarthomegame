@@ -27,8 +27,12 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
   const [nextImage, setNextImage] = useState<number>(9);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
+  const [fadeOut, setFadeOut] = useState<boolean>();
+  const fadeOutDuration: number = 2000;
+
   const handleImageClick = (gridIndex: number) => {
     if (isSubmitted) return;
+    setFadeOut(false);
     const imageIndex = imageGrid[gridIndex];
     if (imageIndex < 0 || imageIndex >= solutions.length) return;
     setCurrentIndex(imageIndex);
@@ -46,6 +50,9 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
       return updated;
     });
     setNextImage(prev => prev + 1);
+    setTimeout(() => {
+      setFadeOut(true);
+    }, fadeOutDuration);
   };
 
   const submitAnswer = () => {
@@ -118,21 +125,15 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
 
             <div className="flex items-center gap-2">
               {feedbackMsg && (
-                      <p
-                              className={`mt-1 text-m ${
-                                      feedbackMsgColor === "green"
-                                              ? "text-green-600"
-                                              : feedbackMsgColor === "red"
-                                                      ? "text-red-600"
-                                                      : "text-black"
-                              }`}
-                      >
-                        {feedbackMsg}
-                      </p>
+                      <div className={`flex space-x-2 ${fadeOut ? 'transition-opacity duration-1000 opacity-0' : 'opacity-100'}`}>
+                        <p className={`mt-1 text-m ${feedbackMsgColor === "green" ? "text-green-600" : feedbackMsgColor === "red" ? "text-red-600" : "text-black"}`}>
+                          {feedbackMsg}
+                        </p>
+                      </div>
               )}
 
               {inRange && feedbackMsg && (
-                      <div className="flex space-x-2">
+                      <div className={`flex space-x-2 ${fadeOut ? 'transition-opacity duration-1000 opacity-0' : 'opacity-100'}`}>
                         <span>{formatWithSign.format(privacyDelta)}</span>
                         <img src={privacyIcon} className="h-6" alt="privacy-icon"/>
                         <span>{formatWithSign.format(comfortDelta)}</span>
