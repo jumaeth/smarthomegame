@@ -9,7 +9,7 @@ import hallwayImg from '@/assets/levels/hallway/hallway.png';
 import hallwayOverlayImg from '@/assets/levels/hallway/hallway_overlay.png';
 
 import hallwayLivingRoomDoorClosedImg from '@/assets/levels/hallway/doors/to_livingroom/frame/hallway_to_living_room_frame_closed.png';
-import hallwayLivingRoomHalfOpenImg from '@/assets/levels/hallway/doors/to_livingroom/frame/hallway_to_living_room_frame_half_open.png';
+import hallwayLivingRoomDoorHalfOpenImg from '@/assets/levels/hallway/doors/to_livingroom/frame/hallway_to_living_room_frame_half_open.png';
 import hallwayLivingRoomDoorOpenImg from '@/assets/levels/hallway/doors/to_livingroom/frame/hallway_to_living_room_frame_open.png';
 
 import hallwayKitchenDoorClosedImg from '@/assets/levels/hallway/doors/to_kitchen/frame/hallway_to_kitchen_frame_closed.png';
@@ -25,6 +25,6 @@ export const LEVEL_TEXTURES: Record<MapKey, { level: string; overlay: string, do
   livingroom: { level: livingroomImg, overlay: livingroomOverlayImg, doorFrame: [kitchenDoorClosedImg, kitchenDoorHalfOpenImg, kithenDoorOpenImg]},
   kitchen: { level: kitchenImg, overlay: kitchenOverlayImg, doorFrame: [kitchenDoorClosedImg, kitchenDoorHalfOpenImg, kithenDoorOpenImg]},
   hallway: { level: hallwayImg, overlay: hallwayOverlayImg, doorFloor: [livingRoomFloorImg, kitchenFloorImg], doorFrame:
-            [hallwayLivingRoomDoorClosedImg, hallwayLivingRoomHalfOpenImg, hallwayLivingRoomDoorOpenImg,
+            [hallwayLivingRoomDoorClosedImg, hallwayLivingRoomDoorHalfOpenImg, hallwayLivingRoomDoorOpenImg,
               hallwayKitchenDoorClosedImg, hallwayKitchenDoorHalfOpenImg, hallwayKitchenDoorOpenImg] },
 };

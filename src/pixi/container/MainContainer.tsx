@@ -1,37 +1,37 @@
-import React, { PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
-import { Container, Graphics } from "@pixi/react";
-import {loadBitmapFont, Texture} from "pixi.js";
+import React, {PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
+import {Container, Graphics} from "@pixi/react";
+import {Texture} from "pixi.js";
 
-import { Level } from "@/pixi/levels/Level";
-import { LevelOverlay } from "@/pixi/levels/LevelOverlay";
-import { DoorFloor } from "@/pixi/levels/DoorFloor";
-import { DoorFrame } from "@/pixi/levels/DoorFrame";
+import {Level} from "@/pixi/levels/Level";
+import {LevelOverlay} from "@/pixi/levels/LevelOverlay";
+import {DoorFloor} from "@/pixi/levels/DoorFloor";
+import {DoorFrame} from "@/pixi/levels/DoorFrame";
 
-import { Camera } from "@/pixi/camera/Camera";
-import { TransitionOverlay } from "@/pixi/components/TransitionOverlay";
-import { HeadUpDisplay } from "@/pixi/components/HeadUpDisplay";
-import { MovementButtons } from "@/components/general-ui/MovementButtons";
-import { ProximityHighlight } from "@/pixi/components/ProximityHighlight";
-import { DoorBlocker } from "@/pixi/components/DoorBlocker";
-import { Tutorial } from "@/pixi/components/Tutorial/Tutorial";
+import {Camera} from "@/pixi/camera/Camera";
+import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
+import {HeadUpDisplay} from "@/pixi/components/HeadUpDisplay";
+import {MovementButtons} from "@/components/general-ui/MovementButtons";
+import {ProximityHighlight} from "@/pixi/components/ProximityHighlight";
+import {DoorBlocker} from "@/pixi/components/DoorBlocker";
+import {Tutorial} from "@/pixi/components/Tutorial/Tutorial";
 
 import characterImage from "@/assets/character/character_movement.png";
-import { Character } from "@/pixi/character/Character";
+import {Character} from "@/pixi/character/Character";
 
-import { DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE } from "@/pixi/constants/world-settings";
-import { MapKey } from "@/types/maps";
-import { RoomName } from "@/objects/Room";
-import { DoorState } from "@/types/door";
+import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings";
+import {MapKey} from "@/types/maps";
+import {RoomName} from "@/objects/Room";
+import {DoorState} from "@/types/door";
 import {Direction, Position} from "@/types/movement";
 
-import { useLevelTextures } from "@/hooks/map/useLevelTextures";
-import { getMapTransition, getSpawnForMap, getTransitionsForMap } from "@/utils/mapTransition";
-import { loadTexture } from "@/utils/loadTexture";
-import { characterPositionStore, useCharacterPosition } from "@/utils/characterPosition";
-import { useTutorialActive } from "@/hooks/gameService/useTutorialActive";
+import {useLevelTextures} from "@/hooks/map/useLevelTextures";
+import {getMapTransition, getSpawnForMap, getTransitionsForMap} from "@/utils/mapTransition";
+import {loadTexture} from "@/utils/loadTexture";
+import {characterPositionStore, useCharacterPosition} from "@/utils/characterPosition";
+import {useTutorialActive} from "@/hooks/gameService/useTutorialActive";
 
-import { InteractivePixiElement } from "@/objects/InteractivePixiElement";
-import { GameService } from "@/services/GameService";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
+import {GameService} from "@/services/GameService";
 
 interface MainContainerProps {
   canvasSize: { width: number; height: number };
@@ -64,7 +64,7 @@ export const MainContainer = ({
   const [pendingTransition, setPendingTransition] =
           useState<{ to: MapKey; spawn: Position; face?: Direction } | null>(null);
 
-  const [spawnPosition, setSpawnPosition] = useState<Position>({ x: DEFAULT_POS_X, y: DEFAULT_POS_Y });
+  //const [spawnPosition, setSpawnPosition] = useState<Position>({ x: DEFAULT_POS_X, y: DEFAULT_POS_Y });
 
   const characterTexture = useMemo<Texture>(() => loadTexture(characterImage), []);
   const { levelTexture, overlayTexture, doorFloorTexture, doorFrameTexture } = useLevelTextures(map);
@@ -168,17 +168,17 @@ export const MainContainer = ({
                           <ProximityHighlight interactiveElements={interactiveElements} />
                           <DoorFloor room={room} map={map} gameService={gameService} textures={doorFloorTexture} />
                           <Character
-                                  ref={characterRef as any}
+                                  ref={characterRef}
                                   texture={characterTexture}
                                   onMove={handleCharacterMove}
                                   collisionMap={collisionMap}
-                                  spawnPosition={spawnPosition}
                                   isPaused={isPaused}
                                   interactiveElements={interactiveElements}
                           />
                           <LevelOverlay texture={overlayTexture} />
                           {getTransitionsForMap(map).map((tr, i) => (
                                   <DoorFrame
+                                          key={i}
                                           textures={doorFrameTexture}
                                           map={map}
                                           gameService={gameService}
@@ -198,7 +198,7 @@ export const MainContainer = ({
                               inTransition={inTransition}
                               onMidTransition={() => {
                                 if (pendingTransition) {
-                                  setSpawnPosition(pendingTransition.spawn);
+                                  //setSpawnPosition(pendingTransition.spawn);
                                   characterPositionStore.teleport(pendingTransition.spawn, pendingTransition.face);
                                   onMapChange(pendingTransition.to);
                                   setPendingTransition(null);

@@ -1,20 +1,19 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
-import { Texture } from "pixi.js";
-import { Container, Sprite, useTick } from "@pixi/react";
-import { ANIMATION_SPEED, MOVE_SPEED, TILE_SIZE } from "@/pixi/constants/world-settings";
-import { useCharacterControls } from "@/hooks/character/useCharacterControls";
-import { Direction, Position } from "@/types/movement";
-import { calculateNewTarget, checkCanMove, handleCharacterMovement } from "@/utils/movment";
-import { useCharacterAnimation } from "@/hooks/character/useCharacterAnimation";
-import { InteractivePixiElement } from "@/objects/InteractivePixiElement.ts";
-import { characterPositionStore, useCharacterPosition } from "@/utils/characterPosition";
-import { useMovementStore } from "@/utils/movementEnabled.ts";
+import {forwardRef, useCallback, useEffect, useImperativeHandle, useRef} from "react";
+import {Texture} from "pixi.js";
+import {Container, Sprite, useTick} from "@pixi/react";
+import {ANIMATION_SPEED, MOVE_SPEED, TILE_SIZE} from "@/pixi/constants/world-settings";
+import {useCharacterControls} from "@/hooks/character/useCharacterControls";
+import {Direction, Position} from "@/types/movement";
+import {calculateNewTarget, checkCanMove, handleCharacterMovement} from "@/utils/movment";
+import {useCharacterAnimation} from "@/hooks/character/useCharacterAnimation";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
+import {characterPositionStore, useCharacterPosition} from "@/utils/characterPosition";
+import {useMovementStore} from "@/utils/movementEnabled.ts";
 
 interface CharacterProps {
   texture: Texture;
   onMove: (pos: Position) => void;
   collisionMap: number[];
-  spawnPosition: Position;
   isPaused: boolean;
   interactiveElements?: InteractivePixiElement[];
 }
@@ -24,7 +23,6 @@ export const Character = forwardRef((
           texture,
           onMove,
           collisionMap,
-          spawnPosition,
           isPaused = false,
           interactiveElements,
         }: CharacterProps,

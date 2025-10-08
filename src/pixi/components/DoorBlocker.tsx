@@ -49,7 +49,7 @@ export function DoorBlocker({
               g.endFill();
             }
           },
-          [tile, tiles, visible, alpha, color]
+          [tile, tiles, visible, alpha, color, room]
   );
 
 

@@ -1,6 +1,6 @@
 import {MapKey, Spawn, Transition} from '@/types/maps';
 import { MAP_TRANSITIONS } from '@/pixi/constants/levels/map-transitions';
-import {MAP_SPAWNS} from "@/utils/map.spawns.ts";
+import {MAP_SPAWNS} from "@/utils/mapSpawns.ts";
 
 export function getMapTransition(map: MapKey, x: number, y: number) {
   const transitions = MAP_TRANSITIONS[map] || [];

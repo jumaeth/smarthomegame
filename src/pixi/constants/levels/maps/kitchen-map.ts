@@ -1,4 +1,4 @@
-import {MapKey, Overlay, Spawn, SpawnTable, Transition} from "@/types/maps";
+import {Overlay, SpawnTable, Transition} from "@/types/maps";
 import {Position} from "@/types/movement.ts";
 
 export const KITCHEN_COL_MAP: number[] = [
