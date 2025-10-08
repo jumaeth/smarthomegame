@@ -100,10 +100,6 @@ export const MainContainer = ({
     return () => { alive = false; setAssetsReady(false); };
   }, [levelTexture, overlayTexture, doorFloorTexture, doorFrameTexture]);
 
-  // Character movement & transitions
-  const characterRef = useRef<{
-    moveUp: () => void; moveDown: () => void; moveLeft: () => void; moveRight: () => void; interact: () => void;
-  } | null>(null);
 
   const handleCharacterMove = (pos: Position) => {
     characterPositionStore.set(pos);
@@ -135,6 +131,8 @@ export const MainContainer = ({
     setInTransition(true);
     setShouldSnapCamera(true);
   };
+
+  const characterRef = useRef<{ moveUp: () => void; moveDown: () => void; moveLeft: () => void; moveRight: () => void; interact: () => void } | null>(null);
 
   const handleMoveUp = () => characterRef.current?.moveUp();
   const handleMoveDown = () => characterRef.current?.moveDown();
