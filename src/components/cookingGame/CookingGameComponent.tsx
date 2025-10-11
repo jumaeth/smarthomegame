@@ -29,6 +29,7 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   const[totalPoints,setTotalPoints]=useState(0);
   const [passedStages, setPassedStages] = useState(0);
   const gameService = useGameService();
+  const device:SmartDevice = gameService.getDeviceByName("SmartTv");
 
   const awardScore = (privacy: number, comfort: number) => {
     if (privacy) gameService.changeScore(privacy, "privacy");
@@ -129,6 +130,7 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
 
   useEffect(()=>{
     if(passedStages === 4 && totalPoints/4>50){
+      device.getStatBlock().setValue("Smart Kitchen Points", totalPoints);
       setTimeout(()=>onCompletion(),100);
     }
   },[totalPoints]);

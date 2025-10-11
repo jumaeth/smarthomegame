@@ -3,6 +3,7 @@ import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
 import {useState} from "react";
+import {SmartDevice} from "@/objects/SmartDevice.ts";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
@@ -17,6 +18,7 @@ interface SmartTvOption {
 
 export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
   const gameService = useGameService();
+  const smartTvDevice:SmartDevice = gameService.getDeviceByName("SmartTv");
   const [showDialogue, setShowDialogue] = useState(true);
   const [showWarning, setShowWarning] = useState<string | null>(null);
   const [showReconfigureWarning, setShowReconfigureWarning] = useState(false);
@@ -139,7 +141,8 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
       gameService.changeScore(totalComfortScore, 'comfort');
       setShowSuccessMessage(true);
     }
-
+    smartTvDevice.getStatBlock().setValue("Smart TV Comfort Score", totalComfortScore);
+    smartTvDevice.getStatBlock().setValue("Smart TV Privacy Score", totalPrivacyScore);
     console.log("Smart TV settings calculated!");
     console.log(`Privacy Score: ${totalPrivacyScore}, Comfort Score: ${totalComfortScore}`);
   };

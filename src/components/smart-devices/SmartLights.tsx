@@ -4,6 +4,7 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { useGameService } from "@/hooks/gameService/useGameService.tsx";
+import {SmartDevice} from "@/objects/SmartDevice.ts";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
@@ -18,6 +19,7 @@ interface SmartLightOption {
 
 export const SmartLights = ({ onCompletion }: { onCompletion: onCompletionCallback }) => {
   const gameService = useGameService();
+  const smartLightsDevice:SmartDevice = gameService.getDeviceByName("SmartTv");
 
   const [showDialogue, setShowDialogue] = useState(true);
   const [showWarning, setShowWarning] = useState<string | null>(null);
@@ -95,6 +97,8 @@ export const SmartLights = ({ onCompletion }: { onCompletion: onCompletionCallba
       setShowSuccessMessage(true);
     }
 
+    smartLightsDevice.getStatBlock().setValue("Smart Lights Comfort Score", totalComfortScore);
+    smartLightsDevice.getStatBlock().setValue("Smart Lights Privacy Score", totalPrivacyScore);
     console.log(
             `SmartLights totals → Privacy: ${totals.privacy}, Comfort: ${totals.comfort}`
     );

@@ -218,4 +218,13 @@ export class GameService {
     this.deviceListeners.add(listener);
     return () => this.deviceListeners.delete(listener);
   }
+
+  public getGame(): Game {
+    return this.game;
+  }
+
+  public getDeviceByName(deviceName: string): SmartDevice  {
+
+    return allRoomStore.getDevice(deviceName);
+  }
 }

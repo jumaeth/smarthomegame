@@ -4,7 +4,7 @@ import {SmartDevice} from "../objects/SmartDevice";
 import {StatsKeys} from "../objects/StatsKeys";
 
 export class StatsService {
-  private CSV_SEPARATOR: string = ",";
+  private CSV_SEPARATOR: string = ";";
   private LINE_BREAK: string = "\n";
 
   generateCsvString(game: Game): string {
@@ -13,8 +13,8 @@ export class StatsService {
 
     csvString += this.generateRoomsLine(game.getRooms()) + this.LINE_BREAK;
     csvString += this.generateDevicesNamesLine(allDevices) + this.LINE_BREAK;
-    csvString += this.generateCommonValuesLines(allDevices) + this.LINE_BREAK;
-    csvString += this.generateDeviceSpecificValuesLines(allDevices) + this.LINE_BREAK;
+    csvString += this.generateCommonValuesLines(allDevices);
+    csvString += this.generateDeviceSpecificValuesLines(allDevices);
 
 
     return csvString;
@@ -23,7 +23,7 @@ export class StatsService {
   generateRoomsLine(rooms: Room[]): string {
     let roomLine: string = "";
     rooms.forEach(room => {
-      let amountOfDevices = room.devices.length;
+      const amountOfDevices = room.devices.length;
       roomLine += room.name + this.CSV_SEPARATOR.repeat(amountOfDevices * 2);
     })
     return roomLine;
@@ -46,8 +46,10 @@ export class StatsService {
 
   generateLineForStatKey(devices: SmartDevice[], statKey: StatsKeys): string {
     let line: string = "";
+    const statKeyName = StatsKeys[statKey]; // Enum-Name als String
+
     devices.forEach(device => {
-      line += statKey + this.CSV_SEPARATOR;
+      line += statKeyName + this.CSV_SEPARATOR;
       line += device.getStatBlock().findByName(statKey) + this.CSV_SEPARATOR;
     })
     return line;
@@ -73,7 +75,7 @@ export class StatsService {
         }
       })
 
-      while(i!== ammountOfLines - 1) {
+      while(i < ammountOfLines - 1) {
         deviceSpecificValuesLines[i] += this.CSV_SEPARATOR+this.CSV_SEPARATOR;
         i++;
       }
