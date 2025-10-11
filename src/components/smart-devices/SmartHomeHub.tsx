@@ -2,12 +2,12 @@ import React from 'react';
 import {DataSortingGame} from '../dataSortingGame/DataSortingGame';
 
 interface SmartHomeHubProps {
-  onCompletion: (isCompleted: boolean) => void;
+  completeDevice: () => void;
 }
 
-export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({ onCompletion }) => {
+export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({ completeDevice }) => {
   const handleGameComplete = () => {
-    onCompletion(true);
+    completeDevice();
   };
 
   return (

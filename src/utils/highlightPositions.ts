@@ -36,7 +36,7 @@ export function getHighlightPosition(device: InteractivePixiElement){
     case "SmartKitchen":
       return new RoundedRectangle(
               device.x*TILE_SIZE-TILE_SIZE*0.025,
-              device.y*TILE_SIZE-TILE_SIZE*0.05,
+              device.y*TILE_SIZE-TILE_SIZE*0.15,
               device.width+TILE_SIZE*0.003,
               device.height+TILE_SIZE*0.0025,
               1);

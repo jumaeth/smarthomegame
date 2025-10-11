@@ -4,8 +4,12 @@ import {RoomNames} from "../objects/RoomNames";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore.ts";
 import {CookieService} from "@/services/CookieService.ts";
+import {allRoomStore} from "@/utils/roomStore.ts";
 import {movementStore} from "@/utils/movementEnabled.ts";
+import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive.ts";
 
+
+type DeviceListener = (device: SmartDevice) => void;
 type Listener = (paused: boolean) => void;
 
 export class GameService {
@@ -15,36 +19,54 @@ export class GameService {
   private pauseListeners  = new Set<Listener>();
   private smartDevicesEnabled = true;
   private smartDevicesEnabledListeners  = new Set<Listener>();
-
+  private deviceListeners = new Set<DeviceListener>();
 
   constructor(navigate: (path: string) => void) {
     const saveGame = CookieService.get<Game>('save_game');
-    const savedGame = saveGame ? Game.fromSerialized(saveGame) : null;
-    this.game = savedGame ? Game.fromSerialized(savedGame) : new Game(this.setUpRooms());
+    const tutorialCookie = CookieService.get<boolean>('tutorialState');
+    if (saveGame) {
+      const game = Game.fromSerialized(saveGame);
+      this.game = game;
+      allRoomStore.set(game.getRooms());
+      if(tutorialCookie != null)tutorialActiveStore.set(tutorialCookie);
+    } else {
+      const newRooms = this.setUpRooms();
+      this.game = new Game(newRooms);
+      if (allRoomStore.getAll().length === 0) allRoomStore.set(newRooms);
+    }
     this.navigate = navigate;
   }
 
   onGameStateChange(): void {
-    CookieService.set("save_game", this.game);
+    CookieService.set("save_game", {
+      rooms:  allRoomStore.getAll().map(r => r.toSerialized()),
+      score: this.game.getScore().toSerialized(),
+    });
+    CookieService.set("tutorialState", tutorialActiveStore.get());
   }
 
   setUpRooms(): Room[] {
-    return [
-      new Room(RoomNames.LIVINGROOM, [
-        new SmartDevice("SmartTv"),
-        new SmartDevice("SmartLights"),
-        new SmartDevice("SecurityCamera")
-      ]),
-      new Room(RoomNames.KITCHEN, [
-        new SmartDevice("SmartHomeHub"),
-        new SmartDevice("SmartKitchen"),
-        new SmartDevice("SecurityCamera"),
-      ]),
-    ];
+
+    const livingRoom = new Room(RoomNames.LIVINGROOM,[
+      new SmartDevice("SmartTv"),
+      new SmartDevice("SmartLights")
+    ]);
+
+    const kitchen= new Room(RoomNames.KITCHEN,[
+      new SmartDevice("SmartHomeHub"),
+      new SmartDevice("SmartKitchen"),
+      new SmartDevice("SecurityCamera"),
+    ]);
+
+    return [livingRoom, kitchen];
+  }
+
+  getAllRooms(): Room[] {
+    return allRoomStore.getAll();
   }
 
   findRoomByName(roomName: RoomNames): Room | undefined {
-    return this.game.getRooms().find((r: Room): boolean => r.name === roomName);
+    return allRoomStore.getRoom(roomName);
   }
 
   completeRoom(roomName: RoomNames): void {
@@ -64,7 +86,7 @@ export class GameService {
   }
 
   checkGameCompletionConditions(): boolean {
-    return this.game.getRooms().every((room: Room): boolean => room.isCompleted);
+    return allRoomStore.getAll().every((room: Room) => room.isCompleted);
   }
 
   getDeviceForRoom(roomName: RoomNames): SmartDevice[] {
@@ -73,7 +95,9 @@ export class GameService {
   }
 
   reset(): boolean {
-    this.game = new Game(this.setUpRooms());
+    const newRooms = this.setUpRooms();
+    this.game = new Game(newRooms);
+    allRoomStore.set(newRooms);
     this.navigate('/');
     this.onGameStateChange();
     return true;
@@ -173,5 +197,25 @@ export class GameService {
 
   getScore():GameScore {
     return this.game.getScore();
+  }
+
+  completeDevice(name: string): void {
+    const device = allRoomStore.getDevice(name);
+    const room = allRoomStore.getRoomForDevice(name);
+    if (device){
+      device.complete();
+      this.deviceListeners.forEach(cb => cb(device));
+      if(this.checkRoomCompleted(room))this.completeRoom(room);
+      this.onGameStateChange();
+    }
+  }
+
+  checkRoomCompleted(name: RoomNames): boolean{
+    return allRoomStore.getRoom(name).devices.every(d => d.getIsCompleted());
+  }
+
+  onDeviceStateChanged(listener: DeviceListener): () => void {
+    this.deviceListeners.add(listener);
+    return () => this.deviceListeners.delete(listener);
   }
 }

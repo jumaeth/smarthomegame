@@ -13,7 +13,16 @@ export class SmartDevice {
   }
 
   static fromSerialized(data: SmartDevice): SmartDevice {
-    return new SmartDevice(data.name);
+    const sd = new SmartDevice(data.name);
+    sd.isCompleted = data.isCompleted;
+    return sd;
+  }
+
+  toSerialized(): object {
+    return {
+      name: this.name,
+      isCompleted: this.isCompleted
+    };
   }
 
   complete(): void {

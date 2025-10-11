@@ -6,6 +6,7 @@ import {CookieService} from "@/services/CookieService.ts";
 import {Trans} from "@lingui/react/macro";
 import LanguageSwitcher from "@/components/LanguageSwitcher.tsx";
 import bgImage from "@/assets/intro/page/welcomepage.jpeg";
+import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive.ts";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const consent = CookieService.get("cookieConsent");
+    console.log("Consent: " + consent);
     if (consent === null) {
       setShowBanner(true);
     }
@@ -57,7 +59,10 @@ export default function HomePage() {
                   </Trans>
                 </Button>
                 <button
-                        onClick={() => navigate("/game/livingroom")}
+                        onClick={() => {
+                          tutorialActiveStore.set(false);
+                          navigate("/game/livingroom");
+                        }}
                         className="px-6 py-3 bg-gray-300 text-gray-800 rounded-lg shadow-md hover:bg-gray-400 transition"
                 >
                   <Trans>
