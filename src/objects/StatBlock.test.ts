@@ -35,11 +35,12 @@ describe('StatBlock', () => {
 
 
   it('startTimer erhöht die Sitzungsanzahl', () => {
-    expect(statBlock.findByName(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS)).toBe("");
-    statBlock.startTimer();
-    expect(statBlock.findByName(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS)).toBe("1");
-    statBlock.startTimer();
-    expect(statBlock.findByName(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS)).toBe("2");
+    const localStatBlock = new StatBlock();
+    expect(localStatBlock.findByName(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS)).toBe("");
+    localStatBlock.startTimer();
+    expect(localStatBlock.findByName(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS)).toBe("1");
+    localStatBlock.startTimer();
+    expect(localStatBlock.findByName(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS)).toBe("2");
   });
 
   it('stopTimer wirft Fehler, wenn Timer nicht gestartet wurde', () => {
