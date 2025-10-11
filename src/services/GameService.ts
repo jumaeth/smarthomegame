@@ -223,8 +223,11 @@ export class GameService {
     return this.game;
   }
 
-  public getDeviceByName(deviceName: string): SmartDevice  {
-
-    return allRoomStore.getDevice(deviceName);
+  public getDeviceByName(deviceName: string): SmartDevice {
+    const device = allRoomStore.getDevice(deviceName);
+    if (!device) {
+      throw new Error(`Device "${deviceName}" not found`);
+    }
+    return device;
   }
 }

@@ -9,6 +9,7 @@ import {Stage, TilingSprite} from "@pixi/react";
 import {Stages} from "./Stages.ts"
 import counterImg from '@/assets/cooking-sprites/counter.png';
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
+import {SmartDevice} from "@/objects/SmartDevice.ts";
 
 interface CookingGameComponentProps {
   onCompletion: () => void;
@@ -30,6 +31,7 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   const [passedStages, setPassedStages] = useState(0);
   const gameService = useGameService();
   const device:SmartDevice = gameService.getDeviceByName("SmartTv");
+  device.getStatBlock().startTimer();
 
   const awardScore = (privacy: number, comfort: number) => {
     if (privacy) gameService.changeScore(privacy, "privacy");
@@ -132,6 +134,7 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
     if(passedStages === 4 && totalPoints/4>50){
       device.getStatBlock().setValue("Smart Kitchen Points", totalPoints);
       setTimeout(()=>onCompletion(),100);
+      device.getStatBlock().stopTimer();
     }
   },[totalPoints]);
 

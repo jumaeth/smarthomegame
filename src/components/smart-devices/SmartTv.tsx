@@ -19,6 +19,7 @@ interface SmartTvOption {
 export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
   const gameService = useGameService();
   const smartTvDevice:SmartDevice = gameService.getDeviceByName("SmartTv");
+  smartTvDevice.getStatBlock().startTimer();
   const [showDialogue, setShowDialogue] = useState(true);
   const [showWarning, setShowWarning] = useState<string | null>(null);
   const [showReconfigureWarning, setShowReconfigureWarning] = useState(false);
@@ -143,6 +144,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
     }
     smartTvDevice.getStatBlock().setValue("Smart TV Comfort Score", totalComfortScore);
     smartTvDevice.getStatBlock().setValue("Smart TV Privacy Score", totalPrivacyScore);
+    smartTvDevice.getStatBlock().stopTimer();
     console.log("Smart TV settings calculated!");
     console.log(`Privacy Score: ${totalPrivacyScore}, Comfort Score: ${totalComfortScore}`);
   };

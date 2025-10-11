@@ -20,6 +20,7 @@ interface SmartLightOption {
 export const SmartLights = ({ onCompletion }: { onCompletion: onCompletionCallback }) => {
   const gameService = useGameService();
   const smartLightsDevice:SmartDevice = gameService.getDeviceByName("SmartTv");
+  smartLightsDevice.getStatBlock().startTimer();
 
   const [showDialogue, setShowDialogue] = useState(true);
   const [showWarning, setShowWarning] = useState<string | null>(null);
@@ -97,8 +98,9 @@ export const SmartLights = ({ onCompletion }: { onCompletion: onCompletionCallba
       setShowSuccessMessage(true);
     }
 
-    smartLightsDevice.getStatBlock().setValue("Smart Lights Comfort Score", totalComfortScore);
-    smartLightsDevice.getStatBlock().setValue("Smart Lights Privacy Score", totalPrivacyScore);
+    smartLightsDevice.getStatBlock().setValue("Smart Lights Privacy Score", calculatedScores.privacy);
+    smartLightsDevice.getStatBlock().setValue("Smart Lights Comfort Score", calculatedScores.comfort);
+    smartLightsDevice.getStatBlock().stopTimer();
     console.log(
             `SmartLights totals → Privacy: ${totals.privacy}, Comfort: ${totals.comfort}`
     );

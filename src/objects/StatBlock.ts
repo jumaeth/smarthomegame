@@ -13,7 +13,10 @@ export class StatBlock {
     return this.values.get(name) ?? "";
   }
 
-  public setValue(name: StatsKeys | string, value: string): void {
+  public setValue(name: StatsKeys | string, value: string | number): void {
+    if (typeof value === "number") {
+      value = String(value);
+    }
     this.values.set(name, value);
   }
 
@@ -32,7 +35,7 @@ export class StatBlock {
       throw new Error("Timer was not started.");
     }
     const elapsed: number = Date.now() - this.startTimeTimestamp;
-    const previousTime: number = Number(this.values.get(StatsKeys.TIME_IN_DEVICE)) ?? 0;
+    const previousTime: number = Number(this.values.get(StatsKeys.TIME_IN_DEVICE) ?? 0);
     this.values.set(StatsKeys.TIME_IN_DEVICE, String(previousTime + elapsed));
     this.startTimeTimestamp = 0;
   }
