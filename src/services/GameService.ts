@@ -144,7 +144,7 @@ export class GameService {
 
   leaveRoom(roomName: RoomName): boolean {
     const room: Room | undefined = this.findRoomByName(roomName);
-    if (room?.isLocked == false) {
+    if (room?.isLocked == false || room?.isLocked == undefined) {
       this.navigate('/game');
       this.onGameStateChange();
     }
