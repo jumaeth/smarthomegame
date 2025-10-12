@@ -21,6 +21,7 @@ import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {t} from "@lingui/core/macro";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 
 export const More_Expl_SD: React.FC<PageProps> = ({
@@ -185,7 +186,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
   //listen for smartTvDone
   useEffect(() => {
     if (!gameService)return;
-    const devices = gameService.getDeviceForRoom("livingroom");
+    const devices = gameService.getDeviceForRoom(RoomNames.LIVINGROOM);
     const tv = devices.find(d => d.name === "SmartTv");
 
     if (!tv) return;

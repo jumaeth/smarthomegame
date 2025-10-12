@@ -13,6 +13,7 @@ import {drawBackground} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {introText, phone, player, scores, tv, tv2} from "@/pixi/components/Tutorial/util/spotLightPositions.ts";
 import {SPOTLIGHT_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+import {RoomNames} from "@/objects/RoomNames.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 
 interface TutorialProps {
@@ -193,13 +194,13 @@ export const Tutorial: React.FC<TutorialProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [nextPage, gameService, mgrRef, onClose, windowWidth, windowHeight, runClearBGAnim]);
+  }, [nextPage]);
 
 
 
   //listen for smartTvDone
   useEffect(() => {
-    const devices = gameService.getDeviceForRoom("livingroom");
+    const devices = gameService.getDeviceForRoom(RoomNames.LIVINGROOM);
     const tv = devices.find(d => d.name === "SmartTv");
 
     if (!tv) return;
