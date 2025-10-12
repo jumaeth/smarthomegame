@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
+import React, {PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Sprite, Text} from "@pixi/react";
 import pointing from "@/assets/tutorial/finalExpl/pointing.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
@@ -42,44 +42,37 @@ export const Score_Changes: React.FC<PageProps> = ({
 
 
 
-  const textsTemp = [
+  const textsTemp = useMemo(() => [
     t`Saw that? Your solution increased the scores. But be careful, bad decisions decrease them! Make sure you always keep a good balance.`
-  ]
-
-  //----------init----------
-
-  useEffect(() => {
-    setupBackground();
-    setupTexts();
-    setupGraphics();
-    setupRobot();
-    setAnimation(Animations.INTRO);
-    gameService?.pauseGame();
-  }, [textRef]);
+  ], [])
 
   //run grow/shrink animation
-  const runIntroAnim = async (robot: PixiSprite, growProps: GrowProps, fadeIn: FadeProps) => {
-    const mgr = mgrRef.current!;
-    const graphic = graphicRef.current;
-    const text = textRef.current;
-    if (!graphic || !text)return;
+  const runIntroAnim = useCallback(
+          async (robot: PixiSprite, growProps: GrowProps, fadeIn: FadeProps) => {
+            const mgr = mgrRef.current!;
+            const graphic = graphicRef.current;
+            const text = textRef.current;
+            if (!graphic || !text)return;
 
-    await mgr.parallel([
-      () => growAnimation(mgr, robot, growProps),
-      () => fadeAnimation(mgr, [graphic, text], fadeIn),
-    ]);
-  };
+            await mgr.parallel([
+              () => growAnimation(mgr, robot, growProps),
+              () => fadeAnimation(mgr, [graphic, text], fadeIn),
+            ]);
+          },[mgrRef]
+  );
 
-  const runOutroAnim = async (robot: PixiSprite, fadeOut: FadeProps) => {
-    const mgr = mgrRef.current!;
-    const graphic = graphicRef.current;
-    const text = textRef.current;
-    if (!graphic || !text)return;
+  const runOutroAnim = useCallback(
+      async (robot: PixiSprite, fadeOut: FadeProps) => {
+      const mgr = mgrRef.current!;
+      const graphic = graphicRef.current;
+      const text = textRef.current;
+      if (!graphic || !text)return;
 
-    await mgr.parallel([
-      () => fadeAnimation(mgr, [robot, graphic, text], fadeOut),
-    ]);
-  };
+      await mgr.parallel([
+        () => fadeAnimation(mgr, [robot, graphic, text], fadeOut),
+      ]);
+    },[mgrRef]
+  )
 
   //manage animations
   useEffect(() => {
@@ -135,7 +128,7 @@ export const Score_Changes: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation]);
+  }, [animation, Animations.IDLE, Animations.INTRO, Animations.OUTRO, mgrRef, runIntroAnim, runOutroAnim, setKeyControl, windowWidth, windowHeight]);
 
 
   //----------user input----------
@@ -158,14 +151,14 @@ export const Score_Changes: React.FC<PageProps> = ({
     return () => {
       events.forEach(func => window.removeEventListener("keydown", func));
     };
-  }, [keyControl, animating]);
+  }, [keyControl, animating, Animations.OUTRO]);
 
 
 
   //----------drawings----------
 
   //store line properties in pixiGraphic
-  const setupTexts = () => {
+  const setupTexts = useCallback(() => {
     const t1 = new PixiText();
     t1.text = textsTemp[0];
     t1.x = windowWidth*0.8;
@@ -178,9 +171,9 @@ export const Score_Changes: React.FC<PageProps> = ({
 
     setPixiTexts(prev => [...prev, t1]);
 
-  }
+  },[textsTemp, windowWidth, windowHeight])
 
-  const setupBackground = () => {
+  const setupBackground = useCallback(() => {
     const parent = backgroundRef?.current;
     if (!parent) return;
 
@@ -194,9 +187,9 @@ export const Score_Changes: React.FC<PageProps> = ({
     b.endFill();
 
     parent.addChild(b);
-  }
+  },[windowWidth, windowHeight])
 
-  const setupGraphics = () => {
+  const setupGraphics = useCallback(() => {
 
     const parent = graphicRef?.current;
     if (!parent) return;
@@ -209,9 +202,9 @@ export const Score_Changes: React.FC<PageProps> = ({
     g.endFill();
 
     parent.addChild(g);
-  }
+  },[windowWidth, windowHeight])
 
-  const setupRobot = () => {
+  const setupRobot = useCallback(() => {
 
     const r = robotRef.current;
     if (!r)return;
@@ -221,7 +214,17 @@ export const Score_Changes: React.FC<PageProps> = ({
     r.y = windowHeight * 0.7;
     r.texture = textureRobot;
 
-  }
+  },[textureRobot, windowWidth, windowHeight])
+
+  //----------init----------
+  useEffect(() => {
+    setupBackground();
+    setupTexts();
+    setupGraphics();
+    setupRobot();
+    setAnimation(Animations.INTRO);
+    gameService?.pauseGame();
+  }, [textRef, Animations.INTRO, gameService, setupBackground, setupTexts, setupRobot, setupGraphics]);
 
   const graphics = () => {
     return (

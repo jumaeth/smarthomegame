@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, RefObject, useEffect, useMemo, useRef, useState} from "react";
+import React, {PropsWithChildren, RefObject, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Sprite} from "@pixi/react";
 import handsUp from "@/assets/tutorial/explanationPages/handsUp.png";
 import pointLeft from "@/assets/tutorial/explanationPages/pointLeft.png";
@@ -20,7 +20,7 @@ import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import '@pixi/events';
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
-import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {t} from "@lingui/core/macro";
 
@@ -58,13 +58,137 @@ export const Decision: React.FC<PageProps> = ({
   const [lessExplReady, setLessExplReady] = useState(false);
 
 
-  const textsTemp = [
+  const textsTemp = useMemo( () => [
     t`That's all you need to know! Time for a quick practice. Your task is to find and solve the first smart device. Now it's your decision`,
     t`Guided introduction`,
     t`Explore yourself`,
     t`Okay, try to walk to the smartTV and solve the challenge using the controls you just learned. I’ll meet you there`
 
-]
+],[])
+
+  //setupGraphics
+  const firstRobotSprite = useCallback (() => {
+    const sprite = charRef.current;
+    if (!sprite) return;
+    sprite.texture = textureHandsUp;
+  },[textureHandsUp])
+
+  const setupArrowSprites = useCallback(() =>{
+    const left = leftArrRef.current;
+    const right = rightArrRef.current;
+
+    if (!left || !right)return;
+
+
+    left.x = windowWidth * 0.435;
+    left.y = windowHeight * 0.6;
+    left.anchor.set(0.5, 0.5);
+    left.texture = textureLeftArr;
+    left.scale.set(0.2);
+
+    right.x = windowWidth * 0.565;
+    right.y = windowHeight * 0.6;
+    right.anchor.set(0.5, 0.5);
+    right.texture = textureRightArr;
+    right.scale.set(0.2);
+
+  },[textureLeftArr, textureRightArr, windowWidth, windowHeight])
+
+  const setupGraphics = useCallback( (x: number, y: number, width: number, height: number, radius: number,
+                                      ref: RefObject<PixiContainer>, hoverEnabled: boolean, onClick: () => void) => {
+
+    const g = new PixiGraphics();
+    g.clear();
+    g.beginFill(fill, 1);
+    g.lineStyle(3, stroke);
+    g.drawRoundedRect(x, y, width, height, radius);
+    g.endFill();
+
+    if (hoverEnabled){
+      g.eventMode = "static";
+      g.addEventListener("pointerover", () => g.cursor = "pointer");
+      g.addEventListener("pointertap", onClick);
+    }
+
+    const parent = ref?.current;
+    if (!parent) return;
+
+    parent.addChild(g);
+  },[])
+
+  //helpers
+  const leftOnClick = useCallback(() => {
+    setAnimation(Anims.OUTRO_MORE);
+  },[Anims.OUTRO_MORE])
+
+  const rightOnClick = useCallback(() => {
+    setAnimation(Anims.SWITCH);
+  },[Anims.SWITCH])
+
+  const drawGraphics = useCallback(() =>{
+    setupGraphics(windowWidth*0.3, windowHeight * 0.125, windowWidth*0.4, windowHeight *0.25, 10,
+            midContRef, false, () => null);
+    setupGraphics(windowWidth*0.3125, windowHeight * 0.4, windowWidth*0.15, windowHeight *0.1, 10,
+            leftContRef, true, leftOnClick);
+    setupGraphics(windowWidth*0.5375, windowHeight * 0.4, windowWidth*0.15, windowHeight *0.1, 10,
+            rightContRef, true, rightOnClick);
+  },[leftOnClick, rightOnClick, setupGraphics, windowWidth, windowHeight])
+
+  const setupTexts = useCallback((text: string, x: number, y: number, fontSize: number, fontWeight: TextStyleFontWeight,
+                                  wrap: number, align: TextStyleAlign, ref: RefObject<PixiContainer>, anchor:number) => {
+    const t1 = new PixiText();
+    t1.text = text;
+    t1.x = x;
+    t1.y = y;
+    t1.style = new TextStyle({
+      fontSize: Math.min(windowWidth, windowHeight) * fontSize,
+      fontWeight: fontWeight,
+      wordWrap: true,
+      wordWrapWidth: windowWidth * wrap,
+      align: align,
+      fontFamily: "LoResRegular",
+      fill: "#FFFFFF"
+    })
+    t1.anchor.set(x = anchor, y = anchor);
+
+    const parent = ref?.current;
+    if (!parent) return;
+
+    parent.addChild(t1);
+  },[windowWidth, windowHeight])
+
+  //define text properties
+  const drawTexts = useCallback(() => {
+
+    setupTexts(textsTemp[0], windowWidth*0.33, windowHeight*0.165, 0.04, "normal", 0.35,
+            "center", midTextRef, 0);
+    setupTexts(textsTemp[1], windowWidth*0.34, windowHeight*0.42, 0.03, "bold", 0.1,
+            "center", leftTextRef, 0);
+    setupTexts(textsTemp[2], windowWidth*0.58, windowHeight*0.42, 0.03, "bold", 0.1,
+            "center", rightTextRef, 0);
+  },[setupTexts, textsTemp, windowWidth, windowHeight])
+
+  //reassign graphics
+  const secondRobotSprite = useCallback(() => {
+    const sprite = charRef.current;
+    if (!sprite) return;
+    sprite.x = windowWidth * 0.8;
+    sprite.y = windowHeight * 0.6;
+    sprite.texture = texturePointLeft;
+    sprite.scale.set(1);
+
+    const graphic = midContRef.current;
+    if (!graphic) return;
+    graphic.removeChildren();
+    setupGraphics(windowWidth*0.275, windowHeight*0.3,windowWidth*0.45, windowHeight*0.2, 10,
+            midContRef, false, () => null);
+
+    const textC = midTextRef.current;
+    if (!textC) return;
+    textC.removeChildren();
+    setupTexts(textsTemp[textsTemp.length-1], windowWidth*0.5,windowHeight*0.4, 0.04, "normal",
+            0.4, "center", midTextRef, 0.5);
+  },[setupGraphics, setupTexts, textsTemp, texturePointLeft, windowWidth, windowHeight])
 
   useEffect(() => {
     if (midContRef) {
@@ -82,10 +206,10 @@ export const Decision: React.FC<PageProps> = ({
       firstRobotSprite();
       setAnimation(Anims.INTRO);
     }
-  }, [showExpl]);
+  }, [showExpl, Anims.INTRO, drawGraphics, drawTexts, setupArrowSprites, onLoad, firstRobotSprite]);
 
   //run intro anim
-  const runIntroAnim = async (sprite: PixiSprite) => {
+  const runIntroAnim = useCallback(async (sprite: PixiSprite) => {
     const mgr = mgrRef.current!;
     const midC = midContRef.current;
     const midT = midTextRef.current;
@@ -128,10 +252,10 @@ export const Decision: React.FC<PageProps> = ({
       () => growAnimation(mgr, rightArrC, growRight),
       () => growAnimation(mgr, sprite, grow)
     ]);
-  };
+  },[mgrRef, drawGraphics, drawTexts, windowWidth, windowHeight])
 
   //run fadeOut of first text
-  const runFadeOutAnim = async () => {
+  const runFadeOutAnim = useCallback( async () => {
     const mgr = mgrRef.current!;
     const midC = midContRef.current;
     const midT = midTextRef.current;
@@ -148,9 +272,9 @@ export const Decision: React.FC<PageProps> = ({
     await mgr.parallel([
       () => fadeAnimation(mgr, [midC, leftT, leftC, rightT, rightC, spriteC, leftArrC, rightArrC], FADE_OUT),
     ]);
-  };
+  },[mgrRef])
 
-  const runFadeAnim = async (fadeProps: FadeProps) => {
+  const runFadeAnim = useCallback(async (fadeProps: FadeProps) => {
     const mgr = mgrRef.current!;
     const midC = midContRef.current;
     const midT = midTextRef.current;
@@ -163,46 +287,7 @@ export const Decision: React.FC<PageProps> = ({
       () => fadeAnimation(mgr, midC, fadeProps),
       () => fadeAnimation(mgr, spriteC, fadeProps),
     ]);
-  };
-
-  //----------user input----------
-
-  //keyControls
-  useEffect(() => {
-    if(keyControl != Pages.DECISION || animating)return;
-
-    const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
-      switch (e.code) {
-        case "ArrowLeft":
-        case "KeyA":
-          if (showExpl && decisionReady){
-            leftOnClick();
-            setDecisionReady(false);
-          }
-          return;
-        case "ArrowRight":
-        case "KeyD":
-          if (showExpl && decisionReady){
-            rightOnClick();
-            setDecisionReady(false);
-          }
-          return;
-        case "Space":
-          if (lessExplReady){
-            setAnimation(Anims.OUTRO_LESS);
-            setLessExplReady(false);
-          }
-          return;
-      }
-    }
-
-
-
-    window.addEventListener("keydown", onSpecialPressed)
-    return () => {
-      window.removeEventListener("keydown", onSpecialPressed);
-    };
-  }, [keyControl, animating, showExpl, decisionReady, lessExplReady]);
+  },[mgrRef])
 
   //manage animations
   useEffect(() => {
@@ -255,135 +340,49 @@ export const Decision: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation]);
+  }, [animation, Anims.IDLE, Anims.INTRO, Anims.OUTRO_LESS, Anims.OUTRO_MORE, Anims.SWITCH, mgrRef, onLoad,
+    runFadeAnim, runFadeOutAnim, runIntroAnim, secondRobotSprite, setKeyControl, setNextPage]);
 
 
-  //helpers
-  const leftOnClick = () => {
-    setAnimation(Anims.OUTRO_MORE);
-  }
+  //----------user input----------
 
-  const rightOnClick = () => {
-    setAnimation(Anims.SWITCH);
-  }
+  //keyControls
+  useEffect(() => {
+    if(keyControl != Pages.DECISION || animating)return;
 
-  //setupGraphics
-  const firstRobotSprite = () => {
-    const sprite = charRef.current;
-    if (!sprite) return;
-    sprite.texture = textureHandsUp;
-  }
-
-  const setupArrowSprites = () =>{
-    const left = leftArrRef.current;
-    const right = rightArrRef.current;
-
-    if (!left || !right)return;
-
-
-    left.x = windowWidth * 0.435;
-    left.y = windowHeight * 0.6;
-    left.anchor.set(0.5, 0.5);
-    left.texture = textureLeftArr;
-    left.scale.set(0.2);
-
-    right.x = windowWidth * 0.565;
-    right.y = windowHeight * 0.6;
-    right.anchor.set(0.5, 0.5);
-    right.texture = textureRightArr;
-    right.scale.set(0.2);
-
-  }
-
-  const setupGraphics = (x: number, y: number, width: number, height: number, radius: number,
-                         ref: RefObject<PixiContainer>, hoverEnabled: boolean, onClick: () => void) => {
-
-    const g = new PixiGraphics();
-    g.clear();
-    g.beginFill(fill, 1);
-    g.lineStyle(3, stroke);
-    g.drawRoundedRect(x, y, width, height, radius);
-    g.endFill();
-
-    if (hoverEnabled){
-      g.eventMode = "static";
-      g.addEventListener("pointerover", () => g.cursor = "pointer");
-      g.addEventListener("pointertap", onClick);
+    const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
+      switch (e.code) {
+        case "ArrowLeft":
+        case "KeyA":
+          if (showExpl && decisionReady){
+            leftOnClick();
+            setDecisionReady(false);
+          }
+          return;
+        case "ArrowRight":
+        case "KeyD":
+          if (showExpl && decisionReady){
+            rightOnClick();
+            setDecisionReady(false);
+          }
+          return;
+        case "Space":
+          if (lessExplReady){
+            setAnimation(Anims.OUTRO_LESS);
+            setLessExplReady(false);
+          }
+          return;
+      }
     }
 
-    const parent = ref?.current;
-    if (!parent) return;
-
-    parent.addChild(g);
-  }
-
-  const drawGraphics = () =>{
-    setupGraphics(windowWidth*0.3, windowHeight * 0.125, windowWidth*0.4, windowHeight *0.25, 10,
-            midContRef, false, () => null);
-    setupGraphics(windowWidth*0.3125, windowHeight * 0.4, windowWidth*0.15, windowHeight *0.1, 10,
-            leftContRef, true, leftOnClick);
-    setupGraphics(windowWidth*0.5375, windowHeight * 0.4, windowWidth*0.15, windowHeight *0.1, 10,
-            rightContRef, true, rightOnClick);
-  }
-
-  const setupTexts = (text: string, x: number, y: number, fontSize: number, fontWeight: TextStyleFontWeight,
-                      wrap: number, align: TextStyleAlign, ref: RefObject<PixiContainer>, anchor:number) => {
-    const t1 = new PixiText();
-    t1.text = text;
-    t1.x = x;
-    t1.y = y;
-    t1.style = new TextStyle({
-      fontSize: Math.min(windowWidth, windowHeight) * fontSize,
-      fontWeight: fontWeight,
-      wordWrap: true,
-      wordWrapWidth: windowWidth * wrap,
-      align: align,
-      fontFamily: "LoResRegular",
-      fill: "#FFFFFF"
-    })
-    t1.anchor.set(x = anchor, y = anchor);
-
-    const parent = ref?.current;
-    if (!parent) return;
-
-    parent.addChild(t1);
-  }
-
-  //define text properties
-  const drawTexts = () => {
-
-    setupTexts(textsTemp[0], windowWidth*0.33, windowHeight*0.165, 0.04, "normal", 0.35,
-            "center", midTextRef, 0);
-    setupTexts(textsTemp[1], windowWidth*0.34, windowHeight*0.42, 0.03, "bold", 0.1,
-            "center", leftTextRef, 0);
-    setupTexts(textsTemp[2], windowWidth*0.58, windowHeight*0.42, 0.03, "bold", 0.1,
-            "center", rightTextRef, 0);
-  }
 
 
+    window.addEventListener("keydown", onSpecialPressed)
+    return () => {
+      window.removeEventListener("keydown", onSpecialPressed);
+    };
+  }, [keyControl, animating, showExpl, decisionReady, lessExplReady, Anims.OUTRO_LESS, leftOnClick, rightOnClick]);
 
-
-  //reassign graphics
-  const secondRobotSprite = () => {
-    const sprite = charRef.current;
-    if (!sprite) return;
-    sprite.x = windowWidth * 0.8;
-    sprite.y = windowHeight * 0.6;
-    sprite.texture = texturePointLeft;
-    sprite.scale.set(1);
-
-    const graphic = midContRef.current;
-    if (!graphic) return;
-    graphic.removeChildren();
-    setupGraphics(windowWidth*0.275, windowHeight*0.3,windowWidth*0.45, windowHeight*0.2, 10,
-            midContRef, false, () => null);
-
-    const textC = midTextRef.current;
-    if (!textC) return;
-    textC.removeChildren();
-    setupTexts(textsTemp[textsTemp.length-1], windowWidth*0.5,windowHeight*0.4, 0.04, "normal",
-            0.4, "center", midTextRef, 0.5);
-  }
 
 
 
