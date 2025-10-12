@@ -3,10 +3,10 @@ import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 
 export const player = (windowWidth: number, windowHeight: number) => {
   return {
-  x: (0.5*windowWidth),
-  y: (0.5*windowHeight)+TILE_SIZE*1.75,
-  width: TILE_SIZE*8,
-  height: TILE_SIZE*8,
+  x: 0.5*windowWidth,
+  y: 0.55*windowHeight,
+  width: windowWidth * 0.1,
+  height: windowHeight * 0.2,
   r: 10,
   } as SpotRect
 }
@@ -22,21 +22,22 @@ export const introText = (windowWidth: number, windowHeight: number) => {
 }
 
 export const scores = (windowWidth: number, windowHeight: number) => {
+
   return {
-    x: (0.86*windowWidth),
-    y: (0.01*windowHeight)-TILE_SIZE*0.25,
-    width: TILE_SIZE*16.5,
-    height: TILE_SIZE*7.5,
+    x: 0.84*windowWidth,
+    y: 0.01*windowHeight,
+    width: windowWidth * 0.15,
+    height: windowHeight * 0.155,
     r: 10,
   } as SpotRect;
 }
 
 export const phone = (windowWidth: number, windowHeight: number) => {
   return {
-    x: (0.006*windowWidth),
-    y: (0.0125*windowHeight),
-    width: TILE_SIZE*8,
-    height: TILE_SIZE*12,
+    x: 0.007*windowWidth,
+    y: 0.0125*windowHeight,
+    width: windowWidth * 0.085,
+    height: windowHeight * 0.225,
     r: 10,
   } as SpotRect;
 }

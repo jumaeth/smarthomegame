@@ -1,103 +1,121 @@
-import React, {PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {Container, Sprite, Text} from "@pixi/react";
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect, useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { Container, Sprite, Text } from "@pixi/react";
 import pointing from "@/assets/tutorial/finalExpl/pointing.png";
-import {loadTexture} from "@/utils/loadTexture.ts";
+import { loadTexture } from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
   Graphics as PixiGraphics,
   Sprite as PixiSprite,
   Text as PixiText,
-  TextStyle
+  TextStyle,
 } from "pixi.js";
-import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
-import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
-import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
-import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
-import {t} from "@lingui/core/macro";
-
+import { TILE_SIZE } from "@/pixi/constants/world-settings.ts";
+import { Pages } from "@/pixi/components/Tutorial/Pages/Pages.ts";
+import { growAnimation, GrowProps } from "@/pixi/components/Tutorial/anim/growAnimation.ts";
+import { PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
+import { fadeAnimation, FadeProps } from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import { useAnimationManager } from "@/hooks/tutorial/useAnimationManager.tsx";
+import { t } from "@lingui/core/macro";
 
 export const Score_Changes: React.FC<PageProps> = ({
-       windowWidth,
-       windowHeight,
-       keyControl,
-       setKeyControl,
-        gameService
-           }: PropsWithChildren<PageProps>) => {
-
-  const enum Animations {IDLE, INTRO, OUTRO}
+                                                     windowWidth,
+                                                     windowHeight,
+                                                     keyControl,
+                                                     setKeyControl,
+                                                     gameService,
+                                                   }: PropsWithChildren<PageProps>) => {
+  const enum Animations {
+    IDLE,
+    INTRO,
+    OUTRO,
+  }
 
   const textureRobot = useMemo(() => loadTexture(pointing), []);
-  const robotRef = useRef<PixiSprite | null >(null);
+  const robotRef = useRef<PixiSprite | null>(null);
+
   const [animation, setAnimation] = useState(Animations.INTRO);
   const [pixiTexts, setPixiTexts] = useState<PixiText[]>([]);
   const [animating, setAnimating] = useState(false);
+
   const mgrRef = useAnimationManager();
-  const fill = "#054388";
-  const stroke = "#009CDD";
+
   const graphicRef = useRef<PixiContainer | null>(null);
   const textRef = useRef<PixiContainer | null>(null);
   const backgroundRef = useRef<PixiContainer | null>(null);
 
+  const fill = "#054388";
+  const stroke = "#009CDD";
 
+  const initedRef = useRef(false);
 
-  const textsTemp = useMemo(() => [
-    t`Saw that? Your solution increased the scores. But be careful, bad decisions decrease them! Make sure you always keep a good balance.`
-  ], [])
+  const textsTemp = useMemo(
+          () => [
+            t`Saw that? Your solution increased the scores. But be careful, bad decisions decrease them! Make sure you always keep a good balance.`,
+          ],
+          []
+  );
 
-  //run grow/shrink animation
+  const replaceChildren = useCallback((parent: PixiContainer, nodes: any[]) => {
+    const removed = parent.removeChildren();
+    removed.forEach((c) => c.destroy?.());
+    nodes.forEach((n) => parent.addChild(n));
+  }, []);
+
   const runIntroAnim = useCallback(
           async (robot: PixiSprite, growProps: GrowProps, fadeIn: FadeProps) => {
             const mgr = mgrRef.current!;
             const graphic = graphicRef.current;
             const text = textRef.current;
-            if (!graphic || !text)return;
+            if (!graphic || !text) return;
 
             await mgr.parallel([
               () => growAnimation(mgr, robot, growProps),
               () => fadeAnimation(mgr, [graphic, text], fadeIn),
             ]);
-          },[mgrRef]
+          },
+          [mgrRef]
   );
 
   const runOutroAnim = useCallback(
-      async (robot: PixiSprite, fadeOut: FadeProps) => {
-      const mgr = mgrRef.current!;
-      const graphic = graphicRef.current;
-      const text = textRef.current;
-      if (!graphic || !text)return;
+          async (robot: PixiSprite, fadeOut: FadeProps) => {
+            const mgr = mgrRef.current!;
+            const graphic = graphicRef.current;
+            const text = textRef.current;
+            if (!graphic || !text) return;
 
-      await mgr.parallel([
-        () => fadeAnimation(mgr, [robot, graphic, text], fadeOut),
-      ]);
-    },[mgrRef]
-  )
+            await mgr.parallel([() => fadeAnimation(mgr, [robot, graphic, text], fadeOut)]);
+          },
+          [mgrRef]
+  );
 
-  //manage animations
+  const anim1: GrowProps = {
+    startX: windowWidth * 0.7,
+    startY: windowHeight * 0.4,
+    endX: windowWidth * 0.7,
+    endY: windowHeight * 0.4,
+    startS: Math.min(windowWidth, windowHeight) / 4000,
+    endS: Math.min(windowWidth, windowHeight) / 2000,
+    duration: 750,
+  };
+
   useEffect(() => {
     if (!mgrRef.current) return;
 
-    let timeoutId: number | undefined;
     const robot = robotRef.current;
     if (!robot) return;
 
     const run = async () => {
-
       switch (animation) {
         case Animations.INTRO: {
 
-          const anim1 = {
-            startX: windowWidth * 0.625, startY: windowHeight * 0.45,
-            endX: windowWidth * 0.625, endY: windowHeight * 0.45,
-            startS: 0.4, endS: 0.5, showOthers: false, duration: 750
-          } as GrowProps
-
-          const fadeIn = {
-            duration: 500,
-            startA: 0,
-            endA: 1,
-          } as FadeProps
+          const fadeIn: FadeProps = { duration: 500, startA: 0, endA: 1 };
 
           setAnimating(true);
           await runIntroAnim(robot, anim1, fadeIn);
@@ -105,14 +123,8 @@ export const Score_Changes: React.FC<PageProps> = ({
           setAnimation(Animations.IDLE);
           break;
         }
-
         case Animations.OUTRO: {
-          const fadeOut = {
-            duration: 500,
-            startA: 1,
-            endA: 0,
-          } as FadeProps
-
+          const fadeOut: FadeProps = { duration: 500, startA: 1, endA: 0 };
           setAnimating(true);
           await runOutroAnim(robot, fadeOut);
           setAnimating(false);
@@ -124,57 +136,53 @@ export const Score_Changes: React.FC<PageProps> = ({
     };
 
     run();
+  }, [
+    animation,
+    Animations.IDLE,
+    Animations.INTRO,
+    Animations.OUTRO,
+    mgrRef,
+    runIntroAnim,
+    runOutroAnim,
+    setKeyControl,
+  ]);
 
-    return () => {
-      if (timeoutId !== undefined) clearTimeout(timeoutId);
-    };
-  }, [animation, Animations.IDLE, Animations.INTRO, Animations.OUTRO, mgrRef, runIntroAnim, runOutroAnim, setKeyControl, windowWidth, windowHeight]);
-
-
-  //----------user input----------
-
-  //keyControls
   useEffect(() => {
-    if(keyControl != Pages.SCORE_CHANGES || animating)return;
+    const sprite = robotRef.current
+    if(!sprite || animating)return;
+    sprite.x = anim1.endX
+    sprite.y = anim1.endY
+    sprite.scale.set(anim1.endS)
+  }, [windowWidth, windowHeight]);
 
-    const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
-      switch (e.code) {
-        case "Space":
-          setAnimation(Animations.OUTRO);
-          break;
-      }
-    }
+  useEffect(() => {
+    if (keyControl != Pages.SCORE_CHANGES || animating) return;
 
-    const events = [onSpecialPressed];
-
-    events.forEach(func => window.addEventListener("keydown", func));
-    return () => {
-      events.forEach(func => window.removeEventListener("keydown", func));
+    const onSpecialPressed = (e: KeyboardEvent) => {
+      if (e.code === "Space") setAnimation(Animations.OUTRO);
     };
+
+    window.addEventListener("keydown", onSpecialPressed);
+    return () => window.removeEventListener("keydown", onSpecialPressed);
   }, [keyControl, animating, Animations.OUTRO]);
 
 
-
-  //----------drawings----------
-
-  //store line properties in pixiGraphic
   const setupTexts = useCallback(() => {
     const t1 = new PixiText();
     t1.text = textsTemp[0];
-    t1.x = windowWidth*0.8;
-    t1.y = windowHeight*0.525;
+    t1.x = windowWidth * 0.825;
+    t1.y = windowHeight * 0.575;
     t1.style = new TextStyle({
       fontSize: Math.min(windowWidth, windowHeight) * 0.035,
       fontWeight: "normal",
-      wordWrapWidth: windowWidth * 0.25
-    })
+      wordWrapWidth: windowWidth * 0.25,
+    });
 
-    setPixiTexts(prev => [...prev, t1]);
-
-  },[textsTemp, windowWidth, windowHeight])
+    setPixiTexts([t1]);
+  }, [textsTemp, windowWidth, windowHeight]);
 
   const setupBackground = useCallback(() => {
-    const parent = backgroundRef?.current;
+    const parent = backgroundRef.current;
     if (!parent) return;
 
     const b = new PixiGraphics();
@@ -182,104 +190,124 @@ export const Score_Changes: React.FC<PageProps> = ({
     b.beginFill("#000000", 0.7);
     b.drawRect(0, 0, windowWidth, windowHeight);
     b.beginHole();
-    b.drawRoundedRect(windowWidth*0.86, (0.01*windowHeight)-TILE_SIZE*0.25, TILE_SIZE*16.5, TILE_SIZE*7.5, 10);
+    b.drawRoundedRect(
+            0.855*windowWidth,
+            0.01*windowHeight,
+            windowWidth * 0.14,
+            windowHeight * 0.155,
+            10
+    );
     b.endHole();
     b.endFill();
 
-    parent.addChild(b);
-  },[windowWidth, windowHeight])
+    replaceChildren(parent, [b]);
+  }, [replaceChildren, windowWidth, windowHeight]);
 
   const setupGraphics = useCallback(() => {
-
-    const parent = graphicRef?.current;
+    const parent = graphicRef.current;
     if (!parent) return;
 
     const g = new PixiGraphics();
     g.clear();
     g.beginFill(fill, 1);
-    g.lineStyle(3, stroke);
-    g.drawRoundedRect(windowWidth*0.675, windowHeight*0.4, windowWidth*0.25, windowHeight*0.25, 12);
+    g.lineStyle(Math.min(windowWidth, windowHeight) / 150, stroke);
+    g.drawRoundedRect(windowWidth * 0.7, windowHeight * 0.45, windowWidth * 0.25, windowHeight * 0.25, 12);
     g.endFill();
 
-    parent.addChild(g);
-  },[windowWidth, windowHeight])
+    replaceChildren(parent, [g]);
+  }, [replaceChildren, windowWidth, windowHeight]);
 
   const setupRobot = useCallback(() => {
-
     const r = robotRef.current;
-    if (!r)return;
+    if (!r) return;
 
     r.anchor.set(0.5, 0.5);
-    r.x = windowWidth * 0.775;
-    r.y = windowHeight * 0.7;
+    r.x = windowWidth * 0.7;
+    r.y = windowHeight * 0.4;
     r.texture = textureRobot;
+    r.scale.set(Math.min(windowWidth, windowHeight) / 2000);
+  }, [textureRobot, windowWidth, windowHeight]);
 
-  },[textureRobot, windowWidth, windowHeight])
+  useLayoutEffect(() => {
+    if (!initedRef.current) {
+      initedRef.current = true;
+      gameService?.pauseGame();
+      // delay one frame so refs are definitely set before we draw
+      const id = requestAnimationFrame(() => setAnimation(Animations.INTRO));
+      return () => cancelAnimationFrame(id);
+    }
+  }, [gameService, Animations.INTRO]);
 
-  //----------init----------
+  const robotScale = useMemo(
+          () => Math.min(windowWidth, windowHeight) / 2000,
+          [windowWidth, windowHeight]
+  );
+
   useEffect(() => {
+    if (!initedRef.current) {
+      initedRef.current = true;
+      gameService?.pauseGame();
+      setAnimation(Animations.INTRO);
+    }
+
     setupBackground();
     setupTexts();
     setupGraphics();
     setupRobot();
-    setAnimation(Animations.INTRO);
-    gameService?.pauseGame();
-  }, [textRef, Animations.INTRO, gameService, setupBackground, setupTexts, setupRobot, setupGraphics]);
+  }, [
+    gameService,
+    Animations.INTRO,
+    setupBackground,
+    setupTexts,
+    setupGraphics,
+    setupRobot,
+    windowWidth,
+    windowHeight,
+  ]);
 
-  const graphics = () => {
-    return (
-            <Container>
-              {<Container ref={graphicRef}/>}
-            </Container>
-    )
-  }
+  const graphics = () => (
+          <Container>
+            <Container ref={graphicRef} />
+          </Container>
+  );
 
-  const background = () => {
-    return (
-            <Container>
-              <Container ref={backgroundRef} />
-            </Container>
-    )
-  }
+  const background = () => (
+          <Container>
+            <Container ref={backgroundRef} />
+          </Container>
+  );
 
-
-  //translate texts to react
-  const texts = () => {
-    return (
-            <Container ref={textRef}>
-              {pixiTexts.map((msg, i) => (
-                      <Text
-                              key={i}
-                              text={msg.text}
-                              x={msg.x}
-                              y={msg.y}
-                              anchor={0.5}
-                              style={new TextStyle({
+  const texts = () => (
+          <Container ref={textRef}>
+            {pixiTexts.map((msg, i) => (
+                    <Text
+                            key={i}
+                            text={msg.text}
+                            x={msg.x}
+                            y={msg.y}
+                            anchor={0.5}
+                            style={
+                              new TextStyle({
                                 fontFamily: "LoResRegular",
                                 fontSize: msg.style.fontSize,
                                 fontWeight: msg.style.fontWeight,
                                 fill: "#FFFFFF",
                                 align: "left",
                                 wordWrap: true,
-                                wordWrapWidth: msg.style.wordWrapWidth
+                                wordWrapWidth: msg.style.wordWrapWidth,
                               })
-                              }
-                      />
-              ))}
-            </Container>
-    )
-  }
-
+                            }
+                    />
+            ))}
+          </Container>
+  );
 
   return (
-      <>
-        {background()}
-        {textureRobot && <Sprite
-          texture={textureRobot}
-          ref={robotRef}
-        />}
-        {graphics()}
-        {texts()}
-      </>
-  )
+          <>
+            {background()}
+            {textureRobot && <Sprite texture={textureRobot} ref={robotRef} />}
+            {graphics()}
+            {texts()}
+          </>
+  );
 };

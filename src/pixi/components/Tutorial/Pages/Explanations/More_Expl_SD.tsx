@@ -45,7 +45,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
   const [animating, setAnimating] = useState(false);
   const [animation, setAnimation] = useState(Animations.INTRO);
   const [showExpl, setShowExpl] = useState(false);
-  const [pixiTexts, setPixiTexts] = useState<PixiText[]>([]);
+  const [pixiTexts, setPixiText] = useState<PixiText>();
 
   //refs
   const graphicRef = useRef<PixiContainer | null>(null);
@@ -72,7 +72,13 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     const graphic = graphicRef.current;
     if (!text || !graphic)return;
     toggleExplanations([text, graphic], false);
-  }, []);
+  }, [])
+
+  const growChar = {
+    startX: windowWidth * 0.825, startY: windowHeight * 0.725,
+    endX: windowWidth * 0.9, endY: windowHeight * 0.7,
+    startS: Math.min(windowWidth, windowHeight) / 4000, endS: Math.min(windowWidth, windowHeight) / 1000, showOthers: false, duration: 750
+  } as GrowProps
 
   //manageAnimations
   useEffect(() => {
@@ -95,11 +101,6 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
       switch (animation) {
         case Animations.INTRO: {
-          const growChar = {
-            startX: windowWidth * 0.825, startY: windowHeight * 0.725,
-            endX: windowWidth * 0.85, endY: windowHeight * 0.7,
-            startS: 0.6, endS: 0.8, showOthers: false, duration: 750
-          } as GrowProps
 
           setAnimating(true);
           toggleExplanations([texts, graphics], true);
@@ -126,27 +127,15 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [ready, animation, Animations.INTRO, Animations.OUTRO, Animations.END, gameService, mgrRef, setKeyControl, setNextPage, windowWidth, windowHeight]);
+  }, [ready, animation, Animations.INTRO, Animations.OUTRO, Animations.END, gameService, mgrRef, setKeyControl, setNextPage]);
 
   useEffect(() => {
-    if(keyControl != Pages.More_Expl_SD || animating)return;
-
-    const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
-      switch (e.code) {
-        case "Space":
-          //setAnimation(Animations.OUTRO);
-          break;
-      }
-    }
-
-    const events = [onSpecialPressed];
-
-    events.forEach(func => window.addEventListener("keydown", func));
-    return () => {
-      events.forEach(func => window.removeEventListener("keydown", func));
-    };
-  }, [keyControl, animating]);
-
+    const sprite = robotRef.current
+    if(!sprite || animating)return;
+    sprite.x = growChar.endX
+    sprite.y = growChar.endY
+    sprite.scale.set(growChar.endS)
+  }, [windowWidth, windowHeight]);
 
   //smartDeviceDetection
   const checkFoundSmartTV = useCallback( (): boolean => {
@@ -211,7 +200,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
       wordWrapWidth: windowWidth * 0.22
     })
 
-    setPixiTexts(prev => [...prev, t1]);
+    setPixiText(t1);
 
   },[windowWidth, windowHeight, explText])
   const setupGraphics = useCallback(() => {
@@ -226,6 +215,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     const parent = graphicRef?.current;
     if (!parent) return;
 
+    parent.children.filter(c => c instanceof PixiGraphics).forEach(c => parent.removeChild(c))
     parent.addChild(g);
   },[windowWidth, windowHeight])
 
@@ -270,25 +260,23 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     if (!showExpl)return null;
     return (
             <Container ref={textRef} renderable={false}>
-              {pixiTexts.map((msg, i) => (
-                      <Text
-                              key={i}
-                              text={msg.text}
-                              x={msg.x}
-                              y={msg.y}
-                              anchor={0.5}
-                              style={new TextStyle({
-                                fontFamily: "LoResRegular",
-                                fontSize: msg.style.fontSize,
-                                fontWeight: msg.style.fontWeight,
-                                fill: "#FFFFFF",
-                                align: "left",
-                                wordWrap: true,
-                                wordWrapWidth: msg.style.wordWrapWidth
-                                })
-                              }
-                      />
-              ))}
+              {pixiTexts && <Text
+                      key={pixiTexts?.text}
+                      text={pixiTexts.text}
+                      x={pixiTexts.x}
+                      y={pixiTexts.y}
+                      anchor={0.5}
+                      style={new TextStyle({
+                        fontFamily: "LoResRegular",
+                        fontSize: pixiTexts.style.fontSize,
+                        fontWeight: pixiTexts.style.fontWeight,
+                        fill: "#FFFFFF",
+                        align: "left",
+                        wordWrap: true,
+                        wordWrapWidth: pixiTexts.style.wordWrapWidth
+                      })
+                      }
+              />}
             </Container>
     )
   }

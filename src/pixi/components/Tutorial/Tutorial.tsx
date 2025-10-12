@@ -1,91 +1,85 @@
-import React, {PropsWithChildren, useCallback, useEffect, useRef, useState} from "react";
-import {Container, Graphics} from "@pixi/react";
-import {Container as PixiContainer, Graphics as PixiGraphics} from "pixi.js";
-import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
-import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import {PAGE_COMPONENTS, PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import {spotlightAnimation} from "@/pixi/components/Tutorial/anim/spotlightAnimation.ts";
-import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
-import {GameService} from "@/services/GameService.ts";
-import {characterPositionStore} from "@/utils/characterPosition.ts";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {drawBackground} from "@/pixi/components/Tutorial/util/drawings.tsx";
-import {introText, phone, player, scores, tv, tv2} from "@/pixi/components/Tutorial/util/spotLightPositions.ts";
-import {SPOTLIGHT_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
-import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
-import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
+import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from "react";
+import { Container, Graphics } from "@pixi/react";
+import { Container as PixiContainer, Graphics as PixiGraphics } from "pixi.js";
+import { TILE_SIZE } from "@/pixi/constants/world-settings.ts";
+import { Pages } from "@/pixi/components/Tutorial/Pages/Pages.ts";
+import { PAGE_COMPONENTS, PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
+import { spotlightAnimation } from "@/pixi/components/Tutorial/anim/spotlightAnimation.ts";
+import { fadeAnimation, FadeProps } from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import { GameService } from "@/services/GameService.ts";
+import { characterPositionStore } from "@/utils/characterPosition.ts";
+import { InteractivePixiElement } from "@/objects/InteractivePixiElement.ts";
+import { drawBackground } from "@/pixi/components/Tutorial/util/drawings.tsx";
+import { introText, phone, player, scores, tv, tv2 } from "@/pixi/components/Tutorial/util/spotLightPositions.ts";
+import { SPOTLIGHT_DURATION } from "@/pixi/components/Tutorial/util/Constants.ts";
+import { useAnimationManager } from "@/hooks/tutorial/useAnimationManager.tsx";
+import { PageOrder } from "@/pixi/components/Tutorial/util/PageOrder.ts";
 
 interface TutorialProps {
   windowWidth: number;
   windowHeight: number;
   gameService: GameService;
   onClose: () => void;
-  interactiveElements:  InteractivePixiElement[];
+  interactiveElements: InteractivePixiElement[];
 }
 
 export const Tutorial: React.FC<TutorialProps> = ({
-       windowWidth,
-       windowHeight,
-       gameService,
-       onClose,
-        interactiveElements
-           }: PropsWithChildren<TutorialProps>) => {
-
+                                                    windowWidth,
+                                                    windowHeight,
+                                                    gameService,
+                                                    onClose,
+                                                    interactiveElements
+                                                  }: PropsWithChildren<TutorialProps>) => {
   const [nextPage, setNextPage] = useState(PageOrder.INTRO);
+  const [keyControl, setKeyControl] = useState(Pages.MAIN);
 
   const rootRef = useRef<PixiContainer | null>(null);
-
-
   const backgroundRef = useRef<PixiGraphics | null>(null);
-  const [keyControl, setKeyControl] = useState(Pages.MAIN)
-
-  const commonProps: PageProps = { windowWidth, windowHeight, keyControl, setKeyControl, setNextPage, interactiveElements, gameService };
-  const ActivePage = PAGE_COMPONENTS[keyControl]; // Component or null
 
   const mgrRef = useAnimationManager();
   const isAnimatingRef = useRef<boolean>(false);
 
-  //initBackground
+  const wRef = useRef(windowWidth);
+  const hRef = useRef(windowHeight);
   useEffect(() => {
-    if (backgroundRef.current){
+    wRef.current = windowWidth;
+    hRef.current = windowHeight;
+    if (backgroundRef.current) {
       drawBackground(backgroundRef, windowWidth, windowHeight);
     }
-  }, [windowHeight, windowWidth]);
+  }, [windowWidth, windowHeight]);
 
-  //pause game at beginning of tutorial
   useEffect(() => {
-    characterPositionStore.teleport({x: 8*TILE_SIZE, y: 5*TILE_SIZE});
+    characterPositionStore.teleport({ x: 8 * TILE_SIZE, y: 5 * TILE_SIZE });
     gameService.pauseGame();
   }, [gameService]);
 
-  const runClearBGAnim = useCallback(
-          async () => {
+  const runClearBGAnim = useCallback(async () => {
+    const mgr = mgrRef.current;
+    const bg = backgroundRef.current;
+    if (!mgr || !bg) return;
+    await mgr.parallel([
+      () => fadeAnimation(mgr, bg, { startA: bg.alpha, endA: 0, duration: 1000 } as FadeProps),
+    ]);
+  }, []);
 
-            const mgr = mgrRef.current;
-            const bg = backgroundRef.current;
+  const ranRef = useRef<Set<PageOrder>>(new Set());
 
-            if(!mgr || !bg)return;
-
-            await mgr.parallel([
-              () => fadeAnimation(mgr, bg, {startA: bg.alpha, endA: 0, duration: 1000} as FadeProps),
-            ]);
-          },[mgrRef]
-  )
-
-  //manage animations
   useEffect(() => {
+    if (ranRef.current.has(nextPage)) return;
+    ranRef.current.add(nextPage);
 
     let timeoutId: number | undefined;
 
     const run = async () => {
-
       const mgr = mgrRef.current;
-      if (!mgr)return;
+      if (!mgr) return;
+
+      const W = wRef.current;
+      const H = hRef.current;
 
       switch (nextPage) {
-
         case PageOrder.INTRO: {
-
           setKeyControl(Pages.INTRO);
           break;
         }
@@ -93,54 +87,47 @@ export const Tutorial: React.FC<TutorialProps> = ({
         case PageOrder.CHARACTER: {
           isAnimatingRef.current = true;
           await mgr.sequence([
-            () => spotlightAnimation(mgr, backgroundRef, windowWidth, windowHeight, introText(windowWidth, windowHeight),
-                    player(windowWidth, windowHeight), SPOTLIGHT_DURATION)
+            () => spotlightAnimation(mgr, backgroundRef, W, H, introText(W, H), player(W, H), SPOTLIGHT_DURATION),
           ]);
           isAnimatingRef.current = false;
-          drawBackground(backgroundRef, windowWidth, windowHeight);
+          drawBackground(backgroundRef, W, H);
           setKeyControl(Pages.CHARACTER);
           return;
         }
 
         case PageOrder.SCORES: {
           await mgr.sequence([
-            () => spotlightAnimation(mgr, backgroundRef, windowWidth, windowHeight, player(windowWidth, windowHeight),
-                    scores(windowWidth, windowHeight), SPOTLIGHT_DURATION)
+            () => spotlightAnimation(mgr, backgroundRef, W, H, player(W, H), scores(W, H), SPOTLIGHT_DURATION),
           ]);
-          drawBackground(backgroundRef, windowWidth, windowHeight);
+          drawBackground(backgroundRef, W, H);
           setKeyControl(Pages.SCORES);
-
           return;
         }
 
         case PageOrder.PHONE: {
-
           isAnimatingRef.current = true;
           await mgr.sequence([
-            () => spotlightAnimation(mgr, backgroundRef, windowWidth, windowHeight, scores(windowWidth, windowHeight),
-                    phone(windowWidth, windowHeight), SPOTLIGHT_DURATION*1.5)
+            () => spotlightAnimation(mgr, backgroundRef, W, H, scores(W, H), phone(W, H), SPOTLIGHT_DURATION * 1.5),
           ]);
           isAnimatingRef.current = false;
-          drawBackground(backgroundRef, windowWidth, windowHeight);
-          setKeyControl(Pages.SMARTPHONE)
-
+          drawBackground(backgroundRef, W, H);
+          setKeyControl(Pages.SMARTPHONE);
           return;
         }
 
         case PageOrder.DECISION: {
-          drawBackground(backgroundRef, windowWidth, windowHeight);
+          drawBackground(backgroundRef, W, H);
           setKeyControl(Pages.DECISION);
           return;
         }
-        case PageOrder.MORE_EXPL: {
 
+        case PageOrder.MORE_EXPL: {
           isAnimatingRef.current = true;
           await mgr.sequence([
-            () => spotlightAnimation(mgr, backgroundRef, windowWidth, windowHeight, player(windowWidth, windowHeight),
-                    tv(windowWidth, windowHeight), SPOTLIGHT_DURATION)
+            () => spotlightAnimation(mgr, backgroundRef, W, H, player(W, H), tv(W, H), SPOTLIGHT_DURATION),
           ]);
           isAnimatingRef.current = false;
-          drawBackground(backgroundRef, windowWidth, windowHeight);
+          drawBackground(backgroundRef, W, H);
           setKeyControl(Pages.MORE_EXPL);
           return;
         }
@@ -157,19 +144,18 @@ export const Tutorial: React.FC<TutorialProps> = ({
           setKeyControl(Pages.More_Expl_SD);
           return;
         }
+
         case PageOrder.SCORE_CHANGES: {
-
           gameService.pauseGame();
-          drawBackground(backgroundRef, windowWidth, windowHeight);
+          drawBackground(backgroundRef, W, H);
 
-          characterPositionStore.teleport({x: 5*TILE_SIZE, y: 3*TILE_SIZE});
+          characterPositionStore.teleport({ x: 5 * TILE_SIZE, y: 3 * TILE_SIZE });
           isAnimatingRef.current = true;
           await mgr.sequence([
-            () => spotlightAnimation(mgr, backgroundRef, windowWidth, windowHeight, tv2(windowWidth, windowHeight),
-                    scores(windowWidth, windowHeight), SPOTLIGHT_DURATION*1.5)
+            () => spotlightAnimation(mgr, backgroundRef, W, H, tv2(W, H), scores(W, H), SPOTLIGHT_DURATION * 1.5),
           ]);
           isAnimatingRef.current = false;
-          drawBackground(backgroundRef, windowWidth, windowHeight);
+          drawBackground(backgroundRef, W, H);
 
           const bg = backgroundRef.current;
           if (!bg) return;
@@ -184,7 +170,6 @@ export const Tutorial: React.FC<TutorialProps> = ({
           onClose();
           return;
         }
-
       }
     };
 
@@ -193,18 +178,14 @@ export const Tutorial: React.FC<TutorialProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [nextPage, gameService, mgrRef, onClose, windowWidth, windowHeight, runClearBGAnim]);
+  }, [nextPage, gameService, mgrRef, onClose, runClearBGAnim]);
 
-
-
-  //listen for smartTvDone
   useEffect(() => {
     const devices = gameService.getDeviceForRoom("livingroom");
-    const tv = devices.find(d => d.name === "SmartTv");
+    const tvDevice = devices.find(d => d.name === "SmartTv");
+    if (!tvDevice) return;
 
-    if (!tv) return;
-
-    const unsubscribe = tv.subscribe(device => {
+    const unsubscribe = tvDevice.subscribe(device => {
       if (device.getIsCompleted() && nextPage === PageOrder.LESS_EXPL) {
         setNextPage(PageOrder.SCORE_CHANGES);
       }
@@ -213,20 +194,24 @@ export const Tutorial: React.FC<TutorialProps> = ({
     return () => unsubscribe();
   }, [nextPage, gameService]);
 
+  const background = () => <Graphics ref={backgroundRef} />;
 
-  const background = () => {
-    return (
-            <>
-              <Graphics ref={backgroundRef} />
-            </>
-    )
-  }
+  const commonProps: PageProps = {
+    windowWidth,
+    windowHeight,
+    keyControl,
+    setKeyControl,
+    setNextPage,
+    interactiveElements,
+    gameService
+  };
+  const ActivePage = PAGE_COMPONENTS[keyControl];
 
   return (
-      <>
-        {background()}
-        <Container ref={rootRef}/>
-        {ActivePage && <ActivePage key={keyControl} {...commonProps} />}
-      </>
-  )
+          <>
+            {background()}
+            <Container ref={rootRef} />
+            {ActivePage && <ActivePage key={keyControl} {...commonProps} />}
+          </>
+  );
 };
