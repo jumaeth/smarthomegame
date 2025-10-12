@@ -5,8 +5,6 @@ import characterImage4 from "@/assets/character/character_movement_4.png";
 import characterImage5 from "@/assets/character/character_movement_5.png";
 import characterImage6 from "@/assets/character/character_movement_6.png";
 
-export const COOKIE_KEY = "selectedCharacter";
-
 export const characters = [
   characterImage1,
   characterImage2,

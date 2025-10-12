@@ -1,10 +1,14 @@
 import {useState} from "react";
 import Button from "@/components/general-ui/Button.tsx";
 import { characters } from "./CharacterConstants";
-import {useCharacterImage} from "@/components/character/CharacterImageProvider.tsx";
+
+export function getTexture() {
+  const character = localStorage.getItem("selectedCharacter");
+  return character ? character : characters[0];
+}
 
 export default function CharacterSelector() {
-  const { character, setCharacter } = useCharacterImage();
+  const character = getTexture();
 
   const [index, setIndex] = useState(
           characters.indexOf(character) !== -1 ? characters.indexOf(character) : 0
@@ -12,7 +16,7 @@ export default function CharacterSelector() {
 
   const updateCharacter = (newIndex: number) => {
     setIndex(newIndex);
-    setCharacter(characters[newIndex]);
+    localStorage.setItem("selectedCharacter", characters[newIndex]);
     console.log("Selector set character to: " + characters[newIndex]);
   };
 

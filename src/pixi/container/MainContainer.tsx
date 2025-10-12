@@ -21,7 +21,7 @@ import {characterPositionStore, useCharacterPosition} from "@/utils/characterPos
 import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
 import {MovementButtons} from "@/components/general-ui/MovementButtons.tsx";
 import {ProximityHighlight} from "@/pixi/components/ProximityHighlight.tsx";
-import {useCharacterImage} from "@/components/character/CharacterImageProvider.tsx";
+import {getTexture} from "@/components/character/CharacterSelector.tsx";
 
 interface MainContainerProps {
   canvasSize: {
@@ -49,8 +49,6 @@ export const MainContainer = ({
                               }: PropsWithChildren<MainContainerProps>) => {
   const [inTransition, setInTransition] = useState(false);
   const [pendingTransition, setPendingTransition] = useState<{ to: MapKey, spawn: Position } | null>(null);
-  const {character} = useCharacterImage();
-  console.log("Container" + character)
 
   const [shouldSnapCamera, setShouldSnapCamera] = useState(false);
   /**
@@ -58,7 +56,7 @@ export const MainContainer = ({
    */
   const [spawnPosition, setSpawnPosition] = useState<Position>({x: DEFAULT_POS_X, y: DEFAULT_POS_Y});
 
-  const characterTexture = useMemo(() => loadTexture(character), [character]);
+  const characterTexture = useMemo(() => loadTexture(getTexture()), []);
   const {levelTexture, overlayTexture, doorTexture} = useLevelTextures(map);
   const {tile: characterTile} = useCharacterPosition();
   const {enabled: tutorialActive, close: closeTutorial} = useTutorialActive();
