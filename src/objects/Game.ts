@@ -1,5 +1,5 @@
 import {Room} from "./Room";
-import {GameScore} from "./GameScore.ts"
+import {GameScore} from "./GameScore"
 
 export class Game {
   private readonly rooms: Room[];
