@@ -7,6 +7,7 @@ import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { messages as enMessages } from "./locales/en/messages";
 import { messages as deMessages } from "./locales/de/messages";
+import {CharacterImageProvider} from "@/components/character/CharacterImageProvider.tsx";
 
 function getLocaleFromCookie() {
   const match = document.cookie.match(/(?:^|; )locale=([^;]*)/);
@@ -22,7 +23,9 @@ i18n.activate(getLocaleFromCookie());
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <I18nProvider i18n={i18n}>
-      <App />
+      <CharacterImageProvider>
+        <App />
+      </CharacterImageProvider>
     </I18nProvider>
   </StrictMode>,
 )

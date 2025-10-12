@@ -1,7 +1,6 @@
 import React, {PropsWithChildren, useMemo, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
 import {Level} from "@/pixi/levels/Level";
-import characterImage from "@/assets/character/character_movement.png";
 import {Character} from "@/pixi/character/Character";
 import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings";
 import {Camera} from "@/pixi/camera/Camera";
@@ -22,44 +21,47 @@ import {characterPositionStore, useCharacterPosition} from "@/utils/characterPos
 import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
 import {MovementButtons} from "@/components/general-ui/MovementButtons.tsx";
 import {ProximityHighlight} from "@/pixi/components/ProximityHighlight.tsx";
+import {useCharacterImage} from "@/components/character/CharacterImageProvider.tsx";
 
 interface MainContainerProps {
-    canvasSize: {
-        width: number;
-        height: number
-    };
-    map: MapKey;
-    collisionMap: number[];
-    onMapChange: (newMap: MapKey) => void;
-    isPaused?: boolean;
-    children?: React.ReactNode;
-    interactiveElements?: InteractivePixiElement[];
-    gameService: GameService;
+  canvasSize: {
+    width: number;
+    height: number
+  };
+  map: MapKey;
+  collisionMap: number[];
+  onMapChange: (newMap: MapKey) => void;
+  isPaused?: boolean;
+  children?: React.ReactNode;
+  interactiveElements?: InteractivePixiElement[];
+  gameService: GameService;
 }
 
 export const MainContainer = ({
-                                  canvasSize,
-                                  map,
-                                  collisionMap,
-                                  onMapChange,
-                                  isPaused = false,
-                                  children,
+                                canvasSize,
+                                map,
+                                collisionMap,
+                                onMapChange,
+                                isPaused = false,
+                                children,
                                 interactiveElements,
                                 gameService
                               }: PropsWithChildren<MainContainerProps>) => {
-    const [inTransition, setInTransition] = useState(false);
-    const [pendingTransition, setPendingTransition] = useState<{ to: MapKey, spawn: Position } | null>(null);
+  const [inTransition, setInTransition] = useState(false);
+  const [pendingTransition, setPendingTransition] = useState<{ to: MapKey, spawn: Position } | null>(null);
+  const {character} = useCharacterImage();
+  console.log("Container" + character)
 
-    const [shouldSnapCamera, setShouldSnapCamera] = useState(false);
-    /**
-     * State to track the spawn position of the character.
-     */
-    const [spawnPosition, setSpawnPosition] = useState<Position>({x: DEFAULT_POS_X, y: DEFAULT_POS_Y});
+  const [shouldSnapCamera, setShouldSnapCamera] = useState(false);
+  /**
+   * State to track the spawn position of the character.
+   */
+  const [spawnPosition, setSpawnPosition] = useState<Position>({x: DEFAULT_POS_X, y: DEFAULT_POS_Y});
 
-    const characterTexture = useMemo(() => loadTexture(characterImage), []);
-    const {levelTexture, overlayTexture, doorTexture} = useLevelTextures(map);
-  const { tile: characterTile } = useCharacterPosition();
-  const { enabled: tutorialActive, close: closeTutorial } = useTutorialActive();
+  const characterTexture = useMemo(() => loadTexture(character), []);
+  const {levelTexture, overlayTexture, doorTexture} = useLevelTextures(map);
+  const {tile: characterTile} = useCharacterPosition();
+  const {enabled: tutorialActive, close: closeTutorial} = useTutorialActive();
 
   const handleCharacterMove = (pos: Position) => {
     characterPositionStore.set(pos);
@@ -71,16 +73,22 @@ export const MainContainer = ({
     if (transition && !tutorialActive) {
       const spawn = getSpawnForMap(transition.to, map);
       const nextSpawn: Position = spawn?.pos
-              ? { x: spawn.pos.x * TILE_SIZE, y: spawn.pos.y * TILE_SIZE }
-              : { x: DEFAULT_POS_X, y: DEFAULT_POS_Y };
+              ? {x: spawn.pos.x * TILE_SIZE, y: spawn.pos.y * TILE_SIZE}
+              : {x: DEFAULT_POS_X, y: DEFAULT_POS_Y};
 
-      setPendingTransition({ to: transition.to, spawn: nextSpawn });
+      setPendingTransition({to: transition.to, spawn: nextSpawn});
       setInTransition(true);
       setShouldSnapCamera(true);
     }
   };
 
-  const characterRef = useRef<{ moveUp: () => void; moveDown: () => void; moveLeft: () => void; moveRight: () => void; interact: () => void } | null>(null);
+  const characterRef = useRef<{
+    moveUp: () => void;
+    moveDown: () => void;
+    moveLeft: () => void;
+    moveRight: () => void;
+    interact: () => void
+  } | null>(null);
 
   const handleMoveUp = () => {
     characterRef.current?.moveUp();
@@ -122,7 +130,7 @@ export const MainContainer = ({
                       onSnapComplete={() => setShouldSnapCamera(false)}
                       tutorialEnabled={tutorialActive}
               >
-                <Level texture={levelTexture} />
+                <Level texture={levelTexture}/>
                 <ProximityHighlight interactiveElements={interactiveElements}/>
                 <Character
                         ref={characterRef}
@@ -132,25 +140,25 @@ export const MainContainer = ({
                         spawnPosition={spawnPosition}
                         isPaused={isPaused}
                         interactiveElements={interactiveElements}
-                    />
-                    <LevelOverlay texture={overlayTexture}/>
-                    <Door textures={doorTexture} state={DoorState.Open}/>
-                </Camera>
-                {!tutorialActive && <TransitionOverlay
-                    width={canvasSize.width}
-                    height={canvasSize.height}
-                    inTransition={inTransition}
-                    onMidTransition={() => {
+                />
+                <LevelOverlay texture={overlayTexture}/>
+                <Door textures={doorTexture} state={DoorState.Open}/>
+              </Camera>
+              {!tutorialActive && <TransitionOverlay
+                      width={canvasSize.width}
+                      height={canvasSize.height}
+                      inTransition={inTransition}
+                      onMidTransition={() => {
                         if (pendingTransition) {
-                            onMapChange(pendingTransition.to);
-                            setSpawnPosition(pendingTransition.spawn);
-                            characterPositionStore.teleport(pendingTransition.spawn);
-                            setShouldSnapCamera(true);
-                            setPendingTransition(null);
+                          onMapChange(pendingTransition.to);
+                          setSpawnPosition(pendingTransition.spawn);
+                          characterPositionStore.teleport(pendingTransition.spawn);
+                          setShouldSnapCamera(true);
+                          setPendingTransition(null);
                         }
-                    }}
-                    onTransitionEnd={() => setInTransition(false)}
-                />}
+                      }}
+                      onTransitionEnd={() => setInTransition(false)}
+              />}
               <MovementButtons
                       canvasSize={canvasSize}
                       onMoveUp={handleMoveUp}
@@ -169,9 +177,9 @@ export const MainContainer = ({
                       windowHeight={canvasSize.height}
                       gameService={gameService}
                       onClose={closeTutorial}
-                      interactiveElements={interactiveElements  as InteractivePixiElement[]}
+                      interactiveElements={interactiveElements as InteractivePixiElement[]}
               />}
             </Container>
-        </>
-    );
+          </>
+  );
 }
