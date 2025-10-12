@@ -108,6 +108,7 @@ export const LivingRoom = () => {
                       interactiveElements={interactiveElements}
                       isPaused={paused}
                       gameService={gameService}
+                      room={roomName}
               />
             </Stage>
           </>

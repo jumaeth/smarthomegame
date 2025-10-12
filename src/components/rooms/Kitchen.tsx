@@ -130,6 +130,7 @@ export const Kitchen = () => {
                       interactiveElements={interactiveElements}
                       isPaused={isPaused}
                       gameService={gameService}
+                      room={roomName}
               />
             </Stage>
         </>

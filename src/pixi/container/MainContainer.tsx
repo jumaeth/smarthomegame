@@ -1,65 +1,105 @@
-import React, {PropsWithChildren, useMemo, useRef, useState} from "react";
+import React, {PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
+import {Texture} from "pixi.js";
+
 import {Level} from "@/pixi/levels/Level";
+import {LevelOverlay} from "@/pixi/levels/LevelOverlay";
+import {DoorFloor} from "@/pixi/levels/DoorFloor";
+import {DoorFrame} from "@/pixi/levels/DoorFrame";
+
+import {Camera} from "@/pixi/camera/Camera";
+import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
+import {HeadUpDisplay} from "@/pixi/components/HeadUpDisplay";
+import {MovementButtons} from "@/components/general-ui/MovementButtons";
+import {ProximityHighlight} from "@/pixi/components/ProximityHighlight";
+import {DoorBlocker} from "@/pixi/components/DoorBlocker";
+import {Tutorial} from "@/pixi/components/Tutorial/Tutorial";
+
 import characterImage from "@/assets/character/character_movement.png";
 import {Character} from "@/pixi/character/Character";
+
 import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings";
-import {Camera} from "@/pixi/camera/Camera";
-import {LevelOverlay} from "@/pixi/levels/LevelOverlay";
-import {loadTexture} from "@/utils/loadTexture";
 import {MapKey} from "@/types/maps";
-import {useLevelTextures} from "@/hooks/map/useLevelTextures";
-import {getMapTransition, getSpawnForMap} from "@/utils/mapTransition";
-import {Position} from "@/types/movement";
-import {Door} from "@/pixi/levels/Door";
+import {RoomName} from "@/objects/Room";
 import {DoorState} from "@/types/door";
-import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {HeadUpDisplay} from "@/pixi/components/HeadUpDisplay.tsx";
-import {GameService} from "@/services/GameService.ts";
-import {Tutorial} from "@/pixi/components/Tutorial/Tutorial.tsx";
-import {characterPositionStore, useCharacterPosition} from "@/utils/characterPosition.ts";
-import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
-import {MovementButtons} from "@/components/general-ui/MovementButtons.tsx";
-import {ProximityHighlight} from "@/pixi/components/ProximityHighlight.tsx";
+import {Direction, Position} from "@/types/movement";
+
+import {useLevelTextures} from "@/hooks/map/useLevelTextures";
+import {getMapTransition, getSpawnForMap, getTransitionsForMap} from "@/utils/mapTransition";
+import {loadTexture} from "@/utils/loadTexture";
+import {characterPositionStore, useCharacterPosition} from "@/utils/characterPosition";
+import {useTutorialActive} from "@/hooks/gameService/useTutorialActive";
+
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
+import {GameService} from "@/services/GameService";
 
 interface MainContainerProps {
-    canvasSize: {
-        width: number;
-        height: number
-    };
-    map: MapKey;
-    collisionMap: number[];
-    onMapChange: (newMap: MapKey) => void;
-    isPaused?: boolean;
-    children?: React.ReactNode;
-    interactiveElements?: InteractivePixiElement[];
-    gameService: GameService;
+  canvasSize: { width: number; height: number };
+  map: MapKey;
+  collisionMap: number[];
+  onMapChange: (newMap: MapKey) => void;
+  isPaused?: boolean;
+  children?: React.ReactNode;
+  interactiveElements?: InteractivePixiElement[];
+  gameService: GameService;
+  room: RoomName;
 }
 
 export const MainContainer = ({
-                                  canvasSize,
-                                  map,
-                                  collisionMap,
-                                  onMapChange,
-                                  isPaused = false,
-                                  children,
+                                canvasSize,
+                                map,
+                                collisionMap,
+                                onMapChange,
+                                isPaused = false,
+                                children,
                                 interactiveElements,
-                                gameService
+                                gameService,
+                                room,
                               }: PropsWithChildren<MainContainerProps>) => {
-    const [inTransition, setInTransition] = useState(false);
-    const [pendingTransition, setPendingTransition] = useState<{ to: MapKey, spawn: Position } | null>(null);
+  const [assetsReady, setAssetsReady] = useState(false);
+  const [cameraSettled, setCameraSettled] = useState(false);
+  const [shouldSnapCamera, setShouldSnapCamera] = useState(false);
 
-    const [shouldSnapCamera, setShouldSnapCamera] = useState(false);
-    /**
-     * State to track the spawn position of the character.
-     */
-    const [spawnPosition, setSpawnPosition] = useState<Position>({x: DEFAULT_POS_X, y: DEFAULT_POS_Y});
+  const [inTransition, setInTransition] = useState(false);
+  const [pendingTransition, setPendingTransition] =
+          useState<{ to: MapKey; spawn: Position; face?: Direction } | null>(null);
 
-    const characterTexture = useMemo(() => loadTexture(characterImage), []);
-    const {levelTexture, overlayTexture, doorTexture} = useLevelTextures(map);
+  //const [spawnPosition, setSpawnPosition] = useState<Position>({ x: DEFAULT_POS_X, y: DEFAULT_POS_Y });
+
+  const characterTexture = useMemo<Texture>(() => loadTexture(characterImage), []);
+  const { levelTexture, overlayTexture, doorFloorTexture, doorFrameTexture } = useLevelTextures(map);
   const { tile: characterTile } = useCharacterPosition();
   const { enabled: tutorialActive, close: closeTutorial } = useTutorialActive();
+  const [blockedDoorTile, setBlockedDoorTile] = useState<Position | null>(null);
+
+  useEffect(() => { setShouldSnapCamera(true); setCameraSettled(false); }, [map]);
+
+  useEffect(() => {
+    let alive = true;
+
+    const toList = (t: unknown): Texture[] =>
+            !t ? [] : Array.isArray(t) ? (t.filter(Boolean) as Texture[]) : [t as Texture];
+
+    const texList: Texture[] = [
+      ...toList(levelTexture),
+      ...toList(overlayTexture),
+      ...toList(doorFloorTexture),
+      ...toList(doorFrameTexture),
+    ].filter(Boolean);
+
+    const waitTexture = (t: Texture) =>
+            t.baseTexture.valid
+                    ? Promise.resolve()
+                    : new Promise<void>((res) => t.baseTexture.once("loaded", () => res()));
+
+    (async () => {
+      await Promise.all(texList.map(waitTexture));
+      requestAnimationFrame(() => { if (alive) setAssetsReady(true); });
+    })();
+
+    return () => { alive = false; setAssetsReady(false); };
+  }, [levelTexture, overlayTexture, doorFloorTexture, doorFrameTexture]);
+
 
   const handleCharacterMove = (pos: Position) => {
     characterPositionStore.set(pos);
@@ -68,39 +108,37 @@ export const MainContainer = ({
     const tileY = Math.floor(pos.y / TILE_SIZE);
     const transition = getMapTransition(map, tileX, tileY);
 
-    if (transition && !tutorialActive) {
-      const spawn = getSpawnForMap(transition.to, map);
-      const nextSpawn: Position = spawn?.pos
-              ? { x: spawn.pos.x * TILE_SIZE, y: spawn.pos.y * TILE_SIZE }
-              : { x: DEFAULT_POS_X, y: DEFAULT_POS_Y };
-
-      setPendingTransition({ to: transition.to, spawn: nextSpawn });
-      setInTransition(true);
-      setShouldSnapCamera(true);
+    if (!transition || tutorialActive) {
+      setBlockedDoorTile(null);
+      return;
     }
+
+    const exitState = gameService.getExitState(map, transition.to);
+    const isLocked = exitState === DoorState.Closed;
+
+    if (isLocked) { setBlockedDoorTile(transition.pos); return; }
+
+    setBlockedDoorTile(null);
+
+    const spawn = getSpawnForMap(transition.to, map);
+    const nextSpawn: Position = spawn?.pos
+            ? { x: spawn.pos.x * TILE_SIZE, y: spawn.pos.y * TILE_SIZE }
+            : { x: DEFAULT_POS_X, y: DEFAULT_POS_Y };
+
+    const face: Direction = spawn?.face ?? "UP";
+
+    setPendingTransition({ to: transition.to, spawn: nextSpawn, face });
+    setInTransition(true);
+    setShouldSnapCamera(true);
   };
 
   const characterRef = useRef<{ moveUp: () => void; moveDown: () => void; moveLeft: () => void; moveRight: () => void; interact: () => void } | null>(null);
 
-  const handleMoveUp = () => {
-    characterRef.current?.moveUp();
-  };
-
-  const handleMoveDown = () => {
-    characterRef.current?.moveDown();
-  };
-
-  const handleMoveLeft = () => {
-    characterRef.current?.moveLeft();
-  };
-
-  const handleMoveRight = () => {
-    characterRef.current?.moveRight();
-  };
-
-  const handleInteract = () => {
-    characterRef.current?.interact();
-  };
+  const handleMoveUp = () => characterRef.current?.moveUp();
+  const handleMoveDown = () => characterRef.current?.moveDown();
+  const handleMoveLeft = () => characterRef.current?.moveLeft();
+  const handleMoveRight = () => characterRef.current?.moveRight();
+  const handleInteract = () => characterRef.current?.interact();
 
   return (
           <>
@@ -119,38 +157,63 @@ export const MainContainer = ({
                       characterPosition={characterTile}
                       canvasSize={canvasSize}
                       shouldSnap={shouldSnapCamera}
-                      onSnapComplete={() => setShouldSnapCamera(false)}
+                      onSnapComplete={() => { setShouldSnapCamera(false); setCameraSettled(true); }}
                       tutorialEnabled={tutorialActive}
               >
-                <Level texture={levelTexture} />
-                <ProximityHighlight interactiveElements={interactiveElements}/>
-                <Character
-                        ref={characterRef}
-                        texture={characterTexture}
-                        onMove={handleCharacterMove}
-                        collisionMap={collisionMap}
-                        spawnPosition={spawnPosition}
-                        isPaused={isPaused}
-                        interactiveElements={interactiveElements}
-                    />
-                    <LevelOverlay texture={overlayTexture}/>
-                    <Door textures={doorTexture} state={DoorState.Open}/>
-                </Camera>
-                {!tutorialActive && <TransitionOverlay
-                    width={canvasSize.width}
-                    height={canvasSize.height}
-                    inTransition={inTransition}
-                    onMidTransition={() => {
-                        if (pendingTransition) {
-                            onMapChange(pendingTransition.to);
-                            setSpawnPosition(pendingTransition.spawn);
-                            characterPositionStore.teleport(pendingTransition.spawn);
-                            setShouldSnapCamera(true);
-                            setPendingTransition(null);
-                        }
-                    }}
-                    onTransitionEnd={() => setInTransition(false)}
-                />}
+                {(assetsReady && cameraSettled) && (
+                        <>
+                          <Level texture={levelTexture} />
+                          <ProximityHighlight interactiveElements={interactiveElements} />
+                          <DoorFloor room={room} map={map} gameService={gameService} textures={doorFloorTexture} />
+                          <Character
+                                  ref={characterRef}
+                                  texture={characterTexture}
+                                  onMove={handleCharacterMove}
+                                  collisionMap={collisionMap}
+                                  isPaused={isPaused}
+                                  interactiveElements={interactiveElements}
+                          />
+                          <LevelOverlay texture={overlayTexture} />
+                          {getTransitionsForMap(map).map((tr, i) => (
+                                  <DoorFrame
+                                          key={i}
+                                          textures={doorFrameTexture}
+                                          map={map}
+                                          gameService={gameService}
+                                          index={i}
+                                          transition={tr}
+                                  />
+                          ))}
+                          <DoorBlocker room={room} tile={blockedDoorTile} visible={!!blockedDoorTile} />
+                        </>
+                )}
+              </Camera>
+
+              {!tutorialActive && (
+                      <TransitionOverlay
+                              width={canvasSize.width}
+                              height={canvasSize.height}
+                              inTransition={inTransition}
+                              onMidTransition={() => {
+                                if (pendingTransition) {
+                                  //setSpawnPosition(pendingTransition.spawn);
+                                  characterPositionStore.teleport(pendingTransition.spawn, pendingTransition.face);
+                                  onMapChange(pendingTransition.to);
+                                  setPendingTransition(null);
+                                }
+                              }}
+                              onTransitionEnd={() => {
+                                setInTransition(false)
+                              }}
+                      />
+              )}
+
+              <HeadUpDisplay
+                      windowWidth={canvasSize.width}
+                      windowHeight={canvasSize.height}
+                      gameService={gameService}
+              />
+
               <MovementButtons
                       canvasSize={canvasSize}
                       onMoveUp={handleMoveUp}
@@ -172,6 +235,6 @@ export const MainContainer = ({
                       interactiveElements={interactiveElements  as InteractivePixiElement[]}
               />}
             </Container>
-        </>
-    );
-}
+          </>
+  );
+};

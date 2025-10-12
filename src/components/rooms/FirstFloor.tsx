@@ -15,9 +15,17 @@ export const FirstFloor = () => {
   const collisionMap = LEVEL_COLLISION_MAPS[roomName];
   const navigate = useNavigate();
 
+  const gameService = useGameService();
+
   const updateCanvasSize = useCallback(() => {
     setCanvasSize(calculateCanvasSize());
   }, [])
+
+  useEffect(() => {
+    const room = gameService.getRoom(roomName)
+    room?.unlockRoom();
+    room?.complete();
+  }, []);
 
   const handleMapChange = (newMap: MapKey) => {
     navigate(`/game/${newMap}`);
@@ -38,7 +46,8 @@ export const FirstFloor = () => {
                       map={roomName}
                       collisionMap={collisionMap}
                       onMapChange={handleMapChange}
-                      gameService={useGameService()}
+                      gameService={gameService}
+                      room={roomName}
               />
             </Stage>
           </>

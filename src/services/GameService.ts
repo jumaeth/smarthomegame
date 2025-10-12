@@ -7,6 +7,8 @@ import {CookieService} from "@/services/CookieService.ts";
 import {allRoomStore} from "@/utils/roomStore.ts";
 import {movementStore} from "@/utils/movementEnabled.ts";
 import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive.ts";
+import {MapKey} from "@/types/maps.ts";
+import {DoorState} from "@/types/door.ts";
 
 
 type DeviceListener = (device: SmartDevice) => void;
@@ -20,6 +22,11 @@ export class GameService {
   private smartDevicesEnabled = true;
   private smartDevicesEnabledListeners  = new Set<Listener>();
   private deviceListeners = new Set<DeviceListener>();
+  private exitStateListeners = new Set<() => void>();
+
+
+  private exitStates = new Map<string, DoorState>();
+  private key = (from: MapKey, to: MapKey) => `${from}->${to}`;
 
   constructor(navigate: (path: string) => void) {
     const saveGame = CookieService.get<Game>('save_game');
@@ -47,18 +54,22 @@ export class GameService {
 
   setUpRooms(): Room[] {
 
+    const hallway = new Room("hallway", []);
+    hallway.complete();
+    hallway.unlockRoom();
+    
     const livingRoom = new Room(RoomNames.LIVINGROOM,[
       new SmartDevice("SmartTv"),
       new SmartDevice("SmartLights")
     ]);
 
-    const kitchen= new Room(RoomNames.KITCHEN,[
+    const kitchen= new Room("kitchen",[
       new SmartDevice("SmartHomeHub"),
       new SmartDevice("SmartKitchen"),
       new SmartDevice("SecurityCamera"),
     ]);
 
-    return [livingRoom, kitchen];
+    return [livingRoom, hallway, kitchen];
   }
 
   getAllRooms(): Room[] {
@@ -73,6 +84,7 @@ export class GameService {
     const room: Room | undefined = this.findRoomByName(roomName);
     if (!room) return;
     room.complete();
+    this.getRoom(roomName).unlockRoom();
     this.navigateAfterComplete();
     this.onGameStateChange();
   }
@@ -147,8 +159,9 @@ export class GameService {
     if (room?.isLocked == false) {
       this.navigate('/game');
       this.onGameStateChange();
+      return true;
     }
-    return true;
+    return false;
   }
 
   changeScore(scoreDelta: number, scoreType: ScoreType): void {
@@ -203,13 +216,60 @@ export class GameService {
     if (device){
       device.complete();
       this.deviceListeners.forEach(cb => cb(device));
-      if(this.checkRoomCompleted(room))this.completeRoom(room);
+
+      if (this.getRoom(room).devices.filter(d => !d.getIsCompleted()).map(d => d.name).length <= 0){
+        this.completeRoom(room);
+      }
       this.onGameStateChange();
     }
   }
 
+  getRoom(name: RoomName): Room {
+    return allRoomStore.getRoom(name);
+  }
+
   checkRoomCompleted(name: RoomNames): boolean{
     return allRoomStore.getRoom(name).devices.every(d => d.getIsCompleted());
+  }
+
+  subscribeExitStates(cb: () => void): () => void {
+    this.exitStateListeners.add(cb);
+    return () => this.exitStateListeners.delete(cb);
+  }
+  private emitExitStates() {
+    for (const cb of this.exitStateListeners) cb();
+  }
+
+  setExitState(from: MapKey, to: MapKey, state: DoorState) {
+    this.exitStates.set(this.key(from, to), state);
+    this.emitExitStates();
+  }
+  getExitState(from: MapKey, to: MapKey): DoorState {
+    const fromRoom = this.getRoom(from);
+    const toRoom = this.getRoom(to);
+
+    if (fromRoom.isLocked || toRoom.isLocked){
+      return DoorState.Closed;
+    }else if (toRoom.isCompleted){
+      return DoorState.Open;
+    }else{
+      return DoorState.HalfOpen;
+    }
+  }
+
+  openExit(from: MapKey, to: MapKey) {
+    this.setExitState(from, to, DoorState.Open);
+    this.setExitState(to, from, DoorState.Open);
+  }
+
+  halfOpenExit(from: MapKey, to: MapKey) {
+    this.setExitState(from, to, DoorState.HalfOpen);
+    this.setExitState(to, from, DoorState.HalfOpen);
+  }
+
+  lockExit(from: MapKey, to: MapKey) {
+    this.setExitState(from, to, DoorState.Closed);
+    this.setExitState(to, from, DoorState.Closed);
   }
 
   onDeviceStateChanged(listener: DeviceListener): () => void {
