@@ -31,10 +31,6 @@ export class Room {
     this.isCompleted = true;
   }
 
-  lockRoom(): void{
-    console.log("locking room: "+this.name)
-    this.isLocked = true;
-  }
 
   unlockRoom(): void{
     this.isLocked = false;

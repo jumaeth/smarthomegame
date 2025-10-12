@@ -1,6 +1,6 @@
 import {Game} from "../objects/Game";
 import {Room} from "../objects/Room";
-import {RoomNames} from "../objects/RoomNames";
+import {RoomNames, roomNameToEnum} from "../objects/RoomNames";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore.ts";
 import {CookieService} from "@/services/CookieService.ts";
@@ -23,10 +23,6 @@ export class GameService {
   private smartDevicesEnabledListeners  = new Set<Listener>();
   private deviceListeners = new Set<DeviceListener>();
   private exitStateListeners = new Set<() => void>();
-
-
-  private exitStates = new Map<string, DoorState>();
-  private key = (from: MapKey, to: MapKey) => `${from}->${to}`;
 
   constructor(navigate: (path: string) => void) {
     const saveGame = CookieService.get<Game>('save_game');
@@ -54,7 +50,7 @@ export class GameService {
 
   setUpRooms(): Room[] {
 
-    const hallway = new Room("hallway", []);
+    const hallway = new Room(RoomNames.HALLWAY, []);
     hallway.complete();
     hallway.unlockRoom();
     
@@ -63,7 +59,7 @@ export class GameService {
       new SmartDevice("SmartLights")
     ]);
 
-    const kitchen= new Room("kitchen",[
+    const kitchen= new Room(RoomNames.KITCHEN, [
       new SmartDevice("SmartHomeHub"),
       new SmartDevice("SmartKitchen"),
       new SmartDevice("SecurityCamera"),
@@ -224,29 +220,20 @@ export class GameService {
     }
   }
 
-  getRoom(name: RoomName): Room {
+  getRoom(name: RoomNames): Room {
     return allRoomStore.getRoom(name);
-  }
-
-  checkRoomCompleted(name: RoomNames): boolean{
-    return allRoomStore.getRoom(name).devices.every(d => d.getIsCompleted());
   }
 
   subscribeExitStates(cb: () => void): () => void {
     this.exitStateListeners.add(cb);
     return () => this.exitStateListeners.delete(cb);
   }
-  private emitExitStates() {
-    for (const cb of this.exitStateListeners) cb();
-  }
 
-  setExitState(from: MapKey, to: MapKey, state: DoorState) {
-    this.exitStates.set(this.key(from, to), state);
-    this.emitExitStates();
-  }
   getExitState(from: MapKey, to: MapKey): DoorState {
-    const fromRoom = this.getRoom(from);
-    const toRoom = this.getRoom(to);
+    const f = roomNameToEnum(from);
+    const t = roomNameToEnum(to);
+    const fromRoom = this.getRoom( f ?? RoomNames.LIVINGROOM );
+    const toRoom = this.getRoom(t ?? RoomNames.LIVINGROOM);
 
     if (fromRoom.isLocked || toRoom.isLocked){
       return DoorState.Closed;
@@ -257,35 +244,16 @@ export class GameService {
     }
   }
 
-  openExit(from: MapKey, to: MapKey) {
-    this.setExitState(from, to, DoorState.Open);
-    this.setExitState(to, from, DoorState.Open);
+  getDeviceByName(name : string){
+    return  allRoomStore.getAllDevices().find(c => c.name == name) ?? new SmartDevice("DEFAULT")
   }
 
-  halfOpenExit(from: MapKey, to: MapKey) {
-    this.setExitState(from, to, DoorState.HalfOpen);
-    this.setExitState(to, from, DoorState.HalfOpen);
-  }
-
-  lockExit(from: MapKey, to: MapKey) {
-    this.setExitState(from, to, DoorState.Closed);
-    this.setExitState(to, from, DoorState.Closed);
+  getGame(){
+    return this.game;
   }
 
   onDeviceStateChanged(listener: DeviceListener): () => void {
     this.deviceListeners.add(listener);
     return () => this.deviceListeners.delete(listener);
-  }
-
-  public getGame(): Game {
-    return this.game;
-  }
-
-  public getDeviceByName(deviceName: string): SmartDevice {
-    const device = allRoomStore.getDevice(deviceName);
-    if (!device) {
-      throw new Error(`Device "${deviceName}" not found`);
-    }
-    return device;
   }
 }

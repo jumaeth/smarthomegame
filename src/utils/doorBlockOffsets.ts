@@ -1,5 +1,5 @@
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
-import {RoomName} from "@/objects/Room.ts";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 
 export type BlockOffset = {
@@ -8,11 +8,11 @@ export type BlockOffset = {
   bx: number;
   by: number;
 }
-export function getBlockOffset(name: RoomName){
+export function getBlockOffset(name: RoomNames){
   switch (name){
-    case "kitchen":
+    case RoomNames.KITCHEN:
       return {x: TILE_SIZE * 0.5, y: TILE_SIZE * 0.2, bx: TILE_SIZE * 0.11, by: TILE_SIZE * 0.125} as BlockOffset;
-    case "livingroom":
+    case RoomNames.LIVINGROOM:
       return {x: TILE_SIZE * 0.5, y: -TILE_SIZE * 0.15, bx: TILE_SIZE*0.1, by:  -TILE_SIZE * 0.2} as BlockOffset;
     default:
       return {x: 0, y: 0} as BlockOffset;

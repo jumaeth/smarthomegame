@@ -15,7 +15,7 @@ import {RoomNames} from "@/objects/RoomNames.ts";
 
 export const Kitchen = () => {
     const gameService = useGameService();
-    const roomName = RoomNames.KITCHEN
+    const roomName = RoomNames.KITCHEN;
     const [isPaused, setIsPaused] = useState(false);
 
     const smartHomeHubModalRef = useRef<{ toggleModal: () => void } | null>(null);

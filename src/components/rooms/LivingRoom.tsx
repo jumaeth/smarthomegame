@@ -18,7 +18,7 @@ import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
 import {RoomNames} from "@/objects/RoomNames.ts";
 
 export const LivingRoom = () => {
-  const roomName: RoomNames = RoomNames.LIVINGROOM
+  const roomName: RoomNames = RoomNames.LIVINGROOM;
 
   const gameService = useGameService();
   const smartDevices : SmartDevice[] = gameService.getDeviceForRoom(roomName);

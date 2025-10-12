@@ -2,13 +2,13 @@ import {Sprite} from "@pixi/react";
 import {GAME_HEIGHT, GAME_WIDTH, OFFSET_X, OFFSET_Y} from "@/pixi/constants/world-settings";
 import {Texture} from "@pixi/core";
 import {getTransitionsForMap} from "@/utils/mapTransition.ts";
-import {RoomName} from "@/objects/Room.ts";
 import {MapKey} from "@/types/maps.ts";
 import {GameService} from "@/services/GameService.ts";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 interface LevelProps {
   textures: Texture[] | undefined;
-  room: RoomName;
+  room: RoomNames;
   map: MapKey;
   gameService: GameService;
 }

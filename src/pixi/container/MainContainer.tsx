@@ -20,7 +20,6 @@ import {Character} from "@/pixi/character/Character";
 
 import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings";
 import {MapKey} from "@/types/maps";
-import {RoomName} from "@/objects/Room";
 import {DoorState} from "@/types/door";
 import {Direction, Position} from "@/types/movement";
 
@@ -32,6 +31,7 @@ import {useTutorialActive} from "@/hooks/gameService/useTutorialActive";
 
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
 import {GameService} from "@/services/GameService";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 interface MainContainerProps {
   canvasSize: { width: number; height: number };
@@ -42,7 +42,7 @@ interface MainContainerProps {
   children?: React.ReactNode;
   interactiveElements?: InteractivePixiElement[];
   gameService: GameService;
-  room: RoomName;
+  room: RoomNames;
 }
 
 export const MainContainer = ({
@@ -56,16 +56,12 @@ export const MainContainer = ({
                                 gameService,
                                 room,
                               }: PropsWithChildren<MainContainerProps>) => {
-  const [assetsReady, setAssetsReady] = useState(false);
-  const [cameraSettled, setCameraSettled] = useState(false);
-  const [shouldSnapCamera, setShouldSnapCamera] = useState(false);
-
-  const [inTransition, setInTransition] = useState(false);
-  const [pendingTransition, setPendingTransition] =
+    const [assetsReady, setAssetsReady] = useState(false);
+    const [cameraSettled, setCameraSettled] = useState(false);
+    const [inTransition, setInTransition] = useState(false);
+    const [pendingTransition, setPendingTransition] =
           useState<{ to: MapKey; spawn: Position; face?: Direction } | null>(null);
-
-  //const [spawnPosition, setSpawnPosition] = useState<Position>({ x: DEFAULT_POS_X, y: DEFAULT_POS_Y });
-
+    const [shouldSnapCamera, setShouldSnapCamera] = useState(false);
   const characterTexture = useMemo<Texture>(() => loadTexture(characterImage), []);
   const { levelTexture, overlayTexture, doorFloorTexture, doorFrameTexture } = useLevelTextures(map);
   const { tile: characterTile } = useCharacterPosition();
@@ -196,7 +192,6 @@ export const MainContainer = ({
                               inTransition={inTransition}
                               onMidTransition={() => {
                                 if (pendingTransition) {
-                                  //setSpawnPosition(pendingTransition.spawn);
                                   characterPositionStore.teleport(pendingTransition.spawn, pendingTransition.face);
                                   onMapChange(pendingTransition.to);
                                   setPendingTransition(null);

@@ -4,10 +4,10 @@ import {OFFSET_X, OFFSET_Y, TILE_SIZE} from "@/pixi/constants/world-settings";
 import type {Position} from "@/types/movement";
 import {Graphics as PixiGraphics} from "pixi.js";
 import {getBlockOffset} from "@/utils/doorBlockOffsets.ts";
-import {RoomName} from "@/objects/Room.ts";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 type DoorBlockerProps = {
-  room: RoomName
+  room: RoomNames
   tile?: Position | null;
   tiles?: Position[];
   visible?: boolean;
