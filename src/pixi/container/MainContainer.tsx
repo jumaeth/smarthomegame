@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
+import React, {PropsWithChildren, useMemo, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
 import {Level} from "@/pixi/levels/Level";
 import characterImage from "@/assets/character/character_movement.png";
@@ -80,10 +80,6 @@ export const MainContainer = ({
     }
   };
 
-  useEffect(() => {
-    console.log(tutorialActive);
-  }, [tutorialActive]);
-
   const characterRef = useRef<{ moveUp: () => void; moveDown: () => void; moveLeft: () => void; moveRight: () => void; interact: () => void } | null>(null);
 
   const handleMoveUp = () => {
@@ -129,6 +125,7 @@ export const MainContainer = ({
                 <Level texture={levelTexture} />
                 <ProximityHighlight interactiveElements={interactiveElements}/>
                 <Character
+                        ref={characterRef}
                         texture={characterTexture}
                         onMove={handleCharacterMove}
                         collisionMap={collisionMap}
@@ -154,11 +151,6 @@ export const MainContainer = ({
                     }}
                     onTransitionEnd={() => setInTransition(false)}
                 />}
-              <HeadUpDisplay
-                      windowWidth={canvasSize.width}
-                      windowHeight={canvasSize.height}
-                      gameService={gameService}
-              />
               <MovementButtons
                       canvasSize={canvasSize}
                       onMoveUp={handleMoveUp}
@@ -166,6 +158,11 @@ export const MainContainer = ({
                       onMoveLeft={handleMoveLeft}
                       onMoveRight={handleMoveRight}
                       onInteract={handleInteract}
+              />
+              <HeadUpDisplay
+                      windowWidth={canvasSize.width}
+                      windowHeight={canvasSize.height}
+                      gameService={gameService}
               />
               {tutorialActive && <Tutorial
                       windowWidth={canvasSize.width}

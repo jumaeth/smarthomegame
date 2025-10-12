@@ -1,7 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
-import {RoomName} from "@/objects/Room.ts";
 
 import {SmartTv} from "../smart-devices/SmartTv.tsx";
 import {SmartLights} from "../smart-devices/SmartLights.tsx";
@@ -16,9 +15,10 @@ import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
 import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState.ts";
 import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
 import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 export const LivingRoom = () => {
-  const roomName: RoomName = "livingroom"
+  const roomName: RoomNames = RoomNames.LIVINGROOM
 
   const gameService = useGameService();
   const smartDevices : SmartDevice[] = gameService.getDeviceForRoom(roomName);
