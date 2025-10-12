@@ -1,19 +1,19 @@
-import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from "react";
-import { Container, Graphics } from "@pixi/react";
-import { Container as PixiContainer, Graphics as PixiGraphics } from "pixi.js";
-import { TILE_SIZE } from "@/pixi/constants/world-settings.ts";
-import { Pages } from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import { PAGE_COMPONENTS, PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import { spotlightAnimation } from "@/pixi/components/Tutorial/anim/spotlightAnimation.ts";
-import { fadeAnimation, FadeProps } from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
-import { GameService } from "@/services/GameService.ts";
-import { characterPositionStore } from "@/utils/characterPosition.ts";
-import { InteractivePixiElement } from "@/objects/InteractivePixiElement.ts";
-import { drawBackground } from "@/pixi/components/Tutorial/util/drawings.tsx";
-import { introText, phone, player, scores, tv, tv2 } from "@/pixi/components/Tutorial/util/spotLightPositions.ts";
-import { SPOTLIGHT_DURATION } from "@/pixi/components/Tutorial/util/Constants.ts";
-import { useAnimationManager } from "@/hooks/tutorial/useAnimationManager.tsx";
-import { PageOrder } from "@/pixi/components/Tutorial/util/PageOrder.ts";
+import React, {PropsWithChildren, useCallback, useEffect, useRef, useState} from "react";
+import {Container, Graphics} from "@pixi/react";
+import {Container as PixiContainer, Graphics as PixiGraphics} from "pixi.js";
+import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
+import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
+import {PAGE_COMPONENTS, PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
+import {spotlightAnimation} from "@/pixi/components/Tutorial/anim/spotlightAnimation.ts";
+import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import {GameService} from "@/services/GameService.ts";
+import {characterPositionStore} from "@/utils/characterPosition.ts";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
+import {drawBackground} from "@/pixi/components/Tutorial/util/drawings.tsx";
+import {introText, phone, player, scores, tv, tv2} from "@/pixi/components/Tutorial/util/spotLightPositions.ts";
+import {SPOTLIGHT_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
+import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 
 interface TutorialProps {
   windowWidth: number;
@@ -44,10 +44,10 @@ export const Tutorial: React.FC<TutorialProps> = ({
   useEffect(() => {
     wRef.current = windowWidth;
     hRef.current = windowHeight;
-    if (backgroundRef.current) {
+    if (backgroundRef.current && keyControl != Pages.PROGRESS_BAR) {
       drawBackground(backgroundRef, windowWidth, windowHeight);
     }
-  }, [windowWidth, windowHeight]);
+  }, [windowWidth, windowHeight, keyControl]);
 
   useEffect(() => {
     characterPositionStore.teleport({ x: 8 * TILE_SIZE, y: 5 * TILE_SIZE });
@@ -61,7 +61,7 @@ export const Tutorial: React.FC<TutorialProps> = ({
     await mgr.parallel([
       () => fadeAnimation(mgr, bg, { startA: bg.alpha, endA: 0, duration: 1000 } as FadeProps),
     ]);
-  }, []);
+  }, [mgrRef]);
 
   const ranRef = useRef<Set<PageOrder>>(new Set());
 
@@ -164,6 +164,18 @@ export const Tutorial: React.FC<TutorialProps> = ({
           setKeyControl(Pages.SCORE_CHANGES);
           return;
         }
+
+
+        case PageOrder.PROGRESS_BAR: {
+
+          const bg = backgroundRef.current;
+          if (!bg) return;
+          bg.clear();
+
+          setKeyControl(Pages.PROGRESS_BAR);
+          return;
+        }
+
 
         case PageOrder.END: {
           gameService.resumeGame();

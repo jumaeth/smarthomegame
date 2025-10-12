@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import { Container, Sprite, Text } from "@pixi/react";
-import pointing from "@/assets/tutorial/finalExpl/pointing.png";
+import pointing from "@/assets/tutorial/finalExpl/pointingLeft.png";
 import { loadTexture } from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
@@ -16,15 +16,15 @@ import {
   Text as PixiText,
   TextStyle,
 } from "pixi.js";
-import { TILE_SIZE } from "@/pixi/constants/world-settings.ts";
 import { Pages } from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import { growAnimation, GrowProps } from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import { PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import { fadeAnimation, FadeProps } from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import { useAnimationManager } from "@/hooks/tutorial/useAnimationManager.tsx";
 import { t } from "@lingui/core/macro";
+import {ProgressBarStatusStore} from "@/utils/progressBarStatus.ts";
 
-export const Score_Changes: React.FC<PageProps> = ({
+export const ProgressBar: React.FC<PageProps> = ({
                                                      windowWidth,
                                                      windowHeight,
                                                      keyControl,
@@ -57,7 +57,7 @@ export const Score_Changes: React.FC<PageProps> = ({
 
   const textsTemp = useMemo(
           () => [
-            t`Saw that? Your solution increased the scores. But be careful, bad decisions decrease them! Make sure you always keep a good balance.`,
+            t`Great, you finished your first device! You can check your progress at anytime by clicking on the trophy symbol`,
           ],
           []
   );
@@ -75,6 +75,8 @@ export const Score_Changes: React.FC<PageProps> = ({
             const text = textRef.current;
             if (!graphic || !text) return;
 
+            ProgressBarStatusStore.set(true)
+
             await mgr.parallel([
               () => growAnimation(mgr, robot, growProps),
               () => fadeAnimation(mgr, [graphic, text], fadeIn),
@@ -90,6 +92,7 @@ export const Score_Changes: React.FC<PageProps> = ({
             const text = textRef.current;
             if (!graphic || !text) return;
 
+            ProgressBarStatusStore.set(false)
             await mgr.parallel([() => fadeAnimation(mgr, [robot, graphic, text], fadeOut)]);
           },
           [mgrRef]
@@ -98,7 +101,7 @@ export const Score_Changes: React.FC<PageProps> = ({
   const anim1: GrowProps = {
     startX: windowWidth * 0.7,
     startY: windowHeight * 0.4,
-    endX: windowWidth * 0.7,
+    endX: windowWidth * 0.4,
     endY: windowHeight * 0.4,
     startS: Math.min(windowWidth, windowHeight) / 4000,
     endS: Math.min(windowWidth, windowHeight) / 2000,
@@ -129,7 +132,7 @@ export const Score_Changes: React.FC<PageProps> = ({
           await runOutroAnim(robot, fadeOut);
           setAnimating(false);
           setAnimation(Animations.IDLE);
-          setKeyControl(Pages.PROGRESS_BAR);
+          setKeyControl(Pages.FINAL_MESSAGE);
           break;
         }
       }
@@ -156,7 +159,7 @@ export const Score_Changes: React.FC<PageProps> = ({
   }, [windowWidth, windowHeight]);
 
   useEffect(() => {
-    if (keyControl != Pages.SCORE_CHANGES || animating) return;
+    if (keyControl != Pages.PROGRESS_BAR || animating) return;
 
     const onSpecialPressed = (e: KeyboardEvent) => {
       if (e.code === "Space") setAnimation(Animations.OUTRO);
@@ -170,12 +173,12 @@ export const Score_Changes: React.FC<PageProps> = ({
   const setupTexts = useCallback(() => {
     const t1 = new PixiText();
     t1.text = textsTemp[0];
-    t1.x = windowWidth * 0.825;
+    t1.x = windowWidth * 0.275;
     t1.y = windowHeight * 0.575;
     t1.style = new TextStyle({
       fontSize: Math.min(windowWidth, windowHeight) * 0.035,
       fontWeight: "normal",
-      wordWrapWidth: windowWidth * 0.25,
+      wordWrapWidth: windowWidth * 0.225,
     });
 
     setPixiTexts([t1]);
@@ -191,16 +194,18 @@ export const Score_Changes: React.FC<PageProps> = ({
     b.drawRect(0, 0, windowWidth, windowHeight);
     b.beginHole();
     b.drawRoundedRect(
-            0.855*windowWidth,
-            0.01*windowHeight,
-            windowWidth * 0.14,
-            windowHeight * 0.155,
+            0.1275*windowWidth,
+            0.035*windowHeight,
+            windowWidth * 0.1875,
+            windowHeight * 0.1,
             10
     );
     b.endHole();
     b.endFill();
 
-    replaceChildren(parent, [b]);
+    //replaceChildren(parent, [b]);
+    parent.children.filter(c => c instanceof PixiGraphics).forEach(c => parent.removeChild(c))
+    parent.addChild(b)
   }, [replaceChildren, windowWidth, windowHeight]);
 
   const setupGraphics = useCallback(() => {
@@ -211,7 +216,7 @@ export const Score_Changes: React.FC<PageProps> = ({
     g.clear();
     g.beginFill(fill, 1);
     g.lineStyle(Math.min(windowWidth, windowHeight) / 150, stroke);
-    g.drawRoundedRect(windowWidth * 0.7, windowHeight * 0.45, windowWidth * 0.25, windowHeight * 0.25, 12);
+    g.drawRoundedRect(windowWidth * 0.15, windowHeight * 0.45, windowWidth * 0.25, windowHeight * 0.25, 12);
     g.endFill();
 
     replaceChildren(parent, [g]);
@@ -222,7 +227,7 @@ export const Score_Changes: React.FC<PageProps> = ({
     if (!r) return;
 
     r.anchor.set(0.5, 0.5);
-    r.x = windowWidth * 0.7;
+    r.x = windowWidth * 0.4;
     r.y = windowHeight * 0.4;
     r.texture = textureRobot;
     r.scale.set(Math.min(windowWidth, windowHeight) / 2000);
@@ -254,15 +259,8 @@ export const Score_Changes: React.FC<PageProps> = ({
     setupTexts();
     setupGraphics();
     setupRobot();
-  }, [
-    gameService,
-    Animations.INTRO,
-    setupBackground,
-    setupTexts,
-    setupGraphics,
-    setupRobot,
-    windowWidth,
-    windowHeight,
+  }, [gameService, Animations.INTRO, setupBackground, setupTexts,
+    setupGraphics, setupRobot, windowWidth, windowHeight,
   ]);
 
   const graphics = () => (

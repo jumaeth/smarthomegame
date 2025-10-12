@@ -1,9 +1,10 @@
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Sprite} from "@pixi/react";
 import {useLoadTextures} from "@/hooks/useLoadTextures.tsx";
 import {ProgressBarIcons} from "@/pixi/components/ProgressBar/ProgressBarIcons.tsx";
 import {GameService} from "@/services/GameService.ts";
 import trophyUrl from "@/assets/progressBar/trophy.png";
+import {ProgressBarStatusStore} from "@/utils/progressBarStatus.ts";
 
 interface ProgressBarProps {
   x: number;
@@ -26,12 +27,21 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
           []
   );
   const {textures, loaded} = useLoadTextures(texturePaths);
-  const [showIcons, setShowIcons] = useState<boolean>(false);
+  const [onLoad, setOnLoad] = useState<boolean>(true);
+  const [, forceUpdate] = useState(0);
   const [hovered, setHovered] = useState<boolean>(false);
 
+  useEffect(() => {
+    ProgressBarStatusStore.set(false);
+    const unsubscribe = ProgressBarStatusStore.subscribe(() => {
+      forceUpdate((n) => n + 1); // trigger re-render
+    });
+    return unsubscribe;
+  }, []);
+
   const action = () => {
-    setShowIcons(!showIcons);
-  }
+    ProgressBarStatusStore.toggle();
+  };
 
   return (
           <>
@@ -48,7 +58,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                     anchor={0}
             >
             </Sprite>)}
-            {showIcons && <ProgressBarIcons
+            {ProgressBarStatusStore.get() && <ProgressBarIcons
                     x={x}
                     y={y}
                     windowWidth={windowWidth}

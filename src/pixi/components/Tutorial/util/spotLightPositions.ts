@@ -1,5 +1,4 @@
 import {SpotRect} from "@/pixi/components/Tutorial/anim/spotlightAnimation.ts";
-import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 
 export const player = (windowWidth: number, windowHeight: number) => {
   return {
@@ -37,7 +36,7 @@ export const phone = (windowWidth: number, windowHeight: number) => {
     x: 0.007*windowWidth,
     y: 0.0125*windowHeight,
     width: windowWidth * 0.085,
-    height: windowHeight * 0.225,
+    height: windowHeight * 0.25,
     r: 10,
   } as SpotRect;
 }

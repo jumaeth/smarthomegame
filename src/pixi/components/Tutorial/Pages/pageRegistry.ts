@@ -11,6 +11,7 @@ import {GameService} from "@/services/GameService.ts";
 import {Score_Changes} from "@/pixi/components/Tutorial/Pages/Explanations/Score_Changes.tsx";
 import {Final_Message} from "@/pixi/components/Tutorial/Pages/Explanations/Final_Message.tsx";
 import {IntroPage} from "@/pixi/components/Tutorial/Pages/IntroPage.tsx";
+import {ProgressBar} from "@/pixi/components/Tutorial/Pages/Explanations/ProgressBar.tsx";
 
 export interface PageProps {
   windowWidth: number;
@@ -32,6 +33,7 @@ export const PAGE_COMPONENTS: {
   [Pages.MORE_EXPL]: React.FunctionComponent<PageProps>;
   [Pages.More_Expl_SD]: React.FunctionComponent<PageProps>;
   [Pages.SCORE_CHANGES]: React.FunctionComponent<PageProps>;
+  [Pages.PROGRESS_BAR]: React.FunctionComponent<PageProps>;
   [Pages.FINAL_MESSAGE]: React.FunctionComponent<PageProps>;
 
 } = {
@@ -44,5 +46,6 @@ export const PAGE_COMPONENTS: {
   [Pages.MORE_EXPL]: More_Expl,
   [Pages.More_Expl_SD]: More_Expl_SD,
   [Pages.SCORE_CHANGES]: Score_Changes,
+  [Pages.PROGRESS_BAR]: ProgressBar,
   [Pages.FINAL_MESSAGE]: Final_Message
 };
