@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect, useRef, useState} from "react";
+import React, {PropsWithChildren, useCallback, useEffect, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
 import {Container as PixiContainer, Graphics as PixiGraphics} from "pixi.js";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
@@ -14,6 +14,7 @@ import {introText, phone, player, scores, tv, tv2} from "@/pixi/components/Tutor
 import {SPOTLIGHT_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {RoomNames} from "@/objects/RoomNames.ts";
+import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 
 interface TutorialProps {
   windowWidth: number;
@@ -22,9 +23,6 @@ interface TutorialProps {
   onClose: () => void;
   interactiveElements:  InteractivePixiElement[];
 }
-
-export enum PageOrder {IDLE,INTRO, CHARACTER, SCORES, PHONE, DECISION, MORE_EXPL,
-LESS_EXPL, More_Expl_SD, SCORE_CHANGES, END}
 
 export const Tutorial: React.FC<TutorialProps> = ({
        windowWidth,
@@ -53,13 +51,27 @@ export const Tutorial: React.FC<TutorialProps> = ({
     if (backgroundRef.current){
       drawBackground(backgroundRef, windowWidth, windowHeight);
     }
-  }, [backgroundRef.current]);
+  }, [windowHeight, windowWidth]);
 
   //pause game at beginning of tutorial
   useEffect(() => {
     characterPositionStore.teleport({x: 8*TILE_SIZE, y: 5*TILE_SIZE});
     gameService.pauseGame();
-  }, []);
+  }, [gameService]);
+
+  const runClearBGAnim = useCallback(
+          async () => {
+
+            const mgr = mgrRef.current;
+            const bg = backgroundRef.current;
+
+            if(!mgr || !bg)return;
+
+            await mgr.parallel([
+              () => fadeAnimation(mgr, bg, {startA: bg.alpha, endA: 0, duration: 1000} as FadeProps),
+            ]);
+          },[mgrRef]
+  )
 
   //manage animations
   useEffect(() => {
@@ -200,21 +212,8 @@ export const Tutorial: React.FC<TutorialProps> = ({
     });
 
     return () => unsubscribe();
-  }, [nextPage]);
+  }, [nextPage, gameService]);
 
-
-
-  const runClearBGAnim = async () => {
-
-    const mgr = mgrRef.current;
-    const bg = backgroundRef.current;
-
-    if(!mgr || !bg)return;
-
-    await mgr.parallel([
-      () => fadeAnimation(mgr, bg, {startA: bg.alpha, endA: 0, duration: 1000} as FadeProps),
-    ]);
-  }
 
   const background = () => {
     return (
