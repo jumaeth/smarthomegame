@@ -1,5 +1,6 @@
 export enum RoomNames {
   LIVINGROOM = "livingroom",
   HALLWAY = "hallway",
-  KITCHEN = "kitchen"
+  KITCHEN = "kitchen",
+  BATHROOM = "bathroom"
 }
