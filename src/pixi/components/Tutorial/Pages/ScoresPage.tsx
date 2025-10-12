@@ -30,11 +30,10 @@ export const ScoresPage: React.FC<PageProps> = ({
   const texture = useMemo(() => loadTexture(scoresImage), []);
 
   //state
-  const [allTexts, setAllTexts] = useState<TextProps[]>([]);
-  const [onLoad, setOnLoad] = useState(true);
   const [animating, setAnimating] = useState(false);
   const [showChar, setShowChar] = useState(true);
   const [animation, setAnimation] = useState(Animations.GROW);
+  const [introRun, setIntroRun] = useState(false);
 
   //refs
   const graphicRef = useRef<PixiContainer|null>(null);
@@ -58,17 +57,23 @@ export const ScoresPage: React.FC<PageProps> = ({
     toggleExplanations([textRef.current, graphicRef.current], false);
   }, []);
 
-  const growChar= {
-    startX: 0.9275 * windowWidth, startY: windowHeight * 0.08,
-    endX: windowWidth  * 0.55, endY: windowHeight * 0.3,
-    startS: Math.min(windowWidth, windowHeight) / 3600, endS: Math.min(windowWidth, windowHeight) / 1000, showOthers: true, duration: GROW_DURATION
-  } as GrowProps
+  const growChar = useMemo<GrowProps>(() => {
+    return {
+      startX: 0.9275 * windowWidth, startY: windowHeight * 0.08,
+      endX: windowWidth * 0.55, endY: windowHeight * 0.3,
+      startS: Math.min(windowWidth, windowHeight) / 3600, endS: Math.min(windowWidth, windowHeight) / 1000,
+      duration: GROW_DURATION
+    };
+  }, [windowWidth, windowHeight]);
 
-  const shrinkChar = {
-    startX: windowWidth * 0.55, startY: windowHeight * 0.3,
-    endX: 0.9275 * windowWidth, endY: windowHeight * 0.063,
-    startS:  Math.min(windowWidth, windowHeight) / 1000, endS: Math.min(windowWidth, windowHeight) / 3600, showOthers: false, duration: GROW_DURATION
-  } as GrowProps
+  const shrinkChar = useMemo<GrowProps>(() =>  {
+    return {
+      startX: windowWidth * 0.55, startY: windowHeight * 0.3,
+      endX: 0.9275 * windowWidth, endY: windowHeight * 0.063,
+      startS:  Math.min(windowWidth, windowHeight) / 1000, endS: Math.min(windowWidth, windowHeight) / 3600,
+      duration: GROW_DURATION
+    };
+  }, [windowWidth, windowHeight])
 
   //manage animations
   useEffect(() => {
@@ -84,12 +89,13 @@ export const ScoresPage: React.FC<PageProps> = ({
       switch (animation) {
 
         case Animations.GROW: {
-
+          if (introRun)return
           setAnimating(true);
           await mgr.sequence([() => growAnimation(mgr, sprite, growChar)]);
           toggleExplanations([texts, graphics], true);
           await mgr.parallel([() => fadeAnimation(mgr, [texts, graphics], FADE_IN)]);
           setAnimating(false);
+          setIntroRun(true)
           break;
         }
 
@@ -119,7 +125,8 @@ export const ScoresPage: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation, Animations.END, Animations.GROW, Animations.SHRINK, mgrRef, setKeyControl, setNextPage]);
+  }, [animation, Animations.END, Animations.GROW, Animations.SHRINK, mgrRef,
+    setKeyControl, setNextPage, growChar, shrinkChar, introRun]);
 
   useEffect(() => {
     const sprite = charRef.current
@@ -127,7 +134,7 @@ export const ScoresPage: React.FC<PageProps> = ({
     sprite.x = growChar.endX
     sprite.y = growChar.endY
     sprite.scale.set(growChar.endS)
-  }, [windowWidth, windowHeight]);
+  }, [windowWidth, windowHeight, animating, growChar.endS, growChar.endX, growChar.endY]);
 
   //keyControls
   useEffect(() => {
@@ -156,7 +163,7 @@ export const ScoresPage: React.FC<PageProps> = ({
       { text: textArr[1], x: windowWidth*0.1025,   y: windowHeight*0.65,  fontSize: 0.03, fontWeight: "lighter"},
       { text: textArr[3], x: windowWidth*0.5775, y: windowHeight*0.675,  fontSize: 0.03, fontWeight: "lighter", wrap: 0.36},
       { text: textArr[4], x: growChar.endX - texture.width * growChar.endS * 0.1, y: windowHeight*0.05, fontSize: 0.07, fontWeight: "bold" },
-    ],[windowWidth, windowHeight]);
+    ],[windowWidth, windowHeight, growChar.endS, growChar.endX, textArr, texture.width]);
 
   const drawLines =  useCallback( (g: PixiGraphics) => {
     g.clear();
@@ -184,7 +191,7 @@ export const ScoresPage: React.FC<PageProps> = ({
             growChar.endX - img.width * 0.325,growChar.endY  + img.height * 0.6
     )
 
-  }, [windowWidth, windowHeight])
+  }, [windowWidth, windowHeight, growChar.endS, growChar.endX, growChar.endY, textsData, texture.height, texture.width])
 
   const lines = () => {
     return (

@@ -11,7 +11,7 @@ import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {ImageProps, TextProps} from "@/pixi/components/Tutorial/util/Types.ts";
 import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
-import {growAnimation} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
+import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {GROW_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
@@ -26,19 +26,6 @@ export const CharacterPage: React.FC<PageProps> = ({
        setNextPage
            }: PropsWithChildren<PageProps>) => {
 
-  type animProps = {
-    startX: number,
-    startY: number,
-    startS: number,
-
-    endX: number,
-    endY: number,
-    endS: number,
-
-    showOthers: boolean
-    duration: number
-  }
-
   const enum Animations {GROW, SHRINK, END}
 
   //states
@@ -52,6 +39,7 @@ export const CharacterPage: React.FC<PageProps> = ({
   const charRef = useRef<PixiSprite | null >(null);
   const graphicRef = useRef<PixiContainer|null>(null);
   const pressedRef = useRef<boolean>(false);
+  const [introRun, setIntroRun] = useState(false);
 
   //others
   const textsTemp = useMemo(() => [
@@ -110,17 +98,23 @@ export const CharacterPage: React.FC<PageProps> = ({
     };
   }, [keyControl, animating, Animations.SHRINK]);
 
-  const growChar = {
+  const growChar= useMemo<GrowProps>(() =>  {
+    return {
     startX: windowWidth / 1.75, startY: windowHeight / 1.5,
     endX: windowWidth * 0.525, endY: windowHeight * 0.525,
-    startS: Math.min(windowWidth, windowHeight) / 100, endS: Math.min(windowWidth, windowHeight) / 45, showOthers: true, duration: GROW_DURATION
-  } as animProps
+    startS: Math.min(windowWidth, windowHeight) / 100, endS: Math.min(windowWidth, windowHeight) / 45,
+    duration: GROW_DURATION
+    }
+  }, [windowWidth, windowHeight])
 
-  const shrinkChar = {
+  const shrinkChar= useMemo<GrowProps>(() =>  {
+    return {
     startX: windowWidth * 0.525, startY: windowHeight * 0.525,
     endX: windowWidth / 1.75, endY: windowHeight / 1.5,
-    startS: Math.min(windowWidth, windowHeight) / 45, endS: Math.min(windowWidth, windowHeight) / 100, showOthers: false, duration: GROW_DURATION
-  } as animProps
+    startS: Math.min(windowWidth, windowHeight) / 45, endS: Math.min(windowWidth, windowHeight) / 100,
+    duration: GROW_DURATION
+    }
+  }, [windowWidth, windowHeight])
 
   //manage animations
   useEffect(() => {
@@ -137,13 +131,13 @@ export const CharacterPage: React.FC<PageProps> = ({
       switch (animation) {
 
         case Animations.GROW: {
-
+          if (introRun)return
           setAnimating(true);
           await mgr.sequence([() => growAnimation(mgr, sprite, growChar)]);
           toggleExplanations([texts, images, graphics], true);
           await mgr.parallel([() => fadeAnimation(mgr, [texts, images, graphics], FADE_IN)]);
           setAnimating(false);
-
+          setIntroRun(true)
           break;
         }
 
@@ -172,7 +166,8 @@ export const CharacterPage: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation, Animations.END, Animations.GROW, Animations.SHRINK, mgrRef, setKeyControl, setNextPage]);
+  }, [animation, Animations.END, Animations.GROW, Animations.SHRINK, mgrRef,
+    setKeyControl, setNextPage, introRun, growChar, shrinkChar]);
 
   useEffect(() => {
     const sprite = charRef.current
@@ -180,7 +175,7 @@ export const CharacterPage: React.FC<PageProps> = ({
     sprite.x = growChar.endX
     sprite.y = growChar.endY
     sprite.scale.set(growChar.endS)
-  }, [windowWidth, windowHeight]);
+  }, [windowWidth, windowHeight, animating, growChar.endS, growChar.endX, growChar.endY]);
 
   //setup graphics
   const setupLines =  useCallback( (g: PixiGraphics) => {
@@ -215,7 +210,7 @@ export const CharacterPage: React.FC<PageProps> = ({
             growChar.endX + img.width * 0.4715, growChar.endY - img.height * 0.2,
             growChar.endX + img.width * 0.437, growChar.endY + img.height * 0.045,
             growChar.endX + img.width * 0.3, growChar.endY - img.height * 0.045);
-  }, [windowWidth, windowHeight])
+  }, [windowWidth, windowHeight, growChar.endS, growChar.endX, growChar.endY, textsData, texture.height, texture.width])
 
   const lines = () => {
     return (

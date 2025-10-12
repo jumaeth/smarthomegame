@@ -43,6 +43,7 @@ export const More_Expl: React.FC<PageProps> = ({
   const stroke = "#009CDD";
   const graphicRef = useRef<PixiContainer | null>(null);
   const textRef = useRef<PixiContainer | null>(null);
+  const [introRun, setIntroRun] = useState(false);
 
 
 
@@ -59,11 +60,6 @@ export const More_Expl: React.FC<PageProps> = ({
       setOnLoad(false);
     }
   }, [onLoad, Animations.INTRO]);
-
-  const spriteScale = useMemo(() => {
-    const f = Math.min(windowWidth, windowHeight);
-    return f > 0 ? f / 450 : 0; // guard
-  }, [windowWidth, windowHeight]);
 
   //----------animations----------
 
@@ -107,11 +103,12 @@ export const More_Expl: React.FC<PageProps> = ({
     duration: 750,
   }), [windowWidth, windowHeight]);
 
-  const fadeIn = {
+  const fadeIn = useMemo<FadeProps>(() =>  {
+    return {
     duration: 500,
     startA: 0,
     endA: 1,
-  } as FadeProps
+  }},[])
 
   //manage animations
   useEffect(() => {
@@ -126,11 +123,12 @@ export const More_Expl: React.FC<PageProps> = ({
 
       switch (animation) {
         case Animations.INTRO: {
-
+          if (introRun)return
           setAnimating(true);
           await runIntroAnim(sprite, robot, anim1, fadeIn);
           setAnimating(false);
           setAnimation(Animations.IDLE);
+          setIntroRun(true)
           break;
         }
 
@@ -158,7 +156,8 @@ export const More_Expl: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation, Animations.INTRO, Animations.IDLE, Animations.OUTRO, setKeyControl, setNextPage]);
+  }, [animation, Animations.INTRO, Animations.IDLE,
+    Animations.OUTRO, setKeyControl, setNextPage, introRun, anim1, fadeIn]);
 
 
   //----------user input----------
@@ -245,7 +244,7 @@ export const More_Expl: React.FC<PageProps> = ({
     ref.y = windowHeight * 0.25
     ref.anchor.set(0.5, 0.5)
     ref.scale.set(anim1.endS)
-  }, [windowWidth,windowHeight]);
+  }, [windowWidth,windowHeight, anim1.endS]);
 
   useEffect(() => {
     setupTexts();

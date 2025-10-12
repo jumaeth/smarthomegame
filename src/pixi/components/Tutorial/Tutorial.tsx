@@ -41,10 +41,13 @@ export const Tutorial: React.FC<TutorialProps> = ({
 
   const wRef = useRef(windowWidth);
   const hRef = useRef(windowHeight);
+
   useEffect(() => {
+    if (keyControl == Pages.PROGRESS_BAR)return;
     wRef.current = windowWidth;
     hRef.current = windowHeight;
-    if (backgroundRef.current && keyControl != Pages.PROGRESS_BAR) {
+    if (backgroundRef.current && (keyControl == Pages.MAIN || keyControl == Pages.MORE_EXPL
+    )) {
       drawBackground(backgroundRef, windowWidth, windowHeight);
     }
   }, [windowWidth, windowHeight, keyControl]);
@@ -127,7 +130,6 @@ export const Tutorial: React.FC<TutorialProps> = ({
             () => spotlightAnimation(mgr, backgroundRef, W, H, player(W, H), tv(W, H), SPOTLIGHT_DURATION),
           ]);
           isAnimatingRef.current = false;
-          drawBackground(backgroundRef, W, H);
           setKeyControl(Pages.MORE_EXPL);
           return;
         }

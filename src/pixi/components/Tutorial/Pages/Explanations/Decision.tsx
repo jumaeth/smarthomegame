@@ -15,6 +15,7 @@ import { loadTexture } from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
   Sprite as PixiSprite,
+        Graphics as PixiGraphics,
   TextStyle,
   Texture,
 } from "pixi.js";
@@ -67,6 +68,7 @@ export const Decision: React.FC<PageProps> = ({
   const [animating, setAnimating] = useState(false);
   const [decisionReady, setDecisionReady] = useState(false);
   const [lessExplReady, setLessExplReady] = useState(false);
+  const [introRun, setIntroRun] = useState(false);
 
   const mgrRef = useAnimationManager();
 
@@ -101,7 +103,7 @@ export const Decision: React.FC<PageProps> = ({
   }, [windowWidth, windowHeight]);
 
   const drawMidPanel = useCallback(
-          (g: any) => {
+          (g: PixiGraphics) => {
             g.clear();
             const { fill, stroke } = layout.colors;
             g.lineStyle(3, stroke, 1);
@@ -120,7 +122,7 @@ export const Decision: React.FC<PageProps> = ({
 
   const whenTextureValid = (tex: Texture | undefined, cb: () => void) => {
     if (!tex) return;
-    if ((tex.baseTexture as any)?.valid) {
+    if ((tex.baseTexture)?.valid) {
       cb();
     } else {
       tex.baseTexture.once("loaded", cb);
@@ -175,13 +177,8 @@ export const Decision: React.FC<PageProps> = ({
       whenTextureValid(s.texture, () => s.scale.set(layout.robot.s));
     }
   }, [
-    showExpl,
-    lessExplReady,
-    layout.robot.pos.x,
-    layout.robot.pos.y,
-    layout.robot.s,
-    windowWidth,
-    windowHeight,
+    showExpl, lessExplReady, layout.robot.pos.x, layout.robot.pos.y, layout.robot.s,
+    windowWidth, windowHeight, placeArrowsFromSprite
   ]);
 
   useEffect(() => {
@@ -211,8 +208,8 @@ export const Decision: React.FC<PageProps> = ({
     if (midContRef) setShowExpl(true);
   }, []);
 
-  const leftOnClick = useCallback(() => setAnimation(Anims.OUTRO_MORE), []);
-  const rightOnClick = useCallback(() => setAnimation(Anims.SWITCH), []);
+  const leftOnClick = useCallback(() => setAnimation(Anims.OUTRO_MORE), [Anims.OUTRO_MORE]);
+  const rightOnClick = useCallback(() => setAnimation(Anims.SWITCH), [Anims.SWITCH]);
 
   useEffect(() => {
     if (!showExpl) return;
@@ -317,7 +314,7 @@ export const Decision: React.FC<PageProps> = ({
       setOnLoad(false);
       setAnimation(Anims.INTRO);
     }
-  }, [showExpl, onLoad]);
+  }, [showExpl, onLoad, Anims.INTRO]);
 
   useEffect(() => {
     if (!mgrRef.current || onLoad) return;
@@ -328,15 +325,19 @@ export const Decision: React.FC<PageProps> = ({
 
       switch (animation) {
         case Anims.INTRO:
+          if (introRun)return
           await runIntroAnim(sprite);
           setDecisionReady(true);
           setAnimation(Anims.IDLE);
+          setIntroRun(true)
           break;
 
         case Anims.SWITCH:
           await runFadeOutAnim();
-          leftArrRef.current && (leftArrRef.current.visible = false);
-          rightArrRef.current && (rightArrRef.current.visible = false);
+          if (leftArrRef.current && rightArrRef.current) {
+            leftArrRef.current.visible = false;
+            rightArrRef.current.visible = false;
+          }
           secondRobotSprite();
           await runFadeAnim(FADE_IN);
           setAnimation(Anims.IDLE);
@@ -363,20 +364,9 @@ export const Decision: React.FC<PageProps> = ({
 
     run();
   }, [
-    animation,
-    Anims.IDLE,
-    Anims.INTRO,
-    Anims.OUTRO_LESS,
-    Anims.OUTRO_MORE,
-    Anims.SWITCH,
-    mgrRef,
-    onLoad,
-    runFadeAnim,
-    runFadeOutAnim,
-    runIntroAnim,
-    secondRobotSprite,
-    setKeyControl,
-    setNextPage,
+    animation, Anims.IDLE, Anims.INTRO, Anims.OUTRO_LESS, Anims.OUTRO_MORE, Anims.SWITCH,
+    mgrRef, onLoad, runFadeAnim, runFadeOutAnim, runIntroAnim, secondRobotSprite,
+    setKeyControl, setNextPage, introRun
   ]);
 
   useEffect(() => {
@@ -408,7 +398,7 @@ export const Decision: React.FC<PageProps> = ({
 
     window.addEventListener("keydown", onSpecialPressed);
     return () => window.removeEventListener("keydown", onSpecialPressed);
-  }, [keyControl, animating, showExpl, decisionReady, lessExplReady, leftOnClick, rightOnClick]);
+  }, [keyControl, animating, showExpl, decisionReady, lessExplReady, leftOnClick, rightOnClick, Anims.OUTRO_LESS]);
 
   const showDecisionUI = showExpl && !lessExplReady && animation !== Anims.SWITCH;
 
@@ -427,7 +417,7 @@ export const Decision: React.FC<PageProps> = ({
                         <Container
                                 ref={leftContRef}
                                 eventMode="static"
-                                pointerover={(e: any) => (e.currentTarget.cursor = "pointer")}
+                                pointerover={(e) => (e.currentTarget.cursor = "pointer")}
                                 pointertap={leftOnClick}
                                 zIndex={0}
                         >
@@ -451,7 +441,7 @@ export const Decision: React.FC<PageProps> = ({
                         <Container
                                 ref={rightContRef}
                                 eventMode="static"
-                                pointerover={(e: any) => (e.currentTarget.cursor = "pointer")}
+                                pointerover={(e) => (e.currentTarget.cursor = "pointer")}
                                 pointertap={rightOnClick}
                                 zIndex={0}
                         >

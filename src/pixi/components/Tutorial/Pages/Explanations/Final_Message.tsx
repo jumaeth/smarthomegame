@@ -45,6 +45,7 @@ export const Final_Message: React.FC<PageProps> = ({
   const textRef = useRef<PixiContainer | null>(null);
   const backgroundRef = useRef<PixiContainer | null>(null);
   const initedRef = useRef(false);
+  const [introRun, setIntroRun] = useState(false);
 
   const textsTemp = useMemo(
           () => [t`That's it, now you are ready to save the smart home and make that movie night possible!`],
@@ -82,10 +83,12 @@ export const Final_Message: React.FC<PageProps> = ({
     (async () => {
       switch (animation) {
         case Animations.INTRO:
+          if(introRun)return
           setAnimating(true);
           await runIntroAnim(robot, FADE_IN);
           setAnimating(false);
           setAnimation(Animations.IDLE);
+          setIntroRun(true)
           break;
 
         case Animations.OUTRO:
@@ -98,7 +101,8 @@ export const Final_Message: React.FC<PageProps> = ({
           break;
       }
     })();
-  }, [animation, setKeyControl, setNextPage]);
+  }, [animation, setKeyControl, setNextPage, Animations.IDLE, Animations.INTRO,
+  Animations.OUTRO, introRun]);
 
   // Input
   useEffect(() => {
@@ -108,10 +112,10 @@ export const Final_Message: React.FC<PageProps> = ({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [keyControl, animating]);
+  }, [keyControl, animating, Animations.OUTRO]);
 
   // Utilities
-  const replaceChildren = useCallback((parent: PixiContainer, nodes: any[]) => {
+  const replaceChildren = useCallback((parent: PixiContainer, nodes: PixiContainer[]) => {
     const old = parent.removeChildren();
     old.forEach((c) => c.destroy?.());
     nodes.forEach((n) => parent.addChild(n));
@@ -148,7 +152,7 @@ export const Final_Message: React.FC<PageProps> = ({
     const g = new PixiGraphics();
     g.clear();
     g.beginFill(fill, 1);
-    g.lineStyle(3, stroke as any);
+    g.lineStyle(3, stroke);
     g.drawRoundedRect(windowWidth * 0.35, windowHeight * 0.5, windowWidth * 0.3, windowHeight * 0.15, 12);
     g.endFill();
     replaceChildren(parent, [g]);
@@ -174,7 +178,7 @@ export const Final_Message: React.FC<PageProps> = ({
     setupGraphics();
     setupTexts();
     setupRobot();
-  }, [setupBackground, setupGraphics, setupTexts, setupRobot, windowWidth, windowHeight]);
+  }, [setupBackground, setupGraphics, setupTexts, setupRobot, windowWidth, windowHeight, Animations.INTRO]);
 
   // Render
   const graphics = () => (

@@ -67,10 +67,10 @@ export const ProgressBarIcons: React.FC<ProgressBarIconsProps> = ({
             y + windowHeight * 0.05,
                 windowWidth * 0.0175 + windowWidth * 0.031 * Object.entries(texturePaths).length,
             windowHeight * 0.07,
-            8
+            8,
         );
         g.endFill();
-    }, [x, y, windowWidth, windowHeight, textures.length]);
+    }, [x, y, windowWidth, windowHeight, texturePaths]);
 
     const drawCompletionBars = useCallback((g: PixiGraphics) => {
 
@@ -104,7 +104,8 @@ export const ProgressBarIcons: React.FC<ProgressBarIconsProps> = ({
               10
       );
       g.endFill();
-    }, [x, y, windowWidth, windowHeight, textures.length, completedPercentage]);
+    }, [x, y, windowWidth, windowHeight, completedPercentage,
+      texturePaths]);
 
     return (
         <>

@@ -27,7 +27,6 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
           []
   );
   const {textures, loaded} = useLoadTextures(texturePaths);
-  const [onLoad, setOnLoad] = useState<boolean>(true);
   const [, forceUpdate] = useState(0);
   const [hovered, setHovered] = useState<boolean>(false);
 

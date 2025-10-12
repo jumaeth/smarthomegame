@@ -43,6 +43,8 @@ export const ProgressBar: React.FC<PageProps> = ({
   const [animation, setAnimation] = useState(Animations.INTRO);
   const [pixiTexts, setPixiTexts] = useState<PixiText[]>([]);
   const [animating, setAnimating] = useState(false);
+  const [introRun, setIntroRun] = useState(false);
+
 
   const mgrRef = useAnimationManager();
 
@@ -62,7 +64,7 @@ export const ProgressBar: React.FC<PageProps> = ({
           []
   );
 
-  const replaceChildren = useCallback((parent: PixiContainer, nodes: any[]) => {
+  const replaceChildren = useCallback((parent: PixiContainer, nodes: PixiContainer[]) => {
     const removed = parent.removeChildren();
     removed.forEach((c) => c.destroy?.());
     nodes.forEach((n) => parent.addChild(n));
@@ -98,7 +100,8 @@ export const ProgressBar: React.FC<PageProps> = ({
           [mgrRef]
   );
 
-  const anim1: GrowProps = {
+  const anim1: GrowProps = useMemo<GrowProps>(() =>  {
+    return {
     startX: windowWidth * 0.7,
     startY: windowHeight * 0.4,
     endX: windowWidth * 0.4,
@@ -106,7 +109,8 @@ export const ProgressBar: React.FC<PageProps> = ({
     startS: Math.min(windowWidth, windowHeight) / 4000,
     endS: Math.min(windowWidth, windowHeight) / 2000,
     duration: 750,
-  };
+   };
+  }, [windowWidth, windowHeight])
 
   useEffect(() => {
     if (!mgrRef.current) return;
@@ -119,11 +123,12 @@ export const ProgressBar: React.FC<PageProps> = ({
         case Animations.INTRO: {
 
           const fadeIn: FadeProps = { duration: 500, startA: 0, endA: 1 };
-
+          if (introRun)return
           setAnimating(true);
           await runIntroAnim(robot, anim1, fadeIn);
           setAnimating(false);
           setAnimation(Animations.IDLE);
+          setIntroRun(true)
           break;
         }
         case Animations.OUTRO: {
@@ -140,14 +145,8 @@ export const ProgressBar: React.FC<PageProps> = ({
 
     run();
   }, [
-    animation,
-    Animations.IDLE,
-    Animations.INTRO,
-    Animations.OUTRO,
-    mgrRef,
-    runIntroAnim,
-    runOutroAnim,
-    setKeyControl,
+    animation, Animations.IDLE, Animations.INTRO, Animations.OUTRO,
+    mgrRef, runIntroAnim, runOutroAnim, setKeyControl, anim1, introRun
   ]);
 
   useEffect(() => {
@@ -156,7 +155,7 @@ export const ProgressBar: React.FC<PageProps> = ({
     sprite.x = anim1.endX
     sprite.y = anim1.endY
     sprite.scale.set(anim1.endS)
-  }, [windowWidth, windowHeight]);
+  }, [windowWidth, windowHeight, anim1.endS, anim1.endX, anim1.endY, animating]);
 
   useEffect(() => {
     if (keyControl != Pages.PROGRESS_BAR || animating) return;
@@ -206,7 +205,7 @@ export const ProgressBar: React.FC<PageProps> = ({
     //replaceChildren(parent, [b]);
     parent.children.filter(c => c instanceof PixiGraphics).forEach(c => parent.removeChild(c))
     parent.addChild(b)
-  }, [replaceChildren, windowWidth, windowHeight]);
+  }, [windowWidth, windowHeight]);
 
   const setupGraphics = useCallback(() => {
     const parent = graphicRef.current;
@@ -242,11 +241,6 @@ export const ProgressBar: React.FC<PageProps> = ({
       return () => cancelAnimationFrame(id);
     }
   }, [gameService, Animations.INTRO]);
-
-  const robotScale = useMemo(
-          () => Math.min(windowWidth, windowHeight) / 2000,
-          [windowWidth, windowHeight]
-  );
 
   useEffect(() => {
     if (!initedRef.current) {

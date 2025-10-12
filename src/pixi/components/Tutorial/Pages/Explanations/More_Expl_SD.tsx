@@ -26,7 +26,6 @@ import {t} from "@lingui/core/macro";
 export const More_Expl_SD: React.FC<PageProps> = ({
         windowWidth,
         windowHeight,
-        keyControl,
         setKeyControl,
         setNextPage,
         interactiveElements,
@@ -46,6 +45,8 @@ export const More_Expl_SD: React.FC<PageProps> = ({
   const [animation, setAnimation] = useState(Animations.INTRO);
   const [showExpl, setShowExpl] = useState(false);
   const [pixiTexts, setPixiText] = useState<PixiText>();
+  const [introRun, setIntroRun] = useState(false);
+
 
   //refs
   const graphicRef = useRef<PixiContainer | null>(null);
@@ -74,11 +75,15 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     toggleExplanations([text, graphic], false);
   }, [])
 
-  const growChar = {
+  const growChar = useMemo<GrowProps>(() =>  {
+    return {
     startX: windowWidth * 0.825, startY: windowHeight * 0.725,
     endX: windowWidth * 0.9, endY: windowHeight * 0.7,
-    startS: Math.min(windowWidth, windowHeight) / 4000, endS: Math.min(windowWidth, windowHeight) / 1000, showOthers: false, duration: 750
-  } as GrowProps
+    startS: Math.min(windowWidth, windowHeight) / 4000, endS: Math.min(windowWidth, windowHeight) / 1000,
+    duration: 750
+    }
+  }, [windowWidth, windowHeight])
+
 
   //manageAnimations
   useEffect(() => {
@@ -101,12 +106,13 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
       switch (animation) {
         case Animations.INTRO: {
-
+          if (introRun)return
           setAnimating(true);
           toggleExplanations([texts, graphics], true);
           await mgr.parallel([() => growAnimation(mgr, robot, growChar),
             () => fadeAnimation(mgr, [texts, graphics], FADE_IN)]);
           setAnimating(false);
+          setIntroRun(true)
           break;
         }
 
@@ -127,7 +133,8 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [ready, animation, Animations.INTRO, Animations.OUTRO, Animations.END, gameService, mgrRef, setKeyControl, setNextPage]);
+  }, [ready, animation, Animations.INTRO, Animations.OUTRO, Animations.END,
+    gameService, mgrRef, setKeyControl, setNextPage, introRun, growChar]);
 
   useEffect(() => {
     const sprite = robotRef.current
@@ -135,7 +142,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     sprite.x = growChar.endX
     sprite.y = growChar.endY
     sprite.scale.set(growChar.endS)
-  }, [windowWidth, windowHeight]);
+  }, [windowWidth, windowHeight, growChar.endS, growChar.endY, growChar.endX, animating]);
 
   //smartDeviceDetection
   const checkFoundSmartTV = useCallback( (): boolean => {

@@ -1,14 +1,7 @@
-import React, {
-  PropsWithChildren,
-  useCallback,
-  useEffect, useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Container, Sprite, Text } from "@pixi/react";
+import React, {PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState,} from "react";
+import {Container, Sprite, Text} from "@pixi/react";
 import pointing from "@/assets/tutorial/finalExpl/pointing.png";
-import { loadTexture } from "@/utils/loadTexture.ts";
+import {loadTexture} from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
   Graphics as PixiGraphics,
@@ -16,13 +9,12 @@ import {
   Text as PixiText,
   TextStyle,
 } from "pixi.js";
-import { TILE_SIZE } from "@/pixi/constants/world-settings.ts";
-import { Pages } from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import { growAnimation, GrowProps } from "@/pixi/components/Tutorial/anim/growAnimation.ts";
-import { PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import { fadeAnimation, FadeProps } from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
-import { useAnimationManager } from "@/hooks/tutorial/useAnimationManager.tsx";
-import { t } from "@lingui/core/macro";
+import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
+import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
+import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
+import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+import {t} from "@lingui/core/macro";
 
 export const Score_Changes: React.FC<PageProps> = ({
                                                      windowWidth,
@@ -43,6 +35,8 @@ export const Score_Changes: React.FC<PageProps> = ({
   const [animation, setAnimation] = useState(Animations.INTRO);
   const [pixiTexts, setPixiTexts] = useState<PixiText[]>([]);
   const [animating, setAnimating] = useState(false);
+  const [introRun, setIntroRun] = useState(false);
+
 
   const mgrRef = useAnimationManager();
 
@@ -62,7 +56,7 @@ export const Score_Changes: React.FC<PageProps> = ({
           []
   );
 
-  const replaceChildren = useCallback((parent: PixiContainer, nodes: any[]) => {
+  const replaceChildren = useCallback((parent: PixiContainer, nodes: PixiContainer[]) => {
     const removed = parent.removeChildren();
     removed.forEach((c) => c.destroy?.());
     nodes.forEach((n) => parent.addChild(n));
@@ -95,7 +89,8 @@ export const Score_Changes: React.FC<PageProps> = ({
           [mgrRef]
   );
 
-  const anim1: GrowProps = {
+  const anim1 =useMemo<GrowProps>(() =>  {
+    return {
     startX: windowWidth * 0.7,
     startY: windowHeight * 0.4,
     endX: windowWidth * 0.7,
@@ -103,7 +98,8 @@ export const Score_Changes: React.FC<PageProps> = ({
     startS: Math.min(windowWidth, windowHeight) / 4000,
     endS: Math.min(windowWidth, windowHeight) / 2000,
     duration: 750,
-  };
+    }
+  }, [windowWidth, windowHeight])
 
   useEffect(() => {
     if (!mgrRef.current) return;
@@ -114,13 +110,14 @@ export const Score_Changes: React.FC<PageProps> = ({
     const run = async () => {
       switch (animation) {
         case Animations.INTRO: {
-
+          if (introRun)return
           const fadeIn: FadeProps = { duration: 500, startA: 0, endA: 1 };
 
           setAnimating(true);
           await runIntroAnim(robot, anim1, fadeIn);
           setAnimating(false);
           setAnimation(Animations.IDLE);
+          setIntroRun(true)
           break;
         }
         case Animations.OUTRO: {
@@ -137,14 +134,8 @@ export const Score_Changes: React.FC<PageProps> = ({
 
     run();
   }, [
-    animation,
-    Animations.IDLE,
-    Animations.INTRO,
-    Animations.OUTRO,
-    mgrRef,
-    runIntroAnim,
-    runOutroAnim,
-    setKeyControl,
+    animation, Animations.IDLE, Animations.INTRO, Animations.OUTRO,
+    mgrRef, runIntroAnim, runOutroAnim, setKeyControl, introRun, anim1
   ]);
 
   useEffect(() => {
@@ -153,7 +144,7 @@ export const Score_Changes: React.FC<PageProps> = ({
     sprite.x = anim1.endX
     sprite.y = anim1.endY
     sprite.scale.set(anim1.endS)
-  }, [windowWidth, windowHeight]);
+  }, [windowWidth, windowHeight, anim1.endS, anim1.endY, anim1.endX, animating]);
 
   useEffect(() => {
     if (keyControl != Pages.SCORE_CHANGES || animating) return;
@@ -237,11 +228,6 @@ export const Score_Changes: React.FC<PageProps> = ({
       return () => cancelAnimationFrame(id);
     }
   }, [gameService, Animations.INTRO]);
-
-  const robotScale = useMemo(
-          () => Math.min(windowWidth, windowHeight) / 2000,
-          [windowWidth, windowHeight]
-  );
 
   useEffect(() => {
     if (!initedRef.current) {

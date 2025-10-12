@@ -32,6 +32,7 @@ export const PhonePage: React.FC<PageProps> = ({
   const [animation, setAnimation] = useState(Animations.GROW);
   const [animating, setAnimating] = useState(false);
   const [showChar, setShowChar] = useState(true);
+  const [introRun, setIntroRun] = useState(false);
 
   //refs
   const charRef = useRef<PixiSprite | null >(null);
@@ -61,17 +62,23 @@ export const PhonePage: React.FC<PageProps> = ({
     toggleExplanations([text, graphic], false);
   }, []);
 
-  const growChar = {
+  const growChar = useMemo<GrowProps>(() =>  {
+    return {
     startX: 0.0475 * windowWidth, startY: windowHeight * 0.15,
     endX: windowWidth * 0.5, endY: windowHeight * 0.5,
-    startS: Math.min(windowWidth, windowHeight) / 3200, endS: Math.min(windowWidth, windowHeight) / 1000, showOthers: true, duration: 750
-  } as GrowProps
+    startS: Math.min(windowWidth, windowHeight) / 3200, endS: Math.min(windowWidth, windowHeight) / 1000,
+    duration: 750
+    }
+  },[windowWidth, windowHeight])
 
-  const shrinkChar = {
+  const shrinkChar= useMemo<GrowProps>(() =>  {
+    return {
     startX: windowWidth * 0.5, startY: windowHeight * 0.5,
     endX: 0.0475 * windowWidth, endY: windowHeight * 0.15,
-    startS: Math.min(windowWidth, windowHeight) / 1000, endS: Math.min(windowWidth, windowHeight) / 3200, showOthers: false, duration: 750
-  } as GrowProps
+    startS: Math.min(windowWidth, windowHeight) / 1000, endS: Math.min(windowWidth, windowHeight) / 3200,
+    duration: 750
+    }
+  },[windowWidth, windowHeight])
 
   //manage animations
   useEffect(() => {
@@ -88,12 +95,13 @@ export const PhonePage: React.FC<PageProps> = ({
       switch (animation) {
 
         case Animations.GROW: {
-
+          if (introRun)return
           setAnimating(true);
           await mgr.sequence([() => growAnimation(mgr, sprite, growChar)]);
           toggleExplanations([texts, graphics], true);
           await mgr.parallel([() => fadeAnimation(mgr, [texts, graphics], FADE_IN)]);
           setAnimating(false);
+          setIntroRun(true)
           break;
         }
 
@@ -123,7 +131,8 @@ export const PhonePage: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation, Animations.END, Animations.GROW, Animations.SHRINK, mgrRef, setKeyControl, setNextPage]);
+  }, [animation, Animations.END, Animations.GROW, Animations.SHRINK, mgrRef,
+    setKeyControl, setNextPage, growChar, shrinkChar, introRun]);
 
 
   useEffect(() => {
@@ -132,7 +141,7 @@ export const PhonePage: React.FC<PageProps> = ({
     sprite.x = growChar.endX
     sprite.y = growChar.endY
     sprite.scale.set(growChar.endS)
-  }, [windowWidth, windowHeight]);
+  }, [windowWidth, windowHeight, animating, growChar.endS, growChar.endX, growChar.endY]);
 
   //keyControls
   useEffect(() => {
