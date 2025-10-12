@@ -58,7 +58,7 @@ export const MainContainer = ({
    */
   const [spawnPosition, setSpawnPosition] = useState<Position>({x: DEFAULT_POS_X, y: DEFAULT_POS_Y});
 
-  const characterTexture = useMemo(() => loadTexture(character), []);
+  const characterTexture = useMemo(() => loadTexture(character), [character]);
   const {levelTexture, overlayTexture, doorTexture} = useLevelTextures(map);
   const {tile: characterTile} = useCharacterPosition();
   const {enabled: tutorialActive, close: closeTutorial} = useTutorialActive();

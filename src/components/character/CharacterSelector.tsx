@@ -3,7 +3,6 @@ import Button from "@/components/general-ui/Button.tsx";
 import { characters } from "./CharacterConstants";
 import {useCharacterImage} from "@/components/character/CharacterImageProvider.tsx";
 
-
 export default function CharacterSelector() {
   const { character, setCharacter } = useCharacterImage();
 
