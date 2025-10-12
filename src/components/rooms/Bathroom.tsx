@@ -5,12 +5,13 @@ import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 export const Bathroom = () => {
   const gameService = useGameService();
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
 
-  const roomName = "bathroom";
+  const roomName = RoomNames.BATHROOM;
 
   const collisionMap = LEVEL_COLLISION_MAPS[roomName];
 
