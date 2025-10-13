@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {RoomNames} from "@/objects/RoomNames.ts";
 
-export const FirstFloor = () => {
+export const Hallway = () => {
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
 
   const roomName = RoomNames.HALLWAY;
