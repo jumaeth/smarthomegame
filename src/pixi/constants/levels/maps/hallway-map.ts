@@ -22,7 +22,7 @@ const SPAWN_FROM_BATHROOM = {x: 10, y: 9} as Position;
 export const HALLWAY_TRANSITIONS: Transition[] = [
   {pos: SPAWN_FROM_LIVINGROOM, to: 'livingroom'},
   {pos: SPAWN_FROM_KITCHEN, to: 'kitchen'},
-  {pos: SPAWN_FROM_BATHROOM, to: 'bathroom'},
+  //{pos: SPAWN_FROM_BATHROOM, to: 'bathroom'},
 ];
 
 export const HALLWAY_OVERLAYS: Overlay[] = [
@@ -31,5 +31,5 @@ export const HALLWAY_OVERLAYS: Overlay[] = [
 export const HALLWAY_SPAWNS: SpawnTable = {
   livingroom: { pos: SPAWN_FROM_LIVINGROOM, face: "DOWN" },
   kitchen:    { pos: SPAWN_FROM_KITCHEN,    face: "DOWN" },
-  bathroom:   { pos: SPAWN_FROM_KITCHEN,    face: "DOWN" },
+  bathroom:   { pos: SPAWN_FROM_BATHROOM,    face: "DOWN" },
 };

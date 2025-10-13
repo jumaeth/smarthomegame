@@ -88,6 +88,8 @@ export class GameService {
   navigateAfterComplete(): void {
     if (this.checkGameCompletionConditions()) {
       this.finishGame();
+    } else {
+      this.continueGame();
     }
   }
 
