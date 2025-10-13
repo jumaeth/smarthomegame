@@ -15,7 +15,7 @@ const AppRoutes = () => (
         <Router>
           <ReloadHandler/>
           <Routes>
-            <Route path="/home" element={<HomePage/>}/>
+            <Route index path="/home" element={<HomePage/>}/>
             <Route path="/intro" element={<IntroPage/>}/>
             <Route path="/game" element={<GameWrapper/>}>
               <Route index element={<FloorSelector/>}/>
