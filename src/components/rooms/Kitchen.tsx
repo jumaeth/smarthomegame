@@ -10,7 +10,7 @@ import {ModalWrapperComponent} from "@/components/ModalWrapperComponent.tsx";
 import {SmartHomeHub} from "@/components/smart-devices/SmartHomeHub.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {SmartKitchen} from "@/components/smart-devices/SmartKitchen.tsx";
-import {SecurityCamera} from "@/components/smart-devices/SecurityCamera.tsx";
+import { SecurityCamera } from "../smart-devices/SecurityCamera";
 
 export const Kitchen = () => {
     const gameService = useGameService();
