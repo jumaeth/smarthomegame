@@ -1,13 +1,14 @@
 import {StatBlock} from "./StatBlock";
 
 type DeviceListener = (device: SmartDevice) => void;
+
 export class SmartDevice {
 
   private listeners = new Set<DeviceListener>;
 
   constructor(
           public name: string,
-          private helpText:string,
+          private helpText: string = "sorry, I cant help you with this",
           private isCompleted: boolean = false,
           public statBlock: StatBlock = new StatBlock()
   ) {
@@ -36,7 +37,7 @@ export class SmartDevice {
     return this.isCompleted;
   }
 
-  getHelpText():string{
+  getHelpText(): string {
     return this.helpText;
   }
 
