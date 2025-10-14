@@ -11,8 +11,8 @@ export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({ completeDevice }) =>
   };
 
   return (
-    <div className="p-6 m-4 bg-gray-100 rounded-xl shadow-md w-full h-full">
-      <div className="w-full h-[calc(100vh-100px)] min-h-[500px]">
+    <div className="p-6 m-4 bg-transparent mx-auto w-full">
+      <div className="relative w-full aspect-[16/9] min-h-[420px]">
         <DataSortingGame onCompletion={handleGameComplete} />
       </div>
     </div>

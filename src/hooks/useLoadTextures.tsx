@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Assets, Texture } from "pixi.js";
+import {useEffect, useState} from "react";
+import {Assets, Texture} from "pixi.js";
 
 export type TextureMap = { [key: string]: string };
 type LoadedTextures = { [key: string]: Texture };
