@@ -90,7 +90,7 @@ export const Kitchen = () => {
                       content={activeDevice ? deviceComponents[activeDevice] : null}
                       onClose={onModalClose}
                       showBg={sdEnabled}
-                      activeDevice={smartDevices.find((d) => d.name === activeDevice)}
+                      activeDevice={smartDevices.find((d) => d.name === activeDevice)??smartDevices[0]}
               />
             </div>
             <Stage width={canvasSize.width} height={canvasSize.height}>
