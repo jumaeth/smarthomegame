@@ -3,7 +3,7 @@ import {Room} from "@/objects/Room";
 import {SmartDevice} from "@/objects/SmartDevice";
 import {CookieService} from '@/services/CookieService';
 import {movementStore} from '@/utils/movementEnabled';
-import {RoomNames} from "@/objects/RoomNames.ts";
+import {RoomNames} from "@/objects/RoomNames";
 
 // mock CookieService to avoid document access
 jest.mock('@/services/CookieService', () => ({
