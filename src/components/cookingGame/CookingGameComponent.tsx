@@ -48,7 +48,8 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
         if (privacy)gameService.changeScore(privacy, "privacy");
         if (comfort)gameService.changeScore(comfort, "comfort");
       }
-      device.getStatBlock().setValue("Smart Kitchen Points", points);
+      const statsScore:number = points.get(Score.Privacy) ?? 0;
+      device.getStatBlock().setValue("Smart Kitchen Points",statsScore);
       device.getStatBlock().stopTimer();
       onCompletion();
     }else if(stage === nextStage){

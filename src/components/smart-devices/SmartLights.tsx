@@ -15,13 +15,10 @@ export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback
     if (isCompleted) {
       onCompletion(isCompleted);
     }
-
+    const calculatedScores = {privacy : gameService.getScore().getPrivacyScore(), comfort : gameService.getScore().getComfortScore()};
     smartLightsDevice.getStatBlock().setValue("Smart Lights Privacy Score", calculatedScores.privacy);
     smartLightsDevice.getStatBlock().setValue("Smart Lights Comfort Score", calculatedScores.comfort);
     smartLightsDevice.getStatBlock().stopTimer();
-    console.log(
-            `SmartLights totals → Privacy: ${totals.privacy}, Comfort: ${totals.comfort}`
-    );
   };
 
   const solutions: Solution[] = [
