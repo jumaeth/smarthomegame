@@ -2,12 +2,12 @@ import {Game} from "../objects/Game";
 import {Room} from "../objects/Room";
 import {RoomNames} from "../objects/RoomNames";
 import {SmartDevice} from "../objects/SmartDevice";
-import {GameScore, ScoreType} from "@/objects/GameScore.ts";
-import {CookieService} from "@/services/CookieService.ts";
-import {allRoomStore} from "@/utils/roomStore.ts";
-import {movementStore} from "@/utils/movementEnabled.ts";
+import {GameScore, ScoreType} from "@/objects/GameScore";
+import {CookieService} from "@/services/CookieService";
+import {allRoomStore} from "@/utils/roomStore";
+import {movementStore} from "@/utils/movementEnabled";
 import {t} from "@lingui/core/macro";
-import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive.ts";
+import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive";
 
 
 type DeviceListener = (device: SmartDevice) => void;
@@ -66,7 +66,7 @@ export class GameService {
     return allRoomStore.getAll();
   }
 
-  findRoomByName(roomName: RoomNames): Room | undefined {
+  private findRoomByName(roomName: RoomNames): Room | undefined {
     return allRoomStore.getRoom(roomName);
   }
 
@@ -78,7 +78,7 @@ export class GameService {
     this.onGameStateChange();
   }
 
-  navigateAfterComplete(): void {
+  private navigateAfterComplete(): void {
     if (this.checkGameCompletionConditions()) {
       this.finishGame();
     } else {
@@ -137,12 +137,6 @@ export class GameService {
   enableSmartDevices(): void {
     this.smartDevicesEnabled = true;
     this.emitSmartDevicesEnable();
-  }
-
-  toogleRoomIsLocked(roomName: RoomNames): void {
-    const room: Room | undefined = this.findRoomByName(roomName);
-    if (room) room.toggleIsLocked();
-    this.onGameStateChange();
   }
 
   leaveRoom(roomName: RoomNames): boolean {
@@ -211,7 +205,7 @@ export class GameService {
     }
   }
 
-  checkRoomCompleted(name: RoomNames): boolean{
+  checkRoomCompleted(name: RoomNames): boolean {
     return allRoomStore.getRoom(name).devices.every(d => d.getIsCompleted());
   }
 
