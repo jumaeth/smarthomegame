@@ -3,6 +3,7 @@ import {Sprite} from "@pixi/react";
 import {useLoadTextures} from "@/hooks/useLoadTextures.tsx";
 import {ProgressBarIcons} from "@/pixi/components/ProgressBar/ProgressBarIcons.tsx";
 import {GameService} from "@/services/GameService.ts";
+import trophyUrl from "@/assets/progressBar/trophy.png";
 
 interface ProgressBarProps {
   x: number;
@@ -21,7 +22,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                                                         }: ProgressBarProps) => {
 
   const texturePaths = useMemo(
-          () => ({ trophy: "/src/assets/progressBar/trophy.png" }),
+          () => ({ trophy: trophyUrl }),
           []
   );
   const {textures, loaded} = useLoadTextures(texturePaths);

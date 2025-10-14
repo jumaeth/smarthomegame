@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
+import React, {PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Graphics, Sprite, Text} from "@pixi/react";
 import tvImage from "@/assets/tutorial/explainTVPage/tv.png";
 import robot from "@/assets/tutorial/explainTVPage/sad.png";
@@ -15,7 +15,7 @@ import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager
 import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
-import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {t} from "@lingui/core/macro";
 
 
@@ -46,9 +46,9 @@ export const More_Expl: React.FC<PageProps> = ({
 
 
 
-  const textsTemp = [
+  const textsTemp = useMemo( () => [
     t`Oh no! See the smartTV? It is controlled by the attacker and shows only red images.\n\nLet’s use the learned to navigate to the smart device and solve the challenge to regain control.`
-  ]
+  ], [])
 
   //----------init----------
 
@@ -58,13 +58,7 @@ export const More_Expl: React.FC<PageProps> = ({
       setAnimation(Animations.INTRO);
       setOnLoad(false);
     }
-  }, [onLoad]);
-
-  useEffect(() => {
-    setupTexts();
-    setupGraphics();
-    setupRobot();
-  }, [textRef]);
+  }, [onLoad, Animations.INTRO]);
 
 
   //----------animations----------
@@ -156,7 +150,7 @@ export const More_Expl: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation]);
+  }, [animation, Animations.INTRO, Animations.IDLE, Animations.OUTRO, setKeyControl, setNextPage, windowWidth, windowHeight]);
 
 
   //----------user input----------
@@ -179,14 +173,14 @@ export const More_Expl: React.FC<PageProps> = ({
     return () => {
       events.forEach(func => window.removeEventListener("keydown", func));
     };
-  }, [keyControl, animating]);
+  }, [keyControl, animating, Animations.OUTRO]);
 
 
 
   //----------drawings----------
 
   //store line properties in pixiGraphic
-  const setupTexts = () => {
+  const setupTexts = useCallback(() => {
     const t1 = new PixiText();
     t1.text = textsTemp[0];
     t1.x = windowWidth*0.575;
@@ -199,8 +193,9 @@ export const More_Expl: React.FC<PageProps> = ({
 
     setPixiTexts(prev => [...prev, t1]);
 
-  }
-  const setupGraphics = () => {
+  },[textsTemp, windowWidth, windowHeight])
+
+  const setupGraphics = useCallback(() => {
 
     const g = new PixiGraphics();
     g.clear();
@@ -213,9 +208,9 @@ export const More_Expl: React.FC<PageProps> = ({
     if (!parent) return;
 
     parent.addChild(g);
-  }
+  },[windowWidth, windowHeight])
 
-  const setupRobot = () => {
+  const setupRobot = useCallback(() => {
 
     const r = robotRef.current;
     if (!r)return;
@@ -225,7 +220,13 @@ export const More_Expl: React.FC<PageProps> = ({
     r.y = windowHeight * 0.7;
     r.texture = textureRobot;
 
-  }
+  },[textureRobot, windowWidth, windowHeight])
+
+  useEffect(() => {
+    setupTexts();
+    setupGraphics();
+    setupRobot();
+  }, [textRef, setupGraphics, setupRobot, setupTexts]);
 
   const graphics = () => {
     return (

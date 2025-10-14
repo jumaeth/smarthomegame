@@ -7,7 +7,7 @@ import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps
 import {useNavigate} from "react-router-dom";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 
-export const FirstFloor = () => {
+export const Hallway = () => {
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
 
   const roomName = "hallway"; //ToDo find better way to match with GameService

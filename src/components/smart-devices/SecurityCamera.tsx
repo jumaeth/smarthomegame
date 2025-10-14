@@ -5,7 +5,7 @@ import { t } from "@lingui/core/macro";
 import { CaptchaComponent } from "@/components/mini-game/CaptchaComponent.tsx";
 import { useGameService } from "@/hooks/gameService/useGameService.tsx";
 
-type onCompletionCallback = (isCompleted: boolean) => void;
+type onCompletionCallback = () => void;
 
 interface CameraOption {
   id: string;
@@ -16,7 +16,7 @@ interface CameraOption {
   comfortScore: number;
 }
 
-export const SecurityCamera = ({ onCompletion }: { onCompletion: onCompletionCallback }) => {
+export const SecurityCamera = ({ completeDevice }: { completeDevice: onCompletionCallback }) => {
   const gameService = useGameService();
 
   // Frame flow: 0 = settings, 1 = placements captcha
@@ -122,7 +122,7 @@ export const SecurityCamera = ({ onCompletion }: { onCompletion: onCompletionCal
   const handleCaptchaCompletion = (isCompleted: boolean) => {
     if (isCompleted) {
       applyScores(+6, +2);
-      onCompletion(true);
+      completeDevice();
     }
   };
 

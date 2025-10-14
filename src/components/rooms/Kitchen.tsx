@@ -11,73 +11,55 @@ import {SmartHomeHub} from "@/components/smart-devices/SmartHomeHub.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {SmartKitchen} from "@/components/smart-devices/SmartKitchen.tsx";
 import {SecurityCamera} from "@/components/smart-devices/SecurityCamera.tsx";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 export const Kitchen = () => {
     const gameService = useGameService();
-    const roomName = "kitchen"; //ToDo find better way to match with GameService
+    const roomName = RoomNames.KITCHEN
     const [isPaused, setIsPaused] = useState(false);
 
-    const smartHomeHubModalRef = useRef<{ toggleModal: () => void }>(null);
-  const smartKitchenModalRef = useRef<{ toggleModal: () => void }>(null);
-  const securityCameraModalRef = useRef<{ toggleModal: () => void }>(null);
+    const smartHomeHubModalRef = useRef<{ toggleModal: () => void } | null>(null);
+  const smartKitchenModalRef = useRef<{ toggleModal: () => void } | null>(null);
+  const securityCameraModalRef = useRef<{ toggleModal: () => void } | null>(null);
 
   const devices = gameService.getDeviceForRoom(roomName).map((device: SmartDevice) => device.name);
-    const [isSmartHomeHubCompleted, setSmartHomeHubCompleted] = useState(false);
-  const [isSmartKitchenCompleted, setSmartKitchenCompleted] = useState(false);
-  const [isSecurityCameraCompleted, setSecurityCameraCompleted] = useState(false);
 
-
-  const checkForCompletion = () => {
-    if ((!devices.includes("SmartHomeHub") || isSmartHomeHubCompleted) && (!devices.includes("SecurityCamera") || isSecurityCameraCompleted) && (!devices.includes("SmartKitchen") || isSmartKitchenCompleted)) {
-      console.log("Kitchen erfolgreich abgeschlossen!");
-      gameService.completeRoom(roomName);
-    } else {
-      console.log("Kitchen nicht bestanden.");
-    }
-  };
-
-    const smartHomeHubCallback = (isCompleted: boolean) => {
-        setSmartHomeHubCompleted(isCompleted);
+    const smartHomeHubCallback = () => {
         gameService.completeDevice("SmartHomeHub");
         setIsPaused(false);
         smartHomeHubModalRef.current?.toggleModal();
-        checkForCompletion();
     };
 
     const openSmartHomeHub = () => {
         if (smartHomeHubModalRef.current) {
             setIsPaused(true)
-            smartHomeHubModalRef.current.toggleModal();
+            smartHomeHubModalRef.current?.toggleModal();
         }
     }
 
-  const securityCameraCallback = (isCompleted: boolean) => {
-    setSecurityCameraCompleted(isCompleted);
+  const securityCameraCallback = () => {
     gameService.completeDevice("SecurityCamera");
     setIsPaused(false);
     securityCameraModalRef.current?.toggleModal();
-    checkForCompletion();
   };
 
   const openSecurityCameraHomeHub = () => {
     if (securityCameraModalRef.current) {
       setIsPaused(true)
-      securityCameraModalRef.current.toggleModal();
+      securityCameraModalRef.current?.toggleModal();
     }
   }
 
-  const smartKitchenCallback = (isCompleted: boolean) => {
-    setSmartKitchenCompleted(isCompleted);
+  const smartKitchenCallback = () => {
     gameService.completeDevice("SmartKitchen");
     setIsPaused(false);
     smartKitchenModalRef.current?.toggleModal();
-    checkForCompletion();
   };
 
   const openSmartKitchen = () => {
     if (smartKitchenModalRef.current) {
       setIsPaused(true);
-      smartKitchenModalRef.current.toggleModal();
+      smartKitchenModalRef.current?.toggleModal();
     }
   };
 
@@ -120,21 +102,21 @@ export const Kitchen = () => {
               {devices.includes("SmartHomeHub") && (
                       <ModalWrapperComponent
                               ref={smartHomeHubModalRef}
-                              content={<SmartHomeHub onCompletion={smartHomeHubCallback}/>}
+                              content={<SmartHomeHub completeDevice={smartHomeHubCallback}/>}
                               onClose={onModalClose}
                       />
               )}
               {devices.includes("SmartKitchen") && (
                       <ModalWrapperComponent
                               ref={smartKitchenModalRef}
-                              content={<SmartKitchen onCompletion={smartKitchenCallback} />}
+                              content={<SmartKitchen completeDevice={smartKitchenCallback} />}
                               onClose={onModalClose}
                       />
               )}
               {devices.includes("SecurityCamera") && (
                       <ModalWrapperComponent
                               ref={securityCameraModalRef}
-                              content={<SecurityCamera onCompletion={securityCameraCallback}/>}
+                              content={<SecurityCamera completeDevice={securityCameraCallback}/>}
                               onClose={onModalClose}
                       />
               )}

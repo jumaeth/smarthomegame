@@ -1,10 +1,12 @@
 import {Game} from "../objects/Game";
-import {Room, RoomName} from "../objects/Room";
+import {Room} from "../objects/Room";
+import {RoomNames} from "../objects/RoomNames";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore";
 import {CookieService} from "@/services/CookieService";
 import {allRoomStore} from "@/utils/roomStore";
 import {movementStore} from "@/utils/movementEnabled";
+import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive";
 
 
 type DeviceListener = (device: SmartDevice) => void;
@@ -21,10 +23,12 @@ export class GameService {
 
   constructor(navigate: (path: string) => void) {
     const saveGame = CookieService.get<Game>('save_game');
+    const tutorialCookie = CookieService.get<boolean>('tutorialState');
     if (saveGame) {
       const game = Game.fromSerialized(saveGame);
       this.game = game;
       allRoomStore.set(game.getRooms());
+      if(tutorialCookie != null)tutorialActiveStore.set(tutorialCookie);
     } else {
       const newRooms = this.setUpRooms();
       this.game = new Game(newRooms);
@@ -38,16 +42,17 @@ export class GameService {
       rooms:  allRoomStore.getAll().map(r => r.toSerialized()),
       score: this.game.getScore().toSerialized(),
     });
+    CookieService.set("tutorialState", tutorialActiveStore.get());
   }
 
   setUpRooms(): Room[] {
 
-    const livingRoom = new Room("livingroom",[
+    const livingRoom = new Room(RoomNames.LIVINGROOM,[
       new SmartDevice("SmartTv"),
       new SmartDevice("SmartLights")
     ]);
 
-    const kitchen= new Room("kitchen",[
+    const kitchen= new Room(RoomNames.KITCHEN,[
       new SmartDevice("SmartHomeHub"),
       new SmartDevice("SmartKitchen"),
       new SmartDevice("SecurityCamera"),
@@ -64,7 +69,7 @@ export class GameService {
     return allRoomStore.getRoom(roomName);
   }
 
-  completeRoom(roomName: RoomName): void {
+  completeRoom(roomName: RoomNames): void {
     const room: Room | undefined = this.findRoomByName(roomName);
     if (!room) return;
     room.complete();
@@ -84,7 +89,7 @@ export class GameService {
     return allRoomStore.getAll().every((room: Room) => room.isCompleted);
   }
 
-  getDeviceForRoom(roomName: RoomName): SmartDevice[] {
+  getDeviceForRoom(roomName: RoomNames): SmartDevice[] {
     const room: Room | undefined = this.findRoomByName(roomName);
     return room ? room.devices : [];
   }
@@ -135,7 +140,7 @@ export class GameService {
 
   leaveRoom(roomName: RoomName): boolean {
     const room: Room | undefined = this.findRoomByName(roomName);
-    if (room?.isLocked == false) {
+    if (room?.isLocked == false || room?.isLocked == undefined) {
       this.navigate('/game');
       this.onGameStateChange();
     }
@@ -190,15 +195,33 @@ export class GameService {
 
   completeDevice(name: string): void {
     const device = allRoomStore.getDevice(name);
+    const room = allRoomStore.getRoomForDevice(name);
     if (device){
       device.complete();
       this.deviceListeners.forEach(cb => cb(device));
+      if(this.checkRoomCompleted(room))this.completeRoom(room);
       this.onGameStateChange();
     }
+  }
+
+  checkRoomCompleted(name: RoomNames): boolean{
+    return allRoomStore.getRoom(name).devices.every(d => d.getIsCompleted());
   }
 
   onDeviceStateChanged(listener: DeviceListener): () => void {
     this.deviceListeners.add(listener);
     return () => this.deviceListeners.delete(listener);
+  }
+
+  public getGame(): Game {
+    return this.game;
+  }
+
+  public getDeviceByName(deviceName: string): SmartDevice {
+    const device = allRoomStore.getDevice(deviceName);
+    if (!device) {
+      throw new Error(`Device "${deviceName}" not found`);
+    }
+    return device;
   }
 }

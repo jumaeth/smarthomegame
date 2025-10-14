@@ -1,6 +1,7 @@
 import {SmartDevice} from "@/objects/SmartDevice";
 import {useMemo, useSyncExternalStore} from "react";
 import {Room} from "@/objects/Room";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 type Listener = () => void;
 
@@ -17,6 +18,10 @@ class roomStore {
 
   getAllDevices(): SmartDevice[] {
    return this.rooms.flatMap(r => r.devices);
+  }
+
+  getRoomForDevice(name: string): RoomNames {
+    return <RoomNames>this.rooms.find(r => r.devices.find(d => d.name === name))?.name;
   }
 
   getDevice(name: string): SmartDevice | undefined {
