@@ -205,7 +205,7 @@ export class GameService {
     }
   }
 
-  checkRoomCompleted(name: RoomNames): boolean{
+  checkRoomCompleted(name: RoomNames): boolean {
     return allRoomStore.getRoom(name).devices.every(d => d.getIsCompleted());
   }
 
