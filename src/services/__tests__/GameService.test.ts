@@ -1,8 +1,9 @@
 import {GameService} from '../GameService';
 import {Room} from "@/objects/Room";
 import {SmartDevice} from "@/objects/SmartDevice";
-import { CookieService } from '@/services/CookieService';
-import { movementStore } from '@/utils/movementEnabled';
+import {CookieService} from '@/services/CookieService';
+import {movementStore} from '@/utils/movementEnabled';
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 // mock CookieService to avoid document access
 jest.mock('@/services/CookieService', () => ({
@@ -19,7 +20,7 @@ describe('GameService', () => {
 
   beforeEach(() => {
     const rooms = [
-      new Room("livingroom", [
+      new Room(RoomNames.LIVINGROOM, [
         new SmartDevice("SmartTv"),
         new SmartDevice("SmartLights"),
       ]),
@@ -47,7 +48,7 @@ describe('GameService', () => {
   it('getAllRooms() should return all rooms', () => {
     const result = gameService.getAllRooms();
     expect(result).toEqual([
-      new Room('livingroom', [
+      new Room(RoomNames.LIVINGROOM, [
         new SmartDevice('SmartTv'),
         new SmartDevice('SmartLights'),
       ]),
@@ -55,7 +56,7 @@ describe('GameService', () => {
   });
 
   it('completeRoom() should set selected room to complete', () => {
-    gameService.completeRoom('livingroom');
+    gameService.completeRoom(RoomNames.LIVINGROOM);
     expect(gameService.getAllRooms()?.[0].isCompleted).toBe(true);
   });
 
@@ -65,7 +66,7 @@ describe('GameService', () => {
             .spyOn(gameService, 'checkGameCompletionConditions')
             .mockReturnValue(false);
 
-    gameService.completeRoom('livingroom');
+    gameService.completeRoom(RoomNames.LIVINGROOM);
 
     expect(continueGameSpy).toHaveBeenCalled();
     expect(checkGameCompletionSpy).toHaveBeenCalled();
@@ -80,7 +81,7 @@ describe('GameService', () => {
             .spyOn(gameService, 'checkGameCompletionConditions')
             .mockReturnValue(true);
 
-    gameService.completeRoom('livingroom');
+    gameService.completeRoom(RoomNames.LIVINGROOM);
 
     expect(finishGameSpy).toHaveBeenCalled();
     expect(checkGameCompletionSpy).toHaveBeenCalled();
@@ -90,7 +91,7 @@ describe('GameService', () => {
   });
 
   it('getDeviceForRoom() should return the devices for a given room', () => {
-    const devices = gameService.getDeviceForRoom('livingroom');
+    const devices = gameService.getDeviceForRoom(RoomNames.LIVINGROOM);
     expect(devices).toBeDefined();
     expect(devices.length).toBeGreaterThan(0);
     expect(devices[0].name).toBeDefined();
@@ -148,7 +149,7 @@ describe('GameService', () => {
   });
 
   it('leaveRoom() should navigate if room is not locked', () => {
-    const result = gameService.leaveRoom('livingroom');
+    const result = gameService.leaveRoom(RoomNames.LIVINGROOM);
     expect(result).toBe(true);
     expect(navigateMock).toHaveBeenCalledWith('/game');
   });
@@ -200,7 +201,7 @@ describe('GameService', () => {
   });
 
   it('completeDevice() should mark device complete and trigger deviceListeners', () => {
-    const device = gameService.getDeviceForRoom('livingroom')[0];
+    const device = gameService.getDeviceForRoom(RoomNames.LIVINGROOM)[0];
     const listener = jest.fn();
     gameService.onDeviceStateChanged(listener);
     gameService.completeDevice(device.name);
