@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
+import React, {PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Sprite, Text} from "@pixi/react";
 import waving from "@/assets/tutorial/finalExpl/waving.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
@@ -13,7 +13,7 @@ import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
-import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 import {t} from "@lingui/core/macro";
 
@@ -42,17 +42,9 @@ export const Final_Message: React.FC<PageProps> = ({
 
 
 
-  const textsTemp = [
+  const textsTemp = useMemo( () => [
     t`That's it, now you are ready to save the smart home and make that movie night possible!`
-  ]
-
-  useEffect(() => {
-    setupBackground();
-    setupTexts();
-    setupGraphics();
-    setupRobot();
-    setAnimation(Animations.INTRO);
-  }, [textRef]);
+  ], [])
 
 
   //----------animations----------
@@ -124,7 +116,7 @@ export const Final_Message: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation]);
+  }, [animation, Animations.IDLE, Animations.INTRO, Animations.OUTRO, setKeyControl, setNextPage]);
 
 
   //----------user input----------
@@ -147,14 +139,14 @@ export const Final_Message: React.FC<PageProps> = ({
     return () => {
       events.forEach(func => window.removeEventListener("keydown", func));
     };
-  }, [keyControl, animating]);
+  }, [keyControl, animating, Animations.OUTRO]);
 
 
 
   //----------drawings----------
 
   //store line properties in pixiGraphic
-  const setupTexts = () => {
+  const setupTexts = useCallback(() => {
     const t1 = new PixiText();
     t1.text = textsTemp[0];
     t1.x = windowWidth*0.5;
@@ -167,9 +159,9 @@ export const Final_Message: React.FC<PageProps> = ({
 
     setPixiTexts(prev => [...prev, t1]);
 
-  }
+  },[textsTemp, windowWidth, windowHeight])
 
-  const setupBackground = () => {
+  const setupBackground = useCallback(() => {
     const parent = backgroundRef?.current;
     if (!parent) return;
 
@@ -180,9 +172,9 @@ export const Final_Message: React.FC<PageProps> = ({
     b.endFill();
 
     parent.addChild(b);
-  }
+  },[windowWidth, windowHeight])
 
-  const setupGraphics = () => {
+  const setupGraphics = useCallback( () => {
 
     const parent = graphicRef?.current;
     if (!parent) return;
@@ -195,9 +187,9 @@ export const Final_Message: React.FC<PageProps> = ({
     g.endFill();
 
     parent.addChild(g);
-  }
+  },[windowWidth, windowHeight])
 
-  const setupRobot = () => {
+  const setupRobot = useCallback( () => {
 
     const r = robotRef.current;
     if (!r)return;
@@ -208,7 +200,15 @@ export const Final_Message: React.FC<PageProps> = ({
     r.scale.set(0.75);
     r.texture = textureRobot;
 
-  }
+  },[textureRobot, windowWidth, windowHeight])
+
+  useEffect(() => {
+    setupBackground();
+    setupTexts();
+    setupGraphics();
+    setupRobot();
+    setAnimation(Animations.INTRO);
+  }, [textRef, Animations.INTRO, setupTexts, setupGraphics, setupRobot, setupBackground]);
 
   const graphics = () => {
     return (

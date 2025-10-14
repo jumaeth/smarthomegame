@@ -2,15 +2,26 @@ import {t} from "@lingui/core/macro";
 import {Trans} from "@lingui/react/macro";
 import {newSolution, Solution} from "@/types/solution.ts";
 import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
+import { useGameService } from "@/hooks/gameService/useGameService.tsx";
+import {SmartDevice} from "@/objects/SmartDevice.ts";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
 export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
+  const gameService = useGameService();
+  const smartLightsDevice:SmartDevice = gameService.getDeviceByName("SmartTv");
 
   const handleQuizCompletion = (isCompleted: boolean) => {
     if (isCompleted) {
       onCompletion(isCompleted);
     }
+
+    smartLightsDevice.getStatBlock().setValue("Smart Lights Privacy Score", calculatedScores.privacy);
+    smartLightsDevice.getStatBlock().setValue("Smart Lights Comfort Score", calculatedScores.comfort);
+    smartLightsDevice.getStatBlock().stopTimer();
+    console.log(
+            `SmartLights totals → Privacy: ${totals.privacy}, Comfort: ${totals.comfort}`
+    );
   };
 
   const solutions: Solution[] = [

@@ -1,5 +1,6 @@
 import {Game} from "../objects/Game";
-import {Room, RoomName} from "../objects/Room";
+import {Room} from "../objects/Room";
+import {RoomNames} from "../objects/RoomNames";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore.ts";
 import {CookieService} from "@/services/CookieService.ts";
@@ -46,12 +47,12 @@ export class GameService {
 
   setUpRooms(): Room[] {
 
-    const livingRoom = new Room("livingroom",[
+    const livingRoom = new Room(RoomNames.LIVINGROOM,[
       new SmartDevice("SmartTv"),
       new SmartDevice("SmartLights")
     ]);
 
-    const kitchen= new Room("kitchen",[
+    const kitchen= new Room(RoomNames.KITCHEN,[
       new SmartDevice("SmartHomeHub"),
       new SmartDevice("SmartKitchen"),
       new SmartDevice("SecurityCamera"),
@@ -64,12 +65,13 @@ export class GameService {
     return allRoomStore.getAll();
   }
 
-  findRoomByName(roomName: RoomName): Room | undefined {
+  findRoomByName(roomName: RoomNames): Room | undefined {
     return allRoomStore.getRoom(roomName);
   }
 
-  completeRoom(roomName: RoomName): void {
-    const room: Room = this.findRoomByName(roomName)!;
+  completeRoom(roomName: RoomNames): void {
+    const room: Room | undefined = this.findRoomByName(roomName);
+    if (!room) return;
     room.complete();
     this.navigateAfterComplete();
     this.onGameStateChange();
@@ -87,7 +89,7 @@ export class GameService {
     return allRoomStore.getAll().every((room: Room) => room.isCompleted);
   }
 
-  getDeviceForRoom(roomName: RoomName): SmartDevice[] {
+  getDeviceForRoom(roomName: RoomNames): SmartDevice[] {
     const room: Room | undefined = this.findRoomByName(roomName);
     return room ? room.devices : [];
   }
@@ -136,15 +138,15 @@ export class GameService {
     this.emitSmartDevicesEnable();
   }
 
-  toogleRoomIsLocked(roomName: RoomName): void {
+  toogleRoomIsLocked(roomName: RoomNames): void {
     const room: Room | undefined = this.findRoomByName(roomName);
     if (room) room.toggleIsLocked();
     this.onGameStateChange();
   }
 
-  leaveRoom(roomName: RoomName): boolean {
+  leaveRoom(roomName: RoomNames): boolean {
     const room: Room | undefined = this.findRoomByName(roomName);
-    if (room?.isLocked == false) {
+    if (room?.isLocked == false || room?.isLocked == undefined) {
       this.navigate('/game');
       this.onGameStateChange();
     }
@@ -208,12 +210,24 @@ export class GameService {
     }
   }
 
-  checkRoomCompleted(name: RoomName): boolean{
+  checkRoomCompleted(name: RoomNames): boolean{
     return allRoomStore.getRoom(name).devices.every(d => d.getIsCompleted());
   }
 
   onDeviceStateChanged(listener: DeviceListener): () => void {
     this.deviceListeners.add(listener);
     return () => this.deviceListeners.delete(listener);
+  }
+
+  public getGame(): Game {
+    return this.game;
+  }
+
+  public getDeviceByName(deviceName: string): SmartDevice {
+    const device = allRoomStore.getDevice(deviceName);
+    if (!device) {
+      throw new Error(`Device "${deviceName}" not found`);
+    }
+    return device;
   }
 }

@@ -10,11 +10,12 @@ import {ModalWrapperComponent} from "@/components/ModalWrapperComponent.tsx";
 import {SmartHomeHub} from "@/components/smart-devices/SmartHomeHub.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {SmartKitchen} from "@/components/smart-devices/SmartKitchen.tsx";
-import { SecurityCamera } from "../smart-devices/SecurityCamera";
+import {SecurityCamera} from "@/components/smart-devices/SecurityCamera.tsx";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 export const Kitchen = () => {
     const gameService = useGameService();
-    const roomName = "kitchen"; //ToDo find better way to match with GameService
+    const roomName = RoomNames.KITCHEN
     const [isPaused, setIsPaused] = useState(false);
 
     const smartHomeHubModalRef = useRef<{ toggleModal: () => void } | null>(null);
