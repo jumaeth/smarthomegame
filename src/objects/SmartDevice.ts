@@ -1,3 +1,4 @@
+import {StatBlock} from "./StatBlock";
 
 type DeviceListener = (device: SmartDevice) => void;
 export class SmartDevice {
@@ -8,6 +9,7 @@ export class SmartDevice {
           public name: string,
           private helpText:string,
           private isCompleted: boolean = false,
+          public statBlock: StatBlock = new StatBlock()
   ) {
   }
 
@@ -25,12 +27,12 @@ export class SmartDevice {
     };
   }
 
-  complete():void {
+  complete(): void {
     this.isCompleted = true;
     this.emit();
   }
 
-  getIsCompleted():boolean{
+  getIsCompleted(): boolean {
     return this.isCompleted;
   }
 
@@ -45,5 +47,12 @@ export class SmartDevice {
 
   private emit() {
     for (const l of this.listeners) l(this);
+  }
+
+  getStatBlock(): StatBlock {
+    if (!this.statBlock) {
+      return new StatBlock()
+    }
+    return this.statBlock;
   }
 }

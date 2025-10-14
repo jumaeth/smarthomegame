@@ -7,6 +7,8 @@ import kitchenDoorHalfOpenImg from '@/assets/levels/kitchen/kitchen_door_half_op
 import kithenDoorOpenImg from '@/assets/levels/kitchen/kitchen_door_open.png';
 import hallwayImg from '@/assets/levels/hallway/hallway.png';
 import hallwayOverlayImg from '@/assets/levels/hallway/hallway_overlay.png';
+import bathroomImg from '@/assets/levels/bathroom/bathroom.png';
+import bathroomOverlayImg from '@/assets/levels/bathroom/bathroom_overlay.png';
 
 import { MapKey } from '@/types/maps';
 
@@ -14,4 +16,5 @@ export const LEVEL_TEXTURES: Record<MapKey, { level: string; overlay: string, do
   livingroom: { level: livingroomImg, overlay: livingroomOverlayImg},
   kitchen: { level: kitchenImg, overlay: kitchenOverlayImg, door: [kitchenDoorClosedImg, kitchenDoorHalfOpenImg, kithenDoorOpenImg]},
   hallway: { level: hallwayImg, overlay: hallwayOverlayImg },
+  bathroom: { level: bathroomImg, overlay: bathroomOverlayImg },
 };

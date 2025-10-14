@@ -1,6 +1,7 @@
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {useMemo, useSyncExternalStore} from "react";
-import {Room, RoomName} from "@/objects/Room.ts";
+import {Room} from "@/objects/Room.ts";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 type Listener = () => void;
 
@@ -19,8 +20,8 @@ class roomStore {
    return this.rooms.flatMap(r => r.devices);
   }
 
-  getRoomForDevice(name: string): RoomName {
-    return <"livingroom" | "hallway" | "kitchen"> this.rooms.find(r => r.devices.find(d => d.name === name))?.name;
+  getRoomForDevice(name: string): RoomNames {
+    return <RoomNames>this.rooms.find(r => r.devices.find(d => d.name === name))?.name;
   }
 
   getDevice(name: string): SmartDevice | undefined {

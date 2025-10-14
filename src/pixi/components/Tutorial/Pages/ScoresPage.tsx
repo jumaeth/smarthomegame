@@ -12,7 +12,7 @@ import {GROW_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
 import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
-import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {t} from "@lingui/core/macro";
 
@@ -45,21 +45,13 @@ export const ScoresPage: React.FC<PageProps> = ({
 
 
   //others
-  const textArr = [
+  const textArr  = useMemo( () => [
     t`Your privacy score`,
     t`It indicates the safety of your data. Evil attackers always try to steal your data and use it to attack you and your personal space. A high privacy score makes it harder for them!`,
     t`Your comfort score`,
     t`A smarthome does a great deal to make your life more comfortable. It can automate routines or know your preferences even better than yourself. A high comfort score makes your life easier!`,
     t`The scores`
-  ]
-
-  //init graphics/texts
-  useEffect(() => {
-    if (onLoad) {
-      setupTexts();
-      setOnLoad(false);
-    }
-  }, [onLoad]);
+  ], [])
 
   //hide explanations  on init
   useLayoutEffect(() => {
@@ -126,7 +118,7 @@ export const ScoresPage: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation]);
+  }, [animation, Animations.END, Animations.GROW, Animations.SHRINK, mgrRef, setKeyControl, setNextPage, windowWidth, windowHeight]);
 
 
   //keyControls
@@ -146,11 +138,11 @@ export const ScoresPage: React.FC<PageProps> = ({
     return () => {
       events.forEach(func => window.removeEventListener("keydown", func));
     };
-  }, [keyControl, animating]);
+  }, [keyControl, animating, Animations.SHRINK]);
 
 
   //setup graphics
-  const setupTexts = () => {
+  const setupTexts = useCallback(() => {
     setAllTexts(prev => [
       ...prev,
       { text: textArr[0], x: windowWidth*0.2,   y: windowHeight*0.6,  fontSize: 0.04, fontWeight: "bold"   },
@@ -159,7 +151,14 @@ export const ScoresPage: React.FC<PageProps> = ({
       { text: textArr[3], x: windowWidth*0.7425, y: windowHeight*0.73,  fontSize: 0.03, fontWeight: "lighter", wrap: 0.36},
       { text: textArr[4], x: windowWidth*0.55+TILE_SIZE*3, y: windowHeight*0.1, fontSize: 0.07, fontWeight: "bold" },
     ]);
-  };
+  },[textArr, windowWidth, windowHeight])
+
+  useEffect(() => {
+    if (onLoad) {
+      setupTexts();
+      setOnLoad(false);
+    }
+  }, [onLoad, setupTexts]);
 
   const drawLines =  useCallback( (g: PixiGraphics) => {
     g.clear();
@@ -174,7 +173,7 @@ export const ScoresPage: React.FC<PageProps> = ({
     g.moveTo(windowWidth*0.55, windowHeight*0.725);
     g.bezierCurveTo(windowWidth*0.475, windowHeight*0.67, windowWidth*0.405, windowHeight*0.525, windowWidth*0.4, windowHeight*0.5);
 
-  }, [])
+  }, [windowWidth, windowHeight])
 
   const lines = () => {
     return (

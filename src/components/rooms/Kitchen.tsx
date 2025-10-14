@@ -10,12 +10,13 @@ import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
 import {SmartHomeHub} from "@/components/smart-devices/SmartHomeHub.tsx";
 import {SmartKitchen} from "@/components/smart-devices/SmartKitchen.tsx";
 import {SecurityCamera} from "@/components/smart-devices/SecurityCamera.tsx";
+import {RoomNames} from "@/objects/RoomNames.ts";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState.ts";
 import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
 
 export const Kitchen = () => {
-  const roomName = "kitchen";
+  const roomName = RoomNames.KITCHEN;
   const gameService = useGameService();
   const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
 
