@@ -15,7 +15,7 @@ export const SmartKitchen: React.FC<SmartKitchenProps> = ({ completeDevice}) => 
 
   return (
           <div>
-            <CookingGameComponent onCompletion={handleGameComplete}/>
+            <CookingGameComponent onCompletion={handleGameComplete} />
           </div>
   );
 };

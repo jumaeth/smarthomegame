@@ -1,24 +1,16 @@
-import {Sprite, Text, Graphics, TilingSprite} from '@pixi/react';
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import {Graphics, Sprite, Text, TilingSprite} from '@pixi/react';
+import React, {RefObject, useEffect, useMemo, useRef, useState} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {Button} from "./Button.tsx";
-import {EventMode, FederatedPointerEvent} from 'pixi.js';
-import {TextStyle, Graphics as PIXIGraphics, Sprite as PIXISprite} from "pixi.js";
+import {EventMode, FederatedPointerEvent, Graphics as PIXIGraphics, Sprite as PIXISprite, TextStyle} from 'pixi.js';
 import {Stages} from "@/components/cookingGame/Stages.ts";
-import recipeopenImg from "@/assets/cooking-sprites/recipeopen.png";
-import tableBackgroundImg from "@/assets/cooking-sprites/table_background.png";
-import placematImg from "@/assets/cooking-sprites/placemat.png";
-import plateImg from "@/assets/cooking-sprites/plate_with_food.png";
-import cutleryImg from "@/assets/cooking-sprites/cutlery.png";
-import glasImg from "@/assets/cooking-sprites/glas.png";
-import napkinImg from "@/assets/cooking-sprites/napkin.png";
-import spoonImg from "@/assets/cooking-sprites/spoon.png";
 import {t} from "@lingui/core/macro";
+import {Score} from "@/components/cookingGame/CookingGameComponent.tsx";
 
 interface ServeStageProps {
   setStage: (stage: Stages) => void;
   dimensions: {width: number, height: number}
-  setTotalPoints: React.Dispatch<React.SetStateAction<number>>;
+  setTotalPoints: RefObject<Map<Score, number>>;
 }
 
 type InteractiveSprite = PIXISprite & {
@@ -32,7 +24,7 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
   const [spriteToMarkerMap, setSpriteToMarkerMap] = useState<Record<string, string>>({});
   const [lockedSprites, setLockedSprites] = useState<Record<string, boolean>>({});
   const [page, setPage] = useState(1);
-  const [points, setPoints] = useState(100);
+  const [points, setPoints] = useState(0);
   const [pointerdown, setPointerdown] = useState(false);
 
   const draggingRef = useRef(false);
@@ -40,14 +32,14 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
   const instruction = t`We are almost finished! \n\nThe last thing we have to do is set the table and serve our dish`;
 
   const texturePaths = useMemo(() => ({
-    recipeopen: recipeopenImg,
-    tableBackground: tableBackgroundImg,
-    placemat: placematImg,
-    plate: plateImg,
-    cutlery: cutleryImg,
-    glas: glasImg,
-    napkin: napkinImg,
-    spoon: spoonImg,
+    recipeOpen: "/src/assets/cooking-sprites/recipeopen.png",
+    tableBackground: "/src/assets/cooking-sprites/table_background.png",
+    placeMat: "/src/assets/cooking-sprites/placemat.png",
+    plate: "/src/assets/cooking-sprites/plate_with_food.png",
+    cutlery: "/src/assets/cooking-sprites/cutlery.png",
+    glas: "/src/assets/cooking-sprites/glas.png",
+    napkin: "/src/assets/cooking-sprites/napkin.png",
+    spoon: "/src/assets/cooking-sprites/spoon.png",
   }), []);
 
   const  initialPositions = useRef<Record<string, { x: number; y: number }>>({
@@ -194,7 +186,7 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
       }, 300);
     } else if (marker.expecting !== null) {
       sprite.tint = 0xff0000;
-      setPoints(prev => prev *0.8);
+      setPoints(prev => prev + 0.25);
       setMarkerFilled(marker.id, false);
       setTimeout(() => sprite.tint = 0xffffff, 300);
     }
@@ -275,8 +267,12 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
       }, 700);
 
       setTimeout(() => {
-        setTotalPoints(prev => prev + points);
-        setStage(Stages.GAME);
+        const setPoints = setTotalPoints.current;
+        if (setPoints) {
+          setPoints.set(Score.Privacy, (setPoints.get(Score.Privacy) ?? 0));
+          setPoints.set(Score.Comfort, (setPoints.get(Score.Comfort) ?? 0)-points);
+        }
+        setStage(Stages.OUTRO);
       }, 1300);
     }
   }, [lockedSprites]);
@@ -286,14 +282,14 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
   };
 
   const instructionPage =  () => {
-    if(page === 1 && textures.recipeopen){
+    if(page === 1 && textures.recipeOpen){
       return (
               <>
                 <Sprite
                         anchor={0.5}
                         eventMode={'static'}
                         scale={0.6}
-                        texture={textures.recipeopen}
+                        texture={textures.recipeOpen}
                         x={272}
                         y={220}
                 />
@@ -341,7 +337,7 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
                     anchor={0.5}
                     eventMode={'none'}
                     scale={0.325}
-                    texture={textures.placemat}
+                    texture={textures.placeMat}
                     x={272}
                     y={210}
             />
