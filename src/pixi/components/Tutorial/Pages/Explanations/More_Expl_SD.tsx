@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
+import React, {PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
 import {Container, Sprite, Text} from "@pixi/react";
 import {loadTexture} from "@/utils/loadTexture.ts";
 import {
@@ -19,8 +19,9 @@ import robot from "@/assets/tutorial/explainTVPage/pointing.png";
 import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
-import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {t} from "@lingui/core/macro";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 
 export const More_Expl_SD: React.FC<PageProps> = ({
@@ -57,15 +58,6 @@ export const More_Expl_SD: React.FC<PageProps> = ({
   const {ePressed} = useCharacterControls();
   const pos = useCharacterPosition();
   const mgrRef = useAnimationManager();
-
-  useEffect(() => {
-    if (showExpl) {
-      setupTexts();
-      setupGraphics();
-      setupBg();
-      setAnimation(Animations.INTRO);
-    }
-  }, [showExpl]);
 
   const ready =
           showExpl &&
@@ -135,7 +127,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [ready, animation]);
+  }, [ready, animation, Animations.INTRO, Animations.OUTRO, Animations.END, gameService, mgrRef, setKeyControl, setNextPage, windowWidth, windowHeight]);
 
   useEffect(() => {
     if(keyControl != Pages.More_Expl_SD || animating)return;
@@ -158,7 +150,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
 
   //smartDeviceDetection
-  const checkFoundSmartTV = (): boolean => {
+  const checkFoundSmartTV = useCallback( (): boolean => {
     if (!pos || !interactiveElements?.length) return false;
 
     const targetX = pos.x / TILE_SIZE;
@@ -182,19 +174,19 @@ export const More_Expl_SD: React.FC<PageProps> = ({
       return true;
     }
     return false;
-  };
+  },[interactiveElements, pos])
 
   useEffect(() => {
     if (ePressed && checkFoundSmartTV()){
       setShowExpl(true);
       gameService?.disableSmartDevices();
     }
-  }, [ePressed]);
+  }, [ePressed, checkFoundSmartTV, gameService]);
 
   //listen for smartTvDone
   useEffect(() => {
     if (!gameService)return;
-    const devices = gameService.getDeviceForRoom("livingroom");
+    const devices = gameService.getDeviceForRoom(RoomNames.LIVINGROOM);
     const tv = devices.find(d => d.name === "SmartTv");
 
     if (!tv) return;
@@ -206,10 +198,10 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [Animations.OUTRO, gameService]);
 
   //setup graphics
-  const setupTexts = () => {
+  const setupTexts = useCallback(() => {
     const t1 = new PixiText();
     t1.text = explText;
     t1.x = windowWidth*0.875;
@@ -222,8 +214,8 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
     setPixiTexts(prev => [...prev, t1]);
 
-  }
-  const setupGraphics = () => {
+  },[windowWidth, windowHeight, explText])
+  const setupGraphics = useCallback(() => {
 
     const g = new PixiGraphics();
     g.clear();
@@ -236,9 +228,9 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     if (!parent) return;
 
     parent.addChild(g);
-  }
+  },[windowWidth, windowHeight])
 
-  const setupBg = () => {
+  const setupBg = useCallback(() => {
     const bg = new PixiGraphics();
 
     bg.clear();
@@ -250,8 +242,16 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     const parent = backgroundRef.current;
     if (!parent)return;
     parent.addChild(bg);
-  }
+  },[windowWidth, windowHeight])
 
+  useEffect(() => {
+    if (showExpl) {
+      setupTexts();
+      setupGraphics();
+      setupBg();
+      setAnimation(Animations.INTRO);
+    }
+  }, [showExpl, Animations.INTRO, setupBg, setupGraphics, setupTexts]);
 
   const graphics = () => {
     if (!showExpl)return null;

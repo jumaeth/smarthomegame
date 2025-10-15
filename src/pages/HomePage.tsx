@@ -6,6 +6,8 @@ import {CookieService} from "@/services/CookieService.ts";
 import {Trans} from "@lingui/react/macro";
 import LanguageSwitcher from "@/components/LanguageSwitcher.tsx";
 import bgImage from "@/assets/intro/page/welcomepage.jpeg";
+import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive.ts";
+import CharacterSelector from "@/components/character/CharacterSelector.tsx";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -57,16 +59,20 @@ export default function HomePage() {
                     Start game
                   </Trans>
                 </Button>
-                <button
-                        onClick={() => navigate("/game/livingroom")}
-                        className="px-6 py-3 bg-gray-300 text-gray-800 rounded-lg shadow-md hover:bg-gray-400 transition"
+                <Button
+                        onClick={() => {
+                          tutorialActiveStore.set(false);
+                          navigate("/game/livingroom");
+                        }}
+                        className="px-6 py-3 bg-gray-400 text-gray-800 rounded-lg shadow-md hover:bg-gray-500 transition"
                 >
                   <Trans>
                     Skip the intro and jump straight into the game
                   </Trans>
-                </button>
+                </Button>
                 <LanguageSwitcher/>
               </div>
+              <CharacterSelector/>
             </div>
 
             {showBanner && (

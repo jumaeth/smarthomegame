@@ -61,6 +61,8 @@ build-job:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
   script:
     - echo "[JOB] Build"
+    - npm run extract
+    - npm run compile
     - npm run build
     - cp -r dist/ build/
     - mkdir config
@@ -147,7 +149,7 @@ system-test-job:
 
 deploy-test-job:
   stage: deploy
-  image: alpine
+  image: alpine:3.20
   environment:
     name: testing
   rules:
@@ -162,7 +164,7 @@ deploy-test-job:
   script:
     - echo "[JOB] Deploy"
     - eval `ssh-agent`
-    - ssh-add <(echo "$SSH_PK_DEVELOPMENT")
+    - echo "$SSH_PK_DEVELOPMENT" | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - touch ~/.ssh/known_hosts
@@ -226,7 +228,7 @@ deploy-test-job:
 
 deploy-dev-job:
   stage: deploy
-  image: alpine
+  image: alpine:3.20
   environment:
     name: development
   rules:
@@ -241,7 +243,7 @@ deploy-dev-job:
   script:
     - echo "[JOB] Deploy"
     - eval `ssh-agent`
-    - ssh-add <(echo "$SSH_PK_DEVELOPMENT")
+    - echo "$SSH_PK_DEVELOPMENT" | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - touch ~/.ssh/known_hosts
