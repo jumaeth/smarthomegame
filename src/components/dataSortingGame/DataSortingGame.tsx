@@ -309,9 +309,9 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
                  style={{ fontFamily: 'LoResRegular, sans-serif' }}
             >
 
-              <h2 className="text-2xl sm:text-3xl md:text-4xl text-white mb-3">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl text-white mb-3">
                 <Trans>Congratulations! 🎉</Trans>
-              </h2>
+              </h1>
 
               <div className="bg-white/90 rounded-xl p-6 max-w-[600px] w-[90%]">
                 <h2 className="text-xl sm:text-xl md:text-2xl text-amber-900 mb-6">
@@ -339,9 +339,9 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
                 <div className="flex justify-center">
                   <button
                           onClick={handleFinish}
-                          className="px-6 py-3 text-xl bg-green-700 hover:bg-green-800 text-white rounded-xl transition-colors"
+                          className="btn-modal-primary"
                   >
-                    <Trans>Completed ✅</Trans>
+                    <Trans>Close</Trans>
                   </button>
                 </div>
               </div>
@@ -352,10 +352,10 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
   // textblocks & blocks
   return (
          <div
-                  className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col gap-4 md:gap-6 lg:gap-8 bg-transperent justify-center"
+                  className="flex flex-col items-center justify-center p-4"
                   style={{ fontFamily: 'LoResRegular, sans-serif' }}
           >
-            <div className="flex justify-center w-full h-32 mt-4 md:mt-6 lg:mt-8 items-center">
+            <div className="flex justify-center w-full mt-4 md:mt-6 lg:mt-8 items-center">
               {currentItem && (
                       (() => {
                         const ItemIcon = currentItem.icon;
@@ -363,8 +363,7 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
                                 <div
                                         draggable
                                         onDragStart={(e) => handleDragStart(e, currentItem)}
-                                        className="w-[90%] sm:w-[70%] md:w-[60%] max-w-[600px] cursor-grab p-3 sm:p-4 md:p-5
-                                        text-green-900 bg-gray-100 hover:bg-amber-100 rounded-lg shadow-md flex justify-center items-center"
+                                        className="draggable-element w-[95%] max-w-[900px]"
                                 >
                                   <h6
                                           className="text-lg sm:text-xl md:text-2xl"
@@ -378,31 +377,30 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
               )}
             </div>
 
-            {feedback && (
-                    <div
-                            className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 rounded-lg shadow-lg z-10 ${
-                                    feedback.type === 'success' ? 'bg-green-100' : 'bg-red-100'
-                            }`}
-                    >
-                      <p
-                              className={`text-lg font-semibold ${
-                                      feedback.type === 'success' ? 'text-green-800' : 'text-red-800'
-                              }`}
-                      >
-                        {feedback.message}
-                      </p>
-                      <p className="text-sm mt-2 text-gray-800 max-w-md">
-                        {feedback.explanation}
-                      </p>
-                      <button
-                              onClick={handleCloseFeedback}
-                              className="mt-4 px-4 py-2 bg-gray-700 hover:bg-gray-500 rounded w-full"
-                              style={{ fontFamily: 'LoResBold, sans-serif' }}
-                      >
-                        <Trans>Close</Trans>
-                      </button>
-                    </div>
-            )}
+           {feedback && (
+                   <div
+                           className={`feedback-popup ${
+                                   feedback.type === 'success' ? 'feedback-success' : 'feedback-error'
+                           }`}
+                   >
+                     <h4
+                             className="font-semibold"
+                     >
+                       {feedback.message}
+                     </h4>
+
+                     <p>
+                       {feedback.explanation}
+                     </p>
+
+                     <button
+                             onClick={handleCloseFeedback}
+                             className="btn-modal-primary"
+                     >
+                       <Trans>Close</Trans>
+                     </button>
+                   </div>
+           )}
 
             <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 lg:gap-8 mt-4 md:mt-6 lg:mt-8">
               {Object.entries(DATA_TYPES).map(([type, { label, color, description }]) => (
@@ -418,6 +416,6 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
                       </div>
               ))}
             </div>
-          </div>
+         </div>
   );
 };
