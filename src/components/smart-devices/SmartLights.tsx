@@ -2,20 +2,23 @@ import {t} from "@lingui/core/macro";
 import {Trans} from "@lingui/react/macro";
 import {newSolution, Solution} from "@/types/solution.ts";
 import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
-import { useGameService } from "@/hooks/gameService/useGameService.tsx";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 
 type onCompletionCallback = (isCompleted: boolean) => void;
 
 export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
   const gameService = useGameService();
-  const smartLightsDevice:SmartDevice = gameService.getDeviceByName("SmartTv");
+  const smartLightsDevice: SmartDevice = gameService.getDeviceByName("SmartTv");
 
   const handleQuizCompletion = (isCompleted: boolean) => {
     if (isCompleted) {
       onCompletion(isCompleted);
     }
-    const calculatedScores = {privacy : gameService.getScore().getPrivacyScore(), comfort : gameService.getScore().getComfortScore()};
+    const calculatedScores = {
+      privacy: gameService.getScore().getPrivacyScore(),
+      comfort: gameService.getScore().getComfortScore()
+    };
     smartLightsDevice.getStatBlock().setValue("Smart Lights Privacy Score", calculatedScores.privacy);
     smartLightsDevice.getStatBlock().setValue("Smart Lights Comfort Score", calculatedScores.comfort);
     smartLightsDevice.getStatBlock().stopTimer();
@@ -36,7 +39,7 @@ export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback
   ];
 
   return (
-          <>
+          <div className="modal-window">
             <h1>
               <Trans>Smart Lighting</Trans>
             </h1>
@@ -50,6 +53,6 @@ export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback
                       onComplete={handleQuizCompletion}
               />
             </div>
-          </>
+          </div>
   );
 };

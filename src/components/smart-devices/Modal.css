@@ -39,7 +39,7 @@ body.active-modal {
 * Modal Backdrop and Overlay
 */
 .modal {
-  position: fixed;
+  display: flex;
   inset: 0;
   z-index: 99;
 }
@@ -47,30 +47,48 @@ body.active-modal {
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.3);
 }
 
-.btn-modal-primary {
+.btn-primary {
   font-size: 18px;
   background-color: #2563eb;
   color: #fff;
   border-radius: 30px;
   padding: 10px 32px;
-  font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
   transition: background-color 0.15s ease-in-out;
 }
 
-.btn-modal-primary:hover {
+.btn-primary:hover {
   background-color: #1d4ed8;
 }
 
+
+/*
+* Modal Intro Container
+*/
+.modal-intro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal-intro-title {
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 32px;
+  font-family: 'LoResBold', sans-serif;
+}
 /*
 * Info Box (White, Rectangular Intro)
 */
 .modal-info-box {
-  font-size: 18px;
+  font-size: 20px;
   background-color: white;
   padding: 20px;
   border-radius: 8px;
@@ -78,9 +96,8 @@ body.active-modal {
   color: #374151;
   width: 100%;
   max-width: 768px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 28px;
+  margin-bottom: 25px;
+  align-items: center;
 }
 
 /*
@@ -117,13 +134,11 @@ body.active-modal {
   font-family: "LoResBold", sans-serif;
   font-size: 20px;
   padding-bottom: 10px;
-  padding-left: 10px;
 }
 
 .modal-content {
   font-size: 20px;
   padding: 15px 5px;
-  border-radius: 3px;
   align-items: center;
 }
 
@@ -167,7 +182,6 @@ body.active-modal {
   display: block;
   margin: auto;
   padding: 8px 16px;
-  font-family: "LoResBold", sans-serif;
   font-size: 20px;
   background: #2563eb;
   color: #fff;
@@ -180,7 +194,7 @@ body.active-modal {
 }
 
 /*
-* Close Button
+* Close Button (X)
 */
 .close-modal {
   position: absolute;
@@ -221,6 +235,7 @@ body.active-modal {
   background-color: #fef3c7;
 }
 
+
 /*
 * Shared Feedback Popup Container
 */
@@ -229,53 +244,54 @@ body.active-modal {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 24px;
+  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 10;
-  max-width: 400px;
   text-align: center;
-  font-family: 'LoResRegular', sans-serif;
-}
-
-.feedback-popup h4 {
-  font-family: 'LoResBold', sans-serif;
-  margin-bottom: 8px;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.feedback-popup p {
-  font-size: 18px;
-  margin-top: 8px;
-  color: #4b5563;
+  color: #222222;
 }
 
 .feedback-popup button {
   margin-top: 16px;
-  width: 100%;
+  width: 50%;
+  background-color: dimgrey;
 }
 
-/*
-* Conditional Feedback Success Style
-*/
+.feedback-2-btn {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.feedback-popup button:hover{
+  background-color: #4a4a4a;
+}
+
 .feedback-success {
   background-color: #d1fae5;
 }
-.feedback-success h4 {
-  color: #065f46;
+
+.feedback-success button {
+  background-color: #37a820;
 }
 
-.feedback-warning{
-  background-color:#ffc107;
+.feedback-success button:hover {
+  background-color: #065f46;
 }
 
-/*
-* Conditional Feedback Error Style
-*/
+.feedback-warning-yellow {
+  background-color: #FEF3C7;
+}
+
+.feedback-warning-red {
+  background-color: #FECACA;
+}
+
 .feedback-error {
   background-color: #fee2e2;
 }
+
 .feedback-error h4 {
   color: #991b1b;
 }
