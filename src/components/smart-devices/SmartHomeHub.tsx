@@ -35,9 +35,9 @@ export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({completeDevice}) => {
   return (
           <div>
             {frame === 0 && (
-                    <div className="flex flex-col items-center justify-center p-4">
+                    <div className="modal-intro-container">
 
-                      <h1 className="text-white text-2xl font-bold mb-8">
+                      <h1 className="modal-intro-title">
                         <Trans>Smart Home Hub</Trans></h1>
 
                       {/* White Rectangular Info Box */}
@@ -55,7 +55,7 @@ export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({completeDevice}) => {
                                 onClick={() => {
                                   setFrame(1)
                                 }}
-                                className={"btn-modal-primary"}
+                                className={"btn-primary"}
                         >
                           <Trans>Continue</Trans>
                         </Button>

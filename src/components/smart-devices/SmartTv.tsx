@@ -173,9 +173,9 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
 
   if (showDialogue) {
     return (
-            <div className="flex flex-col items-center justify-center p-4">
+            <div className="modal-intro-container">
 
-              <h1 className="text-white text-2xl font-bold mb-8">
+              <h1 className="modal-intro-title">
                 <Trans>Smart TV Setup</Trans></h1>
               <div className="modal-info-box">
                 <p className="leading-relaxed">
@@ -185,7 +185,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
                     privacy status!</Trans></p>
               </div>
               <button onClick={() => setShowDialogue(false)}
-                      className="btn-modal-primary"
+                      className="btn-primary"
               >
                 <Trans>Continue</Trans>
               </button>
@@ -219,21 +219,19 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
 
             <button
                     onClick={handleSubmit}
-                    className="btn-modal-primary"
+                    className="btn-primary"
             >
               <Trans>Send answer</Trans>
             </button>
           </div>
 
             {showWarning && (
-                    <div className="feedback-success">
-                      <h4><Trans>⚠️ Warning</Trans></h4>
-                      <p style={{marginBottom: '15px', color: '#333'}}>{showWarning}</p>
+                    <div className="feedback-popup feedback-warning-yellow">
+                      <h3><Trans>Warning ⚠️</Trans></h3>
+                      <p>{showWarning}</p>
                       <button
                               onClick={closeWarning}
-                              style={{
-                                padding: '8px 16px'
-                              }}
+                              className="btn-primary"
                       >
                         <Trans>Continue</Trans>
                       </button>
@@ -241,55 +239,22 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
             )}
 
             {showReconfigureWarning && (
-                    <div style={{
-                      position: 'fixed',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      backgroundColor: 'white',
-                      padding: '24px',
-                      border: '2px solid #dc3545',
-                      borderRadius: '8px',
-                      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-                      zIndex: 1000,
-                      maxWidth: '500px'
-                    }}>
-                      <h4 style={{
-                        marginTop: 0,
-                        color: '#dc3545',
-                        fontSize: '18px',
-                        fontWeight: 'bold',
-                        marginBottom: '12px'
-                      }}><Trans>⚠️ Privacy Warning</Trans></h4>
-                      <p style={{marginBottom: '20px', color: '#333', lineHeight: '1.5', fontSize: '14px'}}>
+                    <div className="feedback-popup feedback-warning-red">
+                      <h3><Trans>❗️ Privacy Warning ❗️</Trans></h3>
+                      <p>
                         <Trans>Your current settings result in a higher privacy loss than comfort gain. This may not
-                          be
-                          the optimal balance for your privacy.</Trans>
+                          be the optimal balance for your privacy.</Trans>
                       </p>
-                      <div style={{display: 'flex', gap: '10px', justifyContent: 'center'}}>
+                      <div className="feedback-2-btn">
                         <button
                                 onClick={handleReconfigure}
-                                style={{
-                                  padding: '10px 20px',
-                                  backgroundColor: '#6c757d',
-                                  color: 'white',
-                                  border: 'none',
-                                  borderRadius: '4px',
-                                  cursor: 'pointer'
-                                }}
+                                className="btn-primary"
                         >
                           <Trans>Reconfigure</Trans>
                         </button>
                         <button
                                 onClick={handleConfirmSettings}
-                                style={{
-                                  padding: '10px 20px',
-                                  backgroundColor: '#dc3545',
-                                  color: 'white',
-                                  border: 'none',
-                                  borderRadius: '4px',
-                                  cursor: 'pointer'
-                                }}
+                                className="btn-primary"
                         >
                           <Trans>Continue Anyway</Trans>
                         </button>
@@ -298,27 +263,9 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
             )}
 
             {showSuccessMessage && (
-                    <div style={{
-                      position: 'fixed',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      backgroundColor: 'white',
-                      padding: '24px',
-                      border: '2px solid #28a745',
-                      borderRadius: '8px',
-                      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-                      zIndex: 1000,
-                      maxWidth: '400px'
-                    }}>
-                      <h4 style={{
-                        marginTop: 0,
-                        color: '#28a745',
-                        fontSize: '18px',
-                        fontWeight: 'bold',
-                        marginBottom: '12px'
-                      }}><Trans>✅ Device Configured</Trans></h4>
-                      <p style={{marginBottom: '20px', color: '#333', lineHeight: '1.5', fontSize: '14px'}}>
+                    <div className="feedback-popup feedback-success">
+                      <h3><Trans>Device Configured ✅ </Trans></h3>
+                      <p>
                         {calculatedScores.privacy < 0 && Math.abs(calculatedScores.privacy) > calculatedScores.comfort
                                 ? <Trans>Your Smart TV has been configured with your chosen settings.</Trans>
                                 : <Trans>Your Smart TV has been configured with a good balance of privacy and
@@ -326,14 +273,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
                       </p>
                       <button
                               onClick={handleSuccessMessageClose}
-                              style={{
-                                padding: '10px 20px',
-                                backgroundColor: '#28a745',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer'
-                              }}
+                              className="btn-primary"
                       >
                         <Trans>Continue</Trans>
                       </button>
