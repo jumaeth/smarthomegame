@@ -318,7 +318,6 @@ body.active-modal {
 
 .settings-checkbox {
   margin-right: 20px;
-  margin-left: 0px;
   transform: scale(1.5);
   accent-color: #37a820;
 }
