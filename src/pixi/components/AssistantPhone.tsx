@@ -9,6 +9,7 @@ import appIcon2 from "@/assets/assistant-phone/app_icon_2.png";
 import appIcon3 from "@/assets/assistant-phone/app_icon_3.png";
 import appIcon4 from "@/assets/assistant-phone/app_icon_4.png";
 import {PixiButton} from "@/pixi/components/PixiButton.tsx";
+import {t} from "@lingui/core/macro";
 
 interface AssistantPhoneProps {
   windowWidth: number;
@@ -112,7 +113,7 @@ export const AssistantPhone: React.FC<AssistantPhoneProps> = ({
                         y={10}
                         width={150} height={50}
                         onClick={onClickExit}
-                        label={"< Back to game"}/>
+                        label={t`< Back to game`}/>
           </Container>
   );
 }
