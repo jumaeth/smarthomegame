@@ -21,9 +21,10 @@ export function GameOver() {
   const bgImage = (privacyScore >= 50 && comfortScore >= 50) ? bgImageWon : bgImageLost;
   const csvString: string = statService.generateCsvString(gameService.getGame());
 
-  function downloadStats():void {
+  function downloadStats(): void {
     FileService.downloadFile("smart_home_escape_stats", csvString, "csv");
   }
+
   return (
           <div className="flex items-center justify-center h-screen w-screen bg-black">
             <div className="relative w-full h-full max-w-[150vh] max-h-[66.67vw] bg-contain bg-center"
@@ -40,9 +41,9 @@ export function GameOver() {
                 <Button onClick={() => downloadStats()}><Trans>Download</Trans></Button>
               </div>
 
-              <h2>
+              <h2><Trans>
                 Game Results:
-              </h2>
+              </Trans></h2>
 
               <CsvTable csvString={csvString}></CsvTable>
             </div>
