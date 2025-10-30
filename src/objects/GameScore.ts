@@ -1,3 +1,5 @@
+import {PointsLevel} from "@/objects/PointsLevel.ts";
+
 export class GameScore {
   private privacyScore: number;
   private comfortScore: number;
@@ -32,6 +34,14 @@ export class GameScore {
 
   setComfortScore(newScore: number): void {
     this.comfortScore = newScore;
+  }
+
+  public getPrivacyLevel(): PointsLevel| undefined {
+    return PointsLevel.fromValue(this.privacyScore);
+  }
+
+  public getComfortLevel(): PointsLevel | undefined {
+    return PointsLevel.fromValue(this.comfortScore);
   }
 }
 
