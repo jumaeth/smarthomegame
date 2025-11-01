@@ -2,68 +2,67 @@ import Button from "@/components/general-ui/Button.tsx";
 import Toggle from "@/components/general-ui/Toggle.tsx";
 import {useState} from "react";
 import gifCookie from "@/assets/intro/page/cookie-gif-2.gif";
+import {Trans} from "@lingui/react/macro";
 
 type CookieBannerProps = {
-    onComplete: (isAccepted: boolean) => void;
+  onComplete: (isAccepted: boolean) => void;
 };
 
 export const CookieBanner = ({
-                                 onComplete,
+                               onComplete,
                              }: CookieBannerProps) => {
-    const BannerText = () => (
-        <>
+  const BannerText = () => (
+          <>
+            <p><Trans>
+              We use functional cookies to enable your later access to our web game and to improve the user experience.
+              Cookies are small files stored on your device.
+            </Trans></p>
             <p>
-                Wir verwenden <strong>[specify here]</strong> Cookies, um Ihnen den späteren Zugriff auf unser Webgame zu
-                ermöglichen und die Nutzererfahrung zu verbessern. Cookies sind kleine Dateien, die auf Ihrem Gerät
-                gespeichert werden.
+              <Trans>by using our website, you agree to the use of cookies in accordance with our </Trans>
+              <a href="https://www.datapro.education/" className="underline text-blue-600 hover:text-blue-800">
+                <Trans>privacy policy</Trans>
+              </a>
+              .
             </p>
-            <p>
-                Durch die Nutzung unserer Webseite stimmen Sie der Verwendung von Cookies gemäß unserer{' '}
-                <a href="/datenschutz" className="underline text-blue-600 hover:text-blue-800">
-                    Datenschutzerklärung [insert link to data protection policy, which I am in the process of writing]
-                </a>{' '}
-                zu.
-            </p>
-        </>
-    );
+          </>
+  );
 
-    const submitAnswer: (selection: boolean) => void = (selection: boolean): void => {
-        onComplete(selection);
-    };
+  const submitAnswer: (selection: boolean) => void = (selection: boolean): void => {
+    onComplete(selection);
+  };
 
-    const [isSavegameEnabled, setIsSavegameEnabled] = useState<boolean>(true);
+  const [isSavegameEnabled, setIsSavegameEnabled] = useState<boolean>(true);
 
-    const accept: () => void = (): void => {
-        submitAnswer(true)
-        setIsSavegameEnabled(true);
-    };
-    const decline: () => void = (): void => {
-        submitAnswer(false)
-        setIsSavegameEnabled(false);
-    };
+  const accept: () => void = (): void => {
+    submitAnswer(true)
+    setIsSavegameEnabled(true);
+  };
+  const decline: () => void = (): void => {
+    submitAnswer(false)
+    setIsSavegameEnabled(false);
+  };
 
-    return (
-        <div className="text-gray-700">
+  return (
+          <div className="text-gray-700">
             <div className="inline-flex items-center whitespace-nowrap">
-                <h1 className="text-black font-bold text-3xl">Cookie Banner</h1>
-                <img
-                    src={gifCookie}
-                    alt="Cookie"
-                    className="w-20 h-20 ml-2 flex-shrink-0"
-                />
-
+              <h1 className="text-black font-bold text-3xl"><Trans>Cookie banner</Trans></h1>
+              <img
+                      src={gifCookie}
+                      alt="Cookie"
+                      className="w-20 h-20 ml-2 flex-shrink-0"
+              />
             </div>
             <div className={"w-[max(30rem,30vw)]"}><BannerText/></div>
-            <h2 className={'bold text-2xl'}> Ihre Einwilligung:</h2>
+            <h2 className={'bold text-2xl'}><Trans>your settings</Trans></h2>
             <div className={"flex items-center"}>
-                <Toggle isOn={isSavegameEnabled} disabled={true} offColor={"bg-red-400"}/><p>Mein Spielfortschritt
-                speichern</p>
+              <Toggle isOn={isSavegameEnabled} disabled={true} offColor={"bg-red-400"}/><p><Trans>Save my game
+              progress</Trans></p>
             </div>
-            <p className={"w-[max(30rem,30vw)]"}>Sie können Ihre Einwilligung jederzeit widerrufen oder Ihre
-                Cookie-Einstellungen anpassen. Weitere Informationen finden Sie in unserer Datenschutzerklärung.</p>
-            <Button children={"Akzeptieren"} onClick={accept} className={"m-2"}/>
-            <Button children={"Einstellungen anpassen / Ablehnen"} onClick={decline} className={"m-2"}/>
-        </div>
-    );
+            <p className={"w-[max(30rem,30vw)]"}><Trans>You can withdraw your consent at any time or adjust your cookie
+              settings. Further information can be found in our privacy policy.</Trans></p>
+            <Button onClick={accept} className={"m-2"}><Trans>accept</Trans></Button>
+            <Button onClick={decline} className={"m-2"}><Trans>decline</Trans></Button>
+          </div>
+  );
 };
 
