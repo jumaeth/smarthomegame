@@ -231,7 +231,6 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
                         <Stage
                                 width={containerSize.width}
                                 height={containerSize.height}
-                                options={{ backgroundAlpha: 0, roundPixels: true, resolution: Math.min(2, window.devicePixelRatio || 1) }}
                         >
                           <TilingSprite
                                   texture={wallTexture}
