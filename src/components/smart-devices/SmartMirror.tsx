@@ -3,7 +3,6 @@ import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
-import bathroomOverlayImg from "@/assets/levels/bathroom/bathroom_overlay.png";
 import wallImg from "@/assets/smart-mirror/wall.png";
 import robotBWImg from "@/assets/smart-mirror/robotBW.png";
 import robotImg from "@/assets/smart-mirror/robot.png";
@@ -43,8 +42,6 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
   const [wallLoaded, setWallLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
-  const leftCanvasRef = useRef<HTMLDivElement | null>(null);
-  const [leftSize, setLeftSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     if (wallTexture === Texture.EMPTY) {
@@ -61,13 +58,8 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
         const r = containerRef.current.getBoundingClientRect();
         setContainerSize({ width: Math.max(0, Math.round(r.width)), height: Math.max(0, Math.round(r.height)) });
       }
-      if (leftCanvasRef.current) {
-        const rect = leftCanvasRef.current.getBoundingClientRect();
-        setLeftSize({ width: Math.max(0, Math.round(rect.width)), height: Math.max(0, Math.round(rect.height)) });
-      }
     });
     if (containerRef.current) ro.observe(containerRef.current);
-    if (leftCanvasRef.current) ro.observe(leftCanvasRef.current);
     return () => ro.disconnect();
   }, []);
   const gameService = useGameService();

@@ -60,6 +60,7 @@ export const Bathroom = () => {
     setCanvasSize(calculateCanvasSize());
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function handleMapChange(_newMap: MapKey): boolean {
     return gameService.leaveRoom(roomName);
   }
