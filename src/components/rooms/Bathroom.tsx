@@ -60,7 +60,7 @@ export const Bathroom = () => {
     setCanvasSize(calculateCanvasSize());
   }, []);
 
-  function handleMapChange(newMap: MapKey): boolean {
+  function handleMapChange(_newMap: MapKey): boolean {
     return gameService.leaveRoom(roomName);
   }
 
