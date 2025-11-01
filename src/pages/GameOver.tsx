@@ -1,3 +1,4 @@
+// File: `src/pages/GameOver.tsx`
 import {useGameService} from "../hooks/gameService/useGameService.tsx";
 import {GameScore} from "@/objects/GameScore.ts";
 import {GameService} from "@/services/GameService.ts";
@@ -18,51 +19,65 @@ export function GameOver() {
 
   const [showStatsOnRight, setShowStatsOnRight] = useState(false);
 
-
   function downloadStats(): void {
     FileService.downloadFile("smart_home_escape_stats", csvString, "csv");
   }
 
   return (
           <div className="min-h-screen flex flex-col sm:flex-row">
-            {/* Linke Fläche */}
-            <div className="w-full h-auto sm:flex-none sm:h-[95vh] sm:w-[min(calc(95vh*16/9),70vw)] p-6 overflow-auto">
-              <div className="flex items-start justify-between gap-4 mb-4">
-                {showStatsOnRight ? (
-                        <div className="overflow-auto max-h-[60vh] p-2 bg-gray-100 dark:bg-gray-800 rounded">
-                          <h2 className="text-2xl"><Trans>Game Results:</Trans></h2>
-                          {/* Stats container auf der rechten Seite (wiederverwendet CsvTable) */}
+            {/* Linke Fläche: Bild als Hintergrund, Overlay füllt die Fläche komplett */}
+            <div className="w-full h-auto sm:flex-none sm:h-screen sm:w-[min(calc(100vh*16/9),70vw)] relative overflow-hidden">
+              <img
+                      src={victoryState?.picture}
+                      alt="Illustration"
+                      className={`absolute inset-0 w-full h-full object-cover ${showStatsOnRight ? "filter brightness-60 grayscale" : ""}`}
+              />
+
+              {showStatsOnRight && (
+                      <div className="absolute inset-0 z-20 p-6 bg-black/60 backdrop-blur-sm flex flex-col">
+                        <h1 className="text-2xl text-center mb-4 text-white"><Trans>Game Results:</Trans></h1>
+                        <div className="w-full flex-1 overflow-auto">
                           <CsvTable csvString={csvString} />
                         </div>
-                ) : (
-                        <div className="flex justify-center">
-                          <img
-                                  src={"https://live.staticflickr.com/65535/54884708545_cb48eb51c5_b.jpg"}
-                                  alt="Illustration"
-                                  className="max-w-full h-auto rounded shadow-sm"
-                                  style={{ maxHeight: "60vh" }}
-                          />
-                        </div>
-                )}
-
-              </div>
+                      </div>
+              )}
             </div>
 
-            {/* Rechte Sidebar */}
-            <aside className="flex-1 p-6 sm:border-l border-t sm:border-t-0 border-gray-200/10 flex flex-col justify-between">
-              <div>
-                <p className="mb-4"><Trans>{victoryState?.displayText}</Trans></p>
+            {/* Rechte Sidebar - dunkles Design, Aktionen in einer Gruppe */}
+            <aside className="flex-1 min-h-screen p-6 sm:border-l border-t sm:border-t-0 border-gray-800/30 flex flex-col justify-between bg-gray-900 text-gray-100">
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-3xl leading-tight text-gray-100">
+                    <Trans>{victoryState?.displayText}</Trans>
+                  </h2>
 
-                <Button onClick={() => setShowStatsOnRight(s => !s)}>
-                  <Trans>{showStatsOnRight ? "Hide Stats" : "Show Stats"}</Trans>
-                </Button>
+                  <p className="mt-2 text-sm text-gray-300">
+                    <Trans>Privacy</Trans>:
+                    <span className="ml-2 font-medium text-gray-100">{String(gameScore.getPrivacyLevel() ?? "-")}</span>
+                    <span className="mx-2 text-gray-500">·</span>
+                    <Trans>Comfort</Trans>:
+                    <span className="ml-2 font-medium text-gray-100">{String(gameScore.getComfortLevel() ?? "-")}</span>
+                  </p>
+                </div>
 
-                {/* ...restlicher Inhalt falls nötig... */}
+                <div className="flex flex-wrap gap-3 items-center">
+                  <Button onClick={() => setShowStatsOnRight(s => !s)}>
+                    <Trans>{showStatsOnRight ? "Hide Statistics" : "Show Statistics"}</Trans>
+                  </Button>
+
+                  <Button onClick={downloadStats}>
+                    <Trans>Download CSV</Trans>
+                  </Button>
+
+                  <Button onClick={() => { gameService.reset(); }}>
+                    <Trans>Restart</Trans>
+                  </Button>
+                </div>
               </div>
 
-              <div className="flex gap-3">
-                <Button onClick={downloadStats}><Trans>Download CSV</Trans></Button>
-                <Button onClick={() => gameService.reset()}><Trans>Restart</Trans></Button>
+              {/* kleiner Footer-Text (keine doppelten Buttons) */}
+              <div className="text-xs text-gray-500 mt-6">
+                <Trans>Thanks for playing — your progress can be restarted with the Restart button.</Trans>
               </div>
             </aside>
           </div>
