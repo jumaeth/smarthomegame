@@ -1,4 +1,4 @@
-import {PointsLevel} from "@/objects/PointsLevel.ts";
+import {PointsLevel} from "@/objects/PointsLevel";
 
 export class GameScore {
   private privacyScore: number;
