@@ -19,6 +19,11 @@ export class PointsLevel {
   }
 
   static fromValue(value: number): PointsLevel | undefined {
+    if(value < 0 ) {
+      return this.LOW
+    }else if (value > 100) {
+      return this.HIGH
+    }
     return PointsLevel.values().find(p => p.contains(value));
   }
 
