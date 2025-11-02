@@ -25,7 +25,6 @@ export function GameOver() {
 
   return (
           <div className="min-h-screen flex flex-col sm:flex-row">
-            {/* Linke Fläche: Bild als Hintergrund, Overlay füllt die Fläche komplett */}
             <div className="w-full h-auto sm:flex-none sm:h-screen sm:w-[min(calc(100vh*16/9),70vw)] relative overflow-hidden">
               <img
                       src={victoryState?.picture}
@@ -43,7 +42,6 @@ export function GameOver() {
               )}
             </div>
 
-            {/* Rechte Sidebar - dunkles Design, Aktionen in einer Gruppe */}
             <aside className="flex-1 min-h-screen p-6 sm:border-l border-t sm:border-t-0 border-gray-800/30 flex flex-col justify-between bg-gray-900 text-gray-100">
               <div className="space-y-6">
                 <div>
@@ -53,10 +51,10 @@ export function GameOver() {
 
                   <p className="mt-2 text-sm text-gray-300">
                     <Trans>Privacy</Trans>:
-                    <span className="ml-2 font-medium text-gray-100">{String(gameScore.getPrivacyLevel() ?? "-")}</span>
+                    <span className="ml-2 font-medium text-gray-100">{String(gameScore.getPrivacyScore() ?? "-")}</span>
                     <span className="mx-2 text-gray-500">·</span>
                     <Trans>Comfort</Trans>:
-                    <span className="ml-2 font-medium text-gray-100">{String(gameScore.getComfortLevel() ?? "-")}</span>
+                    <span className="ml-2 font-medium text-gray-100">{String(gameScore.getComfortScore() ?? "-")}</span>
                   </p>
                 </div>
 
@@ -75,7 +73,6 @@ export function GameOver() {
                 </div>
               </div>
 
-              {/* kleiner Footer-Text (keine doppelten Buttons) */}
               <div className="text-xs text-gray-500 mt-6">
                 <Trans>Thanks for playing — your progress can be restarted with the Restart button.</Trans>
               </div>
