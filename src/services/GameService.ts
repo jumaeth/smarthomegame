@@ -23,8 +23,9 @@ export class GameService {
   private deviceListeners = new Set<DeviceListener>();
 
   constructor(navigate: (path: string) => void) {
-    const saveGame = CookieService.get<Game>('save_game');
-    const tutorialCookie = CookieService.get<boolean>('tutorialState');
+    const saveGame: Game | null = CookieService.get<Game>('save_game');
+    const tutorialCookie: boolean | null = CookieService.get<boolean>('tutorialState');
+
     if (saveGame) {
       const game = Game.fromSerialized(saveGame);
       this.game = game;

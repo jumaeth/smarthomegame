@@ -1,6 +1,4 @@
 import {useEffect} from "react";
-import {useGameService} from "../hooks/gameService/useGameService.tsx";
-import {GameService} from "@/services/GameService.ts";
 import Button from "@/components/general-ui/Button.tsx";
 import {CookieService} from "@/services/CookieService.ts";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -8,7 +6,6 @@ import {Trans} from "@lingui/react/macro";
 
 export function ContinueGame() {
   const navigate = useNavigate();
-  const gameService: GameService = useGameService();
 
   useEffect(() => {
     if (
@@ -23,7 +20,7 @@ export function ContinueGame() {
   const lastPath = location.state?.lastPath;
 
   const onNewGame = () => {
-    gameService.reset();
+    CookieService.set("save_game", null);
     navigate("/home", {replace: true});
   };
 

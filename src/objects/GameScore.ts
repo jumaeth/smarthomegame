@@ -1,6 +1,6 @@
 export class GameScore {
-  private privacyScore: number;
-  private comfortScore: number;
+  private privacyScore: number = 0;
+  private comfortScore: number = 0;
 
   constructor(privacyScore: number, comfortScore: number) {
     this.privacyScore = privacyScore;
@@ -13,8 +13,8 @@ export class GameScore {
 
   toSerialized(): object {
     return {
-      privacy: this.privacyScore,
-      comfort: this.comfortScore
+      privacyScore: this.privacyScore,
+      comfortScore: this.comfortScore
     };
   }
 
