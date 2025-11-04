@@ -61,8 +61,6 @@ build-job:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
   script:
     - echo "[JOB] Build"
-    - npm run extract
-    - npm run compile
     - npm run build
     - cp -r dist/ build/
     - mkdir config
