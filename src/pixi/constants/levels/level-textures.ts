@@ -10,25 +10,43 @@ import hallwayOverlayImg from '@/assets/levels/hallway/hallway_overlay.png';
 import bathroomImg from '@/assets/levels/bathroom/bathroom.png';
 import bathroomOverlayImg from '@/assets/levels/bathroom/bathroom_overlay.png';
 
-import hallwayLivingRoomDoorClosedImg from '@/assets/levels/hallway/doors/to_livingroom/frame/hallway_to_living_room_frame_closed.png';
-import hallwayLivingRoomDoorHalfOpenImg from '@/assets/levels/hallway/doors/to_livingroom/frame/hallway_to_living_room_frame_half_open.png';
-import hallwayLivingRoomDoorOpenImg from '@/assets/levels/hallway/doors/to_livingroom/frame/hallway_to_living_room_frame_open.png';
+import hallwayLivingRoomDoorClosedImg
+  from '@/assets/levels/hallway/doors/to_livingroom/frame/hallway_to_living_room_frame_closed.png';
+import hallwayLivingRoomDoorHalfOpenImg
+  from '@/assets/levels/hallway/doors/to_livingroom/frame/hallway_to_living_room_frame_half_open.png';
+import hallwayLivingRoomDoorOpenImg
+  from '@/assets/levels/hallway/doors/to_livingroom/frame/hallway_to_living_room_frame_open.png';
 
-import hallwayKitchenDoorClosedImg from '@/assets/levels/hallway/doors/to_kitchen/frame/hallway_to_kitchen_frame_closed.png';
-import hallwayKitchenDoorHalfOpenImg from '@/assets/levels/hallway/doors/to_kitchen/frame/hallway_to_kitchen_frame_half_open.png';
-import hallwayKitchenDoorOpenImg from '@/assets/levels/hallway/doors/to_kitchen/frame/hallway_to_kitchen_frame_open.png';
+import hallwayKitchenDoorClosedImg
+  from '@/assets/levels/hallway/doors/to_kitchen/frame/hallway_to_kitchen_frame_closed.png';
+import hallwayKitchenDoorHalfOpenImg
+  from '@/assets/levels/hallway/doors/to_kitchen/frame/hallway_to_kitchen_frame_half_open.png';
+import hallwayKitchenDoorOpenImg
+  from '@/assets/levels/hallway/doors/to_kitchen/frame/hallway_to_kitchen_frame_open.png';
+
+import hallwayBathroomDoorClosedImg
+  from '@/assets/levels/hallway/doors/to_bathroom/frame/hallway_to_bathroom_frame_closed.png';
+import hallwayBathroomDoorHalfOpenImg
+  from '@/assets/levels/hallway/doors/to_bathroom/frame/hallway_to_bathroom_frame_half_open.png';
+import hallwayBathroomDoorOpenImg
+  from '@/assets/levels/hallway/doors/to_bathroom/frame/hallway_to_bathroom_frame_open.png';
 
 import livingRoomFloorImg from '@/assets/levels/hallway/doors/to_livingroom/floor/hallway_to_living_room_floor.png';
 import kitchenFloorImg from '@/assets/levels/hallway/doors/to_kitchen/floor/hallway_to_kitchen_floor.png';
+import bathroomFloorImg from '@/assets/levels/hallway/doors/to_bathroom/floor/hallway_to_kitchen_floor.png';
 
-import { MapKey } from '@/types/maps';
-
-export const LEVEL_TEXTURES: Record<MapKey, { level: string; overlay: string, doorFloor?: string[], doorFrame?: string[] }> = {
-  livingroom: { level: livingroomImg, overlay: livingroomOverlayImg, doorFrame: [kitchenDoorClosedImg, kitchenDoorHalfOpenImg, kithenDoorOpenImg]},
-  kitchen: { level: kitchenImg, overlay: kitchenOverlayImg, doorFrame: [kitchenDoorClosedImg, kitchenDoorHalfOpenImg, kithenDoorOpenImg]},
-  hallway: { level: hallwayImg, overlay: hallwayOverlayImg, doorFloor: [livingRoomFloorImg, kitchenFloorImg], doorFrame:
+export const LEVEL_TEXTURES: {
+  hallway: { overlay: {}; level: {}; doorFloor: {}[]; doorFrameFront: {}[]; doorFrameBack: {}[] };
+  livingroom: { overlay: {}; level: {}; doorFrameFront: {}[] };
+  kitchen: { overlay: {}; level: {}; doorFrameFront: {}[] };
+  bathroom: { overlay: {}; level: {} }
+} = {
+  livingroom: { level: livingroomImg, overlay: livingroomOverlayImg, doorFrameFront: [kitchenDoorClosedImg, kitchenDoorHalfOpenImg, kithenDoorOpenImg]},
+  kitchen: { level: kitchenImg, overlay: kitchenOverlayImg, doorFrameFront: [kitchenDoorClosedImg, kitchenDoorHalfOpenImg, kithenDoorOpenImg]},
+  hallway: { level: hallwayImg, overlay: hallwayOverlayImg, doorFloor: [livingRoomFloorImg, kitchenFloorImg, bathroomFloorImg], doorFrameBack:
             [hallwayLivingRoomDoorClosedImg, hallwayLivingRoomDoorHalfOpenImg, hallwayLivingRoomDoorOpenImg,
-              hallwayKitchenDoorClosedImg, hallwayKitchenDoorHalfOpenImg, hallwayKitchenDoorOpenImg] },
+              hallwayKitchenDoorClosedImg, hallwayKitchenDoorHalfOpenImg, hallwayKitchenDoorOpenImg],
+          doorFrameFront: [hallwayBathroomDoorClosedImg, hallwayBathroomDoorHalfOpenImg, hallwayBathroomDoorOpenImg]},
   bathroom: { level: bathroomImg, overlay: bathroomOverlayImg },
 
 };

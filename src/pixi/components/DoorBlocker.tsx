@@ -8,8 +8,9 @@ import {RoomNames} from "@/objects/RoomNames.ts";
 
 type DoorBlockerProps = {
   room: RoomNames
-  tile?: Position | null;
-  tiles?: Position[];
+  ww: number;
+  wh: number;
+  to
   visible?: boolean;
   alpha?: number;
   color?: number;
@@ -17,8 +18,9 @@ type DoorBlockerProps = {
 
 export function DoorBlocker({
                               room,
-                              tile,
-                              tiles,
+                              ww,
+                              wh,
+                              to,
                               visible = true,
                               alpha = 0.45,
                               color = 0xff0000,
@@ -26,30 +28,27 @@ export function DoorBlocker({
   const draw = useCallback(
           (g: PixiGraphics) => {
             g.clear();
-            if (!visible) return;
+            if (!visible || !to) return;
 
-            const toDraw = tiles ?? (tile ? [tile] : []);
-            if (!toDraw.length) return;
+            const offset = getBlockOffset(room, to, ww, wh)
 
-            for (const t of toDraw) {
-              g.beginFill(color, alpha);
-              g.drawCircle(
-                      OFFSET_X + t.x * TILE_SIZE + getBlockOffset(room).x,
-                      OFFSET_Y + t.y * TILE_SIZE + getBlockOffset(room).y,
-                      TILE_SIZE / 2
-              );
-              g.endFill();
-              g.beginFill(0xFFFFFF, 0.8);
-              g.drawRect(
-                      (OFFSET_X + t.x * TILE_SIZE )+ getBlockOffset(room).bx,
-                      (OFFSET_Y + t.y * TILE_SIZE) + getBlockOffset(room).by,
-                      TILE_SIZE * 0.8,
-                      TILE_SIZE /6
-                      );
-              g.endFill();
-            }
+            g.beginFill(color, alpha);
+            g.drawCircle(
+                    offset.x,
+                    offset.y,
+                    ww * 0.006
+            );
+            g.endFill();
+            g.beginFill(0xFFFFFF, 0.8);
+            g.drawRect(
+                    offset.bx,
+                    offset.by,
+                    ww * 0.01,
+                    wh * 0.004
+            );
+            g.endFill();
           },
-          [tile, tiles, visible, alpha, color, room]
+          [to, visible, alpha, color, room]
   );
 
 

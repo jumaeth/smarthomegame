@@ -81,7 +81,9 @@ export class GameService {
     if (!room) return;
     room.complete();
     this.getRoom(roomName).unlockRoom();
-    this.navigateAfterComplete();
+    if (this.checkGameCompletionConditions()) {
+      this.finishGame();
+    }
     this.onGameStateChange();
   }
 
@@ -232,10 +234,15 @@ export class GameService {
   }
 
   getExitState(from: MapKey, to: MapKey): DoorState {
-    const f = roomNameToEnum(from);
-    const t = roomNameToEnum(to);
-    const fromRoom = this.getRoom( f ?? RoomNames.LIVINGROOM );
-    const toRoom = this.getRoom(t ?? RoomNames.LIVINGROOM);
+    const fromRoomName = roomNameToEnum(from) ?? RoomNames.LIVINGROOM;
+    const toRoomName = roomNameToEnum(to) ?? RoomNames.LIVINGROOM;
+
+    const fromRoom = this.findRoomByName(fromRoomName);
+    const toRoom = this.findRoomByName(toRoomName);
+
+    if (!fromRoom || !toRoom){
+      return DoorState.Closed
+    }
 
     if (fromRoom.isLocked || toRoom.isLocked){
       return DoorState.Closed;

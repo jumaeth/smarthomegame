@@ -19,7 +19,7 @@ import characterImage from "@/assets/character/character_movement.png";
 import {Character} from "@/pixi/character/Character";
 
 import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings";
-import {MapKey} from "@/types/maps";
+import {MapKey, Transition} from "@/types/maps";
 import {DoorState} from "@/types/door";
 import {Direction, Position} from "@/types/movement";
 
@@ -31,7 +31,7 @@ import {useTutorialActive} from "@/hooks/gameService/useTutorialActive";
 
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
 import {GameService} from "@/services/GameService";
-import {RoomNames} from "@/objects/RoomNames.ts";
+import {RoomNames, roomNameToEnum} from "@/objects/RoomNames.ts";
 
 interface MainContainerProps {
   canvasSize: { width: number; height: number };
@@ -63,10 +63,11 @@ export const MainContainer = ({
           useState<{ to: MapKey; spawn: Position; face?: Direction } | null>(null);
     const [shouldSnapCamera, setShouldSnapCamera] = useState(false);
   const characterTexture = useMemo<Texture>(() => loadTexture(characterImage), []);
-  const { levelTexture, overlayTexture, doorFloorTexture, doorFrameTexture } = useLevelTextures(map);
+  const { levelTexture, overlayTexture, doorFloorTexture,
+    doorFrameFrontTexture, doorFrameBackTexture } = useLevelTextures(map);
   const { tile: characterTile } = useCharacterPosition();
   const { enabled: tutorialActive, close: closeTutorial } = useTutorialActive();
-  const [blockedDoorTile, setBlockedDoorTile] = useState<Position | null>(null);
+  const [blockedDoorTo, setBlockedDoorTo] = useState<RoomNames | null>(null);
 
   useEffect(() => { setShouldSnapCamera(true); setCameraSettled(false); }, [map]);
 
@@ -80,7 +81,8 @@ export const MainContainer = ({
       ...toList(levelTexture),
       ...toList(overlayTexture),
       ...toList(doorFloorTexture),
-      ...toList(doorFrameTexture),
+      ...toList(doorFrameFrontTexture),
+      ...toList(doorFrameBackTexture),
     ].filter(Boolean);
 
     const waitTexture = (t: Texture) =>
@@ -94,7 +96,7 @@ export const MainContainer = ({
     })();
 
     return () => { alive = false; setAssetsReady(false); };
-  }, [levelTexture, overlayTexture, doorFloorTexture, doorFrameTexture]);
+  }, [levelTexture, overlayTexture, doorFloorTexture, doorFrameFrontTexture, doorFrameBackTexture]);
 
 
   const handleCharacterMove = (pos: Position) => {
@@ -105,16 +107,17 @@ export const MainContainer = ({
     const transition = getMapTransition(map, tileX, tileY);
 
     if (!transition || tutorialActive) {
-      setBlockedDoorTile(null);
+      setBlockedDoorTo(null);
       return;
     }
 
     const exitState = gameService.getExitState(map, transition.to);
     const isLocked = exitState === DoorState.Closed;
 
-    if (isLocked) { setBlockedDoorTile(transition.pos); return; }
+    if (isLocked)
+    { setBlockedDoorTo(roomNameToEnum(transition.to) ?? null); return; }
 
-    setBlockedDoorTile(null);
+    setBlockedDoorTo(null);
 
     const spawn = getSpawnForMap(transition.to, map);
     const nextSpawn: Position = spawn?.pos
@@ -127,6 +130,24 @@ export const MainContainer = ({
     setInTransition(true);
     setShouldSnapCamera(true);
   };
+
+  const transitionFromTop = (tr: Transition): boolean => {
+    return tr.to != RoomNames.BATHROOM
+  }
+
+  const doorFrame = (state: boolean) =>
+          getTransitionsForMap(map)
+            .filter(tr => transitionFromTop(tr))
+            .map((tr, i) => (
+                    <DoorFrame
+                            key={`${map}-${tr.to}-${i}`}
+                            index={i}
+                            textures={state ? doorFrameBackTexture : doorFrameFrontTexture}
+                            map={map}
+                            gameService={gameService}
+                            transition={tr}
+                    />
+            ));
 
   const characterRef = useRef<{ moveUp: () => void; moveDown: () => void; moveLeft: () => void; moveRight: () => void; interact: () => void } | null>(null);
 
@@ -161,26 +182,24 @@ export const MainContainer = ({
                           <Level texture={levelTexture} />
                           <ProximityHighlight interactiveElements={interactiveElements} />
                           <DoorFloor room={room} map={map} gameService={gameService} textures={doorFloorTexture} />
+                          {doorFrame(true)}
                           <Character
                                   ref={characterRef}
                                   texture={characterTexture}
                                   onMove={handleCharacterMove}
                                   collisionMap={collisionMap}
-                                  isPaused={isPaused}
+                                  isPaused={isPaused as boolean}
                                   interactiveElements={interactiveElements}
                           />
                           <LevelOverlay texture={overlayTexture} />
-                          {getTransitionsForMap(map).map((tr, i) => (
-                                  <DoorFrame
-                                          key={i}
-                                          textures={doorFrameTexture}
-                                          map={map}
-                                          gameService={gameService}
-                                          index={i}
-                                          transition={tr}
-                                  />
-                          ))}
-                          <DoorBlocker room={room} tile={blockedDoorTile} visible={!!blockedDoorTile} />
+                          {doorFrame(false)}
+                          <DoorBlocker
+                                  room={room}
+                                  to={blockedDoorTo}
+                                  visible={!!blockedDoorTo}
+                                  ww={canvasSize.width}
+                                  wh={canvasSize.height}
+                          />
                         </>
                 )}
               </Camera>

@@ -15,6 +15,7 @@ export const LIVINGROOM_COL_MAP: number[] = [
 ];
 
 const LIVINGROOM_SPAWN_POS = {x: 9, y: 9} as Position;
+export const LIVINGROOM_DOOR_POS = {x: 9, y: 10} as Position;
 
 export const LIVINGROOM_TRANSITIONS: Transition[] = [
   {pos: LIVINGROOM_SPAWN_POS, to: 'hallway'},

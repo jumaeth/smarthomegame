@@ -6,7 +6,7 @@ import {MapKey, Transition} from "@/types/maps.ts";
 import {GameService} from "@/services/GameService.ts";
 
 interface LevelProps {
-  textures: Texture[] | undefined;
+  textures: Texture[];
   map: MapKey;
   gameService: GameService;
   transition: Transition;
@@ -23,12 +23,15 @@ export const DoorFrame = ({ textures, map, gameService, transition, index}: Leve
   if (!textures) return null;
 
   const state=gameService.getExitState(map, transition.to);
-  const i=stateToIndex[state] + index * 3;
+  const i=stateToIndex[state] + index*3;
+
+  const texture = textures[i];
+  if (!texture) return null;
 
   return (
           <>
             <Sprite
-                    texture={textures[i]}
+                    texture={texture}
                     width={GAME_WIDTH}
                     height={GAME_HEIGHT}
                     x={OFFSET_X}
