@@ -1,93 +1,156 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Trans} from "@lingui/react/macro";
 import {loadImagesFromFolder} from "@/utils/loadImages.ts";
 import Button from "@/components/general-ui/Button.tsx";
+import {Solution} from "@/types/solution.ts";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
+import privacyIcon from "@/assets/coins/privacy_coin.png";
+import comfortIcon from "@/assets/coins/comfort_coin.png";
 
 type CaptchaProps = {
   pictureFolder: string;
-  solutions: (boolean | string)[];
+  solutions: Solution[];
   onComplete: (isCompleted: boolean) => void;
 };
 
 export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: CaptchaProps) => {
-  const images = loadImagesFromFolder(pictureFolder);
-  const imageList = Object.values(images);
+  const gameService = useGameService();
+  const imageList = loadImagesFromFolder(pictureFolder);
+
   const [feedbackMsg, setFeedbackMsg] = useState<string>("");
+  const [feedbackMsgColor, setFeedbackMsgColor] = useState<string>("black");
 
-  const [displayedIndices, setDisplayedIndices] = useState<number[]>([]);
-  const [score, setScore] = useState<number>(0);
-  const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [answers, setAnswers] = useState<boolean[]>(new Array(solutions.length).fill(false));
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  // Initialize the grid with first 9 images
-  useEffect(() => {
-    setDisplayedIndices(Array.from({length: 9}, (_, i) => i));
-  }, []);
+  const [imageGrid, setImageGrid] = useState<number[]>(Array.from({length: 9}, (_, i) => i));
+  const [nextImage, setNextImage] = useState<number>(9);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
+  const [fadeOut, setFadeOut] = useState<boolean>();
+  const fadeOutDuration: number = 2000;
 
   const handleImageClick = (gridIndex: number) => {
-    if (isCompleted) return;
-    const imageIndex = displayedIndices[gridIndex];
-    if (imageIndex < solutions.length) {
-      setScore(prevScore => prevScore + (solutions[imageIndex] ? 1 : -1));
-
-      if (solutions[imageIndex] !== true && solutions[imageIndex] !== false && typeof solutions[imageIndex] === "string") {
-        setFeedbackMsg(solutions[imageIndex].toString());
-      } else {
-        setFeedbackMsg("");
-      }
-    }
-
-    setDisplayedIndices(prev => {
+    if (isSubmitted) return;
+    setFadeOut(false);
+    const imageIndex = imageGrid[gridIndex];
+    if (imageIndex < 0 || imageIndex >= solutions.length) return;
+    setCurrentIndex(imageIndex);
+    setAnswers(prev => {
+      const next = [...prev];
+      next[imageIndex] = true; // or toggle if that’s desired: next[imageIndex] = !next[imageIndex];
+      const isCorrect = next[imageIndex] === solutions[imageIndex].booleanSolution;
+      setFeedbackMsgColor(isCorrect ? "green" : "red");
+      setFeedbackMsg(solutions[imageIndex].solutionMessage);
+      return next;
+    });
+    setImageGrid(prev => {
       const updated = [...prev];
-      const nextImageIndex = Math.max(...prev) + 1;
-      updated[gridIndex] = nextImageIndex < imageList.length ? nextImageIndex : -1;
+      updated[gridIndex] = nextImage < imageList.length ? nextImage : -1;
       return updated;
     });
+    setNextImage(prev => prev + 1);
+    setTimeout(() => {
+      setFadeOut(true);
+    }, fadeOutDuration);
   };
 
   const submitAnswer = () => {
-    setIsCompleted(true);
-    onComplete(score > 0);
+    setIsSubmitted(true);
   };
+
+  const continueGame = () => {
+    let privacyScore = 0;
+    let comfortScore = 0;
+    answers.forEach((b, i) => {
+      if (i >= solutions.length) return;
+      if (b === solutions[i].booleanSolution) {
+        privacyScore += solutions[i].privacyScoreGain;
+        comfortScore += solutions[i].comfortScoreGain;
+      } else {
+        privacyScore += solutions[i].privacyScorePenalty;
+        comfortScore += solutions[i].comfortScorePenalty;
+      }
+    });
+    console.log(privacyScore)
+    console.log(comfortScore)
+    gameService.changeScore(privacyScore, "privacy");
+    gameService.changeScore(comfortScore, "comfort");
+    onComplete(true);
+  };
+
+  const formatWithSign = new Intl.NumberFormat("en-US", {
+    signDisplay: "always",
+  });
+
+  const inRange = currentIndex >= 0 && currentIndex < solutions.length;
+  const isCorrect =
+          inRange && answers[currentIndex] === solutions[currentIndex].booleanSolution;
+  const privacyDelta = inRange
+          ? isCorrect
+                  ? solutions[currentIndex].privacyScoreGain
+                  : solutions[currentIndex].privacyScorePenalty
+          : 0;
+  const comfortDelta = inRange
+          ? isCorrect
+                  ? solutions[currentIndex].comfortScoreGain
+                  : solutions[currentIndex].comfortScorePenalty
+          : 0;
 
   return (
           <div className="flex flex-col items-center gap-6">
             <div className="grid grid-cols-3 gap-4">
-              {displayedIndices.map((imageIndex, gridIndex) => (
-                      <div key={gridIndex} className={`w-30 h-30 flex items-center justify-center rounded-lg overflow-hidden
-              ${imageIndex >= 0 && !isCompleted ? "cursor-pointer hover:opacity-80 border-2 border-gray-300" : "bg-gray-100"}
-              transition-all duration-200
-            `}
-                           onClick={() => imageIndex >= 0 && !isCompleted && handleImageClick(gridIndex)}
-                      >{imageIndex >= 0 && imageIndex < imageList.length ? (
-                              <img
-                                      src={imageList[imageIndex]}
-                                      alt={`question-${imageIndex}`}
-                                      className="w-full h-full object-cover"
-                              />) : (<div className="w-full h-full bg-gray-200"></div>)}
+              {imageGrid.map((imageIndex, gridIndex) => (
+                      <div
+                              key={gridIndex}
+                              className={`w-30 h-30 flex items-center justify-center rounded-lg overflow-hidden ${
+                                      imageIndex >= 0 && !isSubmitted
+                                              ? "cursor-pointer hover:opacity-80 border-2 border-gray-300"
+                                              : "bg-gray-100"
+                              } transition-all duration-200`}
+                              onClick={() => imageIndex >= 0 && !isSubmitted && handleImageClick(gridIndex)}
+                      >
+                        {imageIndex >= 0 && imageIndex < imageList.length ? (
+                                <img
+                                        src={imageList[imageIndex]}
+                                        alt={`question-${imageIndex}`}
+                                        className="w-full h-full object-cover"
+                                />
+                        ) : (
+                                <div className="w-full h-full bg-gray-200"/>
+                        )}
                       </div>
               ))}
             </div>
 
-            <div className="flex flex-col items-center gap-2">
-              {isCompleted && (
-                      <div className={`text-lg font-bold ${score > 0 ? "text-green-600" : "text-red-600"}`}>
-                        {score > 0 ? <Trans>Success!</Trans> : <Trans>Failed!</Trans>}
+            <div className="flex items-center gap-2">
+              {feedbackMsg && (
+                      <div className={`flex space-x-2 ${fadeOut ? 'transition-opacity duration-1000 opacity-0' : 'opacity-100'}`}>
+                        <p className={`mt-1 text-m ${feedbackMsgColor === "green" ? "text-green-600" : feedbackMsgColor === "red" ? "text-red-600" : "text-black"}`}>
+                          {feedbackMsg}
+                        </p>
                       </div>
               )}
 
-              {feedbackMsg && <div className="text-red-600 text-sm mt-1">{feedbackMsg}</div>}
-
-              <Button onClick={submitAnswer} disabled={isCompleted}>
-                <Trans>Send answer</Trans>
-              </Button>
-
-              {!isCompleted && (
-                      <div className="text-sm text-gray-600 mt-1">
-                        <Trans>Current score: {score}</Trans>
+              {inRange && feedbackMsg && (
+                      <div className={`flex space-x-2 ${fadeOut ? 'transition-opacity duration-1000 opacity-0' : 'opacity-100'}`}>
+                        <span>{formatWithSign.format(privacyDelta)}</span>
+                        <img src={privacyIcon} className="h-6" alt="privacy-icon"/>
+                        <span>{formatWithSign.format(comfortDelta)}</span>
+                        <img src={comfortIcon} className="h-6" alt="comfort-icon"/>
                       </div>
               )}
             </div>
+
+            {!isSubmitted ? (
+                    <Button onClick={submitAnswer}>
+                      <Trans>Send answer</Trans>
+                    </Button>
+            ) : (
+                    <Button onClick={continueGame}>
+                      <Trans>Continue game</Trans>
+                    </Button>
+            )}
           </div>
   );
 };
