@@ -17,13 +17,8 @@ import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
 
 export const Kitchen = () => {
     const gameService = useGameService();
-    const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
     const roomName = RoomNames.KITCHEN
-    const [isPaused, setIsPaused] = useState(false);
-
-    const smartHomeHubModalRef = useRef<{ toggleModal: () => void } | null>(null);
-  const smartKitchenModalRef = useRef<{ toggleModal: () => void } | null>(null);
-  const securityCameraModalRef = useRef<{ toggleModal: () => void } | null>(null);
+    const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
 
   const [activeDevice, setActiveDevice] = useState<string | null>(null);
   const sdEnabled = useSmarDevicesEnabledState();

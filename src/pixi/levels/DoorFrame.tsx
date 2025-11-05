@@ -10,7 +10,6 @@ interface LevelProps {
   map: MapKey;
   gameService: GameService;
   transition: Transition;
-  index: number;
 }
 
 const stateToIndex = {
@@ -19,13 +18,11 @@ const stateToIndex = {
   [DoorState.Open]: 2,
 };
 
-export const DoorFrame = ({ textures, map, gameService, transition, index}: LevelProps) => {
+export const DoorFrame = ({ textures, map, gameService, transition}: LevelProps) => {
   if (!textures) return null;
 
   const state=gameService.getExitState(map, transition.to);
-  const i=stateToIndex[state] + index*3;
-
-  const texture = textures[i];
+  const texture = textures[stateToIndex[state]];
   if (!texture) return null;
 
   return (

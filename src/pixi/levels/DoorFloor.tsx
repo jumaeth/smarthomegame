@@ -17,7 +17,6 @@ export const DoorFloor = ({ textures, room, map, gameService }: LevelProps) => {
   if (!textures) return null;
   if (gameService.getRoom(room).isLocked) return null;
 
-
   return (
           <>
             {textures.slice(0, getTransitionsForMap(map).length).map((texture, i) => (

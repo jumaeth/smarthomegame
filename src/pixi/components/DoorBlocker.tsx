@@ -1,7 +1,5 @@
 import {useCallback} from "react";
 import {Graphics} from "@pixi/react";
-import {OFFSET_X, OFFSET_Y, TILE_SIZE} from "@/pixi/constants/world-settings";
-import type {Position} from "@/types/movement";
 import {Graphics as PixiGraphics} from "pixi.js";
 import {getBlockOffset} from "@/utils/doorBlockOffsets.ts";
 import {RoomNames} from "@/objects/RoomNames.ts";
@@ -10,7 +8,7 @@ type DoorBlockerProps = {
   room: RoomNames
   ww: number;
   wh: number;
-  to
+  to: RoomNames
   visible?: boolean;
   alpha?: number;
   color?: number;
@@ -48,7 +46,7 @@ export function DoorBlocker({
             );
             g.endFill();
           },
-          [to, visible, alpha, color, room]
+          [to, visible, alpha, color, room, ww, wh]
   );
 
 

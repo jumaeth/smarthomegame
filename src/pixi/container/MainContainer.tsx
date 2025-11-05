@@ -3,23 +3,16 @@ import {Container, Graphics} from "@pixi/react";
 import {Texture} from "pixi.js";
 
 import {Level} from "@/pixi/levels/Level";
-import characterImage from "@/assets/character/character_movement.png";
 import {Character} from "@/pixi/character/Character";
 
 import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings";
-import {MapKey, Transition} from "@/types/maps";
+import {MapKey} from "@/types/maps";
 import {DoorState} from "@/types/door";
 import {Direction, Position} from "@/types/movement";
 
 import {useLevelTextures} from "@/hooks/map/useLevelTextures";
 import {getMapTransition, getSpawnForMap, getTransitionsForMap} from "@/utils/mapTransition";
 import {loadTexture} from "@/utils/loadTexture";
-import {MapKey} from "@/types/maps";
-import {useLevelTextures} from "@/hooks/map/useLevelTextures";
-import {getMapTransition, getSpawnForMap} from "@/utils/mapTransition";
-import {Position} from "@/types/movement";
-import {Door} from "@/pixi/levels/Door";
-import {DoorState} from "@/types/door";
 import {TransitionOverlay} from "@/pixi/components/TransitionOverlay";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {HeadUpDisplay} from "@/pixi/components/HeadUpDisplay.tsx";
@@ -29,7 +22,13 @@ import {characterPositionStore, useCharacterPosition} from "@/utils/characterPos
 import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
 import {MovementButtons} from "@/components/general-ui/MovementButtons.tsx";
 import {ProximityHighlight} from "@/pixi/components/ProximityHighlight.tsx";
-import {RoomNames} from "@/objects/RoomNames.ts";
+import {RoomNames, roomNameToEnum} from "@/objects/RoomNames.ts";
+import {Camera} from "@/pixi/camera/Camera.tsx";
+import {DoorFloor} from "@/pixi/levels/DoorFloor.tsx";
+import {LevelOverlay} from "@/pixi/levels/LevelOverlay.tsx";
+import {DoorBlocker} from "@/pixi/components/DoorBlocker.tsx";
+import {DoorFrame} from "@/pixi/levels/DoorFrame.tsx";
+import {getTexture} from "@/components/character/CharacterSelector.tsx";
 
 interface MainContainerProps {
     canvasSize: {
@@ -67,9 +66,7 @@ export const MainContainer = ({
     /**
      * State to track the spawn position of the character.
      */
-    const [spawnPosition, setSpawnPosition] = useState<Position>({x: DEFAULT_POS_X, y: DEFAULT_POS_Y});
-
-    const characterTexture = useMemo(() => loadTexture(characterImage), []);
+  const characterTexture = useMemo(() => loadTexture(getTexture()), []);
   const { levelTexture, overlayTexture, doorFloorTexture,
     doorFrameFrontTexture, doorFrameBackTexture } = useLevelTextures(map);
   const { tile: characterTile } = useCharacterPosition();
@@ -120,8 +117,10 @@ export const MainContainer = ({
     const exitState = gameService.getExitState(map, transition.to);
     const isLocked = exitState === DoorState.Closed;
 
-    if (isLocked)
-    { setBlockedDoorTo(roomNameToEnum(transition.to) ?? null); return; }
+    if (isLocked) {
+      setBlockedDoorTo(roomNameToEnum(transition.to) ?? null);
+      return;
+    }
 
     setBlockedDoorTo(null);
 
@@ -130,26 +129,43 @@ export const MainContainer = ({
             ? { x: spawn.pos.x * TILE_SIZE, y: spawn.pos.y * TILE_SIZE }
             : { x: DEFAULT_POS_X, y: DEFAULT_POS_Y };
 
-    const face: Direction = spawn?.face ?? "UP";
+      const face: Direction = spawn?.face ?? "UP";
 
-      setPendingTransition({ to: transition.to, spawn: nextSpawn });
+      setPendingTransition({ to: transition.to, spawn: nextSpawn, face: face });
       setInTransition(true);
       setShouldSnapCamera(true);
-    }
+
   };
 
-  const transitionFromTop = (tr: Transition): boolean => {
-    return tr.to != RoomNames.BATHROOM
+  const getDoorFrames = (room: RoomNames, state: boolean) => {
+    const front = doorFrameFrontTexture
+    const back = doorFrameBackTexture
+
+    if(roomNameToEnum(map) != RoomNames.HALLWAY) return state ? doorFrameBackTexture : doorFrameFrontTexture
+    if (state){
+      switch (room){
+        case RoomNames.LIVINGROOM:
+          return [front[0], front[1], front[2]]
+        case RoomNames.KITCHEN:
+          return [front[3], front[4], front[5]]
+        default:
+          return []
+      }
+    }else{
+      if (room === RoomNames.BATHROOM){
+        return [back[0], back[1], back[2]]
+      }else{
+        return []
+      }
+    }
   }
 
   const doorFrame = (state: boolean) =>
           getTransitionsForMap(map)
-            .filter(tr => transitionFromTop(tr))
             .map((tr, i) => (
                     <DoorFrame
                             key={`${map}-${tr.to}-${i}`}
-                            index={i}
-                            textures={state ? doorFrameBackTexture : doorFrameFrontTexture}
+                            textures={getDoorFrames(roomNameToEnum(tr.to) as RoomNames,  state)}
                             map={map}
                             gameService={gameService}
                             transition={tr}
@@ -202,14 +218,13 @@ export const MainContainer = ({
                                   onMove={handleCharacterMove}
                                   collisionMap={collisionMap}
                                   isPaused={isPaused as boolean}
-                                  spawnPosition={spawnPosition}
                                   interactiveElements={interactiveElements}
                           />
                           <LevelOverlay texture={overlayTexture} />
                           {doorFrame(false)}
                           <DoorBlocker
                                   room={room}
-                                  to={blockedDoorTo}
+                                  to={blockedDoorTo as RoomNames}
                                   visible={!!blockedDoorTo}
                                   ww={canvasSize.width}
                                   wh={canvasSize.height}

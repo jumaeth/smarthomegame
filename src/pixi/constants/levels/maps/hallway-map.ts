@@ -35,5 +35,5 @@ export const HALLWAY_OVERLAYS: Overlay[] = [
 export const HALLWAY_SPAWNS: SpawnTable = {
   livingroom: { pos: SPAWN_FROM_LIVINGROOM, face: "DOWN" },
   kitchen:    { pos: SPAWN_FROM_KITCHEN,    face: "DOWN" },
-  bathroom:   { pos: SPAWN_FROM_BATHROOM,    face: "DOWN" },
+  bathroom:   { pos: SPAWN_FROM_BATHROOM,    face: "UP" },
 };
