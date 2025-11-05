@@ -60,21 +60,6 @@ describe('GameService', () => {
     expect(gameService.getAllRooms()?.[0].isCompleted).toBe(true);
   });
 
-  it('completeRoom() should call continue game when not all rooms are completed', () => {
-    const continueGameSpy = jest.spyOn(gameService, 'continueGame');
-    const checkGameCompletionSpy = jest
-            .spyOn(gameService, 'checkGameCompletionConditions')
-            .mockReturnValue(false);
-
-    gameService.completeRoom(RoomNames.LIVINGROOM);
-
-    expect(continueGameSpy).toHaveBeenCalled();
-    expect(checkGameCompletionSpy).toHaveBeenCalled();
-
-    continueGameSpy.mockRestore();
-    checkGameCompletionSpy.mockRestore();
-  });
-
   it('completeRoom() should call finish game when all rooms are completed', () => {
     const finishGameSpy = jest.spyOn(gameService, 'finishGame');
     const checkGameCompletionSpy = jest

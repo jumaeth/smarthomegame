@@ -1,4 +1,4 @@
-import {Overlay, Transition} from "@/types/maps";
+import {Overlay, SpawnTable, Transition} from "@/types/maps";
 
 export const BATHROOM_COL_MAP: number[] = [
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -19,3 +19,7 @@ export const BATHROOM_TRANSITIONS: Transition[] = [
 
 export const BATHROOM_OVERLAYS: Overlay[] = [
 ];
+
+export const BATHROOM_SPAWNS: SpawnTable = {
+  hallway: { pos: { x: 9, y: 9 }, face: "UP" }
+};
