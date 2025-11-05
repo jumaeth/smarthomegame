@@ -61,7 +61,7 @@ export const TransitionOverlay = ({
         cancelAnimationFrame(requestRef.current);
       }
     };
-  }, [phase]);
+  }, [phase, onMidTransition, onTransitionEnd]);
 
   if (phase === "idle" && !inTransition) return null;
 

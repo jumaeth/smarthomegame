@@ -16,9 +16,9 @@ import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnab
 import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
 
 export const Kitchen = () => {
-  const roomName = RoomNames.KITCHEN;
-  const gameService = useGameService();
-  const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
+    const gameService = useGameService();
+    const roomName = RoomNames.KITCHEN
+    const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
 
   const [activeDevice, setActiveDevice] = useState<string | null>(null);
   const sdEnabled = useSmarDevicesEnabledState();
@@ -102,6 +102,7 @@ export const Kitchen = () => {
                       interactiveElements={interactiveElements}
                       isPaused={paused}
                       gameService={gameService}
+                      room={roomName}
               />
             </Stage>
           </>
