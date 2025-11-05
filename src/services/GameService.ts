@@ -2,14 +2,14 @@ import {Game} from "../objects/Game";
 import {Room} from "../objects/Room";
 import {RoomNames, roomNameToEnum} from "../objects/RoomNames";
 import {SmartDevice} from "../objects/SmartDevice";
-import {GameScore, ScoreType} from "@/objects/GameScore.ts";
-import {CookieService} from "@/services/CookieService.ts";
-import {allRoomStore} from "@/utils/roomStore.ts";
-import {movementStore} from "@/utils/movementEnabled.ts";
-import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive.ts";
+import {GameScore, ScoreType} from "@/objects/GameScore";
+import {CookieService} from "@/services/CookieService";
+import {allRoomStore} from "@/utils/roomStore";
+import {movementStore} from "@/utils/movementEnabled";
+import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive";
 import {t} from "@lingui/core/macro";
-import {MapKey} from "@/types/maps.ts";
-import {DoorState} from "@/types/door.ts";
+import {MapKey} from "@/types/maps";
+import {DoorState} from "@/types/door";
 
 
 type DeviceListener = (device: SmartDevice) => void;
