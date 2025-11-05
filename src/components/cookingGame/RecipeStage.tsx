@@ -4,22 +4,20 @@ import {Sprite, Text} from "@pixi/react"
 import {TextStyle} from "pixi.js";
 import {Button} from "@/components/cookingGame/Button.tsx";
 import {Stages} from "@/components/cookingGame/Stages.ts";
-import recipeopen from '@/assets/cooking-sprites/recipeopen.png';
 import {t} from "@lingui/core/macro";
 
 interface RecipeStageProps {
   setStage: (stage: Stages) => void;
-  setTotalPoints: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoints }) => {
+export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage }) => {
   const [text, setText] = useState('');
   const [page, setPage] = useState(1);
-  const [label, setLabel] = useState("weiter");
+  const [label, setLabel] = useState(t`continue`);
 
 
   const texturePaths = useMemo(() => ({
-    recipeopen: recipeopen
+    recipeOpen: "/src/assets/cooking-sprites/recipeopen.png"
   }), []);
 
   const pageTexts = useMemo(() => [
@@ -37,12 +35,10 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoin
   const action = () => {
     if (page < pageTexts.length) {
       if (page === pageTexts.length - 1) {
-        setLabel("ende");
+        setLabel(t`end`);
       }
       setPage(page + 1);
     } else {
-      setTotalPoints((prev : number) => prev + 100);
-      setTotalPoints((prev : number) => prev + 100);
       setStage(Stages.GAME);
     }
   };
@@ -51,14 +47,14 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage, setTotalPoin
 
   return (
           <>
-            {loaded && textures.recipeopen && (<Sprite
+            {loaded && textures.recipeOpen && (<Sprite
                     scale={0.6}
-                    texture={textures.recipeopen}
+                    texture={textures.recipeOpen}
                     x={-33}
                     y={-90}
             />)}
 
-            {loaded && textures.recipeopen &&(<Text
+            {loaded && textures.recipeOpen &&(<Text
                     text={(text).toUpperCase()}
                     x={75}
                     y={70}

@@ -1,7 +1,10 @@
 export enum Stages{
   GAME,
+  INTRO,
   RECIPE,
   INGREDIENTS,
   COOK,
-  SERVE
+  SERVE,
+  OUTRO,
+  END
 }

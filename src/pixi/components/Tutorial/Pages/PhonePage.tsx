@@ -44,12 +44,12 @@ export const PhonePage: React.FC<PageProps> = ({
   const textArr  = useMemo( () => [
     t`The help app`,
     t`Want to see this tutorial again or find out how to control the game? - Use the help app!`,
-    t`The progress app`,
-    t`Use this app to check on the smart devices and your overall progress within the game`,
+    t``,
+    t``,
     t`The settings`,
     t`Use this app to change the settings, including language, sound or touch controls`,
-    t`The smart assistant`,
-    t`Want to learn more about a topic? Use this app to talk to an expert in Data Security – The Datapro LLM!`,
+    t``,
+    t``,
     t`The Phone`
 
 ], [])

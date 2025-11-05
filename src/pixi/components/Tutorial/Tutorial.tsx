@@ -13,6 +13,7 @@ import {drawBackground} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {introText, phone, player, scores, tv, tv2} from "@/pixi/components/Tutorial/util/spotLightPositions.ts";
 import {SPOTLIGHT_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+import {RoomNames} from "@/objects/RoomNames.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 
 interface TutorialProps {
@@ -195,9 +196,8 @@ export const Tutorial: React.FC<TutorialProps> = ({
   }, [nextPage, gameService, mgrRef, onClose, runClearBGAnim]);
 
   useEffect(() => {
-    const devices = gameService.getDeviceForRoom("livingroom");
-    const tvDevice = devices.find(d => d.name === "SmartTv");
-    if (!tvDevice) return;
+    const devices = gameService.getDeviceForRoom(RoomNames.LIVINGROOM);
+    const tv = devices.find(d => d.name === "SmartTv");
 
     const unsubscribe = tvDevice.subscribe(device => {
       if (device.getIsCompleted() && nextPage === PageOrder.LESS_EXPL) {

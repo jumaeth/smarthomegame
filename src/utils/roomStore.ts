@@ -1,49 +1,62 @@
-import {SmartDevice} from "@/objects/SmartDevice.ts";
+import {SmartDevice} from "@/objects/SmartDevice";
 import {useMemo, useSyncExternalStore} from "react";
-import {Room, RoomName} from "@/objects/Room.ts";
+import {Room} from "@/objects/Room";
+import {RoomNames} from "@/objects/RoomNames";
 
 type Listener = () => void;
 
 class roomStore {
- private rooms: Room[];
- private listeners = new Set<Listener>();
- constructor(initial: Room[]) {
-   this.rooms = initial ? initial : [];
- }
+  private rooms: Room[];
+  private listeners = new Set<Listener>();
 
-  getAll(): Room[] { return this.rooms; }
-
-  getRoom(name: string): Room { return <Room>this.rooms.find(r => r.name === name); }
-
-  getAllDevices(): SmartDevice[] {
-   return this.rooms.flatMap(r => r.devices);
+  constructor(initial: Room[]) {
+    this.rooms = initial ? initial : [];
   }
 
-  getRoomForDevice(name: string): RoomName {
-    return <"livingroom" | "hallway" | "kitchen"> this.rooms.find(r => r.devices.find(d => d.name === name))?.name;
+  getAll(): Room[] {
+    return this.rooms;
+  }
+
+  getRoom(name: string): Room {
+    return <Room>this.rooms.find(r => r.name === name);
+  }
+
+  getAllDevices(): SmartDevice[] {
+    return this.rooms.flatMap(r => r.devices);
+  }
+
+  getRoomForDevice(name: string): RoomNames {
+    return <RoomNames>this.rooms.find(r => r.devices.find(d => d.name === name))?.name;
   }
 
   getDevice(name: string): SmartDevice | undefined {
     return this.getAllDevices().find(d => d.name === name);
   }
+
   set(rs: Room[]) {
     this.rooms = rs;
     this.listeners.forEach((l) => l());
- }
+  }
 
- subscribe(fn: Listener) { this.listeners.add(fn);
-   return () => { this.listeners.delete(fn); }; }
+  subscribe(fn: Listener) {
+    this.listeners.add(fn);
+    return () => {
+      this.listeners.delete(fn);
+    };
+  }
 }
+
 export const allRoomStore = new roomStore([]);
+
 export function useRoomStore() {
   const allRooms = useSyncExternalStore(
           (cb) => allRoomStore.subscribe(cb),
-          () => allRoomStore.getAll() );
+          () => allRoomStore.getAll());
 
   const completed = useMemo(
           () => (allRooms.filter(r => r.isCompleted)), [allRooms]);
 
   const nonCompleted = useMemo(() => (allRooms.filter(d => !d.isCompleted)), [allRooms]);
 
-  return { allRooms, completed, nonCompleted };
+  return {allRooms, completed, nonCompleted};
 }

@@ -10,12 +10,13 @@ export const HALLWAY_COL_MAP: number[] = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
 ];
 
 export const HALLWAY_TRANSITIONS: Transition[] = [
   {pos: {x: 3, y: 3}, to: 'livingroom'},
   {pos: {x: 10, y: 3}, to: 'kitchen'},
+  {pos: {x: 10, y: 9}, to: 'bathroom'},
 ];
 
 export const HALLWAY_OVERLAYS: Overlay[] = [
