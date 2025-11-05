@@ -197,7 +197,8 @@ export const Tutorial: React.FC<TutorialProps> = ({
 
   useEffect(() => {
     const devices = gameService.getDeviceForRoom(RoomNames.LIVINGROOM);
-    const tv = devices.find(d => d.name === "SmartTv");
+    const tvDevice = devices.find(d => d.name === "SmartTv");
+    if (!tvDevice) return;
 
     const unsubscribe = tvDevice.subscribe(device => {
       if (device.getIsCompleted() && nextPage === PageOrder.LESS_EXPL) {
