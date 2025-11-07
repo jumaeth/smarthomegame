@@ -284,7 +284,7 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
 
     setFeedback({
       type: isCorrect ? 'success' : 'error',
-      message: isCorrect ? t`Correct!` : t`Wrong! Try again.`,
+      message: isCorrect ? t`Correct! ✅` : t`Wrong! Try again 🚫`,
       explanation: isCorrect ? item.explanation : DATA_TYPES[type].explanation
     });
   };
@@ -305,41 +305,36 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
 
     // game result
     return (
-            <div className="p-4 md:p-6 lg:p-8 w-full h-full flex flex-col items-center justify-center gap-8 bg-transparent font-mono text-center items-center"
-                 style={{ fontFamily: 'LoResRegular, sans-serif' }}
+            <div className="p-4 min-w-[600px] h-full flex flex-col items-center justify-center gap-8 bg-transparent font-mono text-center items-center text-amber-900"
             >
 
-              <h1 className="text-2xl sm:text-3xl md:text-4xl text-white mb-3">
-                <Trans>Congratulations! 🎉</Trans>
-              </h1>
+              <div className="bg-white rounded-xl p-6 w-[100%] font-['LoResRegular',sans-serif]">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl mb-4">
+                  <Trans>🎉 Congratulations! 🎉</Trans>
+                </h1>
 
-              <div className="bg-white/90 rounded-xl p-6 max-w-[600px] w-[90%]">
-                <h2 className="text-xl sm:text-xl md:text-2xl text-amber-900 mb-6">
-                  <Trans>Summary</Trans>
-                </h2>
-
-                <p className="text-base sm:text-xl text-amber-900 mb-1">
+                <p className="text-base sm:text-xl mb-1">
                   <Trans>All items were sorted!</Trans>
                 </p>
 
                 {firstTrySuccesses.length > 0 && (
-                        <p className="text-base sm:text-xl text-amber-900 mb-1">
+                        <p className="text-base sm:text-xl  mb-1">
                           <Trans>Answered correctly on the first attempt:</Trans> <span style={{ textShadow: '1px 1px 3px rgba(120, 53, 15, 0.8)' }}>{firstTrySuccesses.length}</span> <Trans>of</Trans> <span style={{ textShadow: '1px 1px 3px rgba(120, 53, 15, 0.8)' }}>{DATA_ITEMS.length}</span>
                         </p>
                 )}
 
-                <p className="text-base sm:text-xl text-amber-900 mb-1">
+                <p className="text-base sm:text-xl mb-1">
                   <Trans>Completion bonus:</Trans><span
                         style={{textShadow: '1px 1px 3px rgba(120, 53, 15, 0.6)'}}> + {bonus.privacy}<Trans> privacy</Trans>, + {bonus.comfort} <Trans>comfort</Trans></span>
                 </p>
-                <p className="text-base sm:text-xl text-amber-900 mb-8">
+                <p className="text-base sm:text-xl mb-4">
                   <Trans>The Smart Home Hub is now unlocked, but you can try again if you want!</Trans>
                 </p>
 
                 <div className="flex justify-center">
                   <button
                           onClick={handleFinish}
-                          className="btn-modal-primary"
+                          className="px-10 py-2 text-white text-lg font-semibold bg-blue-600 hover:bg-blue-700 rounded-[30px] shadow-md transition-colors cursor-pointer"
                   >
                     <Trans>Close</Trans>
                   </button>
@@ -352,7 +347,7 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
   // textblocks & blocks
   return (
          <div
-                  className="flex flex-col items-center justify-center p-4"
+                  className="w-full h-full flex flex-col items-center justify-center p-4"
                   style={{ fontFamily: 'LoResRegular, sans-serif' }}
           >
             <div className="flex justify-center w-full mt-4 md:mt-6 lg:mt-8 items-center">
@@ -379,37 +374,39 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
 
            {feedback && (
                    <div
-                           className={`feedback-popup ${
-                                   feedback.type === 'success' ? 'feedback-success' : 'feedback-error'
+                           className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+                        p-6 rounded-lg shadow-lg z-[100] text-black text-center max-w-sm ${
+                                   feedback.type === 'success' ? 'bg-green-200' : 'bg-red-100'
                            }`}
                    >
                      <h4
-                             className="font-semibold"
+                             className="font-semibold mb-2 text-2xl"
                      >
                        {feedback.message}
                      </h4>
 
-                     <p>
+                     <p className="mb-4">
                        {feedback.explanation}
                      </p>
 
                      <button
                              onClick={handleCloseFeedback}
-                             className="btn-modal-primary"
+                             className="px-3 py-[10px] text-white bg-gray-600 text-lg font-semibold hover:bg-gray-700
+                      rounded-xl shadow-md transition-colors cursor-pointer w-full"
                      >
                        <Trans>Close</Trans>
                      </button>
                    </div>
            )}
 
-            <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 lg:gap-8 mt-4 md:mt-6 lg:mt-8">
+            <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 lg:gap-8 mt-4 md:mt-6 lg:mt-8 flex-grow">
               {Object.entries(DATA_TYPES).map(([type, { label, color, description }]) => (
                       <div
                               key={type}
                               onDragOver={handleDragOver}
                               onDragLeave={handleDragLeave}
                               onDrop={(e) => handleDrop(e, type as keyof typeof DATA_TYPES)}
-                              className={`w-full md:w-1/3 p-4 rounded-lg shadow-md ${color} text-white min-h-[200px] flex flex-col items-center justify-center text-center`}
+                              className={`w-full md:w-1/3 p-4 rounded-lg shadow-md ${color} text-white min-h-[200px] min-w-[200px] flex flex-col items-center text-center`}
                       >
                         <h3 className="text-xl font-bold mb-2">{label}</h3>
                         <p className="text-sm">{description}</p>
