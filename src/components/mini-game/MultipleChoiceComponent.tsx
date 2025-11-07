@@ -62,12 +62,12 @@ export const MultipleChoiceComponent = ({
 
   return (
           <div className="grid">
-            <ul className="my-0 p-0 list-none">
+            <ul className="my-4">
               {questions.map((q, i) => {
                 const isCorrect = answers[i] === solutions[i].booleanSolution;
                 return (
-                        <li key={i} className="settings-list-item">
-                          <label className="settings-list-label">
+                        <li key={i} className="mt-2.5 mb-3 p-3 border border-grey-400 rounded-md">
+                          <label className="flex items-center cursor-pointer">
                             {q}
                             <div className="ml-auto">
                               <Toggle
@@ -104,11 +104,13 @@ export const MultipleChoiceComponent = ({
               })}
             </ul>
             {!isSubmitted ? (
-                    <Button onClick={submitAnswer} className="btn-primary">
+                    <Button onClick={submitAnswer} className="px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
+                      rounded-[30px] shadow-md transition-colors cursor-pointer">
                       <Trans>Send answer</Trans>
                     </Button>
             ) : (
-                    <Button onClick={continueGame} className="btn-primary">
+                    <Button onClick={continueGame} className="px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
+                      rounded-[30px] shadow-md transition-colors cursor-pointer">
                       <Trans>Continue</Trans>
                     </Button>
             )}
