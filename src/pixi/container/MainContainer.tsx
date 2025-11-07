@@ -209,9 +209,9 @@ export const MainContainer = ({
                 {(assetsReady && cameraSettled) && (
                         <>
                           <Level texture={levelTexture} />
-                          <ProximityHighlight interactiveElements={interactiveElements} />
                           <DoorFloor room={room} map={map} gameService={gameService} textures={doorFloorTexture} />
                           {doorFrame(true)}
+                          <ProximityHighlight interactiveElements={interactiveElements} windowWidth={canvasSize.width} windowHeight={canvasSize.height} />
                           <Character
                                   ref={characterRef}
                                   texture={characterTexture}

@@ -1,22 +1,31 @@
 import {TILE_SIZE} from "@/pixi/constants/world-settings";
-import {PropsWithChildren, useRef} from "react";
+import React, {PropsWithChildren, useRef, useState} from "react";
 import {Container as PixiContainer, Graphics as PixiGraphics} from "pixi.js"
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {Container, useTick} from "@pixi/react";
+import {Container, Sprite, useTick} from "@pixi/react";
 import {useCharacterPosition} from "@/hooks/character/useCharacterPosition.ts";
 import {getHighlightPosition} from "@/utils/highlightPositions.ts";
+import {loadTexture} from "@/utils/loadTexture.ts";
+import image from "@/assets/highlighting/tv.png"
+import {getHighlightPosition2} from "@/utils/highlightPositions2.tsx";
+import {SmartDevice} from "@/objects/SmartDevice.ts";
 
 
 interface ProximityHighlightProps {
     interactiveElements?: InteractivePixiElement[];
+    windowWidth: number;
+    windowHeight: number;
 }
 export const ProximityHighlight = ({
-                                       interactiveElements,
-                                     }: PropsWithChildren<ProximityHighlightProps>) => {
+                                       interactiveElements, windowWidth, windowHeight
+                                     }: PropsWithChildren<ProximityHighlightProps>
+) => {
 
     const pos = useCharacterPosition();
     const graphicRef = useRef<PixiContainer|null>(null);
 
+
+    const [interactive, setInteractive] = useState<InteractivePixiElement | null>(null);
 
     const checkForProximity = () => {
       if (!pos) {
@@ -47,7 +56,7 @@ export const ProximityHighlight = ({
         return null;
       }
 
-      const interactive = checkForProximity();
+      setInteractive(checkForProximity());
 
       const graphic = graphicRef.current;
       if(!graphic)return;
@@ -57,7 +66,7 @@ export const ProximityHighlight = ({
         const rect = getHighlightPosition(interactive);
 
         g.lineStyle(1, 0xFFFF00, 0.5);
-        g.drawRoundedRect(rect.x, rect.y, rect.width* TILE_SIZE, rect.height* TILE_SIZE, rect.radius);
+        //g.drawRoundedRect(rect.x, rect.y, rect.width* TILE_SIZE, rect.height* TILE_SIZE, rect.radius);
 
       }else{
         if(!graphic)return;
@@ -71,5 +80,12 @@ export const ProximityHighlight = ({
 
     useTick(() => {checkForHighlight();});
 
-    return (<Container ref={graphicRef}/>);
+    const getPosition = () => {return (checkForProximity() != null) ? getHighlightPosition(checkForProximity()) : {x: 0, y: 0}}
+
+    return (
+            <>
+              <Container ref={graphicRef}/>
+              { getPosition().x != 0 && interactive && getHighlightPosition2(interactive.name, getPosition(), windowWidth, windowHeight)}
+            </>
+    );
 }
