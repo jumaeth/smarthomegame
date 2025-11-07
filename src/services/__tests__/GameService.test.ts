@@ -41,7 +41,7 @@ describe('GameService', () => {
   it('onGameStateChange() should save the game object to the cookies', () => {
     gameService.onGameStateChange();
     expect(CookieService.set).toHaveBeenCalledWith(
-            "save_game", {"rooms": [{"devices": [{"helpText": "sorry, I cant help you with this", "isCompleted": false, "name": "SmartTv"}, {"helpText": "sorry, I cant help you with this", "isCompleted": false, "name": "SmartLights"}], "isCompleted": false, "isLocked": false, "name": "livingroom"}], "score": {"comfortScore": 50, "privacyScore": 0}}
+            "save_game", {"rooms": [{"devices": [{"helpText": "sorry, I cant help you with this", "isCompleted": false, "name": "SmartTv"}, {"helpText": "sorry, I cant help you with this", "isCompleted": false, "name": "SmartLights"}], "isCompleted": false, "isLocked": false, "name": "livingroom"}], "score": {"comfortScore": 10, "privacyScore": 10}}
     );
   });
 
