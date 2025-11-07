@@ -6,9 +6,8 @@ import {Texture} from "@pixi/core";
 import assistantPhone from "@/assets/assistant-phone/assistant_phone_background.png";
 import appIcon1 from "@/assets/assistant-phone/app_icon_1.png";
 import appIcon2 from "@/assets/assistant-phone/app_icon_2.png";
-import appIcon3 from "@/assets/assistant-phone/app_icon_3.png";
-import appIcon4 from "@/assets/assistant-phone/app_icon_4.png";
 import {PixiButton} from "@/pixi/components/PixiButton.tsx";
+import {t} from "@lingui/core/macro";
 
 interface AssistantPhoneProps {
   windowWidth: number;
@@ -26,8 +25,6 @@ export const AssistantPhone: React.FC<AssistantPhoneProps> = ({
     Texture.from(assistantPhone),
     Texture.from(appIcon1),
     Texture.from(appIcon2),
-    Texture.from(appIcon3),
-    Texture.from(appIcon4),
   ], []);
 
   const phoneHeight = windowHeight * 0.95;
@@ -42,10 +39,6 @@ export const AssistantPhone: React.FC<AssistantPhoneProps> = ({
   const onClickApp1 = () => {
   }
   const onClickApp2 = () => {
-  }
-  const onClickApp3 = () => {
-  }
-  const onClickApp4 = () => {
   }
 
   return (
@@ -86,33 +79,11 @@ export const AssistantPhone: React.FC<AssistantPhoneProps> = ({
                     cursor="pointer"
                     pointertap={onClickApp2}
             />
-            <Sprite
-                    anchor={0.5}
-                    x={phonePosition.x - appOffset}
-                    y={phonePosition.y + appOffset + appShift}
-                    texture={textures[3]}
-                    width={appSize.width}
-                    height={appSize.height}
-                    interactive={true}
-                    cursor="pointer"
-                    pointertap={onClickApp3}
-            />
-            <Sprite
-                    anchor={0.5}
-                    x={phonePosition.x + appOffset}
-                    y={phonePosition.y + appOffset + appShift}
-                    texture={textures[4]}
-                    width={appSize.width}
-                    height={appSize.height}
-                    interactive={true}
-                    cursor="pointer"
-                    pointertap={onClickApp4}
-            />
             <PixiButton x={10}
                         y={10}
                         width={150} height={50}
                         onClick={onClickExit}
-                        label={"< Back to game"}/>
+                        label={t`< Back to game`}/>
           </Container>
   );
 }

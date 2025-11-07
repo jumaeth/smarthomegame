@@ -15,7 +15,7 @@ import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {growAnimation} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
-import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {GROW_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
 import {t} from "@lingui/core/macro";
 
@@ -58,15 +58,39 @@ export const CharacterPage: React.FC<PageProps> = ({
   const pressedRef = useRef<boolean>(false);
 
   //others
-  const textsTemp = [
+  const textsTemp = useMemo(() => [
           t`Movement`, t`Use the arrow keys or WASD to move around`, t`Interaction`, t`Use the “E” key to interact with objects`,
           t`Discovery`, t`Interactive objects light up if you walk next to them`, t`The Player`
-  ]
+  ], [])
   const texture = useMemo(() => loadTexture(characterImage), []);
-  const imageSource: typeof arrowKeys[] = [arrowKeys, eKey, highlighting];
+  const imageSource: typeof arrowKeys[] = useMemo(() => [arrowKeys, eKey, highlighting], []);
 
   //hooks
   const mgrRef = useAnimationManager();
+
+  const setupTexts = useCallback(() => {
+    setAllTexts(prev => [
+      ...prev,
+      { text: textsTemp[0], x: windowWidth*0.2,   y: windowHeight*0.29,  fontSize: 0.04, fontWeight: "bold"   },
+      { text: textsTemp[2], x: windowWidth*0.225, y: windowHeight*0.79,  fontSize: 0.04, fontWeight: "bold"   },
+      { text: textsTemp[4], x: windowWidth*0.8,   y: windowHeight*0.45,  fontSize: 0.04, fontWeight: "bold"   },
+      { text: textsTemp[1], x: windowWidth*0.2,   y: windowHeight*0.35,  fontSize: 0.03, fontWeight: "lighter"},
+      { text: textsTemp[3], x: windowWidth*0.225, y: windowHeight*0.85,  fontSize: 0.03, fontWeight: "lighter"},
+      { text: textsTemp[5], x: windowWidth*0.8,   y: windowHeight*0.525, fontSize: 0.03, fontWeight: "lighter"},
+      { text: textsTemp[6], x: windowWidth*0.5+TILE_SIZE*3, y: windowHeight*0.25, fontSize: 0.07, fontWeight: "bold" },
+    ]);
+  },[textsTemp, windowWidth, windowHeight])
+
+  const setupImages = useCallback( () => {
+    setAllImages(prev => [
+      ...prev,
+      { texture: loadTexture(imageSource[0]), x: windowWidth*0.2,   y: windowHeight*0.18,  scale: 1.15},
+      { texture: loadTexture(imageSource[1]), x: windowWidth*0.225, y: windowHeight*0.7,  scale: 1},
+      { texture: loadTexture(imageSource[2]), x: windowWidth*0.8,   y: windowHeight*0.29,  scale: 1},
+    ]);
+
+
+  },[imageSource, windowWidth, windowHeight])
 
   //init
   useEffect(() => {
@@ -75,7 +99,7 @@ export const CharacterPage: React.FC<PageProps> = ({
       setupImages();
       setOnLoad(false);
     }
-  }, [onLoad]);
+  }, [onLoad, setupImages, setupTexts]);
 
   //hide explanations  on init
   useLayoutEffect(() => {
@@ -104,7 +128,7 @@ export const CharacterPage: React.FC<PageProps> = ({
     return () => {
       events.forEach(func => window.removeEventListener("keydown", func));
     };
-  }, [keyControl, animating]);
+  }, [keyControl, animating, Animations.SHRINK]);
 
 
   //manage animations
@@ -167,7 +191,7 @@ export const CharacterPage: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation]);
+  }, [animation, Animations.END, Animations.GROW, Animations.SHRINK, mgrRef, setKeyControl, setNextPage, windowWidth, windowHeight]);
 
 
   //setup graphics
@@ -188,30 +212,7 @@ export const CharacterPage: React.FC<PageProps> = ({
     g.lineStyle(6, "FFFFFF", 1);
     g.moveTo(windowWidth*0.7, windowHeight*0.3);
     g.bezierCurveTo(windowWidth*0.66, windowHeight*0.32, windowWidth*0.65, windowHeight*0.5, windowWidth*0.6, windowHeight*0.5);
-  }, [])
-  const setupTexts = () => {
-    setAllTexts(prev => [
-      ...prev,
-      { text: textsTemp[0], x: windowWidth*0.2,   y: windowHeight*0.29,  fontSize: 0.04, fontWeight: "bold"   },
-      { text: textsTemp[2], x: windowWidth*0.225, y: windowHeight*0.79,  fontSize: 0.04, fontWeight: "bold"   },
-      { text: textsTemp[4], x: windowWidth*0.8,   y: windowHeight*0.45,  fontSize: 0.04, fontWeight: "bold"   },
-      { text: textsTemp[1], x: windowWidth*0.2,   y: windowHeight*0.35,  fontSize: 0.03, fontWeight: "lighter"},
-      { text: textsTemp[3], x: windowWidth*0.225, y: windowHeight*0.85,  fontSize: 0.03, fontWeight: "lighter"},
-      { text: textsTemp[5], x: windowWidth*0.8,   y: windowHeight*0.525, fontSize: 0.03, fontWeight: "lighter"},
-      { text: textsTemp[6], x: windowWidth*0.5+TILE_SIZE*3, y: windowHeight*0.25, fontSize: 0.07, fontWeight: "bold" },
-    ]);
-  };
-
-  const setupImages = () => {
-    setAllImages(prev => [
-      ...prev,
-      { texture: loadTexture(imageSource[0]), x: windowWidth*0.2,   y: windowHeight*0.18,  scale: 1.15},
-      { texture: loadTexture(imageSource[1]), x: windowWidth*0.225, y: windowHeight*0.7,  scale: 1},
-      { texture: loadTexture(imageSource[2]), x: windowWidth*0.8,   y: windowHeight*0.29,  scale: 1},
-    ]);
-
-
-  }
+  }, [windowWidth, windowHeight])
 
   const lines = () => {
     return (

@@ -10,7 +10,7 @@ import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
-import {PageOrder} from "@/pixi/components/Tutorial/Tutorial.tsx";
+import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {TextProps} from "@/pixi/components/Tutorial/util/Types.ts";
 import {t} from "@lingui/core/macro";
 
@@ -42,26 +42,18 @@ export const PhonePage: React.FC<PageProps> = ({
   const graphicRef = useRef<PixiContainer|null>(null);
 
 
-  const textArr = [
+  const textArr  = useMemo( () => [
     t`The help app`,
     t`Want to see this tutorial again or find out how to control the game? - Use the help app!`,
-    t`The progress app`,
-    t`Use this app to check on the smart devices and your overall progress within the game`,
+    t``,
+    t``,
     t`The settings`,
     t`Use this app to change the settings, including language, sound or touch controls`,
-    t`The smart assistant`,
-    t`Want to learn more about a topic? Use this app to talk to an expert in Data Security – The Datapro LLM!`,
+    t``,
+    t``,
     t`The Phone`
 
-]
-
-  //init graphics/texts
-  useEffect(() => {
-    if (onLoad) {
-      setupTexts();
-      setOnLoad(false);
-    }
-  }, [onLoad]);
+], [])
 
   //hide explanations  on init
   useLayoutEffect(() => {
@@ -131,7 +123,7 @@ export const PhonePage: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation]);
+  }, [animation, Animations.END, Animations.GROW, Animations.SHRINK, mgrRef, setKeyControl, setNextPage, windowWidth, windowHeight]);
 
 
 
@@ -152,10 +144,10 @@ export const PhonePage: React.FC<PageProps> = ({
     return () => {
       events.forEach(func => window.removeEventListener("keydown", func));
     };
-  }, [keyControl, animating]);
+  }, [keyControl, animating, Animations.SHRINK]);
 
   //setup graphics
-  const setupTexts = () => {
+  const setupTexts = useCallback( ()=> {
     setAllTexts(prev => [
       ...prev,
       { text: textArr[0], x: windowWidth*0.12,   y: windowHeight*0.2,  fontSize: 0.035, fontWeight: "bold"   },
@@ -170,7 +162,15 @@ export const PhonePage: React.FC<PageProps> = ({
 
       { text: textArr[8], x: windowWidth*0.5, y: windowHeight*0.125, fontSize: 0.06, fontWeight: "bold" },
     ]);
-  };
+  },[textArr, windowWidth, windowHeight])
+
+  //init graphics/texts
+  useEffect(() => {
+    if (onLoad) {
+      setupTexts();
+      setOnLoad(false);
+    }
+  }, [onLoad, setupTexts]);
 
   //define line properties
   const drawLines =  useCallback( (g: PixiGraphics) => {
@@ -196,7 +196,7 @@ export const PhonePage: React.FC<PageProps> = ({
     g.moveTo(windowWidth*0.55, windowHeight*0.34);
     g.lineTo(windowWidth*0.655, windowHeight*0.3);
 
-  }, [])
+  }, [windowWidth, windowHeight])
 
 
   const lines = () => {

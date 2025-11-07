@@ -1,5 +1,5 @@
 import {RoundedRectangle} from "pixi.js";
-import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
+import {OFFSET_X, OFFSET_Y, TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 
 export function getHighlightPosition(device: InteractivePixiElement){
@@ -29,14 +29,14 @@ export function getHighlightPosition(device: InteractivePixiElement){
     case "SmartHomeHub":
       return new RoundedRectangle(
               device.x*TILE_SIZE - TILE_SIZE * 0.04,
-              device.y*TILE_SIZE+TILE_SIZE*0.7,
+              device.y*TILE_SIZE+OFFSET_Y*1.5,
               device.width-TILE_SIZE*0.003,
               device.height-TILE_SIZE*0.0225,
               0.5);
     case "SmartKitchen":
       return new RoundedRectangle(
-              device.x*TILE_SIZE-TILE_SIZE*0.025,
-              device.y*TILE_SIZE-TILE_SIZE*0.15,
+              device.x*TILE_SIZE-OFFSET_X,
+              device.y*TILE_SIZE,
               device.width+TILE_SIZE*0.003,
               device.height+TILE_SIZE*0.0025,
               1);

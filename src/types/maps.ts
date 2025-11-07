@@ -1,4 +1,8 @@
-import {Position} from "@/types/movement";
+import {Direction, Position} from "@/types/movement";
+
+export type Spawn = { pos: Position; face?: Direction };
+export type SpawnTable = Partial<Record<MapKey, Spawn>>;
+export type SpawnDirectory = Record<MapKey, SpawnTable>;
 
 export type MapSettings = {
   name: string;
@@ -20,6 +24,7 @@ export type MapKey =
         | 'livingroom'
         | 'hallway'
         | 'kitchen'
+        | 'bathroom'
         ;
 
 export type DeviceKey=
