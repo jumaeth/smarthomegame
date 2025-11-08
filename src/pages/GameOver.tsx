@@ -1,51 +1,82 @@
+// File: `src/pages/GameOver.tsx`
 import {useGameService} from "../hooks/gameService/useGameService.tsx";
 import {GameScore} from "@/objects/GameScore.ts";
 import {GameService} from "@/services/GameService.ts";
-import {t} from '@lingui/core/macro';
 import {Trans} from "@lingui/react/macro";
 import Button from "@/components/general-ui/Button.tsx";
-import bgImageWon from "@/assets/victory-page/game_won.png";
-import bgImageLost from "@/assets/victory-page/game_lost.png";
 import {StatsService} from "@/services/StatsService.ts";
 import {FileService} from "@/services/FileService.ts";
 import CsvTable from "@/components/CsvTable.tsx";
-
+import {VictoryType} from "@/objects/VictoryType.ts";
+import {useState} from "react";
 
 export function GameOver() {
   const gameService: GameService = useGameService();
   const statService: StatsService = new StatsService();
   const gameScore: GameScore = gameService.getScore();
-  const privacyScore: number = gameScore.getPrivacyScore();
-  const comfortScore: number = gameScore.getComfortScore();
-  const gameOverMessage: string = (privacyScore >= 50 && comfortScore >= 50) ? t`Congratulations, you won!` : t`Too bad, you lost`;
-  const bgImage = (privacyScore >= 50 && comfortScore >= 50) ? bgImageWon : bgImageLost;
+  const victoryState: VictoryType | undefined = VictoryType.fromLevels(gameScore.getPrivacyLevel(), gameScore.getComfortLevel());
   const csvString: string = statService.generateCsvString(gameService.getGame());
 
-  function downloadStats():void {
+  const [showStatsOnRight, setShowStatsOnRight] = useState(false);
+
+  function downloadStats(): void {
     FileService.downloadFile("smart_home_escape_stats", csvString, "csv");
   }
+
   return (
-          <div className="flex items-center justify-center h-screen w-screen bg-black">
-            <div className="relative w-full h-full max-w-[150vh] max-h-[66.67vw] bg-contain bg-center"
-                 style={{backgroundImage: `url(${bgImage})`}}>
-              <div className="absolute top-[5%] right-0 w-full h-min">
-                <h2 className="text-2xl font-bold mb-4 text-center">{gameOverMessage}</h2>
-              </div>
-              <div className="absolute top-[70%] right-[30%] w-[40%] max-h-[17%] text-center p-4">
-                <p className="text-sm"><Trans>You have achieved the following score <br/>Privacy: </Trans>{privacyScore}<Trans> Convenience: </Trans>{comfortScore}
-                </p>
-              </div>
-              <div className="absolute bottom-0 right-0 w-min h-min">
-                <Button onClick={() => gameService.reset()}><Trans>Restart</Trans></Button>
-                <Button onClick={() => downloadStats()}><Trans>Download</Trans></Button>
-              </div>
+          <div className="min-h-screen flex flex-col sm:flex-row">
+            <div className="w-full h-auto sm:flex-none sm:h-screen sm:w-[min(calc(100vh*16/9),70vw)] relative overflow-hidden">
+              <img
+                      src={victoryState?.picture}
+                      alt="Illustration"
+                      className={`absolute inset-0 w-full h-full object-cover ${showStatsOnRight ? "filter brightness-60 grayscale" : ""}`}
+              />
 
-              <h2>
-                Game Results:
-              </h2>
-
-              <CsvTable csvString={csvString}></CsvTable>
+              {showStatsOnRight && (
+                      <div className="absolute inset-0 z-20 p-6 bg-black/60 backdrop-blur-sm flex flex-col">
+                        <h1 className="text-2xl text-center mb-4 text-white"><Trans>Game Results:</Trans></h1>
+                        <div className="w-full flex-1 overflow-auto">
+                          <CsvTable csvString={csvString} />
+                        </div>
+                      </div>
+              )}
             </div>
+
+            <aside className="flex-1 min-h-screen p-6 sm:border-l border-t sm:border-t-0 border-gray-800/30 flex flex-col justify-between bg-gray-900 text-gray-100">
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-3xl leading-tight text-gray-100">
+                    <Trans>{victoryState?.displayText}</Trans>
+                  </h2>
+
+                  <p className="mt-2 text-sm text-gray-300">
+                    <Trans>Privacy</Trans>:
+                    <span className="ml-2 font-medium text-gray-100">{String(gameScore.getPrivacyScore() ?? "-")}</span>
+                    <span className="mx-2 text-gray-500">·</span>
+                    <Trans>Comfort</Trans>:
+                    <span className="ml-2 font-medium text-gray-100">{String(gameScore.getComfortScore() ?? "-")}</span>
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-3 items-center">
+                  <Button onClick={() => setShowStatsOnRight(s => !s)}>
+                    <Trans>{showStatsOnRight ? "Hide Statistics" : "Show Statistics"}</Trans>
+                  </Button>
+
+                  <Button onClick={downloadStats}>
+                    <Trans>Download CSV</Trans>
+                  </Button>
+
+                  <Button onClick={() => { gameService.reset(); }}>
+                    <Trans>Restart</Trans>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="text-xs text-gray-500 mt-6">
+                <Trans>Thanks for playing — your progress can be restarted with the Restart button.</Trans>
+              </div>
+            </aside>
           </div>
   );
 }

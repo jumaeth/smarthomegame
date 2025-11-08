@@ -5,6 +5,7 @@ import React, {useMemo} from "react";
 import {Texture} from "@pixi/core";
 import assistantPhoneMap from "@/assets/assistant-phone/assistant_phone_minimap.png";
 import {PixiButton} from "@/pixi/components/PixiButton.tsx";
+import {t} from "@lingui/core/macro";
 
 interface AssistantPhoneProps {
   windowWidth: number;
@@ -45,7 +46,7 @@ export const AssistantPhone: React.FC<AssistantPhoneProps> = ({
                         y={10}
                         width={150} height={50}
                         onClick={onClickExit}
-                        label={"< Back to game"}/>
+                        label={t`< Back to game`}/>
           </Container>
   );
 }

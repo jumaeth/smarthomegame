@@ -40,6 +40,7 @@ export const Bathroom = () => {
                       collisionMap={collisionMap}
                       onMapChange={handleMapChange}
                       gameService={useGameService()}
+                      room={roomName}
               />
             </Stage>
           </>
