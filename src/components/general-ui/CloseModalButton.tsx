@@ -12,7 +12,7 @@ const CloseModalButton = ({onClick, ariaLabel}: ButtonCloseModalProps) => {
                   aria-label={ariaLabel}
                   className={`${baseStyles}`}
           >
-            <div className="text-white text-[40px] translate-y-[-4px]">x</div>
+            <div className="text-white text-[40px] translate-y-[-3px]">×</div>
           </button>
   );
 };
