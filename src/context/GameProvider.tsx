@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import {ReactNode, useMemo} from "react";
 import { GameContext } from "./GameContext";
 import { GameService } from "../services/GameService";
 import {useNavigate} from "react-router-dom";
@@ -9,7 +9,7 @@ interface GameProviderProps {
 
 export const GameProvider = ({ children }: GameProviderProps) => {
   const navigate = useNavigate();
-  const gameService = new GameService(navigate);
+  const gameService = useMemo(() => new GameService(navigate), []);
 
   return (
           <GameContext.Provider value={gameService}>

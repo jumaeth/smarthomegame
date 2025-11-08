@@ -14,7 +14,7 @@ type HelpButtonProps = {
 
 const HelpButton = ({newMessage, smartDevice}: HelpButtonProps) => {
   const [showMessage, setShowMessage] = useState(false);
-  const [message, setMessage] = useState("Wow, interesting task you got there, do you need help with anything?")
+  const [message, setMessage] = useState(t`wow interesting task you got there, do you need help with anything?`)
 
   const onYes: () => void = (): void => {
     setMessage(smartDevice ? smartDevice.getHelpText() : t`This is more difficult than i thought, unfortunately I cannot support you with this.`)
@@ -27,7 +27,7 @@ const HelpButton = ({newMessage, smartDevice}: HelpButtonProps) => {
 
   const openMessage: () => void = (): void => {
     setShowMessage(true);
-    setMessage("Wow, interesting task you got there, do you need help with anything?")
+    setMessage(t`wow interesting task you got there, do you need help with anything?`)
     setButtons(<div>{yes}{no}</div>)
   }
 
@@ -48,7 +48,7 @@ const HelpButton = ({newMessage, smartDevice}: HelpButtonProps) => {
           <div className="fixed top-5 left-20 h-20 w-100 flex items-start space-x-4 z-[101]">
             <img className="fixed top-0 left-0 w-[150px] z-[10]" src={assistantPhone} alt="assistant-phone"
                  onClick={openMessage}/>
-            { !wasRead && (
+            {!wasRead && (
                     <b className="z-11 fixed top-16 left-18 h-7 w-7 rounded-full bg-red-600 border-black border-2 text-center align-middle"
                        onClick={openMessage}>1</b>
             )}

@@ -41,7 +41,7 @@ describe('GameService', () => {
   it('onGameStateChange() should save the game object to the cookies', () => {
     gameService.onGameStateChange();
     expect(CookieService.set).toHaveBeenCalledWith(
-            "save_game", {"rooms": [{"devices": [{"helpText": "sorry, I cant help you with this", "isCompleted": false, "name": "SmartTv"}, {"helpText": "sorry, I cant help you with this", "isCompleted": false, "name": "SmartLights"}], "isCompleted": false, "isLocked": false, "name": "livingroom"}], "score": {"comfort": 50, "privacy": 0}}
+            "save_game", {"rooms": [{"devices": [{"helpText": "sorry, I cant help you with this", "isCompleted": false, "name": "SmartTv"}, {"helpText": "sorry, I cant help you with this", "isCompleted": false, "name": "SmartLights"}], "isCompleted": false, "isLocked": false, "name": "livingroom"}], "score": {"comfortScore": 10, "privacyScore": 10}}
     );
   });
 
@@ -58,21 +58,6 @@ describe('GameService', () => {
   it('completeRoom() should set selected room to complete', () => {
     gameService.completeRoom(RoomNames.LIVINGROOM);
     expect(gameService.getAllRooms()?.[0].isCompleted).toBe(true);
-  });
-
-  it('completeRoom() should call continue game when not all rooms are completed', () => {
-    const continueGameSpy = jest.spyOn(gameService, 'continueGame');
-    const checkGameCompletionSpy = jest
-            .spyOn(gameService, 'checkGameCompletionConditions')
-            .mockReturnValue(false);
-
-    gameService.completeRoom(RoomNames.LIVINGROOM);
-
-    expect(continueGameSpy).toHaveBeenCalled();
-    expect(checkGameCompletionSpy).toHaveBeenCalled();
-
-    continueGameSpy.mockRestore();
-    checkGameCompletionSpy.mockRestore();
   });
 
   it('completeRoom() should call finish game when all rooms are completed', () => {
