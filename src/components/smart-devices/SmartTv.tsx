@@ -172,7 +172,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
 
   if (showDialogue) {
     return (
-            <div className="flex flex-col items-center justify-center p-4 font-['LoResRegular',sans-serif]">
+            <div className="flex flex-col items-center justify-center p-4">
 
               <h1 className="text-white text-3xl font-bold mb-8">
                 <Trans>Smart TV Setup</Trans></h1>
@@ -195,8 +195,8 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
 
   return (
 
-          <div className="absolute text-2xl -translate-x-1/2 -translate-y-1/2 bg-[#3a3a3a] border-[4px] px-[30px] py-[12px] w-[800px] font-['LoResRegular',sans-serif]">
-            <h1 className="text-center text-3xl mb-4 font-['LoResBold',sans-serif]"><Trans>Smart TV Settings</Trans></h1>
+          <div className="text-2xl text-white px-[30px] py-[12px] w-[800px]">
+            <h1 className="text-center text-3xl mb-4 font-['LoResBold',sans-serif] "><Trans>Smart TV Settings</Trans></h1>
 
             <div className="text-xl px-[5px]">
               <p><Trans>Select which features you want to enable for your Smart TV:</Trans></p>
