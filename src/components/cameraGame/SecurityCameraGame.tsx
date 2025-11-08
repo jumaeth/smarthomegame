@@ -55,12 +55,8 @@ export const SecurityCameraGame = ({onCompletion}: { onCompletion: onCompletionC
   };
 
   return (
-          <div  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                        bg-[#3a3a3a] border-[4px] border-white
-                        shadow-[0_0_0_6px_#000]
-                        px-[30px] py-[12px] w-[800px] max-w-[90vw]
-                        rounded-none text-white text-lg leading-normal z-[100] h-auto
-                        font-['LoResRegular',sans-serif]">
+          <div  className="px-[30px] py-[12px] w-[800px] max-w-[90vw]
+                        rounded-none text-white text-lg leading-normal z-[100] h-auto">
             <h1 className="text-center font-['LoResBold',sans-serif] text-[28px] pb-[15px]">
               <Trans>Security Camera</Trans>
             </h1>
