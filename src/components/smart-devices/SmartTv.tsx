@@ -1,4 +1,3 @@
-import "./Modal.css";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
