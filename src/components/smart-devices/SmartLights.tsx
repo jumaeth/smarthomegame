@@ -39,8 +39,7 @@ export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback
   ];
 
   return (
-          <div className="absolute text-2xl -translate-x-1/2 -translate-y-1/2 bg-[#3a3a3a] border-[4px]
-          px-[30px] py-[12px] w-[800px] font-['LoResRegular',sans-serif]">
+          <div className="text-white px-[30px] py-[12px] w-[800px]">
             <h1 className="text-center font-['LoResBold',sans-serif] text-[28px] pb-[15px]">
               <Trans>Smart Lighting</Trans>
             </h1>

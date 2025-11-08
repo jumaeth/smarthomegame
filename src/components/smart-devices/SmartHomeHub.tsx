@@ -35,7 +35,7 @@ export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({completeDevice}) => {
   return (
           <div>
             {frame === 0 && (
-                    <div className="flex flex-col items-center justify-center p-4 font-['LoResRegular',sans-serif]">
+                    <div className="flex flex-col items-center justify-center p-4">
 
                       <h1 className="text-white text-3xl font-bold mb-8">
                         <Trans>Smart Home Hub</Trans></h1>
@@ -66,7 +66,7 @@ export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({completeDevice}) => {
 
             {/* Game Modal (Frame 1) */}
             {isGameModalOpen && (
-                    <div className="fixed inset-0 z-[99] flex items-center justify-center font-['LoResBold',sans-serif] pb-[15px]">
+                    <div className="text-white fixed inset-0 z-[99] flex items-center justify-center font-['LoResBold',sans-serif] pb-[15px]">
 
                       <div className="absolute inset-0 bg-black/75" onClick={closeModal}/>
 

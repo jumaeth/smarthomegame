@@ -348,7 +348,6 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
   return (
          <div
                   className="w-full h-full flex flex-col items-center justify-center p-4"
-                  style={{ fontFamily: 'LoResRegular, sans-serif' }}
           >
             <div className="flex justify-center w-full mt-4 md:mt-6 lg:mt-8 items-center">
               {currentItem && (
@@ -358,7 +357,8 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
                                 <div
                                         draggable
                                         onDragStart={(e) => handleDragStart(e, currentItem)}
-                                        className="draggable-element w-[95%] max-w-[900px]"
+                                        className="w-[90%] sm:w-[70%] md:w-[60%] max-w-[600px] cursor-grab p-3 sm:p-4 md:p-5
+                                        text-green-900 bg-gray-100 hover:bg-amber-100 rounded-lg shadow-md flex justify-center items-center"
                                 >
                                   <h6
                                           className="text-lg sm:text-xl md:text-2xl"
