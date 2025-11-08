@@ -305,7 +305,7 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
 
     // game result
     return (
-            <div className="p-4 min-w-[600px] h-full flex flex-col items-center justify-center gap-8 bg-transparent font-mono text-center items-center text-amber-900"
+            <div className="p-4 min-w-[600px] h-full flex flex-col items-center justify-center gap-8 bg-transparent font-mono text-center text-amber-900"
             >
 
               <div className="bg-white rounded-xl p-6 w-[100%] font-['LoResRegular',sans-serif]">
