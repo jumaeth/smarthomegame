@@ -61,8 +61,8 @@ export const MultipleChoiceComponent = ({
   });
 
   return (
-          <div className="grid">
-            <ul className="my-4">
+          <div className="flex flex-col items-center">
+            <ul className="my-2 w-full">
               {questions.map((q, i) => {
                 const isCorrect = answers[i] === solutions[i].booleanSolution;
                 return (
@@ -104,13 +104,13 @@ export const MultipleChoiceComponent = ({
               })}
             </ul>
             {!isSubmitted ? (
-                    <Button onClick={submitAnswer} className="px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
-                      rounded-[30px] shadow-md transition-colors cursor-pointer">
+                    <Button onClick={submitAnswer} className="px-10 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
+                      rounded-xl shadow-md cursor-pointer">
                       <Trans>Send answer</Trans>
                     </Button>
             ) : (
-                    <Button onClick={continueGame} className="px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
-                      rounded-[30px] shadow-md transition-colors cursor-pointer">
+                    <Button onClick={continueGame} className="px-10 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
+                      rounded-xl shadow-md cursor-pointer">
                       <Trans>Continue</Trans>
                     </Button>
             )}
