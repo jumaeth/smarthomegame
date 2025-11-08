@@ -25,25 +25,26 @@ export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback
   };
 
   const solutions: Solution[] = [
-    newSolution(true, t`this setting is acceptable`, 5, 0, 1, -5),
-    newSolution(true, t`this setting is acceptable`, 5, 0, 1, -5),
-    newSolution(false, t`this setting is not acceptable`, 10, -2, -10, +2),
-    newSolution(false, t`this setting is not acceptable`, 10, -6, +10, +6),
+    newSolution(true, t`This setting is acceptable`, 5, 0, 1, -5),
+    newSolution(true, t`This setting is acceptable`, 5, 0, 1, -5),
+    newSolution(false, t`This setting is not acceptable`, 10, -2, -10, +2),
+    newSolution(false, t`This setting is not acceptable`, 10, -6, +10, +6),
   ];
 
   const questions: string[] = [
-    t`activate Bluetooth`,
-    t`activate WiFi`,
-    t`record energy consumption`,
-    t`connect to smart app`,
+    t`Activate Bluetooth`,
+    t`Activate WiFi`,
+    t`Record energy consumption`,
+    t`Connect to smart app`,
   ];
 
   return (
-          <div className="modal-window">
-            <h1>
+          <div className="absolute text-2xl -translate-x-1/2 -translate-y-1/2 bg-[#3a3a3a] border-[4px]
+          px-[30px] py-[12px] w-[800px] font-['LoResRegular',sans-serif]">
+            <h1 className="text-center font-['LoResBold',sans-serif] text-[28px] pb-[15px]">
               <Trans>Smart Lighting</Trans>
             </h1>
-            <div>
+            <div className="text-xl px-[5px]">
               <h3>
                 <Trans>Manage permissions:</Trans>
               </h3>

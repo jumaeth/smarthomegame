@@ -61,7 +61,7 @@ export const SecurityCameraGame = ({onCompletion}: { onCompletion: onCompletionC
                         px-[30px] py-[12px] w-[800px] max-w-[90vw]
                         rounded-none text-white text-lg leading-normal z-[100] h-auto
                         font-['LoResRegular',sans-serif]">
-            <h1 className="text-center text-3xl font-bold mb-4">
+            <h1 className="text-center font-['LoResBold',sans-serif] text-[28px] pb-[15px]">
               <Trans>Security Camera</Trans>
             </h1>
             <div className="p-6 rounded-lg text-white min-w-[600px]">
