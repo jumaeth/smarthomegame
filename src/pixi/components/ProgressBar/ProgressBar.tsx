@@ -1,16 +1,14 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useMemo, useState} from "react";
 import {Sprite} from "@pixi/react";
 import {useLoadTextures} from "@/hooks/useLoadTextures.tsx";
 import {ProgressBarIcons} from "@/pixi/components/ProgressBar/ProgressBarIcons.tsx";
 import {GameService} from "@/services/GameService.ts";
 import trophyUrl from "@/assets/progressBar/trophy.png";
-import {ProgressBarStatusStore} from "@/utils/progressBarStatus.ts";
 
 interface ProgressBarProps {
   x: number;
   y: number;
   windowWidth: number;
-  windowHeight: number;
   gameService: GameService;
 }
 
@@ -18,36 +16,32 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                                                           x,
                                                           y,
                                                           windowWidth,
-                                                          windowHeight,
                                                           gameService
                                                         }: ProgressBarProps) => {
 
   const texturePaths = useMemo(
-          () => ({ trophy: trophyUrl }),
+          () => ({trophy: trophyUrl}),
           []
   );
   const {textures, loaded} = useLoadTextures(texturePaths);
-  const [, forceUpdate] = useState(0);
+  const [showIcons, setShowIcons] = useState<boolean>(false);
   const [hovered, setHovered] = useState<boolean>(false);
 
-  useEffect(() => {
-    ProgressBarStatusStore.set(false);
-    const unsubscribe = ProgressBarStatusStore.subscribe(() => {
-      forceUpdate((n) => n + 1); // trigger re-render
-    });
-    return unsubscribe;
-  }, []);
-
   const action = () => {
-    ProgressBarStatusStore.toggle();
-  };
+    setShowIcons(!showIcons);
+  }
+
+  const trophyHeight: number = windowWidth * 0.1;
+  const trophyWidth: number = windowWidth * 0.075;
+  const spacing: number = 4;
 
   return (
           <>
             {loaded && (<Sprite
                     x={x}
                     y={y}
-                    scale={{ x: windowWidth * 0.00005, y: windowHeight * 0.0001 }}
+                    height={trophyHeight}
+                    width={trophyWidth}
                     interactive={true}
                     pointerover={() => setHovered(true)}
                     pointerdown={action}
@@ -57,11 +51,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                     anchor={0}
             >
             </Sprite>)}
-            {ProgressBarStatusStore.get() && <ProgressBarIcons
-                    x={x}
-                    y={y}
-                    windowWidth={windowWidth}
-                    windowHeight={windowHeight}
+            {showIcons && <ProgressBarIcons
+                    x={x + trophyWidth + spacing}
+                    y={y + spacing}
+                    trophyHeight={trophyHeight}
                     gameService={gameService}
             />}
           </>

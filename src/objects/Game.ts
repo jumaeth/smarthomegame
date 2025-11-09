@@ -7,7 +7,7 @@ export class Game {
 
   constructor(rooms: Room[], score?: GameScore) {
     this.rooms = rooms;
-    this.score = score ? score : new GameScore(0, 50)
+    this.score = score ? score : new GameScore(10, 10)
   }
 
   static fromSerialized(data: Game): Game {
