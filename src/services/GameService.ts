@@ -67,8 +67,9 @@ export class GameService {
       new SmartDevice("SecurityCamera", t`Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them.`),
     ]);
 
-    const bathroom = new Room(RoomNames.BATHROOM, []);
-    bathroom.complete()
+    const bathroom = new Room(RoomNames.BATHROOM, [
+      new SmartDevice("SmartShower", t`Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable.`),
+    ]);
 
     return [livingRoom, hallway, kitchen, bathroom];
   }
