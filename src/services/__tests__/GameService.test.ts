@@ -2,7 +2,7 @@ import {GameService} from '../GameService';
 import {Room} from "@/objects/Room";
 import {SmartDevice} from "@/objects/SmartDevice";
 import {CookieService} from '@/services/CookieService';
-import {movementStore} from '@/utils/movementEnabled';
+import {movementStore} from '@/utils/character/movementEnabled.ts';
 import {RoomNames} from "@/objects/RoomNames";
 
 // mock CookieService to avoid document access
