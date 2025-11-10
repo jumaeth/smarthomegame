@@ -1,5 +1,5 @@
-import {Direction, Position} from "@/types/movement";
-import {COLS, TILE_SIZE} from "@/pixi/constants/world-settings";
+import {Direction, Position} from "@/types/movement.ts";
+import {COLS, TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 
 export const calculateCanvasSize = () => {
   const width = window.innerWidth;

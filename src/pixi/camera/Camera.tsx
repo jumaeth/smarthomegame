@@ -2,7 +2,7 @@ import {useRef, PropsWithChildren, useEffect} from 'react'
 import {Container, useTick} from '@pixi/react'
 import {Graphics as PIXIGraphics} from 'pixi.js'
 import {TILE_SIZE, ZOOM} from "@/pixi/constants/world-settings";
-import {lerp} from "@/utils/movment";
+import {lerp} from "@/utils/character/movment.ts";
 
 interface CameraProps {
   characterPosition: { x: number; y: number }

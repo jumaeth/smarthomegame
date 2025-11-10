@@ -1,6 +1,6 @@
 import {Stage} from "@pixi/react";
 import {useCallback, useEffect, useState} from "react";
-import {calculateCanvasSize} from "@/utils/movment.ts";
+import {calculateCanvasSize} from "@/utils/character/movment.ts";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";

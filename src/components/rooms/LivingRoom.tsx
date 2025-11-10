@@ -5,7 +5,7 @@ import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {SmartTv} from "../smart-devices/SmartTv.tsx";
 import {SmartLights} from "../smart-devices/SmartLights.tsx";
 
-import {calculateCanvasSize} from "@/utils/movment.ts";
+import {calculateCanvasSize} from "@/utils/character/movment.ts";
 import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {Stage} from "@pixi/react";
@@ -59,7 +59,7 @@ export const LivingRoom = () => {
 
   const interactiveElements = [
     new InteractivePixiElement(4, 2, 2, 1, "SmartTv", (): void => handleDeviceOpen("SmartTv")),
-    new InteractivePixiElement(1, 2, 1, 1, "SmartLights", (): void => handleDeviceOpen("SmartLights")),
+    new InteractivePixiElement(1, 2, 1, 2, "SmartLights", (): void => handleDeviceOpen("SmartLights"))
     new InteractivePixiElement(8.95, 5.225, 1, 1, "LivingRoomCandles", () => {}, InteractiveType.DUMMY),
     new InteractivePixiElement(16, 5, 1, 1, "LivingRoomFood", () => {}, InteractiveType.DUMMY),
   ]
@@ -88,6 +88,7 @@ export const LivingRoom = () => {
 
   const deviceComponents: Record<string, JSX.Element> = {
     SmartTv: <SmartTv onCompletion={(completed) => smartDeviceCallback(completed)}/>,
+    SmartLights: <SmartLights onCompletion={(completed) => smartDeviceCallback(completed)}/>,
   };
 
   return (

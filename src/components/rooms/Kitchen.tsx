@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
-import {calculateCanvasSize} from "@/utils/movment.ts";
+import {calculateCanvasSize} from "@/utils/character/movment.ts";
 import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {Stage} from "@pixi/react";
@@ -54,7 +54,7 @@ export const Kitchen = () => {
 
   const interactiveElements = [
     new InteractivePixiElement(14, 4, 1, 1, "SmartHomeHub", (): void => handleDeviceOpen("SmartHomeHub")),
-    new InteractivePixiElement(1, 2, 1, 1, "SecurityCamera", (): void => handleDeviceOpen("SecurityCamera")),
+    new InteractivePixiElement(1, 3, 1, 1, "SecurityCamera", (): void => handleDeviceOpen("SecurityCamera")),
     new InteractivePixiElement(9, 3, 1, 1, "SmartKitchen", (): void => handleDeviceOpen("SmartKitchen")),
     new InteractivePixiElement(5, 1.7, 1, 1.3, "KitchenPainting", () => {}, InteractiveType.DUMMY),
   ];
