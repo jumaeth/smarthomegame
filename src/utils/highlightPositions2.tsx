@@ -11,6 +11,7 @@ import livingroom_food from "@/assets/highlighting/extras/livingroom_food.png"
 import kitchen_painting from "@/assets/highlighting/extras/kitchen_painting.png"
 import bathroom_chick from "@/assets/highlighting/extras/bathroom_chick.png"
 import bathroom_drawer from "@/assets/highlighting/extras/bathroom_drawer.png"
+import smart_shower from "@/assets/highlighting/shower.png"
 import {Container, Graphics, Sprite} from "@pixi/react";
 import React from "react";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
@@ -92,6 +93,20 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
                         x={position.x - TILE_SIZE * 2}
                         y={position.y + TILE_SIZE * 3.75}
                         texture={loadTexture(mirror as String)}
+                        scale={{ x: 1, y: 1 }}
+                        anchor={0.5}
+                />
+              </>
+      )
+
+    case "SmartShower":
+      return (
+              <>
+                <Sprite
+                        key={device.name + "highlight"}
+                        x={position.x + TILE_SIZE * 8}
+                        y={position.y + TILE_SIZE * 2.75}
+                        texture={loadTexture(smart_shower as String)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />

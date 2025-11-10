@@ -8,12 +8,53 @@ import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {RoomNames} from "@/objects/RoomNames.ts";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {InteractiveType} from "@/types/InteractiveType.ts";
+import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
+import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState.ts";
+import {SmartDevice} from "@/objects/SmartDevice.ts";
+import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
 
 export const Bathroom = () => {
   const gameService = useGameService();
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
-
   const roomName = RoomNames.BATHROOM;
+  const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
+  const [activeDevice, setActiveDevice] = useState<string | null>(null);
+  const sdEnabled = useSmarDevicesEnabledState();
+  const paused = usePauseState();
+
+  const smartDeviceCallback = (isCompleted: boolean): void => {
+    if (!activeDevice) return;
+    const device = smartDevices.find((d) => d.name === activeDevice);
+    if (!device) return;
+    if (isCompleted) gameService.completeDevice(device.name);
+    gameService.resumeGame();
+    setActiveDevice(null);
+    checkForRoomCompletion();
+  };
+
+  const handleDeviceOpen = (deviceName: string): void => {
+    setActiveDevice(deviceName);
+    gameService.pauseGame();
+  };
+
+  const checkForRoomCompletion = () => {
+    const allCompleted = smartDevices.every(device => device.getIsCompleted());
+    if (allCompleted) {
+      gameService.completeRoom(roomName);
+    }
+  };
+
+  function onModalClose() {
+    setActiveDevice(null);
+    gameService.resumeGame();
+  }
+
+  const interactiveElements = [
+    new InteractivePixiElement(11, 2, 2, 2, "SmartMirror", (): void => {}),
+    new InteractivePixiElement(1, 3, 2, 1, "SmartShower", (): void => handleDeviceOpen("SmartShower")),
+    new InteractivePixiElement(14.975, 6.5, 1, 1, "BathroomChick", () => {}, InteractiveType.DUMMY),
+    new InteractivePixiElement(1.15, 6.5, 1.6, 1, "BathroomDrawer", () => {}, InteractiveType.DUMMY),
+  ];
 
   const collisionMap = LEVEL_COLLISION_MAPS[roomName];
 
@@ -26,14 +67,6 @@ export const Bathroom = () => {
     return gameService.leaveRoom(roomName);
   };
 
-  const interactiveElements = [
-    new InteractivePixiElement(11, 2, 2, 2, "SmartMirror", (): void => {}),
-    new InteractivePixiElement(14.975, 6.5, 1, 1, "BathroomChick", () => {}, InteractiveType.DUMMY),
-    new InteractivePixiElement(1.15, 6.5, 1.6, 1, "BathroomDrawer", () => {}, InteractiveType.DUMMY),
-
-  ];
-
-
   useEffect(() => {
     window.addEventListener("resize", updateCanvasSize);
     return () => {
@@ -41,8 +74,23 @@ export const Bathroom = () => {
     }
   }, [updateCanvasSize, collisionMap])
 
+  const deviceComponents: Record<string, JSX.Element> = {
+    //SmartShower: <SmartShower completeDevice={() => smartDeviceCallback(true)}/>,
+  };
+
+
   return (
           <>
+            <div>
+              <BasicModalWrapper
+                      isOpen={!!activeDevice}
+                      content={activeDevice ? deviceComponents[activeDevice] : null}
+                      onClose={onModalClose}
+                      showBg={sdEnabled}
+                      activeDevice={smartDevices.find((d) => d.name === activeDevice) ?? smartDevices[0] ?? new SmartDevice("SmartShower", "")}
+              />
+            </div>
+
             <Stage width={canvasSize.width} height={canvasSize.height}>
               <MainContainer
                       canvasSize={canvasSize}
