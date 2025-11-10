@@ -148,23 +148,11 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
 
   React.useEffect(() => {
     if (!smartDevice) return;
-    if (allSolved && !pointsApplied.current) {
-      // Guard against multiple executions
-      pointsApplied.current = true;
-      
+    if (allSolved) {
       // Apply accumulated points multiplied by 1.5x (SmartMirror scores 1.5x SmartKitchen)
-      const basePrivacy = totalPoints.current.privacy || 0;
-      const baseComfort = totalPoints.current.comfort || 0;
-      const privacyScore = Math.round((basePrivacy || 0) * 1.5);
-      const comfortScore = Math.round((baseComfort || 0) * 1.5);
-      
-      console.log('[SmartMirror] Applying points:', { 
-        basePrivacy, 
-        baseComfort, 
-        privacyScore, 
-        comfortScore
-      });
-      
+      const privacyScore = totalPoints.current.privacy || 0;
+      const comfortScore = totalPoints.current.comfort || 0;
+            
       // Apply points using gameService.changeScore
       if (privacyScore) {
         gameService.changeScore(privacyScore, 'privacy');
@@ -198,36 +186,17 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
     const currentComfort = totalPoints.current.comfort || 0;
     
     totalPoints.current.privacy = currentPrivacy + (privacyDelta || 0);
-    totalPoints.current.comfort = currentComfort + (comfortDelta || 0);
-    
-    console.log(`[SmartMirror] Selected ${provider.name} for ${appId}:`, {
-      permissions: provider.permissions.length,
-      features: provider.features.length,
-      privacyDelta,
-      comfortDelta,
-      totalPrivacy: totalPoints.current.privacy,
-      totalComfort: totalPoints.current.comfort
-    });
+    totalPoints.current.comfort = currentComfort + (comfortDelta || 0);    
   };
 
   return (
-          <div className="modal-content" style={{ color: '#111' }}>
+          <div className="modal-content text-gray-900">
             <p><Trans>Choose a provider for each app. Compare details, then make your choices.</Trans></p>
 
-            <div ref={containerRef} style={{
-              width: '960px',
-              height: '560px',
-              maxWidth: '90vw',
-              margin: '12px auto',
-              background: 'transparent',
-              border: '1px solid #c2d4ff',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-              position: 'relative',
-              overflow: 'hidden'
-            }}>
+            <div ref={containerRef} className="w-[960px] h-[560px] max-w-[90vw] my-3 mx-auto bg-transparent border border-blue-200 shadow-md relative overflow-hidden">
               {/* Full background tiled brick, like cooking game */}
               {wallLoaded && containerSize.width > 0 && containerSize.height > 0 && (
-                      <div style={{position: 'absolute', inset: 0, zIndex: 0}}>
+                      <div className="absolute inset-0 z-0">
                         <Stage
                                 width={containerSize.width}
                                 height={containerSize.height}
@@ -242,50 +211,24 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
                         </Stage>
                       </div>
               )}
-              <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', padding: '16px', position: 'relative', zIndex: 1, height: '100%'}}>
+              <div className="grid grid-cols-2 gap-4 p-4 relative z-[1] h-full">
                 {/* Left: mirror and apps (single full-plane background to avoid offsets) */}
-                <div style={{ position: 'relative', overflow: 'hidden' }}>
+                <div className="relative overflow-hidden">
                   {/* Mirror only on left */}
-                  <div style={{
-                    position: 'absolute',
-                    left: '8%', top: '10%',
-                    width: '80%', height: '80%',
-                    background: 'linear-gradient(180deg, #cfd8e3 0%, #e6ecf4 100%)',
-                    boxShadow: 'inset 0 0 30px rgba(0,0,0,0.25)',
-                    border: '8px solid #a8b3bf',
-                    zIndex: 1
-                  }}/>
+                  <div className="absolute left-[8%] top-[10%] w-4/5 h-4/5 bg-gradient-to-b from-slate-200 to-slate-100 shadow-[inset_0_0_30px_rgba(0,0,0,0.25)] border-8 border-slate-400 z-[1]"/>
 
                   {/* Smaller app tiles inside mirror */}
-                  <div style={{
-                    position: 'absolute', left: '8%', top: '10%', width: '80%', height: '80%',
-                    display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', padding: '12px', zIndex: 2
-                  }}>
+                  <div className="absolute left-[8%] top-[10%] w-4/5 h-4/5 grid grid-cols-2 gap-3 p-3 z-[2]">
                     {apps.map((app) => (
                             <button
                                     key={app.id}
                                     onClick={() => setSelectedAppId(app.id)}
-                                    style={{
-                                      background: 'transparent',
-                                      border: 'none',
-                                      padding: 0,
-                                      opacity: solvedApps[app.id] ? 1 : 0.6,
-                                      cursor: 'pointer',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                      width: '100%',
-                                      height: '100%'
-                                    }}
+                                    className={`bg-transparent border-none p-0 ${solvedApps[app.id] ? 'opacity-100' : 'opacity-60'} cursor-pointer flex items-center justify-center w-full h-full`}
                             >
                               <img
                                       src={solvedApps[app.id] ? app.icon : app.iconBW}
                                       alt={app.label}
-                                      style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'contain'
-                                      }}
+                                      className="w-full h-full object-contain"
                               />
                             </button>
                     ))}
@@ -293,80 +236,63 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
                 </div>
 
                 {/* Right: provider list on white background */}
-                <div style={{ background: '#fff', borderLeft: '1px solid #eee', padding: '12px', minHeight: '210px', overflowY: 'auto' }}>
+                <div className="bg-white border-l border-gray-200 p-3 min-h-[210px] overflow-y-auto">
                   {!selectedAppId && (
-                          <div style={{color: '#555'}}>
+                          <div className="text-gray-500">
                             <Trans>Select an app on the left to see providers.</Trans>
                           </div>
                   )}
                   {selectedAppId && (
                           <div>
-                            <h2 style={{marginTop: 0}}>{apps.find(a => a.id === selectedAppId)?.label}</h2>
+                            <h2 className="mt-0">{apps.find(a => a.id === selectedAppId)?.label}</h2>
                             {(apps.find(a => a.id === selectedAppId)?.providers || []).map((p) => {
                               const isExpanded = expanded[selectedAppId] === p.name;
                               const allVisited = hasVisitedAllProviders(selectedAppId);
                               return (
-                                      <div key={p.name} style={{border: '1px solid #e5e7eb', marginBottom: '10px', background: '#fafafa'}}>
+                                      <div key={p.name} className="border border-gray-200 mb-2.5 bg-gray-50">
                                         <button
                                                 onClick={() => { setExpanded(prev => ({...prev, [selectedAppId]: isExpanded ? null : p.name})); markVisited(selectedAppId, p.name); }}
-                                                style={{
-                                                  width: '100%',
-                                                  textAlign: 'left',
-                                                  padding: '10px 12px',
-                                                  background: '#f8fafc',
-                                                  borderBottom: isExpanded ? '1px solid #e5e7eb' : 'none',
-                                                  cursor: 'pointer',
-                                                  display: 'flex',
-                                                  alignItems: 'center',
-                                                  justifyContent: 'space-between',
-                                                  color: '#111'
-                                                }}
+                                                className={`w-full text-left py-2.5 px-3 bg-slate-50 ${isExpanded ? 'border-b border-gray-200' : ''} cursor-pointer flex items-center justify-between text-gray-900`}
                                         >
                                           <strong>{p.name}</strong>
-                                          <span style={{fontSize: '12px', color: '#666'}}>{isExpanded ? t`Hide` : t`Expand`}</span>
+                                          <span className="text-xs text-gray-600">{isExpanded ? t`Hide` : t`Expand`}</span>
                                         </button>
                                         {isExpanded && (
-                                                <div style={{padding: '10px 12px'}}>
-                                                  <div style={{color: '#333', marginBottom: '6px'}}>{p.description}</div>
-                                                  <div style={{display: 'flex', gap: '16px', marginTop: '8px'}}>
-                                                    <div style={{flex: 1}}>
-                                                      <div style={{color: '#444', marginBottom: '4px'}}><Trans>Permissions</Trans></div>
-                                                      <ul style={{margin: 0, paddingLeft: '18px'}}>
+                                                <div className="py-2.5 px-3">
+                                                  <div className="text-gray-700 mb-1.5">{p.description}</div>
+                                                  <div className="flex gap-4 mt-2">
+                                                    <div className="flex-1">
+                                                      <div className="text-gray-700 mb-1"><Trans>Permissions</Trans></div>
+                                                      <ul className="m-0 pl-[18px]">
                                                         {p.permissions.map((perm) => (
                                                                 <li key={perm}>{perm}</li>
                                                         ))}
                                                       </ul>
                                                     </div>
-                                                    <div style={{flex: 1}}>
-                                                      <div style={{color: '#444', marginBottom: '4px'}}><Trans>Features</Trans></div>
-                                                      <ul style={{margin: 0, paddingLeft: '18px'}}>
+                                                    <div className="flex-1">
+                                                      <div className="text-gray-700 mb-1"><Trans>Features</Trans></div>
+                                                      <ul className="m-0 pl-[18px]">
                                                         {p.features.map((f) => (
                                                                 <li key={f}>{f}</li>
                                                         ))}
                                                       </ul>
                                                     </div>
                                                   </div>
-                                                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '10px'}}>
+                                                  <div className="grid grid-cols-2 gap-3 mt-2.5">
                                                     <div>
-                                                      <div style={{color: '#444', marginBottom: '4px'}}><Trans>Data retention</Trans></div>
+                                                      <div className="text-gray-700 mb-1"><Trans>Data retention</Trans></div>
                                                       <div>{p.retention}</div>
                                                     </div>
                                                     <div>
-                                                      <div style={{color: '#444', marginBottom: '4px'}}><Trans>Security</Trans></div>
+                                                      <div className="text-gray-700 mb-1"><Trans>Security</Trans></div>
                                                       <div>{p.security}</div>
                                                     </div>
                                                   </div>
-                                                  <div style={{textAlign: 'right', marginTop: '10px'}}>
+                                                  <div className="text-right mt-2.5">
                                                     <button
                                                             onClick={() => handleProviderSelect(selectedAppId, p)}
                                                             disabled={!allVisited}
-                                                            style={{
-                                                              background: allVisited ? '#ffd54d' : '#e5e7eb',
-                                                              color: allVisited ? '#111' : '#888',
-                                                              border: '1px solid #e0b000',
-                                                              padding: '6px 10px',
-                                                              cursor: allVisited ? 'pointer' : 'not-allowed'
-                                                            }}
+                                                            className={`${allVisited ? 'bg-yellow-400 text-gray-900 cursor-pointer' : 'bg-gray-200 text-gray-500 cursor-not-allowed'} border border-yellow-600 py-1.5 px-2.5`}
                                                     >
                                                       <Trans>Choose</Trans>
                                                     </button>
@@ -382,11 +308,11 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
               </div>
             </div>
 
-            <div style={{marginTop: '8px', textAlign: 'right'}}>
+            <div className="mt-2 text-right">
               {allSolved ? (
-                      <span style={{color: '#0f9d58', fontWeight: 600}}><Trans>All apps configured!</Trans></span>
+                      <span className="text-green-600 font-semibold"><Trans>All apps configured!</Trans></span>
               ) : (
-                      <span style={{color: '#555'}}><Trans>Solve all 4 apps</Trans></span>
+                      <span className="text-gray-500"><Trans>Solve all 4 apps</Trans></span>
               )}
             </div>
           </div>
