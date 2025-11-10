@@ -35,8 +35,6 @@ export const ProximityHighlight = ({
 
     const playerTile = pixelToTile(pos.x, pos.y);
     const interactive = getNearbyInteractiveElement(playerTile, interactiveElements);
-    console.log({ posPixels: pos, playerTile, interactive });
-    console.log(interactive)
 
     const graphic = graphicRef.current;
     if (!graphic) return;
