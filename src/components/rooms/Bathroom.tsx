@@ -96,6 +96,7 @@ export const Bathroom = () => {
                       interactiveElements={interactiveElements}
                       isPaused={paused}
                       gameService={gameService}
+                      room={roomName}
               />
             </Stage>
           </>
