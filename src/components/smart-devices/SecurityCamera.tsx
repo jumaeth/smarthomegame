@@ -1,4 +1,3 @@
-import "./Modal.css";
 import React from 'react';
 import {SecurityCameraGame} from "@/components/cameraGame/SecurityCameraGame.tsx";
 

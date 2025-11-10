@@ -1,5 +1,4 @@
 import { CookingGameComponent } from "../cookingGame/CookingGameComponent.tsx";
-import "./Modal.css";
 import React from 'react';
 
 interface SmartKitchenProps {
