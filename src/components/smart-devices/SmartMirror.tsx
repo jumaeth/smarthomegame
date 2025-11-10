@@ -69,7 +69,6 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
   
   // Points accumulator (like SmartKitchen), will be multiplied by 1.5x at completion
   const totalPoints = useRef<{ privacy: number; comfort: number }>({ privacy: 0, comfort: 0 });
-  const pointsApplied = useRef<boolean>(false);
 
   const apps: AppConfig[] = useMemo(() => ([
     {
