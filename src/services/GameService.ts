@@ -5,7 +5,7 @@ import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore";
 import {CookieService} from "@/services/CookieService";
 import {allRoomStore} from "@/utils/roomStore";
-import {movementStore} from "@/utils/character/movementEnabled.ts";
+import {movementStore} from "@/utils/character/movementEnabled";
 import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive";
 import {t} from "@lingui/core/macro";
 import {MapKey} from "@/types/maps";
