@@ -1,6 +1,6 @@
 import React, {PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
-import {Texture, Container as PixiContainer, DisplayObject} from "pixi.js";
+import {Texture} from "pixi.js";
 
 import {Level} from "@/pixi/levels/Level";
 import {Character} from "@/pixi/character/Character";
@@ -29,6 +29,7 @@ import {LevelOverlay} from "@/pixi/levels/LevelOverlay.tsx";
 import {DoorBlocker} from "@/pixi/components/DoorBlocker.tsx";
 import {DoorFrame} from "@/pixi/levels/DoorFrame.tsx";
 import {getTexture} from "@/components/character/CharacterSelector.tsx";
+import {SpeechBubble, SpeechBubbleProps} from "@/pixi/components/SpeechBubble.tsx";
 
 interface MainContainerProps {
     canvasSize: {
@@ -72,7 +73,7 @@ export const MainContainer = ({
   const { tile: characterTile } = useCharacterPosition();
   const { enabled: tutorialActive, close: closeTutorial } = useTutorialActive();
   const [blockedDoorTo, setBlockedDoorTo] = useState<RoomNames | null>(null);
-  const [overlayReact, setOverlayReact] = useState<React.ReactNode | null>(null);
+  const [dummy, setDummy] = useState<SpeechBubbleProps | null>(null);
 
   useEffect(() => { setShouldSnapCamera(true); setCameraSettled(false); }, [map]);
 
@@ -138,6 +139,11 @@ export const MainContainer = ({
 
   };
 
+  const showDummy = (p: SpeechBubbleProps) => {
+    setDummy(p);
+    window.setTimeout(() => setDummy(null), 1500);
+  };
+
   const getDoorFrames = (room: RoomNames, state: boolean) => {
     const front = doorFrameFrontTexture
     const back = doorFrameBackTexture
@@ -181,10 +187,6 @@ export const MainContainer = ({
     interact: () => void
   } | null>(null);
 
-  const showReactOverlay = (node: React.ReactNode, ttlMs = 1200) => {
-    setOverlayReact(node);
-    window.setTimeout(() => setOverlayReact(null), ttlMs);
-  };
 
   const handleMoveUp = () => characterRef.current?.moveUp();
   const handleMoveDown = () => characterRef.current?.moveDown();
@@ -225,11 +227,13 @@ export const MainContainer = ({
                                   collisionMap={collisionMap}
                                   isPaused={isPaused as boolean}
                                   interactiveElements={interactiveElements}
-                                  onReactOverlay={showReactOverlay}
+                                  onShowDummy={showDummy}
                           />
                           <LevelOverlay texture={overlayTexture} />
                           {doorFrame(false)}
-                          {overlayReact}
+                          {dummy && (
+                                  <SpeechBubble x={dummy.x} y={dummy.y} element={dummy.element} />
+                          )}
                           <DoorBlocker
                                   room={room}
                                   to={blockedDoorTo as RoomNames}
@@ -237,7 +241,7 @@ export const MainContainer = ({
                                   ww={canvasSize.width}
                                   wh={canvasSize.height}
                           />
-                        </>
+                          </>
                 )}
                 </Camera>
               {!tutorialActive && (

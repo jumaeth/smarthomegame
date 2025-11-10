@@ -10,6 +10,7 @@ import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {characterPositionStore, useCharacterPosition} from "@/utils/characterPosition";
 import {useMovementStore} from "@/utils/movementEnabled.ts";
 import {InteractiveType} from "@/types/InteractiveType.ts";
+import {SpeechBubbleProps} from "@/pixi/components/SpeechBubble.tsx";
 
 interface CharacterProps {
   texture: Texture;
@@ -17,7 +18,7 @@ interface CharacterProps {
   collisionMap: number[];
   isPaused: boolean;
   interactiveElements?: InteractivePixiElement[];
-  onReactOverlay?: (node: React.ReactNode, ttlMs?: number) => void;
+  onShowDummy?: (p: SpeechBubbleProps) => void;
 }
 
 export const Character = forwardRef((
@@ -27,7 +28,7 @@ export const Character = forwardRef((
           collisionMap,
           isPaused = false,
           interactiveElements,
-          onReactOverlay,
+          onShowDummy,
         }: CharacterProps,
         ref
 ) => {
@@ -105,9 +106,12 @@ export const Character = forwardRef((
       return;
     }
 
-    if (interactiveElement.type === InteractiveType.DUMMY) {
-      const node = interactiveElement.interaction(); // React.ReactNode
-      if (node && onReactOverlay) onReactOverlay(node, 1200);
+    if (interactiveElement.type === InteractiveType.DUMMY && onShowDummy) {
+      onShowDummy({
+        x: interactiveElement.x,
+        y: interactiveElement.y,
+        element: interactiveElement.name,
+      });
     }
   };
 

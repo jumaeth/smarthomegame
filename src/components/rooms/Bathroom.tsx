@@ -7,6 +7,7 @@ import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {RoomNames} from "@/objects/RoomNames.ts";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
+import {InteractiveType} from "@/types/InteractiveType.ts";
 
 export const Bathroom = () => {
   const gameService = useGameService();
@@ -27,6 +28,9 @@ export const Bathroom = () => {
 
   const interactiveElements = [
     new InteractivePixiElement(11, 2, 2, 2, "SmartMirror", (): void => {}),
+    new InteractivePixiElement(14.975, 6.5, 1, 1, "BathroomChick", () => {}, InteractiveType.DUMMY),
+    new InteractivePixiElement(1.15, 6.5, 1.6, 1, "BathroomDrawer", () => {}, InteractiveType.DUMMY),
+
   ];
 
 

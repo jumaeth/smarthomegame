@@ -16,6 +16,7 @@ import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnab
 import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
 import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
 import {RoomNames} from "@/objects/RoomNames.ts";
+import {InteractiveType} from "@/types/InteractiveType.ts";
 
 export const LivingRoom = () => {
   const roomName: RoomNames = RoomNames.LIVINGROOM;
@@ -58,7 +59,9 @@ export const LivingRoom = () => {
 
   const interactiveElements = [
     new InteractivePixiElement(4, 2, 2, 1, "SmartTv", (): void => handleDeviceOpen("SmartTv")),
-    new InteractivePixiElement(1, 2, 1, 1, "SmartLights", (): void => handleDeviceOpen("SmartLights"))
+    new InteractivePixiElement(1, 2, 1, 1, "SmartLights", (): void => handleDeviceOpen("SmartLights")),
+    new InteractivePixiElement(8.95, 5.225, 1, 1, "LivingRoomCandles", () => {}, InteractiveType.DUMMY),
+    new InteractivePixiElement(16, 5, 1, 1, "LivingRoomFood", () => {}, InteractiveType.DUMMY),
   ]
 
   //Render Code
@@ -85,7 +88,6 @@ export const LivingRoom = () => {
 
   const deviceComponents: Record<string, JSX.Element> = {
     SmartTv: <SmartTv onCompletion={(completed) => smartDeviceCallback(completed)}/>,
-    SmartLights: <SmartLights onCompletion={(completed) => smartDeviceCallback(completed)}/>,
   };
 
   return (

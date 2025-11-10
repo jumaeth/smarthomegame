@@ -14,6 +14,7 @@ import {RoomNames} from "@/objects/RoomNames.ts";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState.ts";
 import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
+import {InteractiveType} from "@/types/InteractiveType.ts";
 
 export const Kitchen = () => {
     const gameService = useGameService();
@@ -55,6 +56,7 @@ export const Kitchen = () => {
     new InteractivePixiElement(14, 4, 1, 1, "SmartHomeHub", (): void => handleDeviceOpen("SmartHomeHub")),
     new InteractivePixiElement(1, 2, 1, 1, "SecurityCamera", (): void => handleDeviceOpen("SecurityCamera")),
     new InteractivePixiElement(9, 3, 1, 1, "SmartKitchen", (): void => handleDeviceOpen("SmartKitchen")),
+    new InteractivePixiElement(5, 1.7, 1, 1.3, "KitchenPainting", () => {}, InteractiveType.DUMMY),
   ];
 
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
