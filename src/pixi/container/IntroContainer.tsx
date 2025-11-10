@@ -1,12 +1,19 @@
 import {Container, Graphics, Sprite} from "@pixi/react";
 import {PropsWithChildren, useMemo, useState} from "react";
-import frame1 from "@/assets/intro/de/DE_Frame01.png";
-import frame2 from "@/assets/intro/de/DE_Frame02.png";
-import frame3 from "@/assets/intro/de/DE_Frame03.png";
-import frame4 from "@/assets/intro/de/DE_Frame04.png";
-import frame5 from "@/assets/intro/de/DE_Frame05.png";
 import {Texture} from "@pixi/core";
 import {PixiButton} from "@/pixi/components/PixiButton";
+import {getLocaleFromCookie} from "@/utils/cookie/languageCookie.ts";
+
+const introFrames = import.meta.glob("@/assets/intro/*/Frame*.png", {
+  eager: true,
+}) as Record<string, { default: string }>;
+
+function getIntroFrames(locale: string): string[] {
+  return Object.entries(introFrames)
+          .filter(([path]) => path.includes(`/intro/${locale}/`))
+          .sort(([a], [b]) => a.localeCompare(b)) // ensures Frame01, Frame02, etc.
+          .map(([, mod]) => mod.default);
+}
 
 interface IntroContainerProps {
   canvasSize: {
@@ -17,13 +24,12 @@ interface IntroContainerProps {
 }
 
 export const IntroContainer = ({canvasSize, onStart}: PropsWithChildren<IntroContainerProps>) => {
-  const textures = useMemo(() => [
-    Texture.from(frame1),
-    Texture.from(frame2),
-    Texture.from(frame3),
-    Texture.from(frame4),
-    Texture.from(frame5),
-  ], []);
+  const locale = getLocaleFromCookie();
+
+  const textures = useMemo(() => {
+    const frames = getIntroFrames(locale);
+    return frames.map((src) => Texture.from(src));
+  }, [locale]);
 
   const [frame, setFrame] = useState(0);
 
