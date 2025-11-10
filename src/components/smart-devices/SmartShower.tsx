@@ -33,6 +33,7 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
   const [completedObjects, setCompletedObjects] = useState<Set<string>>(new Set());
   const totalPoints = useRef({ privacy: 0, comfort: 0 });
   const pointsApplied = useRef(false);
+  const shouldCompleteOnUnmount = useRef(false);
 
   useEffect(() => {
     if (smartDevice) {
@@ -156,9 +157,17 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
 
       smartDevice.getStatBlock().setValue("Smart Shower Points", privacyScore);
       smartDevice.getStatBlock().stopTimer();
-      gameService.completeDevice("SmartShower");
+      shouldCompleteOnUnmount.current = true;
     }
   }, [allCompleted, smartDevice, gameService]);
+
+  useEffect(() => {
+    return () => {
+      if (shouldCompleteOnUnmount.current) {
+        completeDevice();
+      }
+    };
+  }, [completeDevice]);
 
   const baseWidth = Math.max(...showerObjects.map(obj => obj.x + obj.width)) + 50;
   const baseHeight = Math.max(...showerObjects.map(obj => obj.y + obj.height)) + 50;
