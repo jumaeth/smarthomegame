@@ -6,6 +6,7 @@ import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps
 import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {RoomNames} from "@/objects/RoomNames.ts";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 
 export const Bathroom = () => {
   const gameService = useGameService();
@@ -24,6 +25,11 @@ export const Bathroom = () => {
     return gameService.leaveRoom(roomName);
   };
 
+  const interactiveElements = [
+    new InteractivePixiElement(11, 2, 2, 2, "SmartMirror", (): void => {}),
+  ];
+
+
   useEffect(() => {
     window.addEventListener("resize", updateCanvasSize);
     return () => {
@@ -40,6 +46,7 @@ export const Bathroom = () => {
                       collisionMap={collisionMap}
                       onMapChange={handleMapChange}
                       gameService={useGameService()}
+                      interactiveElements={interactiveElements}
                       room={roomName}
               />
             </Stage>

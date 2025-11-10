@@ -1,6 +1,6 @@
 import React, {PropsWithChildren, useEffect, useMemo, useRef, useState} from "react";
 import {Container, Graphics} from "@pixi/react";
-import {Texture} from "pixi.js";
+import {Texture, Container as PixiContainer, DisplayObject} from "pixi.js";
 
 import {Level} from "@/pixi/levels/Level";
 import {Character} from "@/pixi/character/Character";
@@ -72,6 +72,7 @@ export const MainContainer = ({
   const { tile: characterTile } = useCharacterPosition();
   const { enabled: tutorialActive, close: closeTutorial } = useTutorialActive();
   const [blockedDoorTo, setBlockedDoorTo] = useState<RoomNames | null>(null);
+  const [overlayReact, setOverlayReact] = useState<React.ReactNode | null>(null);
 
   useEffect(() => { setShouldSnapCamera(true); setCameraSettled(false); }, [map]);
 
@@ -180,6 +181,11 @@ export const MainContainer = ({
     interact: () => void
   } | null>(null);
 
+  const showReactOverlay = (node: React.ReactNode, ttlMs = 1200) => {
+    setOverlayReact(node);
+    window.setTimeout(() => setOverlayReact(null), ttlMs);
+  };
+
   const handleMoveUp = () => characterRef.current?.moveUp();
   const handleMoveDown = () => characterRef.current?.moveDown();
   const handleMoveLeft = () => characterRef.current?.moveLeft();
@@ -219,9 +225,11 @@ export const MainContainer = ({
                                   collisionMap={collisionMap}
                                   isPaused={isPaused as boolean}
                                   interactiveElements={interactiveElements}
+                                  onReactOverlay={showReactOverlay}
                           />
                           <LevelOverlay texture={overlayTexture} />
                           {doorFrame(false)}
+                          {overlayReact}
                           <DoorBlocker
                                   room={room}
                                   to={blockedDoorTo as RoomNames}

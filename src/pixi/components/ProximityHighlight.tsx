@@ -85,7 +85,7 @@ export const ProximityHighlight = ({
     return (
             <>
               <Container ref={graphicRef}/>
-              { getPosition().x != 0 && interactive && getHighlightPosition2(interactive.name, getPosition(), windowWidth, windowHeight)}
+              { getPosition().x != 0 && interactive && getHighlightPosition2(interactive, getPosition())}
             </>
     );
 }

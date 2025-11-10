@@ -1,5 +1,5 @@
 import {forwardRef, useCallback, useEffect, useImperativeHandle, useRef} from "react";
-import {Texture} from "pixi.js";
+import {Texture, Container as PixiContainer} from "pixi.js";
 import {Container, Sprite, useTick} from "@pixi/react";
 import {ANIMATION_SPEED, MOVE_SPEED, TILE_SIZE} from "@/pixi/constants/world-settings";
 import {useCharacterControls} from "@/hooks/character/useCharacterControls";
@@ -9,6 +9,7 @@ import {useCharacterAnimation} from "@/hooks/character/useCharacterAnimation";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {characterPositionStore, useCharacterPosition} from "@/utils/characterPosition";
 import {useMovementStore} from "@/utils/movementEnabled.ts";
+import {InteractiveType} from "@/types/InteractiveType.ts";
 
 interface CharacterProps {
   texture: Texture;
@@ -16,6 +17,7 @@ interface CharacterProps {
   collisionMap: number[];
   isPaused: boolean;
   interactiveElements?: InteractivePixiElement[];
+  onReactOverlay?: (node: React.ReactNode, ttlMs?: number) => void;
 }
 
 export const Character = forwardRef((
@@ -25,6 +27,7 @@ export const Character = forwardRef((
           collisionMap,
           isPaused = false,
           interactiveElements,
+          onReactOverlay,
         }: CharacterProps,
         ref
 ) => {
@@ -94,7 +97,18 @@ export const Character = forwardRef((
 
   const checkForInteraction = () => {
     const interactiveElement = checkForProximity();
-    if (interactiveElement) interactiveElement.interaction();
+    if (!interactiveElement) return;
+
+
+    if (interactiveElement.type === InteractiveType.SMART_DEVICE) {
+      interactiveElement.interaction();
+      return;
+    }
+
+    if (interactiveElement.type === InteractiveType.DUMMY) {
+      const node = interactiveElement.interaction(); // React.ReactNode
+      if (node && onReactOverlay) onReactOverlay(node, 1200);
+    }
   };
 
   useImperativeHandle(ref, () => ({
