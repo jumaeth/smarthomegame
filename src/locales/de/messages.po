@@ -20,6 +20,8 @@ msgid ""
 "\n"
 "- Your wallet was "
 msgstr ""
+"\n"
+"- Dein Geldbeutel war \n"
 
 #: src/components/cookingGame/CookingStage.tsx:34
 msgid ""
@@ -62,7 +64,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:27
 msgid "achieve better results."
-msgstr ""
+msgstr "erreiche bessere Ergebnisse."
 
 #: src/components/smart-devices/SmartLights.tsx:35
 msgid "Activate Bluetooth"
@@ -86,15 +88,15 @@ msgstr ""
 
 #: src/components/cookingGame/CookingStage.tsx:48
 msgid "Authorization"
-msgstr ""
+msgstr "Berechtigung"
 
 #: src/components/cookingGame/IngredientsStage.tsx:47
 msgid "bad"
-msgstr ""
+msgstr "falsch"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:156
 msgid "Bank details are personal data that require special protection as they are used for financial transactions."
-msgstr ""
+msgstr "Bankdaten sind personenbezogene Daten, die besonderen Schutz erfordern, da sie für Finanztransaktionen verwendet werden."
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:84
 msgid "Biometric data like fingerprints are unique characteristics of a person and cannot be changed, so they require special protection."
@@ -106,7 +108,7 @@ msgstr ""
 
 #: src/pages/HomePage.tsx:51
 msgid "Button."
-msgstr ""
+msgstr "Taste."
 
 #: src/components/cookingGame/IngredientsStage.tsx:38
 msgid "buy cheese"
@@ -114,7 +116,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:38
 msgid "buy spaghetti"
-msgstr ""
+msgstr "Spaghetti einkaufen"
 
 #: src/components/cookingGame/IngredientsStage.tsx:38
 msgid "buy spices"
@@ -122,7 +124,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:38
 msgid "buy tomatoes"
-msgstr ""
+msgstr "Tomaten einkaufen"
 
 #: src/components/general-ui/CookieBanner.tsx:21
 msgid "by using our website, you agree to the use of cookies in accordance with our "
@@ -145,7 +147,7 @@ msgstr ""
 #: src/components/general-ui/HelpButton.tsx:41
 #: src/components/mini-game/CaptchaComponent.tsx:153
 msgid "Close"
-msgstr ""
+msgstr "Schließen"
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:22
 msgid "Cloud backup"
@@ -153,7 +155,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:32
 msgid "Co-op farmers' market"
-msgstr ""
+msgstr "Bio-Bauern Markt"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:328
 msgid "comfort"
@@ -173,7 +175,7 @@ msgstr ""
 
 #: src/components/cookingGame/CookingStage.tsx:55
 msgid "Connects regularly to cloud for updates"
-msgstr ""
+msgstr "Stellt regelmäßig eine Verbindung zur Cloud her, um Updates zu erhalten."
 
 #: src/components/cookingGame/CookingStage.tsx:25
 #: src/components/cookingGame/IntroStage.tsx:16
@@ -188,7 +190,7 @@ msgstr ""
 #: src/components/smart-devices/SmartTv.tsx:239
 #: src/components/smart-devices/SmartTv.tsx:286
 msgid "Continue"
-msgstr ""
+msgstr "Fahre fort"
 
 #: src/components/smart-devices/SmartTv.tsx:265
 msgid "Continue anyway"
@@ -225,11 +227,11 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:37
 msgid "Data that is intended for the general public and does not contain any personal information"
-msgstr ""
+msgstr "Daten, die für die allgemeine Öffentlichkeit bestimmt sind und keine personenbezogenen Daten enthalten"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:51
 msgid "Data that requires a higher level of protection under the GDPR"
-msgstr ""
+msgstr "Daten, die gemäß der DSGVO ein höheres Schutzniveau erfordern"
 
 #: src/components/general-ui/CookieBanner.tsx:64
 msgid "decline"
@@ -249,7 +251,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:31
 msgid "Discounter, with card"
-msgstr ""
+msgstr "Discounter, mit Karte zahlen"
 
 #: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:63
 msgid "Discovery"
@@ -261,7 +263,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:49
 msgid "do not agree with"
-msgstr ""
+msgstr "stimme nicht zu"
 
 #: src/pages/GameOver.tsx:67
 msgid "Download CSV"
@@ -282,7 +284,7 @@ msgstr ""
 
 #: src/components/cookingGame/CookingStage.tsx:48
 msgid "Energy"
-msgstr ""
+msgstr "Strom"
 
 #: src/pixi/components/Tutorial/Pages/Explanations/Decision.tsx:64
 msgid "Explore yourself"
@@ -294,7 +296,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:48
 msgid "fast."
-msgstr ""
+msgstr "schnell."
 
 #: src/components/cookingGame/IngredientsStage.tsx:25
 msgid ""
@@ -308,7 +310,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:34
 msgid "from \"parmesan.com"
-msgstr ""
+msgstr "von \"parmesan.com\""
 
 #: src/pages/GameOver.tsx:37
 msgid "Game Results:"
@@ -316,7 +318,7 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:91
 msgid "Genetic data is particularly sensitive as it can affect not only the person concerned but also their relatives."
-msgstr ""
+msgstr "Genetische Daten sind besonders sensibel, da sie nicht nur die betroffene Person, sondern auch deren Angehörige betreffen können."
 
 #: src/pages/NotFoundPage.tsx:13
 msgid "Go Home"
@@ -332,7 +334,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:33
 msgid "Grandma's garden "
-msgstr ""
+msgstr "Omas Garten "
 
 #: src/pixi/components/Tutorial/Pages/Explanations/Decision.tsx:63
 msgid "Guided introduction"
@@ -340,15 +342,15 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:49
 msgid "happy about"
-msgstr ""
+msgstr "glücklich über"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:77
 msgid "Health data is particularly worthy of protection under the GDPR, as it contains very personal information and could be misused."
-msgstr ""
+msgstr "Gesundheitsdaten sind gemäß der DSGVO besonders schutzwürdig, da sie sehr persönliche Informationen enthalten und mit schwerwiegenden Folgen missbraucht werden könnten."
 
 #: src/pages/HomePage.tsx:38
 msgid "Hello and welcome to the Smart Home Escape Game"
-msgstr ""
+msgstr "Hallo und herzlich willkommen zur Smart Home Challenge"
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:78
 msgid "Hey, you should rearrange your surveillance cameras. The smart home has already made a preselection. Do you agree with this? Select all the camera placements you want to keep."
@@ -362,7 +364,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:33
 msgid "Hyped spice startup"
-msgstr ""
+msgstr "Hyped spice startup"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:153
 msgid "IBAN: DE00 0000 0000 0000"
@@ -410,7 +412,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:34
 msgid "in the supermarket (again)"
-msgstr ""
+msgstr "(wieder) im Supermarkt"
 
 #: src/components/cookingGame/CookingStage.tsx:52
 msgid "Integrated into the energy monitoring system"
@@ -430,7 +432,7 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:163
 msgid "IP addresses are personal data that can be used to identify a device and thus indirectly a person."
-msgstr ""
+msgstr "IP-Adressen sind personenbezogene Daten, mit denen ein Gerät und damit indirekt auch eine Person identifiziert werden kann."
 
 #: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:50
 msgid "It indicates the safety of your data. Evil attackers always try to steal your data and use it to attack you and your personal space. A high privacy score makes it harder for them!"
@@ -438,7 +440,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:31
 msgid "Italy Retailer"
-msgstr ""
+msgstr "Italienischer Einzelhändler"
 
 #: src/services/GameService.ts:67
 msgid "Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them."
@@ -450,7 +452,7 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:170
 msgid "Location data is personal information that can provide information about movement patterns and whereabouts."
-msgstr ""
+msgstr "Standortdaten sind personenbezogene Daten, die Informationen über Bewegungsmuster und Aufenthaltsorte liefern können."
 
 #: src/components/smart-devices/SmartTv.tsx:95
 msgid "Location Services"
@@ -466,7 +468,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:32
 msgid "Market"
-msgstr ""
+msgstr "Markt"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:125
 msgid "Max Mustermann, Musterstraße 1, 12345 Musterstadt"
@@ -498,7 +500,7 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:128
 msgid "Name and address are personal data that can lead to the identification of a person."
-msgstr ""
+msgstr "Name und Adresse sind personenbezogene Daten, die zur Identifizierung einer Person führen können."
 
 #: src/components/general-ui/HelpButton.tsx:40
 msgid "No"
@@ -506,11 +508,11 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:47
 msgid "normal"
-msgstr ""
+msgstr "normal"
 
 #: src/components/cookingGame/IngredientsStage.tsx:49
 msgid "not angry with"
-msgstr ""
+msgstr "nicht wütend auf"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:322
 msgid "of"
@@ -518,7 +520,7 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:186
 msgid "Official announcements are public information that is accessible to all citizens."
-msgstr ""
+msgstr "Offizielle Bekanntmachungen sind öffentliche Informationen, die allen BürgerInnen zugänglich sind."
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:67
 msgid "Oh no! All your settings have been reset. <0/>Time to set them again:"
@@ -541,11 +543,11 @@ msgstr ""
 
 #: src/components/cookingGame/CookingStage.tsx:48
 msgid "Operation"
-msgstr ""
+msgstr "Operation"
 
 #: src/components/cookingGame/IngredientsStage.tsx:33
 msgid "Own balcony"
-msgstr ""
+msgstr "Eigener Balkon"
 
 #: src/pages/NotFoundPage.tsx:8
 msgid "Page Not Found"
@@ -553,15 +555,15 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:42
 msgid "Personal data"
-msgstr ""
+msgstr "Personenbezogene Daten"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:49
 msgid "Personal data of special categories"
-msgstr ""
+msgstr "Personenbezogene Daten besonderer Kategorien"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:44
 msgid "Personal information that can become sensitive when combined with other data"
-msgstr ""
+msgstr "Personenbezogene Daten, die in Verbindung mit anderen Daten besonders sensibel werden können"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:142
 msgid "Phone numbers are personal data that can be used for identification and contact purposes."
@@ -569,7 +571,7 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:105
 msgid "Political opinions are particularly worthy of protection as they could lead to discrimination or influence."
-msgstr ""
+msgstr "Politische Meinungen sind besonders schutzwürdig, da sie zu Diskriminierung führen oder gezielt beeinflusst werden könnten."
 
 #: src/pixi/components/Tutorial/Pages/IntroPage.tsx:31
 msgid "Press space to advance"
@@ -585,33 +587,35 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:179
 msgid "Public event announcements are accessible to everyone and do not contain any personal information."
-msgstr ""
+msgstr "Öffentliche Veranstaltungsankündigungen sind für alle zugänglich und enthalten keine personenbezogenen Daten."
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:214
 msgid "Public maps do not contain any personal information and are accessible to everyone."
-msgstr ""
+msgstr "Öffentliche Karten enthalten keine personenbezogenen Daten und sind für alle zugänglich."
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:207
 msgid "Public statistics are aggregated data without personal reference."
-msgstr ""
+msgstr "Öffentliche Statistiken sind aggregierte Daten ohne direkten Bezug zu persönlichen Daten."
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:193
 msgid "Public transport information is accessible to everyone and does not contain any personal data."
-msgstr ""
+msgstr "Informationen zum öffentlichen Nahverkehr sind für alle zugänglich und enthalten keine personenbezogenen Daten."
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:35
 msgid "Publicly accessible data"
-msgstr ""
+msgstr "Öffentlich zugängliche Daten"
 
 #: src/components/cookingGame/IngredientsStage.tsx:43
 msgid ""
 "quality.\n"
 "- The purchase was"
 msgstr ""
+"quality.\n"
+"- Der Einkauf war\n"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:116
 msgid "Racial and ethnic origin"
-msgstr ""
+msgstr "Ethnische Herkunft oder Zugehörigkeit"
 
 #: src/components/smart-devices/SmartTv.tsx:258
 msgid "Reconfigure"
@@ -623,7 +627,7 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:98
 msgid "Religious beliefs are particularly worthy of protection as they could lead to discrimination."
-msgstr ""
+msgstr "Religiöse Überzeugungen und religiöse Zugehörigkeit sind besonders schutzwürdig, da sie zu Diskriminierung führen können."
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:95
 msgid "Religious denomination: Buddhism"
@@ -631,7 +635,7 @@ msgstr ""
 
 #: src/pages/GameOver.tsx:71
 msgid "Restart"
-msgstr ""
+msgstr "Restart"
 
 #: src/components/general-ui/CookieBanner.tsx:58
 msgid "Save my game progress"
@@ -639,7 +643,7 @@ msgstr ""
 
 #: src/components/cookingGame/CookingStage.tsx:53
 msgid "Saves preferences and cooked dishes"
-msgstr ""
+msgstr "Einstellungen und gekochte Gerichte speichern"
 
 #: src/pixi/components/Tutorial/Pages/Explanations/Score_Changes.tsx:46
 msgid "Saw that? Your solution increased the scores. But be careful, bad decisions decrease them! Make sure you always keep a good balance."
@@ -657,15 +661,15 @@ msgstr ""
 #: src/components/mini-game/MultipleChoiceComponent.tsx:109
 #: src/components/smart-devices/SmartTv.tsx:226
 msgid "Send answer"
-msgstr ""
+msgstr "Antwort senden"
 
 #: src/pages/HomePage.tsx:69
 msgid "Skip the intro and jump straight into the game"
-msgstr ""
+msgstr "Überspringe die Einleitung und steige direkt ins Spiel ein."
 
 #: src/components/cookingGame/IngredientsStage.tsx:48
 msgid "slow."
-msgstr ""
+msgstr "langsam."
 
 #: src/components/smart-devices/SmartHomeHub.tsx:38
 msgid "Smart Home Hub"
@@ -694,27 +698,27 @@ msgstr ""
 #: src/pages/HomePage.tsx:47
 #: src/pages/HomePage.tsx:58
 msgid "Start game"
-msgstr ""
+msgstr "Spiel starten"
 
 #: src/components/cookingGame/IngredientsStage.tsx:32
 msgid "Store on the farm"
-msgstr ""
+msgstr "Bauernhof-Shop"
 
 #: src/components/cookingGame/CookingStage.tsx:54
 msgid "Stores time and consumed energy"
-msgstr ""
+msgstr "Speichert Zeit und verbrauchte Energie"
 
 #: src/components/cookingGame/IngredientsStage.tsx:47
 msgid "Super"
-msgstr ""
+msgstr "Super"
 
 #: src/components/cookingGame/IngredientsStage.tsx:53
 msgid "Super job"
-msgstr ""
+msgstr "Super Arbeit"
 
 #: src/components/cookingGame/IngredientsStage.tsx:33
 msgid "Sustainable store"
-msgstr ""
+msgstr "Nachhaltiger Shop"
 
 #: src/components/smart-devices/SmartTv.tsx:47
 msgid "Synced with Health App"
@@ -742,6 +746,9 @@ msgid ""
 "\n"
 "- The ingredients have a"
 msgstr ""
+"Danke für deine Hilfe, mal sehen.:\n"
+"\n"
+"- Die Zutaten haben eine\n"
 
 #: src/pixi/components/Tutorial/Pages/Explanations/Decision.tsx:62
 msgid "That's all you need to know! Time for a quick practice. Your task is to find and solve the first smart device. Now it's your decision"
@@ -761,7 +768,7 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:149
 msgid "The date of birth is personal information that can contribute to identification."
-msgstr ""
+msgstr "Das Geburtsdatum ist eine personenbezogene Angabe, die zur Identifizierung deiner Person führen kann."
 
 #: src/pixi/components/Tutorial/Pages/PhonePage.tsx:46
 msgid "The help app"
@@ -793,7 +800,7 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:119
 msgid "This data is particularly worthy of protection as it could lead to discrimination."
-msgstr ""
+msgstr "Diese Daten sind besonders schützenswert, da sie zu Diskriminierung führen könnten."
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:38
 msgid ""
@@ -828,7 +835,7 @@ msgstr ""
 #: src/components/cameraGame/SecurityCameraGame.tsx:28
 #: src/components/cameraGame/SecurityCameraGame.tsx:29
 msgid "This is not necessary and a risk to your privacy"
-msgstr ""
+msgstr "Dies ist nicht notwendig und stellt ein Risiko für Deine Privatsphäre dar."
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:45
 msgid ""
@@ -860,7 +867,7 @@ msgstr ""
 
 #: src/components/cookingGame/CookingStage.tsx:48
 msgid "Time"
-msgstr ""
+msgstr "Zeit"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:112
 msgid "Trade union membership is particularly worthy of protection as it could lead to workplace discrimination."
@@ -868,11 +875,11 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:34
 msgid "Trip to Italy"
-msgstr ""
+msgstr "Reise nach Italien"
 
 #: src/components/cookingGame/IngredientsStage.tsx:53
 msgid "Try again"
-msgstr ""
+msgstr "Versuch's nochmal!"
 
 #: src/components/smart-devices/SmartTv.tsx:103
 msgid "Usage Analytics"
@@ -896,11 +903,11 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:31
 msgid "Vegetable delivery service"
-msgstr ""
+msgstr "Gemüse-Lieferdienst"
 
 #: src/components/cookingGame/IngredientsStage.tsx:32
 msgid "Vegetarian box"
-msgstr ""
+msgstr "Vegetarische Box"
 
 #: src/components/smart-devices/SmartTv.tsx:79
 msgid "Voice recognition on"
@@ -920,6 +927,9 @@ msgid ""
 "\n"
 "The last thing we have to do is set the table and serve our dish"
 msgstr ""
+"Wir sind fast fertig! \n"
+"\n"
+"Als letztes müssen wir noch den Tisch decken und unser Gericht servieren.\n"
 
 #: src/components/general-ui/CookieBanner.tsx:16
 msgid "We use functional cookies to enable your later access to our web game and to improve the user experience. Cookies are small files stored on your device."
@@ -927,7 +937,7 @@ msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:200
 msgid "Weather data is public information that does not contain any personal references."
-msgstr ""
+msgstr "Wetterdaten sind öffentlich zugänglich und enthalten keine persönlichen Informationen."
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:197
 msgid "Weather forecast: 18’C, rain"
@@ -959,7 +969,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:34
 msgid "Workshop on a farm"
-msgstr ""
+msgstr "Workshop auf einem Bauernhof"
 
 #: src/components/general-ui/HelpButton.tsx:17
 #: src/components/general-ui/HelpButton.tsx:30
@@ -976,7 +986,7 @@ msgstr ""
 
 #: src/pages/HomePage.tsx:43
 msgid "You are on the start page. To start a new adventure, click on the"
-msgstr ""
+msgstr "Das ist die Startseite. Um eine neue Challenge zu beginnen, klicke auf"
 
 #: src/components/general-ui/CookieBanner.tsx:61
 msgid "You can withdraw your consent at any time or adjust your cookie settings. Further information can be found in our privacy policy."
@@ -988,6 +998,9 @@ msgid ""
 "\n"
 "Be careful about using your data to "
 msgstr ""
+"Du musst verschiedene Kriterien wie Kosten, Zeit und Qualität berücksichtigen. \n"
+"\n"
+"Sei vorsichtig bei der Verwendung deiner Daten, um \n"
 
 #: src/services/GameService.ts:66
 msgid "You need to cook a meal. lets try to focus on privacy friendly but still practical choices. The minigame will let you know what the next steps are to complet the game."
@@ -1007,7 +1020,7 @@ msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:43
 msgid "your decisions."
-msgstr ""
+msgstr "Deine Entscheidungen."
 
 #: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:49
 msgid "Your privacy score"
