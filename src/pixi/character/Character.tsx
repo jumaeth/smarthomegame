@@ -4,11 +4,11 @@ import {Container, Sprite, useTick} from "@pixi/react";
 import {ANIMATION_SPEED, MOVE_SPEED, TILE_SIZE} from "@/pixi/constants/world-settings";
 import {useCharacterControls} from "@/hooks/character/useCharacterControls";
 import {Direction, Position} from "@/types/movement";
-import {calculateNewTarget, checkCanMove, handleCharacterMovement} from "@/utils/movment";
+import {calculateNewTarget, checkCanMove, handleCharacterMovement} from "@/utils/character/movment";
 import {useCharacterAnimation} from "@/hooks/character/useCharacterAnimation";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {characterPositionStore, useCharacterPosition} from "@/utils/characterPosition";
-import {useMovementStore} from "@/utils/movementEnabled.ts";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
+import {characterPositionStore, useCharacterPosition} from "@/utils/character/characterPosition";
+import {useMovementStore} from "@/utils/character/movementEnabled";
 
 interface CharacterProps {
   texture: Texture;

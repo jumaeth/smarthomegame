@@ -1,4 +1,4 @@
-import {characterPositionStore} from "@/utils/characterPosition.ts";
+import {characterPositionStore} from "@/utils/character/characterPosition.ts";
 import {useSyncExternalStore} from "react";
 import {Position} from "@/types/movement.ts";
 

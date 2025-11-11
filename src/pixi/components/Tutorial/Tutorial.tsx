@@ -7,7 +7,7 @@ import {PAGE_COMPONENTS, PageProps} from "@/pixi/components/Tutorial/Pages/pageR
 import {spotlightAnimation} from "@/pixi/components/Tutorial/anim/spotlightAnimation.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {GameService} from "@/services/GameService.ts";
-import {characterPositionStore} from "@/utils/characterPosition.ts";
+import {characterPositionStore} from "@/utils/character/characterPosition.ts";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {drawBackground} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {introText, phone, player, scores, tv, tv2} from "@/pixi/components/Tutorial/util/spotLightPositions.ts";

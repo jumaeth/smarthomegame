@@ -1,6 +1,6 @@
 import {Stage} from "@pixi/react";
 import {useCallback, useEffect, useState} from "react";
-import {calculateCanvasSize} from "@/utils/movment";
+import {calculateCanvasSize} from "@/utils/character/movment.ts";
 import {IntroContainer} from "@/pixi/container/IntroContainer";
 import {useNavigate} from "react-router-dom";
 
