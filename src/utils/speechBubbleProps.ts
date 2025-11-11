@@ -72,6 +72,6 @@ export function getSpeechBubbleProps(device: string, x: number, y: number): Spee
         textXOffset: TILE_SIZE * 0.025,
       };
     default:
-      return {x: 0, y: 0, element: 0, color: 0xffffff, textColor: 0x000000} as SpeechBubbleProps;
+      return {x: 0, y: 0, element: "", color: 0xffffff, textColor: 0x000000} as SpeechBubbleProps;
   }
 }
