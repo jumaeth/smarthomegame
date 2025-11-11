@@ -13,11 +13,10 @@ import bathroom_chick from "@/assets/highlighting/extras/bathroom_chick.png"
 import bathroom_drawer from "@/assets/highlighting/extras/bathroom_drawer.png"
 import smart_shower from "@/assets/highlighting/shower.png"
 import {Container, Graphics, Sprite} from "@pixi/react";
-import React from "react";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 
-export function getHighlightPosition2(device: InteractivePixiElement, position: {x, y}){
+export function getHighlightPosition2(device: InteractivePixiElement, position: {x: number, y: number}){
 
   switch (device.name){
     case "SmartTv":
@@ -25,9 +24,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x + TILE_SIZE * 4.8}
-                        y={position.y + TILE_SIZE * 3.8}
-                        texture={loadTexture(tv as String)}
+                        x={position.x + TILE_SIZE * 8.75}
+                        y={position.y + TILE_SIZE * 5.525}
+                        texture={loadTexture(tv as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />
@@ -38,9 +37,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x + TILE_SIZE * 7.975}
-                        y={position.y + TILE_SIZE * 3.5}
-                        texture={loadTexture(lamp as String)}
+                        x={position.x + TILE_SIZE * 8.94}
+                        y={position.y + TILE_SIZE * 5.53}
+                        texture={loadTexture(lamp as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />
@@ -51,9 +50,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x + TILE_SIZE * 8.04}
-                        y={position.y + TILE_SIZE * 4}
-                        texture={loadTexture(camera as String)}
+                        x={position.x + TILE_SIZE * 8.94}
+                        y={position.y + TILE_SIZE * 5.46}
+                        texture={loadTexture(camera as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />
@@ -64,9 +63,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x - TILE_SIZE * 4.96}
-                        y={position.y + TILE_SIZE}
-                        texture={loadTexture(hub as String)}
+                        x={position.x + TILE_SIZE * 8.12}
+                        y={position.y + TILE_SIZE * 5.41}
+                        texture={loadTexture(hub as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />
@@ -77,9 +76,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x }
-                        y={position.y + TILE_SIZE * 2.75}
-                        texture={loadTexture(kitchen as String)}
+                        x={position.x + TILE_SIZE * 8.45}
+                        y={position.y + TILE_SIZE * 5.45}
+                        texture={loadTexture(kitchen as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />
@@ -90,9 +89,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x - TILE_SIZE * 2}
-                        y={position.y + TILE_SIZE * 3.75}
-                        texture={loadTexture(mirror as String)}
+                        x={position.x + TILE_SIZE * 8.31}
+                        y={position.y + TILE_SIZE * 5.51}
+                        texture={loadTexture(mirror as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />
@@ -104,9 +103,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x + TILE_SIZE * 8}
-                        y={position.y + TILE_SIZE * 2.75}
-                        texture={loadTexture(smart_shower as String)}
+                        x={position.x + TILE_SIZE * 8.93}
+                        y={position.y + TILE_SIZE * 5.46}
+                        texture={loadTexture(smart_shower as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />
@@ -120,9 +119,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x + TILE_SIZE * 1.9}
-                        y={position.y + TILE_SIZE * 3.25}
-                        texture={loadTexture(hallway_frog as String)}
+                        x={position.x + TILE_SIZE * 8.56}
+                        y={position.y + TILE_SIZE * 5.5}
+                        texture={loadTexture(hallway_frog as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />
@@ -134,9 +133,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x  + TILE_SIZE * 0.05}
-                        y={position.y + TILE_SIZE * 0.525}
-                        texture={loadTexture(livingroom_candles as String)}
+                        x={position.x  + TILE_SIZE * 8.44}
+                        y={position.y + TILE_SIZE * 5.324}
+                        texture={loadTexture(livingroom_candles as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />
@@ -148,9 +147,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x  - TILE_SIZE * 7}
-                        y={position.y + TILE_SIZE * 0.75}
-                        texture={loadTexture(livingroom_food as String)}
+                        x={position.x  + TILE_SIZE * 8.005}
+                        y={position.y + TILE_SIZE * 5.34}
+                        texture={loadTexture(livingroom_food as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />
@@ -162,9 +161,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x  + TILE_SIZE * 4}
-                        y={position.y + TILE_SIZE * 4.05}
-                        texture={loadTexture(kitchen_painting as String)}
+                        x={position.x  + TILE_SIZE * 8.68}
+                        y={position.y + TILE_SIZE * 5.54}
+                        texture={loadTexture(kitchen_painting as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />
@@ -176,9 +175,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x  - TILE_SIZE * 5.975}
-                        y={position.y - TILE_SIZE * 0.745}
-                        texture={loadTexture(bathroom_chick as String)}
+                        x={position.x  + TILE_SIZE * 8.065}
+                        y={position.y + TILE_SIZE * 5.245}
+                        texture={loadTexture(bathroom_chick as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />
@@ -190,9 +189,9 @@ export function getHighlightPosition2(device: InteractivePixiElement, position: 
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x  + TILE_SIZE * 7.85}
-                        y={position.y - TILE_SIZE * 0.745}
-                        texture={loadTexture(bathroom_drawer as String)}
+                        x={position.x  + TILE_SIZE * 8.9255}
+                        y={position.y + TILE_SIZE * 5.245}
+                        texture={loadTexture(bathroom_drawer as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
                 />

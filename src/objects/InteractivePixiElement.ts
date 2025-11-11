@@ -1,5 +1,4 @@
 import {InteractiveType} from "@/types/InteractiveType.ts";
-import { Container as PixiContainer } from "pixi.js";
 export class InteractivePixiElement {
   constructor(
           public x: number,

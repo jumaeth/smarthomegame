@@ -59,7 +59,7 @@ export const LivingRoom = () => {
 
   const interactiveElements = [
     new InteractivePixiElement(4, 2, 2, 1, "SmartTv", (): void => handleDeviceOpen("SmartTv")),
-    new InteractivePixiElement(1, 2, 1, 2, "SmartLights", (): void => handleDeviceOpen("SmartLights"))
+    new InteractivePixiElement(1, 2, 1, 2, "SmartLights", (): void => handleDeviceOpen("SmartLights")),
     new InteractivePixiElement(8.95, 5.225, 1, 1, "LivingRoomCandles", () => {}, InteractiveType.DUMMY),
     new InteractivePixiElement(16, 5, 1, 1, "LivingRoomFood", () => {}, InteractiveType.DUMMY),
   ]

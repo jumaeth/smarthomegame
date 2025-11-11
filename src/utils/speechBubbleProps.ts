@@ -7,7 +7,7 @@ export function getSpeechBubbleProps(device: string, x: number, y: number): Spee
     case "HallwayFrog":
       return {
         x: x + TILE_SIZE * 7.25,
-        y: y + TILE_SIZE * 2.4,
+        y: y + TILE_SIZE * 2.25,
         width: TILE_SIZE,
         height: TILE_SIZE * 0.3,
         element: "",
@@ -17,7 +17,7 @@ export function getSpeechBubbleProps(device: string, x: number, y: number): Spee
     case "LivingRoomCandles":
       return {
         x: x + TILE_SIZE * 8.9,
-        y: y + TILE_SIZE * 4.8,
+        y: y + TILE_SIZE * 4.7,
         height: TILE_SIZE * 0.4,
         element: "",
         color: 0x2c2b33,
@@ -28,7 +28,7 @@ export function getSpeechBubbleProps(device: string, x: number, y: number): Spee
     case "LivingRoomFood":
       return {
         x: x + TILE_SIZE * 15.6,
-        y: y + TILE_SIZE * 4.8,
+        y: y + TILE_SIZE * 4.7,
         element: "",
         color: 0x2c2b33,
         textColor: 0xffffff,
@@ -50,7 +50,7 @@ export function getSpeechBubbleProps(device: string, x: number, y: number): Spee
     case "BathroomChick":
       return {
         x: x + TILE_SIZE * 14.525,
-        y: y + TILE_SIZE * 6.1,
+        y: y + TILE_SIZE * 6,
         height: TILE_SIZE * 0.4,
         textSize: 2.5,
         element: "",
@@ -62,7 +62,7 @@ export function getSpeechBubbleProps(device: string, x: number, y: number): Spee
     case "BathroomDrawer":
       return {
         x: x + TILE_SIZE * 1.55,
-        y: y + TILE_SIZE * 5.9,
+        y: y + TILE_SIZE * 5.7,
         height: TILE_SIZE * 0.4,
         width: TILE_SIZE + 1.2,
         textSize: 2.5,

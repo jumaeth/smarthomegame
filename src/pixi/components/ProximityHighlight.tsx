@@ -1,13 +1,11 @@
-import {TILE_SIZE} from "@/pixi/constants/world-settings";
-import {PropsWithChildren, useRef} from "react";
-import {Container as PixiContainer, Graphics as PixiGraphics} from "pixi.js"
+import {PropsWithChildren, useEffect, useRef, useState} from "react";
+import {Container as PixiContainer} from "pixi.js"
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {Container, useTick} from "@pixi/react";
+import {Container} from "@pixi/react";
 import {useCharacterPosition} from "@/hooks/character/useCharacterPosition.ts";
-import {getHighlightPosition2} from "@/utils/highlightPositions.ts";
-import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {getNearbyInteractiveElement} from "@/utils/character/proximity.ts";
-import { pixelToTile } from "@/utils/coords";
+import {pixelToTile} from "@/utils/coords";
+import {getHighlightPosition2} from "@/utils/highlightPositions2.tsx";
 
 interface ProximityHighlightProps {
     interactiveElements?: InteractivePixiElement[];
@@ -40,22 +38,11 @@ export const ProximityHighlight = ({
     const playerTile = pixelToTile(pos.x, pos.y);
     const interactive = getNearbyInteractiveElement(playerTile, interactiveElements);
 
-    const graphic = graphicRef.current;
-    if (!graphic) return;
-
-    const g = new PixiGraphics();
-
     if (interactive) {
       setInteractive(interactive)
-      //const rect = getHighlightPosition(interactive);
-      //g.lineStyle(1, 0xffff00, 0.5);
-      //g.drawRoundedRect(rect.x, rect.y, rect.width * TILE_SIZE, rect.height * TILE_SIZE, rect.radius);
-    } else {
-      g.clear();
+    }else{
+      setInteractive(null)
     }
-
-    graphic.removeChildren();
-    graphic.addChild(g);
   }, [pos, interactiveElements]);
 
   const getPosition = () => {return interactive ? {x: interactive.x, y: interactive.y} : {x: 0, y: 0}}
