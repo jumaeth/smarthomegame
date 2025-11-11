@@ -17,6 +17,7 @@ import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {t} from "@lingui/core/macro";
+import {fill, stroke} from "@/pixi/components/Tutorial/util/TutorialColors.ts";
 
 
 export const More_Expl: React.FC<PageProps> = ({
@@ -34,15 +35,14 @@ export const More_Expl: React.FC<PageProps> = ({
   const charRef = useRef<PixiSprite | null >(null);
   const robotRef = useRef<PixiSprite | null >(null);
   const [animation, setAnimation] = useState(Animations.IDLE);
-  const [pixiTexts, setPixiTexts] = useState<PixiText[]>([]);
+  const [pixiText, setPixiText] = useState<PixiText[]>([]);
   const [onLoad, setOnLoad] = useState(true);
   const [animating, setAnimating] = useState(false);
   const mgrRef = useRef<AnimationManager | null>(null);
   const backgroundRef = useRef<PixiGraphics | null>(null);
-  const fill = "#054388";
-  const stroke = "#009CDD";
   const graphicRef = useRef<PixiContainer | null>(null);
   const textRef = useRef<PixiContainer | null>(null);
+  const [introRun, setIntroRun] = useState(false);
 
 
 
@@ -59,7 +59,6 @@ export const More_Expl: React.FC<PageProps> = ({
       setOnLoad(false);
     }
   }, [onLoad, Animations.INTRO]);
-
 
   //----------animations----------
 
@@ -93,6 +92,23 @@ export const More_Expl: React.FC<PageProps> = ({
     ]);
   };
 
+  const anim1 = useMemo<GrowProps>(() => ({
+    startX: windowWidth * 0.2425,
+    startY: windowHeight * 0.0925,
+    endX:   windowWidth * 0.2,
+    endY:   windowHeight * 0.3,
+    startS: Math.min(windowWidth, windowHeight) / 1000,
+    endS:   Math.min(windowWidth, windowHeight) / 450,
+    duration: 750,
+  }), [windowWidth, windowHeight]);
+
+  const fadeIn = useMemo<FadeProps>(() =>  {
+    return {
+    duration: 500,
+    startA: 0,
+    endA: 1,
+  }},[])
+
   //manage animations
   useEffect(() => {
     if (!mgrRef.current) return;
@@ -106,23 +122,12 @@ export const More_Expl: React.FC<PageProps> = ({
 
       switch (animation) {
         case Animations.INTRO: {
-
-          const anim1 = {
-            startX: windowWidth * 0.2425, startY: windowHeight * 0.0925,
-            endX: windowWidth * 0.2, endY: windowHeight * 0.3,
-            startS: 1, endS: 2, showOthers: false, duration: 750
-          } as GrowProps
-
-          const fadeIn = {
-            duration: 500,
-            startA: 0,
-            endA: 1,
-          } as FadeProps
-
+          if (introRun)return
           setAnimating(true);
           await runIntroAnim(sprite, robot, anim1, fadeIn);
           setAnimating(false);
           setAnimation(Animations.IDLE);
+          setIntroRun(true)
           break;
         }
 
@@ -150,7 +155,8 @@ export const More_Expl: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation, Animations.INTRO, Animations.IDLE, Animations.OUTRO, setKeyControl, setNextPage, windowWidth, windowHeight]);
+  }, [animation, Animations.INTRO, Animations.IDLE,
+    Animations.OUTRO, setKeyControl, setNextPage, introRun, anim1, fadeIn]);
 
 
   //----------user input----------
@@ -183,7 +189,7 @@ export const More_Expl: React.FC<PageProps> = ({
   const setupTexts = useCallback(() => {
     const t1 = new PixiText();
     t1.text = textsTemp[0];
-    t1.x = windowWidth*0.575;
+    t1.x = windowWidth*0.55;
     t1.y = windowHeight*0.45;
     t1.style = new TextStyle({
       fontSize: Math.min(windowWidth, windowHeight) * 0.035,
@@ -191,21 +197,28 @@ export const More_Expl: React.FC<PageProps> = ({
       wordWrapWidth: windowWidth * 0.4
     })
 
-    setPixiTexts(prev => [...prev, t1]);
+    const parent = graphicRef?.current;
+    if (!parent) return;
+    parent.children.filter(c => c instanceof PixiText).forEach(text => parent.removeChild(text))
+
+
+    setPixiText([t1]);
 
   },[textsTemp, windowWidth, windowHeight])
 
   const setupGraphics = useCallback(() => {
 
+
     const g = new PixiGraphics();
     g.clear();
     g.beginFill(fill, 1);
     g.lineStyle(3, stroke);
-    g.drawRoundedRect(windowWidth*0.365, windowHeight*0.295, windowWidth*0.42, windowHeight*0.32, 12);
+    g.drawRoundedRect(windowWidth*0.34, windowHeight*0.295, windowWidth*0.42, windowHeight*0.32, 12);
     g.endFill();
 
     const parent = graphicRef?.current;
     if (!parent) return;
+    parent.children.filter(c => c instanceof PixiGraphics).forEach(graphic => parent.removeChild(graphic))
 
     parent.addChild(g);
   },[windowWidth, windowHeight])
@@ -216,17 +229,28 @@ export const More_Expl: React.FC<PageProps> = ({
     if (!r)return;
 
     r.anchor.set(0.5, 0.5);
-    r.x = windowWidth * 0.775;
+    r.x = windowWidth * 0.825;
     r.y = windowHeight * 0.7;
+    r.scale.set(Math.min(windowWidth, windowHeight) / 700)
     r.texture = textureRobot;
 
   },[textureRobot, windowWidth, windowHeight])
+
+  const setupTVSprite = useCallback(() => {
+    const ref = charRef.current;
+    if (!ref) return;
+    ref.x = windowWidth * 0.2
+    ref.y = windowHeight * 0.25
+    ref.anchor.set(0.5, 0.5)
+    ref.scale.set(anim1.endS)
+  }, [windowWidth,windowHeight, anim1.endS]);
 
   useEffect(() => {
     setupTexts();
     setupGraphics();
     setupRobot();
-  }, [textRef, setupGraphics, setupRobot, setupTexts]);
+    setupTVSprite();
+  }, [textRef, setupGraphics, setupRobot, setupTexts, setupTVSprite]);
 
   const graphics = () => {
     return (
@@ -249,7 +273,7 @@ export const More_Expl: React.FC<PageProps> = ({
   const texts = () => {
     return (
             <Container ref={textRef}>
-              {pixiTexts.map((msg, i) => (
+              {pixiText.map((msg, i) => (
                       <Text
                               key={i}
                               text={msg.text}

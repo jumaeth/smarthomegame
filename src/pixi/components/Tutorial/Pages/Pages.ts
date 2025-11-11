@@ -8,5 +8,6 @@ export enum Pages{
   MORE_EXPL,
   More_Expl_SD,
   SCORE_CHANGES,
+  PROGRESS_BAR,
   FINAL_MESSAGE
 }
