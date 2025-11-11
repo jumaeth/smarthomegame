@@ -6,6 +6,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: de\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
 #. js-lingui-explicit-id
 #: src/pixi/components/Tutorial/Pages/PhonePage.tsx:48
@@ -22,6 +28,7 @@ msgid ""
 msgstr ""
 "\n"
 "- Dein Geldbeutel war \n"
+""
 
 #: src/components/cookingGame/CookingStage.tsx:34
 msgid ""
@@ -612,6 +619,7 @@ msgid ""
 msgstr ""
 "quality.\n"
 "- Der Einkauf war\n"
+""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:116
 msgid "Racial and ethnic origin"
@@ -749,6 +757,7 @@ msgstr ""
 "Danke für deine Hilfe, mal sehen.:\n"
 "\n"
 "- Die Zutaten haben eine\n"
+""
 
 #: src/pixi/components/Tutorial/Pages/Explanations/Decision.tsx:62
 msgid "That's all you need to know! Time for a quick practice. Your task is to find and solve the first smart device. Now it's your decision"
@@ -930,6 +939,7 @@ msgstr ""
 "Wir sind fast fertig! \n"
 "\n"
 "Als letztes müssen wir noch den Tisch decken und unser Gericht servieren.\n"
+""
 
 #: src/components/general-ui/CookieBanner.tsx:16
 msgid "We use functional cookies to enable your later access to our web game and to improve the user experience. Cookies are small files stored on your device."
@@ -1001,6 +1011,7 @@ msgstr ""
 "Du musst verschiedene Kriterien wie Kosten, Zeit und Qualität berücksichtigen. \n"
 "\n"
 "Sei vorsichtig bei der Verwendung deiner Daten, um \n"
+""
 
 #: src/services/GameService.ts:66
 msgid "You need to cook a meal. lets try to focus on privacy friendly but still practical choices. The minigame will let you know what the next steps are to complet the game."
