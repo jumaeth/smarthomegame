@@ -1,7 +1,5 @@
 import {Container, Sprite} from "@pixi/react";
 import React, {useMemo} from "react";
-
-
 import {Texture} from "@pixi/core";
 import assistantPhoneMap from "@/assets/assistant-phone/assistant_phone_minimap.png";
 import {PixiButton} from "@/pixi/components/PixiButton.tsx";
@@ -19,9 +17,7 @@ export const AssistantPhone: React.FC<AssistantPhoneProps> = ({
                                                                 onClickExit
                                                               }: AssistantPhoneProps) => {
 
-  const textures = useMemo(() => [
-    Texture.from(assistantPhoneMap)
-  ], []);
+  const texture = useMemo(() => Texture.from(assistantPhoneMap), []);
 
   const phoneHeight = windowHeight * 0.80;
   const phoneSize = {height: phoneHeight, width: phoneHeight * 1.7}
@@ -38,7 +34,7 @@ export const AssistantPhone: React.FC<AssistantPhoneProps> = ({
                     x={phonePosition.x}
                     y={phonePosition.y}
                     interactive={false}
-                    texture={textures[0]}
+                    texture={texture}
                     width={phoneSize.width}
                     height={phoneSize.height}
             />
