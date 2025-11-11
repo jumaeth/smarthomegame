@@ -53,7 +53,7 @@ export default function HomePage() {
                 </Trans>
               </p>
 
-              <div className="flex space-x-4">
+              <div className="flex items-center space-x-4">
                 <Button onClick={() => navigate("/intro")}>
                   <Trans>
                     Start game
