@@ -22,6 +22,7 @@ import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {t} from "@lingui/core/macro";
 import {RoomNames} from "@/objects/RoomNames.ts";
+import {fill, stroke} from "@/pixi/components/Tutorial/util/TutorialColors.ts";
 
 
 export const More_Expl_SD: React.FC<PageProps> = ({
@@ -37,8 +38,6 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
   //other
   const textureRobot = useMemo(() => loadTexture(robot), []);
-  const fill = "#054388";
-  const stroke = "#009CDD";
   const explText = t`Deselect the right options to restore a balance between privacy and comfort. Different decisions will have different affects on your scores.`
 
   //state

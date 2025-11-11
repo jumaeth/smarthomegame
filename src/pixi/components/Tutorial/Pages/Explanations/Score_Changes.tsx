@@ -15,6 +15,7 @@ import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {t} from "@lingui/core/macro";
+import {fill, stroke} from "@/pixi/components/Tutorial/util/TutorialColors.ts";
 
 export const Score_Changes: React.FC<PageProps> = ({
                                                      windowWidth,
@@ -43,9 +44,6 @@ export const Score_Changes: React.FC<PageProps> = ({
   const graphicRef = useRef<PixiContainer | null>(null);
   const textRef = useRef<PixiContainer | null>(null);
   const backgroundRef = useRef<PixiContainer | null>(null);
-
-  const fill = "#054388";
-  const stroke = "#009CDD";
 
   const initedRef = useRef(false);
 

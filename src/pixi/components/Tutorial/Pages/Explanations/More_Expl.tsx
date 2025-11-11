@@ -17,6 +17,7 @@ import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {t} from "@lingui/core/macro";
+import {fill, stroke} from "@/pixi/components/Tutorial/util/TutorialColors.ts";
 
 
 export const More_Expl: React.FC<PageProps> = ({
@@ -39,8 +40,6 @@ export const More_Expl: React.FC<PageProps> = ({
   const [animating, setAnimating] = useState(false);
   const mgrRef = useRef<AnimationManager | null>(null);
   const backgroundRef = useRef<PixiGraphics | null>(null);
-  const fill = "#054388";
-  const stroke = "#009CDD";
   const graphicRef = useRef<PixiContainer | null>(null);
   const textRef = useRef<PixiContainer | null>(null);
   const [introRun, setIntroRun] = useState(false);

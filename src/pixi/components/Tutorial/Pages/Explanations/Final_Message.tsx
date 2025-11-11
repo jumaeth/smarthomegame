@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { Container, Sprite, Text } from "@pixi/react";
 import waving from "@/assets/tutorial/finalExpl/waving.png";
-import { loadTexture } from "@/utils/loadTexture.ts";
+import { loadTexture } from "@/utils/loadTexture";
 import {
   Container as PixiContainer,
   Graphics as PixiGraphics,
@@ -16,13 +16,14 @@ import {
   Text as PixiText,
   TextStyle,
 } from "pixi.js";
-import { Pages } from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import { AnimationManager } from "@/pixi/components/Tutorial/anim/AnimationManager.ts";
-import { PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import { fadeAnimation, FadeProps } from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
-import { PageOrder } from "@/pixi/components/Tutorial/util/PageOrder.ts";
-import { FADE_IN, FADE_OUT } from "@/pixi/components/Tutorial/util/AnimProps.ts";
+import { Pages } from "@/pixi/components/Tutorial/Pages/Pages";
+import { AnimationManager } from "@/pixi/components/Tutorial/anim/AnimationManager";
+import { PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry";
+import { fadeAnimation, FadeProps } from "@/pixi/components/Tutorial/anim/fadeAnimation";
+import { PageOrder } from "@/pixi/components/Tutorial/util/PageOrder";
+import { FADE_IN, FADE_OUT } from "@/pixi/components/Tutorial/util/AnimProps";
 import { t } from "@lingui/core/macro";
+import {fill, stroke} from "@/pixi/components/Tutorial/util/TutorialColors.ts";
 
 export const Final_Message: React.FC<PageProps> = ({
                                                      windowWidth,
@@ -39,8 +40,6 @@ export const Final_Message: React.FC<PageProps> = ({
   const [pixiTexts, setPixiTexts] = useState<PixiText[]>([]);
   const [animating, setAnimating] = useState(false);
   const mgrRef = useRef<AnimationManager | null>(null);
-  const fill = "#054388";
-  const stroke = "#009CDD";
   const graphicRef = useRef<PixiContainer | null>(null);
   const textRef = useRef<PixiContainer | null>(null);
   const backgroundRef = useRef<PixiContainer | null>(null);

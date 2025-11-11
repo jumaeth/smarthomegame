@@ -23,6 +23,7 @@ import { fadeAnimation, FadeProps } from "@/pixi/components/Tutorial/anim/fadeAn
 import { useAnimationManager } from "@/hooks/tutorial/useAnimationManager.tsx";
 import { t } from "@lingui/core/macro";
 import {ProgressBarStatusStore} from "@/utils/progressBarStatus.ts";
+import {fill, stroke} from "@/pixi/components/Tutorial/util/TutorialColors.ts";
 
 export const ProgressBar: React.FC<PageProps> = ({
                                                      windowWidth,
@@ -51,9 +52,6 @@ export const ProgressBar: React.FC<PageProps> = ({
   const graphicRef = useRef<PixiContainer | null>(null);
   const textRef = useRef<PixiContainer | null>(null);
   const backgroundRef = useRef<PixiContainer | null>(null);
-
-  const fill = "#054388";
-  const stroke = "#009CDD";
 
   const initedRef = useRef(false);
 
@@ -100,6 +98,16 @@ export const ProgressBar: React.FC<PageProps> = ({
           [mgrRef]
   );
 
+  /**
+   * Define Props to run grow animation on. The following must be defined:
+   *  startX --> x coordinate to start grow animation from
+   *  startY --> y coordinate to start grow animation from
+   *  endX: -->  x coordinate to end grow animation on
+   *  endY: --> y coordinate to end grow animation on
+   *  startS --> start scale (very small at the beginning)
+   *  endS --> end scale
+   *  duration --> duration of the animation
+   */
   const anim1: GrowProps = useMemo<GrowProps>(() =>  {
     return {
     startX: windowWidth * 0.7,
