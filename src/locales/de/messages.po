@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2025-11-03 17:12+0100\n"
+"POT-Creation-Date: 2025-11-11 11:34+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,7 +29,7 @@ msgid ""
 "Our Smartkitchen can prepare all the ingredients but we have to choose the right machine to cook the dish"
 msgstr ""
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:333
+#: src/components/dataSortingGame/DataSortingGame.tsx:328
 msgid " privacy"
 msgstr ""
 
@@ -40,20 +40,16 @@ msgstr ""
 msgid "{0}"
 msgstr ""
 
-#: src/pixi/components/AssistantPhone.tsx:86
+#: src/pixi/components/AssistantPhone.tsx:45
 msgid "< Back to game"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:263
-msgid "⚠️ Privacy Warning"
+#: src/components/smart-devices/SmartTv.tsx:247
+msgid "❗️ Privacy Warning ❗️"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:236
-msgid "⚠️ Warning"
-msgstr ""
-
-#: src/components/smart-devices/SmartTv.tsx:312
-msgid "✅ Device Configured"
+#: src/components/dataSortingGame/DataSortingGame.tsx:313
+msgid "🎉 Congratulations! 🎉"
 msgstr ""
 
 #: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:52
@@ -68,23 +64,23 @@ msgstr ""
 msgid "achieve better results."
 msgstr ""
 
-#: src/components/smart-devices/SmartLights.tsx:32
-msgid "activate Bluetooth"
+#: src/components/smart-devices/SmartLights.tsx:35
+msgid "Activate Bluetooth"
 msgstr ""
 
-#: src/components/smart-devices/SmartLights.tsx:33
-msgid "activate WiFi"
+#: src/components/smart-devices/SmartLights.tsx:36
+msgid "Activate WiFi"
 msgstr ""
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:23
 msgid "AI image recognition"
 msgstr ""
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:322
+#: src/components/dataSortingGame/DataSortingGame.tsx:317
 msgid "All items were sorted!"
 msgstr ""
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:327
+#: src/components/dataSortingGame/DataSortingGame.tsx:322
 msgid "Answered correctly on the first attempt:"
 msgstr ""
 
@@ -132,7 +128,7 @@ msgstr ""
 msgid "by using our website, you agree to the use of cookies in accordance with our "
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:88
+#: src/components/smart-devices/SmartTv.tsx:87
 msgid "Camera On"
 msgstr ""
 
@@ -144,23 +140,22 @@ msgstr ""
 msgid "City festival schedule on the flyer"
 msgstr ""
 
+#: src/components/dataSortingGame/DataSortingGame.tsx:339
+#: src/components/dataSortingGame/DataSortingGame.tsx:397
 #: src/components/general-ui/HelpButton.tsx:41
-msgid "close"
-msgstr ""
-
-#: src/components/dataSortingGame/DataSortingGame.tsx:402
+#: src/components/mini-game/CaptchaComponent.tsx:153
 msgid "Close"
 msgstr ""
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:22
-msgid "cloud backup"
+msgid "Cloud backup"
 msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:32
 msgid "Co-op farmers' market"
 msgstr ""
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:333
+#: src/components/dataSortingGame/DataSortingGame.tsx:328
 msgid "comfort"
 msgstr ""
 
@@ -168,20 +163,12 @@ msgstr ""
 msgid "Comfort"
 msgstr ""
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:344
-msgid "Completed ✅"
-msgstr ""
-
-#: src/components/dataSortingGame/DataSortingGame.tsx:332
+#: src/components/dataSortingGame/DataSortingGame.tsx:327
 msgid "Completion bonus:"
 msgstr ""
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:313
-msgid "Congratulations! 🎉"
-msgstr ""
-
-#: src/components/smart-devices/SmartLights.tsx:35
-msgid "connect to smart app"
+#: src/components/smart-devices/SmartLights.tsx:38
+msgid "Connect to smart app"
 msgstr ""
 
 #: src/components/cookingGame/CookingStage.tsx:55
@@ -191,24 +178,20 @@ msgstr ""
 #: src/components/cookingGame/CookingStage.tsx:25
 #: src/components/cookingGame/IntroStage.tsx:16
 #: src/components/cookingGame/RecipeStage.tsx:16
-#: src/components/smart-devices/SmartHomeHub.tsx:21
 msgid "continue"
 msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:53
-#: src/components/mini-game/MultipleChoiceComponent.tsx:111
-#: src/components/smart-devices/SmartTv.tsx:182
-#: src/components/smart-devices/SmartTv.tsx:244
-#: src/components/smart-devices/SmartTv.tsx:329
+#: src/components/mini-game/MultipleChoiceComponent.tsx:114
+#: src/components/smart-devices/SmartHomeHub.tsx:58
+#: src/components/smart-devices/SmartTv.tsx:190
+#: src/components/smart-devices/SmartTv.tsx:239
+#: src/components/smart-devices/SmartTv.tsx:286
 msgid "Continue"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:292
-msgid "Continue Anyway"
-msgstr ""
-
-#: src/components/mini-game/CaptchaComponent.tsx:151
-msgid "Continue game"
+#: src/components/smart-devices/SmartTv.tsx:265
+msgid "Continue anyway"
 msgstr ""
 
 #: src/pages/ContinueGame.tsx:34
@@ -229,11 +212,15 @@ msgstr ""
 #: src/components/cameraGame/SecurityCameraGame.tsx:49
 #: src/components/cameraGame/SecurityCameraGame.tsx:50
 #: src/components/cameraGame/SecurityCameraGame.tsx:51
-msgid "correct, this placement is acceptable"
+msgid "Correct, this placement is acceptable"
 msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:287
-msgid "Correct!"
+msgid "Correct! ✅"
+msgstr ""
+
+#: src/components/smart-devices/SmartHomeHub.tsx:69
+msgid "Data Sorting Challenge"
 msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:37
@@ -252,7 +239,11 @@ msgstr ""
 msgid "Deselect the right options to restore a balance between privacy and comfort. Different decisions will have different affects on your scores."
 msgstr ""
 
-#: src/services/GameService.ts:58
+#: src/components/smart-devices/SmartTv.tsx:274
+msgid "Device Configured ✅ "
+msgstr ""
+
+#: src/services/GameService.ts:65
 msgid "Did you know personal data of members of the European Union are protected by the General Data Protection Regulation GDPR? The GDPR protects your personal information by law, and you may request its protection even if the data processor is not located in the EU. The GDPR even grants higher protection to especially sensitive data, that means data which might be abused against you are sorted into special categories. For example, this could be private information on your religion, or political views. Have you understood what the GDPR protects? Decide if provided information is public, personal, or personal and sensitive by dragging and dropping."
 msgstr ""
 
@@ -297,7 +288,7 @@ msgstr ""
 msgid "Explore yourself"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:32
+#: src/components/smart-devices/SmartTv.tsx:31
 msgid "Face ID activated"
 msgstr ""
 
@@ -359,7 +350,7 @@ msgstr ""
 msgid "Hello and welcome to the Smart Home Escape Game"
 msgstr ""
 
-#: src/components/cameraGame/SecurityCameraGame.tsx:75
+#: src/components/cameraGame/SecurityCameraGame.tsx:78
 msgid "Hey, you should rearrange your surveillance cameras. The smart home has already made a preselection. Do you agree with this? Select all the camera placements you want to keep."
 msgstr ""
 
@@ -377,43 +368,43 @@ msgstr ""
 msgid "IBAN: DE00 0000 0000 0000"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:90
+#: src/components/smart-devices/SmartTv.tsx:89
 msgid "If you opt out of camera access, gesture controls and video calling features will not work."
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:34
+#: src/components/smart-devices/SmartTv.tsx:33
 msgid "If you opt out of Face ID, you'll need to use a PIN or password to verify purchases or access TV settings, which may be less convenient."
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:42
+#: src/components/smart-devices/SmartTv.tsx:41
 msgid "If you opt out of Google Account sync, you won't be able to access your personalized content, recommendations, and purchased apps."
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:98
+#: src/components/smart-devices/SmartTv.tsx:97
 msgid "If you opt out of location services, local content and weather information may not be accurate."
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:74
+#: src/components/smart-devices/SmartTv.tsx:73
 msgid "If you opt out of microphone access, voice commands and voice search will not work."
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:66
+#: src/components/smart-devices/SmartTv.tsx:65
 msgid "If you opt out of Smart Home App sync, you won't be able to control your TV remotely or receive notifications."
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:58
+#: src/components/smart-devices/SmartTv.tsx:57
 msgid "If you opt out of Smart Home Hub sync, your TV won't be able to control other smart devices or respond to home automation."
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:50
+#: src/components/smart-devices/SmartTv.tsx:49
 msgid "If you opt out of the Health App, Smart TV cannot track your screen time anymore and send Health Alerts."
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:106
+#: src/components/smart-devices/SmartTv.tsx:105
 msgid "If you opt out of usage analytics, the TV won't be able to provide personalized recommendations."
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:82
+#: src/components/smart-devices/SmartTv.tsx:81
 msgid "If you opt out of voice recognition, the TV won't be able to learn your voice patterns for better accuracy."
 msgstr ""
 
@@ -434,7 +425,7 @@ msgid "Interactive objects light up if you walk next to them"
 msgstr ""
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:20
-msgid "internet connection"
+msgid "Internet connection"
 msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:163
@@ -449,7 +440,7 @@ msgstr ""
 msgid "Italy Retailer"
 msgstr ""
 
-#: src/services/GameService.ts:60
+#: src/services/GameService.ts:67
 msgid "Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them."
 msgstr ""
 
@@ -461,15 +452,15 @@ msgstr ""
 msgid "Location data is personal information that can provide information about movement patterns and whereabouts."
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:96
+#: src/components/smart-devices/SmartTv.tsx:95
 msgid "Location Services"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:40
+#: src/components/smart-devices/SmartTv.tsx:39
 msgid "Logged in with Google Account"
 msgstr ""
 
-#: src/components/smart-devices/SmartLights.tsx:45
+#: src/components/smart-devices/SmartLights.tsx:48
 msgid "Manage permissions:"
 msgstr ""
 
@@ -481,7 +472,7 @@ msgstr ""
 msgid "Max Mustermann, Musterstraße 1, 12345 Musterstadt"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:72
+#: src/components/smart-devices/SmartTv.tsx:71
 msgid "Microphone On"
 msgstr ""
 
@@ -510,7 +501,7 @@ msgid "Name and address are personal data that can lead to the identification of
 msgstr ""
 
 #: src/components/general-ui/HelpButton.tsx:40
-msgid "no"
+msgid "No"
 msgstr ""
 
 #: src/components/cookingGame/IngredientsStage.tsx:47
@@ -521,7 +512,7 @@ msgstr ""
 msgid "not angry with"
 msgstr ""
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:327
+#: src/components/dataSortingGame/DataSortingGame.tsx:322
 msgid "of"
 msgstr ""
 
@@ -529,8 +520,8 @@ msgstr ""
 msgid "Official announcements are public information that is accessible to all citizens."
 msgstr ""
 
-#: src/components/cameraGame/SecurityCameraGame.tsx:64
-msgid "Oh no, all your settings have been reset. Time to set them again"
+#: src/components/cameraGame/SecurityCameraGame.tsx:67
+msgid "Oh no! All your settings have been reset. <0/>Time to set them again:"
 msgstr ""
 
 #: src/pixi/components/Tutorial/Pages/Explanations/More_Expl.tsx:50
@@ -622,12 +613,12 @@ msgstr ""
 msgid "Racial and ethnic origin"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:279
+#: src/components/smart-devices/SmartTv.tsx:258
 msgid "Reconfigure"
 msgstr ""
 
-#: src/components/smart-devices/SmartLights.tsx:34
-msgid "record energy consumption"
+#: src/components/smart-devices/SmartLights.tsx:37
+msgid "Record energy consumption"
 msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:98
@@ -654,17 +645,17 @@ msgstr ""
 msgid "Saw that? Your solution increased the scores. But be careful, bad decisions decrease them! Make sure you always keep a good balance."
 msgstr ""
 
-#: src/components/cameraGame/SecurityCameraGame.tsx:59
+#: src/components/cameraGame/SecurityCameraGame.tsx:61
 msgid "Security Camera"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:193
+#: src/components/smart-devices/SmartTv.tsx:202
 msgid "Select which features you want to enable for your Smart TV:"
 msgstr ""
 
-#: src/components/mini-game/CaptchaComponent.tsx:147
-#: src/components/mini-game/MultipleChoiceComponent.tsx:108
-#: src/components/smart-devices/SmartTv.tsx:219
+#: src/components/mini-game/CaptchaComponent.tsx:148
+#: src/components/mini-game/MultipleChoiceComponent.tsx:109
+#: src/components/smart-devices/SmartTv.tsx:226
 msgid "Send answer"
 msgstr ""
 
@@ -676,24 +667,24 @@ msgstr ""
 msgid "slow."
 msgstr ""
 
-#: src/components/smart-devices/SmartHomeHub.tsx:16
-msgid "smart home hub"
+#: src/components/smart-devices/SmartHomeHub.tsx:38
+msgid "Smart Home Hub"
 msgstr ""
 
-#: src/components/smart-devices/SmartLights.tsx:41
+#: src/components/smart-devices/SmartLights.tsx:44
 msgid "Smart Lighting"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:190
+#: src/components/smart-devices/SmartTv.tsx:199
 msgid "Smart TV Settings"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:177
+#: src/components/smart-devices/SmartTv.tsx:178
 msgid "Smart TV Setup"
 msgstr ""
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:21
-msgid "smartphone connection"
+msgid "Smartphone connection"
 msgstr ""
 
 #: src/pages/ContinueGame.tsx:35
@@ -713,10 +704,6 @@ msgstr ""
 msgid "Stores time and consumed energy"
 msgstr ""
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:318
-msgid "Summary"
-msgstr ""
-
 #: src/components/cookingGame/IngredientsStage.tsx:47
 msgid "Super"
 msgstr ""
@@ -729,15 +716,15 @@ msgstr ""
 msgid "Sustainable store"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:48
+#: src/components/smart-devices/SmartTv.tsx:47
 msgid "Synced with Health App"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:64
+#: src/components/smart-devices/SmartTv.tsx:63
 msgid "Synced with Smart Home App"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:56
+#: src/components/smart-devices/SmartTv.tsx:55
 msgid "Synced with Smart Home Hub"
 msgstr ""
 
@@ -800,7 +787,7 @@ msgstr ""
 msgid "The settings"
 msgstr ""
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:336
+#: src/components/dataSortingGame/DataSortingGame.tsx:331
 msgid "The Smart Home Hub is now unlocked, but you can try again if you want!"
 msgstr ""
 
@@ -826,16 +813,16 @@ msgstr ""
 msgid "This is a bad place for a camera, it is not recommended to place a camera pointing at your pool for privacy reasons"
 msgstr ""
 
-#: src/services/GameService.ts:54
+#: src/services/GameService.ts:61
 msgid "This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Modify your settings by clicking on the sliders. When you are satisfied with your choices continue by pressing the continue button"
 msgstr ""
 
-#: src/services/GameService.ts:53
+#: src/services/GameService.ts:60
 msgid "This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Uncheck the permissions which you think are not necessary by clicking directly on the checkbox."
 msgstr ""
 
 #: src/components/general-ui/HelpButton.tsx:20
-msgid "this is more difficult than i thought, unfortunately I cannot support you with this."
+msgid "This is more difficult than i thought, unfortunately I cannot support you with this."
 msgstr ""
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:28
@@ -856,19 +843,19 @@ msgid ""
 "                     political opinions, religious beliefs or trade union membership."
 msgstr ""
 
-#: src/components/smart-devices/SmartLights.tsx:25
-#: src/components/smart-devices/SmartLights.tsx:26
-msgid "this setting is acceptable"
+#: src/components/smart-devices/SmartLights.tsx:28
+#: src/components/smart-devices/SmartLights.tsx:29
+msgid "This setting is acceptable"
 msgstr ""
 
-#: src/components/smart-devices/SmartLights.tsx:27
-#: src/components/smart-devices/SmartLights.tsx:28
-msgid "this setting is not acceptable"
+#: src/components/smart-devices/SmartLights.tsx:30
+#: src/components/smart-devices/SmartLights.tsx:31
+msgid "This setting is not acceptable"
 msgstr ""
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:26
 #: src/components/cameraGame/SecurityCameraGame.tsx:27
-msgid "this setting is ok"
+msgid "This setting is ok"
 msgstr ""
 
 #: src/components/cookingGame/CookingStage.tsx:48
@@ -887,7 +874,7 @@ msgstr ""
 msgid "Try again"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:104
+#: src/components/smart-devices/SmartTv.tsx:103
 msgid "Usage Analytics"
 msgstr ""
 
@@ -915,12 +902,16 @@ msgstr ""
 msgid "Vegetarian box"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:80
+#: src/components/smart-devices/SmartTv.tsx:79
 msgid "Voice recognition on"
 msgstr ""
 
 #: src/pixi/components/Tutorial/Pages/PhonePage.tsx:47
 msgid "Want to see this tutorial again or find out how to control the game? - Use the help app!"
+msgstr ""
+
+#: src/components/smart-devices/SmartTv.tsx:233
+msgid "Warning ⚠️"
 msgstr ""
 
 #: src/components/cookingGame/ServeStage.tsx:32
@@ -976,11 +967,11 @@ msgid "wow interesting task you got there, do you need help with anything?"
 msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:287
-msgid "Wrong! Try again."
+msgid "Wrong! Try again 🚫"
 msgstr ""
 
 #: src/components/general-ui/HelpButton.tsx:39
-msgid "yes"
+msgid "Yes"
 msgstr ""
 
 #: src/pages/HomePage.tsx:43
@@ -998,7 +989,7 @@ msgid ""
 "Be careful about using your data to "
 msgstr ""
 
-#: src/services/GameService.ts:59
+#: src/services/GameService.ts:66
 msgid "You need to cook a meal. lets try to focus on privacy friendly but still practical choices. The minigame will let you know what the next steps are to complet the game."
 msgstr ""
 
@@ -1006,11 +997,11 @@ msgstr ""
 msgid "Your comfort score"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:265
+#: src/components/smart-devices/SmartTv.tsx:249
 msgid "Your current settings result in a higher privacy loss than comfort gain. This may not be the optimal balance for your privacy."
 msgstr ""
 
-#: src/components/smart-devices/SmartHomeHub.tsx:19
+#: src/components/smart-devices/SmartHomeHub.tsx:43
 msgid "Your data permissions are all mixed up! Your Smart Home App has access to all data files in your personal cloud. Decide which information about you is too private, and unnecessary for your Smart Home to function."
 msgstr ""
 
@@ -1026,14 +1017,14 @@ msgstr ""
 msgid "your settings"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:316
+#: src/components/smart-devices/SmartTv.tsx:278
 msgid "Your Smart TV has been configured with a good balance of privacy and comfort!"
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:315
+#: src/components/smart-devices/SmartTv.tsx:277
 msgid "Your Smart TV has been configured with your chosen settings."
 msgstr ""
 
-#: src/components/smart-devices/SmartTv.tsx:179
+#: src/components/smart-devices/SmartTv.tsx:181
 msgid "Your Smart TV was reset to its default settings. Uncheck settings if you think you do not need them for your Smart TV to be working smart, and leave the permissions if they are needed for your TV experience. Choose wisely - your decisions impact your privacy status!"
 msgstr ""
