@@ -32,7 +32,7 @@ export const BasicModalWrapper = ({content, isOpen, onClose, showBg, activeDevic
               <div className="relative h-auto w-auto grid items-center justify-items-center bg-[#3a3a3a] border-4 border-white shadow-[0_0_0_6px_black] z-[100]"
                    onClick={(e) => e.stopPropagation()}>
                 <CloseModalButton onClick={onClose} ariaLabel={"Schliessen"}/>
-                <div className="h-auto max-h-[85vh] overflow-y-auto w-auto max-w-[85vw] overflow-x-auto px-3 grid grid-cols-1 items-center justify-items-center">
+                <div className="h-auto max-h-[85vh] overflow-y-auto w-auto max-w-[85vw] overflow-x-auto p-3 grid grid-cols-1 items-center justify-items-center">
                   {content}
                 </div>
               </div>
