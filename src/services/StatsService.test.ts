@@ -26,11 +26,8 @@ describe("StatsService", () => {
     device4.getStatBlock().setValue("Richtig beantwortet", "3");
     device4.getStatBlock().setValue("Falsch beantwortet", "5");
     device5.getStatBlock().setValue("Score", "1701");
-    console.log(device1);
     const statsService = new StatsService();
     const csv = statsService.generateCsvString(game);
-    console.log("generated string:");
-    console.log(csv);
     expect(typeof csv).toBe("string");
     expect(csv.length).toBeGreaterThan(0);
 

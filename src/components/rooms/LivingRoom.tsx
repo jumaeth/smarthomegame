@@ -6,7 +6,6 @@ import {SmartTv} from "../smart-devices/SmartTv.tsx";
 import {SmartLights} from "../smart-devices/SmartLights.tsx";
 
 import {calculateCanvasSize} from "@/utils/character/movment.ts";
-import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
@@ -70,9 +69,8 @@ export const LivingRoom = () => {
     setCanvasSize(calculateCanvasSize());
   }, [])
 
-  function handleMapChange(newMap: MapKey): boolean {
+  function handleMapChange(): boolean {
     if (tutorialActive.enabled) return false;
-    console.log(newMap); //ToDo remove
     return gameService.leaveRoom(roomName);
   }
 

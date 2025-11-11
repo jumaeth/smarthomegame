@@ -1,7 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {calculateCanvasSize} from "@/utils/character/movment.ts";
-import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
@@ -19,8 +18,7 @@ export const Bathroom = () => {
     setCanvasSize(calculateCanvasSize());
   }, [])
 
-  const handleMapChange = (newMap: MapKey) => {
-    console.log("Map changed to:", newMap);
+  const handleMapChange = () => {
     return gameService.leaveRoom(roomName);
   };
 

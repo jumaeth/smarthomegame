@@ -1,7 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {calculateCanvasSize} from "@/utils/character/movment.ts";
-import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
@@ -16,9 +15,9 @@ import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnab
 import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
 
 export const Kitchen = () => {
-    const gameService = useGameService();
-    const roomName = RoomNames.KITCHEN
-    const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
+  const gameService = useGameService();
+  const roomName = RoomNames.KITCHEN
+  const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
 
   const [activeDevice, setActiveDevice] = useState<string | null>(null);
   const sdEnabled = useSmarDevicesEnabledState();
@@ -64,8 +63,7 @@ export const Kitchen = () => {
     setCanvasSize(calculateCanvasSize());
   }, []);
 
-  function handleMapChange(newMap: MapKey): boolean {
-    console.log("Map changed to:", newMap);
+  function handleMapChange(): boolean {
     return gameService.leaveRoom(roomName);
   }
 

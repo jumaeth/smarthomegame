@@ -28,8 +28,7 @@ export const SecurityCameraGame = ({onCompletion}: { onCompletion: onCompletionC
       newSolution(false, t`This is not necessary and a risk to your privacy`, 10, -2, -10, +2),
       newSolution(false, t`This is not necessary and a risk to your privacy`, 10, -2, -10, +2),
     ],
-    handleCompletion: (isCorrect: boolean): void => {
-      console.log("Completed:", isCorrect);
+    handleCompletion: (): void => {
       setFrame(1);
     }
   }
@@ -55,7 +54,7 @@ export const SecurityCameraGame = ({onCompletion}: { onCompletion: onCompletionC
   };
 
   return (
-          <div  className="px-[30px] py-[12px] w-[800px] max-w-[90vw]
+          <div className="px-[30px] py-[12px] w-[800px] max-w-[90vw]
                         rounded-none text-white text-lg leading-normal z-[100] h-auto">
             <h1 className="text-center font-['LoResBold',sans-serif] text-[28px] pb-[15px]">
               <Trans>Security Camera</Trans>

@@ -6,10 +6,7 @@ export function useAnimationManager() {
 
   useEffect(() => {
     mgrRef.current = new AnimationManager();
-    try{
-      mgrRef.current?.cancelAll()
-    }catch (e){
-      console.log(e)}
+    mgrRef.current?.cancelAll()
     return;
   }, []);
 

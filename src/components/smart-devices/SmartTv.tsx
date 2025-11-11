@@ -144,8 +144,6 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
     smartTvDevice.getStatBlock().setValue("Smart TV Comfort Score", totalComfortScore);
     smartTvDevice.getStatBlock().setValue("Smart TV Privacy Score", totalPrivacyScore);
     smartTvDevice.getStatBlock().stopTimer();
-    console.log("Smart TV settings calculated!");
-    console.log(`Privacy Score: ${totalPrivacyScore}, Comfort Score: ${totalComfortScore}`);
   };
 
   const handleReconfigure = () => {
@@ -196,36 +194,37 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
   return (
 
           <div className="text-2xl text-white px-[30px] py-[12px] w-[800px]">
-            <h1 className="text-center text-3xl mb-4 font-['LoResBold',sans-serif] "><Trans>Smart TV Settings</Trans></h1>
+            <h1 className="text-center text-3xl mb-4 font-['LoResBold',sans-serif] "><Trans>Smart TV Settings</Trans>
+            </h1>
 
             <div className="text-xl px-[5px]">
               <p><Trans>Select which features you want to enable for your Smart TV:</Trans></p>
 
-            <div className="max-h-[400px] overflow-y-auto mb-5">
-              {options.map((option: SmartTvOption) => (
-                      <div key={option.id} className="mt-2.5 mb-3 p-3 border border-grey-400 rounded-md">
-                        <label className="flex items-center cursor-pointer">
-                          <input
-                                  type="checkbox"
-                                  checked={option.checked}
-                                  onChange={(e) => handleOptionChange(option.id, e.target.checked)}
-                                  className="mr-5 scale-[1.8] accent-[#37a820]"
-                          />
-                          <span>{option.label}</span>
-                        </label>
-                      </div>
-              ))}
-            </div>
+              <div className="max-h-[400px] overflow-y-auto mb-5">
+                {options.map((option: SmartTvOption) => (
+                        <div key={option.id} className="mt-2.5 mb-3 p-3 border border-grey-400 rounded-md">
+                          <label className="flex items-center cursor-pointer">
+                            <input
+                                    type="checkbox"
+                                    checked={option.checked}
+                                    onChange={(e) => handleOptionChange(option.id, e.target.checked)}
+                                    className="mr-5 scale-[1.8] accent-[#37a820]"
+                            />
+                            <span>{option.label}</span>
+                          </label>
+                        </div>
+                ))}
+              </div>
 
-            <button
-                    onClick={handleSubmit}
-                    className="px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
+              <button
+                      onClick={handleSubmit}
+                      className="px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
                               rounded-[30px] shadow-md transition-colors cursor-pointer text-white
                               mx-auto block w-full max-w-[30%] mb-2"
-            >
-              <Trans>Send answer</Trans>
-            </button>
-          </div>
+              >
+                <Trans>Send answer</Trans>
+              </button>
+            </div>
 
             {showWarning && (
                     <div className="absolute text-xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 rounded-lg
