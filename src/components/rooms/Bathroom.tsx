@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
-import {calculateCanvasSize} from "@/utils/movment.ts";
+import {calculateCanvasSize} from "@/utils/character/movment.ts";
 import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {Stage} from "@pixi/react";
@@ -40,6 +40,7 @@ export const Bathroom = () => {
                       collisionMap={collisionMap}
                       onMapChange={handleMapChange}
                       gameService={useGameService()}
+                      room={roomName}
               />
             </Stage>
           </>

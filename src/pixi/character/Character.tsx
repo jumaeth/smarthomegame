@@ -4,170 +4,149 @@ import {Container, Sprite, useTick} from "@pixi/react";
 import {ANIMATION_SPEED, MOVE_SPEED, TILE_SIZE} from "@/pixi/constants/world-settings";
 import {useCharacterControls} from "@/hooks/character/useCharacterControls";
 import {Direction, Position} from "@/types/movement";
-import {calculateNewTarget, checkCanMove, handleCharacterMovement} from "@/utils/movment";
+import {calculateNewTarget, checkCanMove, handleCharacterMovement} from "@/utils/character/movment";
 import {useCharacterAnimation} from "@/hooks/character/useCharacterAnimation";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {characterPositionStore} from "@/utils/characterPosition.ts";
-import {useMovementStore} from "@/utils/movementEnabled.ts";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
+import {characterPositionStore, useCharacterPosition} from "@/utils/character/characterPosition";
+import {useMovementStore} from "@/utils/character/movementEnabled";
 
 interface CharacterProps {
-    texture: Texture;
-    onMove: (pos: Position) => void;
-    collisionMap: number[];
-    spawnPosition: Position;
-    isPaused: boolean;
-    interactiveElements?: InteractivePixiElement[];
+  texture: Texture;
+  onMove: (pos: Position) => void;
+  collisionMap: number[];
+  isPaused: boolean;
+  interactiveElements?: InteractivePixiElement[];
 }
 
-export const Character = forwardRef(({
-                                       texture,
-                                       onMove,
-                                       collisionMap,
-                                       spawnPosition,
-                                       isPaused = false,
-                                       interactiveElements
-                                     }: CharacterProps, ref) => {
-  const position = useRef<Position>({...spawnPosition});
+export const Character = forwardRef((
+        {
+          texture,
+          onMove,
+          collisionMap,
+          isPaused = false,
+          interactiveElements,
+        }: CharacterProps,
+        ref
+) => {
+  const { pos } = useCharacterPosition();
+  const posRef = useRef<Position>(pos);
+  useEffect(() => { posRef.current = pos; }, [pos]);
+
   const targetPosition = useRef<Position | null>(null);
-  const currentDirection = useRef<Direction | null>(null);
+  const currentDirection = useRef<Direction>(characterPositionStore.getFacing());
+  const isMoving = useRef(false);
 
-    const {direction} = useCharacterControls();
+  const { direction } = useCharacterControls();
+  const { movementEnabled } = useMovementStore();
 
-    const isMoving = useRef(false);
-    const {sprite, updateSprite} = useCharacterAnimation({
-        texture,
-        frameHeight: 32,
-        frameWidth: 32,
-        totalFrames: 8,
-        animationSpeed: ANIMATION_SPEED,
-    })
-
-    const { movementEnabled } = useMovementStore();
-
-    const setNextTarget = useCallback((direction: Direction) => {
-        if (targetPosition.current) return
-        const {x, y} = position.current;
-        currentDirection.current = direction;
-        const newTarget = calculateNewTarget(x, y, direction);
-
-        if (checkCanMove(newTarget, collisionMap)) {
-            targetPosition.current = newTarget;
-        }
-    }, [collisionMap])
-
-    const teleportTo = useCallback((newPosition: Position) => {
-        if (newPosition) {
-            position.current = newPosition;
-            targetPosition.current = null;
-            isMoving.current = false;
-            characterPositionStore.teleport(newPosition);
-        }
-    }, []);
+  const { sprite, updateSprite } = useCharacterAnimation({
+    texture,
+    frameHeight: 32,
+    frameWidth: 32,
+    totalFrames: 8,
+    animationSpeed: ANIMATION_SPEED,
+  });
 
   useEffect(() => {
-    const off = characterPositionStore.onTeleport((next) => {
-      position.current = next;
-      targetPosition.current = null;
-      isMoving.current = false;
-      currentDirection.current = 'DOWN' as Direction;
-    });
-    return () => { off(); };
+    updateSprite(currentDirection.current, false);
   }, []);
 
-    useEffect(() => {
-        teleportTo(spawnPosition)
-    }, [spawnPosition, teleportTo]);
+  const setNextTarget = useCallback((dir: Direction) => {
+    if (targetPosition.current) return;
+    const { x, y } = posRef.current;
+    currentDirection.current = dir;
+    characterPositionStore.setFacing(dir);
+    const newTarget = calculateNewTarget(x, y, dir);
+    if (checkCanMove(newTarget, collisionMap)) targetPosition.current = newTarget;
+  }, [collisionMap]);
 
+  useEffect(() => {
+    const off = characterPositionStore.onTeleport(({ dir }) => {
+      targetPosition.current = null;
+      isMoving.current = false;
+      if (dir) characterPositionStore.setFacing(dir);
+      currentDirection.current = dir ?? characterPositionStore.getFacing();
+      updateSprite(currentDirection.current, false);
+    });
+    return () => { off(); };
+  }, [updateSprite]);
 
-    function checkForInteraction() {
-        if (!position.current) {
-            return;
-        }
+  const checkForProximity = () => {
+    const { x, y } = posRef.current;
+    const targetX = x / TILE_SIZE;
+    const targetY = y / TILE_SIZE;
 
-        const interactiveElement = checkForProximity();
+    const interactiveElement = interactiveElements?.find(element => {
+      const elementLeft = element.x - 1;
+      const elementRight = element.x + element.width;
+      const elementTop = element.y - 1;
+      const elementBottom = element.y + element.height;
+      return (
+              targetX >= elementLeft &&
+              targetX <= elementRight &&
+              targetY >= elementTop &&
+              targetY <= elementBottom
+      );
+    });
 
-        if (interactiveElement) {
-            interactiveElement.interaction();
-        }
-    }
+    return interactiveElement ?? null;
+  };
 
-    const checkForProximity = () => {
-      if (!position.current) {
-        return null;
+  const checkForInteraction = () => {
+    const interactiveElement = checkForProximity();
+    if (interactiveElement) interactiveElement.interaction();
+  };
+
+  useImperativeHandle(ref, () => ({
+    moveUp: () => setNextTarget("UP"),
+    moveDown: () => setNextTarget("DOWN"),
+    moveLeft: () => setNextTarget("LEFT"),
+    moveRight: () => setNextTarget("RIGHT"),
+    interact: () => checkForInteraction(),
+  }));
+
+  useTick((delta) => {
+    const pauseRequested = isPaused || !movementEnabled;
+
+    if (!pauseRequested) {
+      if (direction && direction === "INTERACT") {
+        checkForInteraction();
+      } else if (direction) {
+        setNextTarget(direction);
       }
-
-      const targetX = position.current.x / TILE_SIZE;
-      const targetY = position.current.y / TILE_SIZE;
-
-      const interactiveElement = interactiveElements?.find(element => {
-        const elementLeft = element.x-1;
-        const elementRight = element.x + (element.width ) ;
-        const elementTop = element.y-1;
-        const elementBottom = element.y + (element.height) ;
-        return (
-                targetX >= elementLeft &&
-                targetX <= elementRight &&
-                targetY >= elementTop &&
-                targetY <= elementBottom
-        );
-      });
-
-      if (interactiveElement)return interactiveElement;
-      else return null;
     }
 
-    useImperativeHandle(ref, () => ({
-      moveUp: () => setNextTarget("UP"),
-      moveDown: () => setNextTarget("DOWN"),
-      moveLeft: () => setNextTarget("LEFT"),
-      moveRight: () => setNextTarget("RIGHT"),
-      interact: () => checkForInteraction(),
-    }));
+    if (targetPosition.current) {
+      const {
+        position: newPosition,
+        completed,
+      } = handleCharacterMovement(posRef.current, targetPosition.current, MOVE_SPEED, delta);
 
-    useTick((delta) => {
-        const pauseRequested = isPaused || !movementEnabled;
+      characterPositionStore.set(newPosition);
+      isMoving.current = true;
 
-        if(!pauseRequested){
-          if (direction && direction == 'INTERACT') {
-            checkForInteraction()
-          } else if (direction) {
-            setNextTarget(direction);
-          }
+      if (completed) {
+        onMove(newPosition);
+        targetPosition.current = null;
+        isMoving.current = false;
+      }
+    }
 
-        }
-          // handle Movement
-        if (targetPosition.current) {
-          const {
-            position: newPosition,
-            completed
-          } = handleCharacterMovement(position.current, targetPosition.current, MOVE_SPEED, delta);
+    const face = currentDirection.current ?? characterPositionStore.getFacing();
+    updateSprite(face, isMoving.current);
+  });
 
-          position.current = newPosition;
-          isMoving.current = true;
-          characterPositionStore.set(newPosition);
-
-          if (completed) {
-            onMove(position.current)
-            targetPosition.current = null;
-            isMoving.current = false;
-          }
-        }
-
-
-        updateSprite(currentDirection.current!, isMoving.current);
-    })
-
-    return (
-        <>
-            <Container>
-                {sprite && (<Sprite
-                    texture={sprite.texture}
-                    x={position.current.x}
-                    y={position.current.y}
-                    scale={0.5}
-                    anchor={[0, 0]}
-                />)}
-            </Container>
-        </>
-    );
-})
+  return (
+          <Container>
+            {sprite && (
+                    <Sprite
+                            texture={sprite.texture}
+                            x={pos.x}
+                            y={pos.y}
+                            scale={0.5}
+                            anchor={[0, 0]}
+                    />
+            )}
+          </Container>
+  );
+});

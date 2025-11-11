@@ -31,6 +31,11 @@ export class Room {
     this.isCompleted = true;
   }
 
+
+  unlockRoom(): void{
+    this.isLocked = false;
+  }
+
   toggleIsLocked(): void {
     this.isLocked = !this.isLocked;
   }

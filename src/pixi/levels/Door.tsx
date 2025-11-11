@@ -6,6 +6,7 @@ import {DoorState} from "@/types/door";
 interface LevelProps {
   textures: Texture[] | undefined;
   state: DoorState;
+  doorOfRoom: number;
 }
 
 const stateToIndex = {
@@ -14,10 +15,11 @@ const stateToIndex = {
   [DoorState.Open]: 2,
 };
 
-export const Door = ({textures, state}: LevelProps) => {
+export const Door = ({textures, state, doorOfRoom}: LevelProps) => {
   if (!textures) return;
 
-  const texture = textures[stateToIndex[state]];
+  const index = stateToIndex[state]+((doorOfRoom)*3);
+  const texture = textures[index];
 
   return (
           <>

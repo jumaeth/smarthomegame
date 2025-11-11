@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
-import {calculateCanvasSize} from "@/utils/movment.ts";
+import {calculateCanvasSize} from "@/utils/character/movment.ts";
 import {MapKey} from "@/types/maps.ts";
 import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {Stage} from "@pixi/react";
@@ -16,9 +16,9 @@ import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnab
 import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
 
 export const Kitchen = () => {
-  const roomName = RoomNames.KITCHEN;
-  const gameService = useGameService();
-  const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
+    const gameService = useGameService();
+    const roomName = RoomNames.KITCHEN
+    const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
 
   const [activeDevice, setActiveDevice] = useState<string | null>(null);
   const sdEnabled = useSmarDevicesEnabledState();
@@ -53,7 +53,7 @@ export const Kitchen = () => {
 
   const interactiveElements = [
     new InteractivePixiElement(14, 4, 1, 1, "SmartHomeHub", (): void => handleDeviceOpen("SmartHomeHub")),
-    new InteractivePixiElement(1, 2, 1, 1, "SecurityCamera", (): void => handleDeviceOpen("SecurityCamera")),
+    new InteractivePixiElement(1, 3, 1, 1, "SecurityCamera", (): void => handleDeviceOpen("SecurityCamera")),
     new InteractivePixiElement(9, 3, 1, 1, "SmartKitchen", (): void => handleDeviceOpen("SmartKitchen")),
   ];
 
@@ -102,6 +102,7 @@ export const Kitchen = () => {
                       interactiveElements={interactiveElements}
                       isPaused={paused}
                       gameService={gameService}
+                      room={roomName}
               />
             </Stage>
           </>

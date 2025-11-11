@@ -98,12 +98,12 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
           : 0;
 
   return (
-          <div className="flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-2">
             <div className="grid grid-cols-3 gap-4">
               {imageGrid.map((imageIndex, gridIndex) => (
                       <div
                               key={gridIndex}
-                              className={`w-30 h-30 flex items-center justify-center rounded-lg overflow-hidden ${
+                              className={`w-40 h-40 flex items-center justify-center rounded-lg overflow-hidden ${
                                       imageIndex >= 0 && !isSubmitted
                                               ? "cursor-pointer hover:opacity-80 border-2 border-gray-300"
                                               : "bg-gray-100"
@@ -125,7 +125,7 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
 
             <div className="flex items-center gap-2">
               {feedbackMsg && (
-                      <div className={`flex space-x-2 ${fadeOut ? 'transition-opacity duration-1000 opacity-0' : 'opacity-100'}`}>
+                      <div className={`flex space-x-2 ${fadeOut ? 'transition-opacity duration-2000 opacity-0' : 'opacity-100'}`}>
                         <p className={`mt-1 text-m ${feedbackMsgColor === "green" ? "text-green-600" : feedbackMsgColor === "red" ? "text-red-600" : "text-black"}`}>
                           {feedbackMsg}
                         </p>
@@ -133,7 +133,7 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
               )}
 
               {inRange && feedbackMsg && (
-                      <div className={`flex space-x-2 ${fadeOut ? 'transition-opacity duration-1000 opacity-0' : 'opacity-100'}`}>
+                      <div className={`flex space-x-2 ${fadeOut ? 'transition-opacity duration-2000 opacity-0' : 'opacity-100'}`}>
                         <span>{formatWithSign.format(privacyDelta)}</span>
                         <img src={privacyIcon} className="h-6" alt="privacy-icon"/>
                         <span>{formatWithSign.format(comfortDelta)}</span>
@@ -143,12 +143,14 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
             </div>
 
             {!isSubmitted ? (
-                    <Button onClick={submitAnswer}>
+                    <Button onClick={submitAnswer} className="px-10 py-[10px] text-white bg-blue-600 text-lg font-semibold hover:bg-blue-700
+                      rounded-xl shadow-md transition-colors cursor-pointer">
                       <Trans>Send answer</Trans>
                     </Button>
             ) : (
-                    <Button onClick={continueGame}>
-                      <Trans>Continue game</Trans>
+                    <Button onClick={continueGame} className="px-10 py-[10px] text-white bg-gray-600 text-lg font-semibold hover:bg-gray-700
+                      rounded-xl shadow-md transition-colors cursor-pointer">
+                      <Trans>Close</Trans>
                     </Button>
             )}
           </div>
