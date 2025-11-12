@@ -1,16 +1,11 @@
 import {useCallback, useEffect, useState} from "react";
-import {useGameService} from "@/hooks/gameService/useGameService";
-import {calculateCanvasSize} from "@/utils/character/movment";
-import {MapKey} from "@/types/maps";
-import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
+import {calculateCanvasSize} from "@/utils/character/movment.ts";
+import {MapKey} from "@/types/maps.ts";
+import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {Stage} from "@pixi/react";
-import {MainContainer} from "@/pixi/container/MainContainer";
-import {RoomNames} from "@/objects/RoomNames";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
-import {InteractiveType} from "@/types/InteractiveType";
-import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState";
-import {SmartDevice} from "@/objects/SmartDevice";
-import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper";
+import {MainContainer} from "@/pixi/container/MainContainer.tsx";
+import {RoomNames} from "@/objects/RoomNames.ts";
 
 export const Bathroom = () => {
   const gameService = useGameService();
@@ -19,6 +14,29 @@ export const Bathroom = () => {
   const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
   const [activeDevice, setActiveDevice] = useState<string | null>(null);
   const sdEnabled = useSmarDevicesEnabledState();
+  const paused = usePauseState();
+
+  const smartDeviceCallback = (isCompleted: boolean): void => {
+    if (!activeDevice) return;
+    const device = smartDevices.find((d) => d.name === activeDevice);
+    if (!device) return;
+    if (isCompleted) gameService.completeDevice(device.name);
+    gameService.resumeGame();
+    setActiveDevice(null);
+    checkForRoomCompletion();
+  };
+
+  const handleDeviceOpen = (deviceName: string): void => {
+    setActiveDevice(deviceName);
+    gameService.pauseGame();
+  };
+
+  const checkForRoomCompletion = () => {
+    const allCompleted = smartDevices.every(device => device.getIsCompleted());
+    if (allCompleted) {
+      gameService.completeRoom(roomName);
+    }
+  };
 
   function onModalClose() {
     setActiveDevice(null);
@@ -27,7 +45,7 @@ export const Bathroom = () => {
 
   const interactiveElements = [
     new InteractivePixiElement(11, 2, 2, 2, "SmartMirror", (): void => {}),
-    new InteractivePixiElement(1, 3, 2, 1, "SmartShower", (): void => {}),
+    new InteractivePixiElement(1, 3, 2, 1, "SmartShower", (): void => handleDeviceOpen("SmartShower")),
     new InteractivePixiElement(14.975, 6.5, 1, 1, "BathroomChick", () => {}, InteractiveType.DUMMY),
     new InteractivePixiElement(1.15, 6.5, 1.6, 1, "BathroomDrawer", () => {}, InteractiveType.DUMMY),
   ];
@@ -51,9 +69,8 @@ export const Bathroom = () => {
   }, [updateCanvasSize, collisionMap])
 
   const deviceComponents: Record<string, JSX.Element> = {
-    //SmartShower: <SmartShower completeDevice={() => smartDeviceCallback(true)}/>,
+    SmartShower: <SmartShower completeDevice={() => smartDeviceCallback(true)}/>,
   };
-
 
   return (
           <>
@@ -66,15 +83,15 @@ export const Bathroom = () => {
                       activeDevice={smartDevices.find((d) => d.name === activeDevice) ?? smartDevices[0] ?? new SmartDevice("SmartShower", "")}
               />
             </div>
-
             <Stage width={canvasSize.width} height={canvasSize.height}>
               <MainContainer
                       canvasSize={canvasSize}
                       map={roomName}
                       collisionMap={collisionMap}
                       onMapChange={handleMapChange}
-                      gameService={useGameService()}
                       interactiveElements={interactiveElements}
+                      isPaused={paused}
+                      gameService={gameService}
                       room={roomName}
               />
             </Stage>
