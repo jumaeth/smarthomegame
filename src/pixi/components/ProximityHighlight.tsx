@@ -5,7 +5,7 @@ import {Container} from "@pixi/react";
 import {useCharacterPosition} from "@/hooks/character/useCharacterPosition.ts";
 import {getNearbyInteractiveElement} from "@/utils/character/proximity.ts";
 import {pixelToTile} from "@/utils/coords";
-import {getHighlightPosition2} from "@/utils/highlightPositions2.tsx";
+import {getHighlightPosition} from "@/utils/highlightPositions.tsx";
 
 interface ProximityHighlightProps {
     interactiveElements?: InteractivePixiElement[];
@@ -50,7 +50,7 @@ export const ProximityHighlight = ({
   return (
           <>
             <Container ref={graphicRef}/>
-            { getPosition().x != 0 && interactive && getHighlightPosition2(interactive, getPosition())}
+            { getPosition().x != 0 && interactive && getHighlightPosition(interactive, getPosition())}
           </>
   );
 }

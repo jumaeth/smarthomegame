@@ -1,16 +1,16 @@
 import {useCallback, useEffect, useState} from "react";
-import {useGameService} from "@/hooks/gameService/useGameService.tsx";
-import {calculateCanvasSize} from "@/utils/character/movment.ts";
-import {MapKey} from "@/types/maps.ts";
-import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
+import {useGameService} from "@/hooks/gameService/useGameService";
+import {calculateCanvasSize} from "@/utils/character/movment";
+import {MapKey} from "@/types/maps";
+import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps";
 import {Stage} from "@pixi/react";
-import {MainContainer} from "@/pixi/container/MainContainer.tsx";
-import {RoomNames} from "@/objects/RoomNames.ts";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {InteractiveType} from "@/types/InteractiveType.ts";
-import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState.ts";
-import {SmartDevice} from "@/objects/SmartDevice.ts";
-import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
+import {MainContainer} from "@/pixi/container/MainContainer";
+import {RoomNames} from "@/objects/RoomNames";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
+import {InteractiveType} from "@/types/InteractiveType";
+import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState";
+import {SmartDevice} from "@/objects/SmartDevice";
+import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper";
 
 export const Bathroom = () => {
   const gameService = useGameService();

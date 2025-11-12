@@ -16,7 +16,7 @@ import {Container, Graphics, Sprite} from "@pixi/react";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 
-export function getHighlightPosition2(device: InteractivePixiElement, position: {x: number, y: number}){
+export function getHighlightPosition(device: InteractivePixiElement, position: {x: number, y: number}){
 
   switch (device.name){
     case "SmartTv":

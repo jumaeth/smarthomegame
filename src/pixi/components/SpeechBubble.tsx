@@ -1,8 +1,8 @@
 import {Container, Graphics, Text} from "@pixi/react";
 import * as PIXI from "pixi.js";
-import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
+import {TILE_SIZE} from "@/pixi/constants/world-settings";
 import {t} from "@lingui/core/macro";
-import {getSpeechBubbleProps} from "@/utils/speechBubbleProps.ts";
+import {getSpeechBubbleProps} from "@/utils/speechBubbleProps";
 
 export type SpeechBubbleProps = {
   x: number,
