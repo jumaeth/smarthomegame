@@ -72,7 +72,7 @@ export class GameService {
       new SmartDevice("SmartMirror", t`You need to configure your smart mirror by choosing a provider for each app. Compare the permissions, features, data retention, and security details of each provider. Expand each provider to see all the details, then make your choice. Remember to explore all providers for each app before making your selection.`),
     ]);
 
-    return [livingRoom, kitchen, bathroom];
+    return [hallway, livingRoom, kitchen, bathroom];
   }
 
   getAllRooms(): Room[] {

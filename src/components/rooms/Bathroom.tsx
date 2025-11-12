@@ -13,6 +13,7 @@ import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {InteractiveType} from "@/types/InteractiveType.ts";
 import {SmartShower} from "@/components/smart-devices/SmartShower.tsx";
 import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
+import SmartMirror from "@/components/smart-devices/SmartMirror.tsx";
 
 export const Bathroom = () => {
   const gameService = useGameService();
@@ -51,7 +52,7 @@ export const Bathroom = () => {
   }
 
   const interactiveElements = [
-    new InteractivePixiElement(11, 2, 2, 2, "SmartMirror", (): void => {}),
+    new InteractivePixiElement(11, 2, 2, 2, "SmartMirror", (): void => handleDeviceOpen("SmartMirror")),
     new InteractivePixiElement(1, 3, 2, 1, "SmartShower", (): void => handleDeviceOpen("SmartShower")),
     new InteractivePixiElement(14.975, 6.5, 1, 1, "BathroomChick", () => {}, InteractiveType.DUMMY),
     new InteractivePixiElement(1.15, 6.5, 1.6, 1, "BathroomDrawer", () => {}, InteractiveType.DUMMY),
@@ -77,6 +78,7 @@ export const Bathroom = () => {
 
   const deviceComponents: Record<string, JSX.Element> = {
     SmartShower: <SmartShower completeDevice={() => smartDeviceCallback(true)}/>,
+    SmartMirror: <SmartMirror completeDevice={() => smartDeviceCallback(true)}/>,
   };
 
   return (
