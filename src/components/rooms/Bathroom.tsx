@@ -6,6 +6,13 @@ import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps
 import {Stage} from "@pixi/react";
 import {MainContainer} from "@/pixi/container/MainContainer.tsx";
 import {RoomNames} from "@/objects/RoomNames.ts";
+import {SmartDevice} from "@/objects/SmartDevice.ts";
+import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState.ts";
+import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
+import {InteractiveType} from "@/types/InteractiveType.ts";
+import {SmartShower} from "@/components/smart-devices/SmartShower.tsx";
+import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
 
 export const Bathroom = () => {
   const gameService = useGameService();
