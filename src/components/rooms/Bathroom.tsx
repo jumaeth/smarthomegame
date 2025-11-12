@@ -1,17 +1,17 @@
 import {useCallback, useEffect, useState} from "react";
-import {useGameService} from "@/hooks/gameService/useGameService.tsx";
-import {SmartDevice} from "@/objects/SmartDevice.ts";
-import {SmartShower} from "../smart-devices/SmartShower.tsx";
-import {calculateCanvasSize} from "@/utils/character/movment.ts";
-import {MapKey} from "@/types/maps.ts";
-import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
+import {useGameService} from "@/hooks/gameService/useGameService";
+import {SmartDevice} from "@/objects/SmartDevice";
+import {SmartShower} from "../smart-devices/SmartShower";
+import {calculateCanvasSize} from "@/utils/character/movment";
+import {MapKey} from "@/types/maps";
+import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps";
 import {Stage} from "@pixi/react";
-import {MainContainer} from "@/pixi/container/MainContainer.tsx";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
-import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState.ts";
-import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
-import {RoomNames} from "@/objects/RoomNames.ts";
+import {MainContainer} from "@/pixi/container/MainContainer";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
+import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper";
+import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState";
+import {usePauseState} from "@/hooks/gameService/usePauseState";
+import {RoomNames} from "@/objects/RoomNames";
 
 export const Bathroom = () => {
   const gameService = useGameService();

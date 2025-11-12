@@ -16,7 +16,6 @@ import hubSilhouette from "@/assets/progressBar/progressBarIcons/silhouettes/hub
 import showerIcon from "@/assets/progressBar/progressBarIcons/icons/shower.png";
 import showerSilhouette from "@/assets/progressBar/progressBarIcons/silhouettes/showerSilhouette.png";
 
-
 type device = {
   name: string;
   icon: string;

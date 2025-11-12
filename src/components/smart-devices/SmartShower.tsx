@@ -1,49 +1,14 @@
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
 import React, {useState, useEffect, useRef} from 'react';
-import Button from "@/components/general-ui/Button.tsx";
-import {useGameService} from "@/hooks/gameService/useGameService.tsx";
-import {SmartDevice} from "@/objects/SmartDevice.ts";
+import Button from "@/components/general-ui/Button";
+import {useGameService} from "@/hooks/gameService/useGameService";
+import {SmartDevice} from "@/objects/SmartDevice";
 import sceneImg from "@/assets/smart-shower/scene.png";
 import checkImg from "@/assets/smart-shower/check.png";
 
-interface SmartShowerProps {
-  completeDevice: () => void;
-}
-
-interface ShowerObject {
-  id: string;
-  name: string;
-  question: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  privacyScore: number;
-  comfortScore: number;
-  isMessageOnly?: boolean;
-}
-
-export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
-  const gameService = useGameService();
-  const smartDevice: SmartDevice | undefined = gameService.getDeviceByName("SmartShower");
-  
-  const [frame, setFrame] = useState(0);
-  const [selectedObject, setSelectedObject] = useState<ShowerObject | null>(null);
-  const [completedObjects, setCompletedObjects] = useState<Set<string>>(new Set());
-  const totalPoints = useRef({ privacy: 0, comfort: 0 });
-  const pointsApplied = useRef(false);
-  const shouldCompleteOnUnmount = useRef(false);
-
-  useEffect(() => {
-    if (smartDevice) {
-      smartDevice.getStatBlock().startTimer();
-    }
-  }, [smartDevice]);
-
-  const isGameModalOpen = frame === 1;
-
-  const showerObjects: ShowerObject[] = [
+function getShowerObjects(): ShowerObject[] {
+  return [
     {
       id: "showerhead",
       name: t`Shower Head`,
@@ -113,6 +78,45 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
       isMessageOnly: true
     }
   ];
+}
+
+interface SmartShowerProps {
+  completeDevice: () => void;
+}
+
+interface ShowerObject {
+  id: string;
+  name: string;
+  question: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  privacyScore: number;
+  comfortScore: number;
+  isMessageOnly?: boolean;
+}
+
+export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
+  const gameService = useGameService();
+  const smartDevice: SmartDevice | undefined = gameService.getDeviceByName("SmartShower");
+
+  const [frame, setFrame] = useState(0);
+  const [selectedObject, setSelectedObject] = useState<ShowerObject | null>(null);
+  const [completedObjects, setCompletedObjects] = useState<Set<string>>(new Set());
+  const totalPoints = useRef({ privacy: 0, comfort: 0 });
+  const pointsApplied = useRef(false);
+  const shouldCompleteOnUnmount = useRef(false);
+
+  const showerObjects = getShowerObjects();
+
+  useEffect(() => {
+    if (smartDevice) {
+      smartDevice.getStatBlock().startTimer();
+    }
+  }, [smartDevice]);
+
+  const isGameModalOpen = frame === 1;
 
   const handleObjectClick = (object: ShowerObject) => {
     if (completedObjects.has(object.id)) return;
@@ -122,7 +126,7 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
   const handleAnswer = (granted: boolean) => {
     if (!selectedObject) return;
 
-    if (selectedObject.isMessageOnly) {
+    if (selectedObject?.isMessageOnly) {
       setCompletedObjects(prev => new Set([...prev, selectedObject.id]));
       setSelectedObject(null);
       return;
@@ -172,7 +176,7 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
   const baseWidth = Math.max(...showerObjects.map(obj => obj.x + obj.width)) + 50;
   const baseHeight = Math.max(...showerObjects.map(obj => obj.y + obj.height)) + 50;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isGameModalOpen) {
       document.body.classList.add('active-modal');
     } else {
@@ -213,7 +217,7 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
             )}
 
             {isGameModalOpen && (
-                    <div className="h-150 text-white h-full px-[20px] py-[20px] flex flex-col">
+                    <div className="h-150 text-white px-[20px] py-[20px] flex flex-col">
 
                       <h1 className="text-3xl text-center font-['LoResBold',sans-serif] mb-4">
                         <Trans>Smart Shower Configuration</Trans>
@@ -266,7 +270,7 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
                           return (
                             <div className="bg-white rounded-xl p-6 w-full max-w-2xl text-center mx-auto">
                               <h1 className="text-2xl sm:text-3xl md:text-4xl mb-4 font-['LoResBold',sans-serif] text-gray-800">
-                                <Trans>🎉 All Objects Processed! 🎉</Trans>
+                                🎉 <Trans>All Objects Processed!</Trans> 🎉
                               </h1>
                               <p className="text-base sm:text-xl mb-4 text-gray-700">
                                 {isSustainabilityFocused ? (
@@ -281,9 +285,9 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
 
                         {!allCompleted && (
                           <div className="relative w-full h-full flex justify-center items-center overflow-auto">
-                            <div 
+                            <div
                               className="relative rounded-lg overflow-visible"
-                              style={{ 
+                              style={{
                                 width: `${baseWidth}px`,
                                 height: `${baseHeight}px`,
                                 position: 'relative',
@@ -335,7 +339,6 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
                           </div>
                         )}
                       </div>
-
                     </div>
             )}
           </div>
