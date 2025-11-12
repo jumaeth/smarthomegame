@@ -1,23 +1,23 @@
 import {useCallback, useEffect, useState} from "react";
-import {useGameService} from "@/hooks/gameService/useGameService.tsx";
-import {calculateCanvasSize} from "@/utils/character/movment.ts";
-import {MapKey} from "@/types/maps.ts";
-import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
+import {useGameService} from "@/hooks/gameService/useGameService";
+import {SmartDevice} from "@/objects/SmartDevice";
+import {SmartShower} from "../smart-devices/SmartShower";
+import {calculateCanvasSize} from "@/utils/character/movment";
+import {MapKey} from "@/types/maps";
+import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps";
 import {Stage} from "@pixi/react";
-import {MainContainer} from "@/pixi/container/MainContainer.tsx";
-import {RoomNames} from "@/objects/RoomNames.ts";
-import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
-import {SmartDevice} from "@/objects/SmartDevice.ts";
-import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState.ts";
-import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {SmartMirror} from "@/components/smart-devices/SmartMirror.tsx";
+import {MainContainer} from "@/pixi/container/MainContainer";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
+import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper";
+import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState";
+import {usePauseState} from "@/hooks/gameService/usePauseState";
+import {RoomNames} from "@/objects/RoomNames";
 
 export const Bathroom = () => {
-  const roomName = RoomNames.BATHROOM;
   const gameService = useGameService();
+  const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
+  const roomName = RoomNames.BATHROOM;
   const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
-
   const [activeDevice, setActiveDevice] = useState<string | null>(null);
   const sdEnabled = useSmarDevicesEnabledState();
   const paused = usePauseState();
@@ -37,43 +37,42 @@ export const Bathroom = () => {
     gameService.pauseGame();
   };
 
-  const checkForRoomCompletion = (): void => {
-    const allCompleted = smartDevices.every((device) => device.getIsCompleted());
+  const checkForRoomCompletion = () => {
+    const allCompleted = smartDevices.every(device => device.getIsCompleted());
     if (allCompleted) {
       gameService.completeRoom(roomName);
     }
   };
 
-  function onModalClose(): void {
+  function onModalClose() {
     setActiveDevice(null);
     gameService.resumeGame();
   }
 
   const interactiveElements = [
-    new InteractivePixiElement(11, 2, 2, 2, "SmartMirror", (): void => handleDeviceOpen("SmartMirror")),
+    new InteractivePixiElement(1, 3, 2, 1, "SmartShower", (): void => handleDeviceOpen("SmartShower")),
   ];
 
-  const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
   const collisionMap = LEVEL_COLLISION_MAPS[roomName];
 
   const updateCanvasSize = useCallback(() => {
     setCanvasSize(calculateCanvasSize());
-  }, []);
+  }, [])
 
-  function handleMapChange(newMap: MapKey): boolean {
+  const handleMapChange = (newMap: MapKey) => {
     console.log("Map changed to:", newMap);
     return gameService.leaveRoom(roomName);
-  }
+  };
 
   useEffect(() => {
     window.addEventListener("resize", updateCanvasSize);
     return () => {
       window.removeEventListener("resize", updateCanvasSize);
-    };
-  }, [updateCanvasSize, collisionMap]);
+    }
+  }, [updateCanvasSize, collisionMap])
 
   const deviceComponents: Record<string, JSX.Element> = {
-    SmartMirror: <SmartMirror completeDevice={() => smartDeviceCallback(true)}/> ,
+    SmartShower: <SmartShower completeDevice={() => smartDeviceCallback(true)}/>,
   };
 
   return (
@@ -84,7 +83,7 @@ export const Bathroom = () => {
                       content={activeDevice ? deviceComponents[activeDevice] : null}
                       onClose={onModalClose}
                       showBg={sdEnabled}
-                      activeDevice={smartDevices.find((d) => d.name === activeDevice) ?? smartDevices[0]}
+                      activeDevice={smartDevices.find((d) => d.name === activeDevice) ?? smartDevices[0] ?? new SmartDevice("SmartShower", "")}
               />
             </div>
             <Stage width={canvasSize.width} height={canvasSize.height}>
