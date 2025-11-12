@@ -30,6 +30,7 @@ import {DoorBlocker} from "@/pixi/components/DoorBlocker.tsx";
 import {DoorFrame} from "@/pixi/levels/DoorFrame.tsx";
 import {getTexture} from "@/components/character/CharacterSelector.tsx";
 import {SpeechBubble, SpeechBubbleProps} from "@/pixi/components/SpeechBubble.tsx";
+import {InteractiveType} from "@/types/InteractiveType.ts";
 
 interface MainContainerProps {
     canvasSize: {
@@ -72,8 +73,13 @@ export const MainContainer = ({
     doorFrameFrontTexture, doorFrameBackTexture } = useLevelTextures(map);
   const { tile: characterTile } = useCharacterPosition();
   const { enabled: tutorialActive, close: closeTutorial } = useTutorialActive();
-  const [blockedDoorTo, setBlockedDoorTo] = useState<RoomNames | null>(null);
+
+  /**
+   * reference to control proximity highlights
+   */
+  const proximityRef = useRef<{ getNearbyInteractive: () => InteractivePixiElement | null } | null>(null);
   const [dummy, setDummy] = useState<SpeechBubbleProps | null>(null);
+  const [blockedDoorTo, setBlockedDoorTo] = useState<RoomNames | null>(null);
 
   useEffect(() => { setShouldSnapCamera(true); setCameraSettled(false); }, [map]);
 
@@ -136,7 +142,6 @@ export const MainContainer = ({
       setPendingTransition({ to: transition.to, spawn: nextSpawn, face: face });
       setInTransition(true);
       setShouldSnapCamera(true);
-
   };
 
   const showDummy = (p: SpeechBubbleProps) => {
@@ -179,6 +184,18 @@ export const MainContainer = ({
                     />
             ));
 
+  const handleInteraction = () => {
+    const nearby = proximityRef.current?.getNearbyInteractive();
+    console.log(nearby)
+    if (!nearby) return;
+
+    if (nearby.type === InteractiveType.SMART_DEVICE) {
+      nearby.interaction();
+    } else if (nearby.type === InteractiveType.DUMMY) {
+      showDummy({ x: nearby.x, y: nearby.y, element: nearby.name });
+    }
+  };
+
   const characterRef = useRef<{
     moveUp: () => void;
     moveDown: () => void;
@@ -219,15 +236,17 @@ export const MainContainer = ({
                           <Level texture={levelTexture} />
                           <DoorFloor room={room} map={map} gameService={gameService} textures={doorFloorTexture} />
                           {doorFrame(true)}
-                          <ProximityHighlight interactiveElements={interactiveElements} windowWidth={canvasSize.width} windowHeight={canvasSize.height} />
+                          <ProximityHighlight
+                                  ref={proximityRef}
+                                  interactiveElements={interactiveElements}
+                          />
                           <Character
                                   ref={characterRef}
                                   texture={characterTexture}
                                   onMove={handleCharacterMove}
                                   collisionMap={collisionMap}
                                   isPaused={isPaused as boolean}
-                                  interactiveElements={interactiveElements}
-                                  onShowDummy={showDummy}
+                                  onInteractCheck={handleInteraction}
                           />
                           <LevelOverlay texture={overlayTexture} />
                           {doorFrame(false)}

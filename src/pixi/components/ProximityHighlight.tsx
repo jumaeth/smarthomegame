@@ -1,4 +1,4 @@
-import {PropsWithChildren, useEffect, useRef, useState} from "react";
+import {forwardRef, PropsWithChildren, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {Container as PixiContainer} from "pixi.js"
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
 import {Container} from "@pixi/react";
@@ -8,18 +8,21 @@ import {pixelToTile} from "@/utils/coords";
 import {getHighlightPosition} from "@/utils/highlightPositions.tsx";
 
 interface ProximityHighlightProps {
-    interactiveElements?: InteractivePixiElement[];
-    windowWidth: number;
-    windowHeight: number;
+  interactiveElements?: InteractivePixiElement[];
 }
 
-export const ProximityHighlight = ({
-                                     interactiveElements,
-                                   }: PropsWithChildren<ProximityHighlightProps>) => {
+
+export const ProximityHighlight = forwardRef(({
+                                                interactiveElements,
+                                              }: PropsWithChildren<ProximityHighlightProps>, ref) => {
   const pos = useCharacterPosition();
   const graphicRef = useRef<PixiContainer | null>(null);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
   const [interactive, setInteractive] = useState<InteractivePixiElement | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    getNearbyInteractive: () => interactive,
+  }));
 
   useEffect(() => {
     if (!pos) return;
@@ -37,20 +40,23 @@ export const ProximityHighlight = ({
 
     const playerTile = pixelToTile(pos.x, pos.y);
     const interactive = getNearbyInteractiveElement(playerTile, interactiveElements);
-
-    if (interactive) {
-      setInteractive(interactive)
-    }else{
-      setInteractive(null)
+    console.log(interactive)
+    if (!interactive) {
+      setInteractive(null);
+      return;
     }
+
+    setInteractive(interactive);
   }, [pos, interactiveElements]);
 
-  const getPosition = () => {return interactive ? {x: interactive.x, y: interactive.y} : {x: 0, y: 0}}
+  const getPosition = () => {
+    return interactive ? {x: interactive.x, y: interactive.y} : {x: 0, y: 0}
+  }
 
   return (
           <>
             <Container ref={graphicRef}/>
-            { getPosition().x != 0 && interactive && getHighlightPosition(interactive, getPosition())}
+            {getPosition().x != 0 && interactive && getHighlightPosition(interactive, getPosition())}
           </>
   );
-}
+})
