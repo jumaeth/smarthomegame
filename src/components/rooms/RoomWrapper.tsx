@@ -23,7 +23,7 @@ interface RoomWrapperProps {
   onMapChangeOverride?: (newMap: MapKey) => boolean | void;
 }
 
-export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, autoComplete, autoUnlock }: RoomWrapperProps) => {
+export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, autoComplete, autoUnlock, onMapChangeOverride }: RoomWrapperProps) => {
   const gameService = useGameService();
   const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
 
@@ -114,7 +114,7 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
                       canvasSize={canvasSize}
                       map={roomName}
                       collisionMap={collisionMap}
-                      onMapChange={handleMapChange}
+                      onMapChange={onMapChangeOverride ?? handleMapChange}
                       interactiveElements={processedElements}
                       isPaused={paused}
                       gameService={gameService}
