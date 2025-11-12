@@ -6,8 +6,8 @@ export function getSpeechBubbleProps(device: string, x: number, y: number): Spee
   switch (device){
     case "HallwayFrog":
       return {
-        x: x + TILE_SIZE * 7.25,
-        y: y + TILE_SIZE * 2.25,
+        x: x + TILE_SIZE * 15.75,
+        y: y + TILE_SIZE * 7.85,
         width: TILE_SIZE,
         height: TILE_SIZE * 0.3,
         element: "",

@@ -1,5 +1,5 @@
 import {Direction, Position} from "@/types/movement.ts";
-import {COLS, TILE_SIZE} from "@/pixi/constants/world-settings.ts";
+import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 
 export const calculateCanvasSize = () => {
   const width = window.innerWidth;
@@ -18,16 +18,20 @@ export const calculateNewTarget = (
   }
 }
 
-export const checkCanMove = (target: Position, collisionMap: number[]) => {
+export const checkCanMove = (target: Position, collisionMap: number[][]) => {
   const row = Math.floor(target.y / TILE_SIZE);
   const col = Math.floor(target.x / TILE_SIZE);
-  const index = COLS * row + col;
 
-  if (index < 0 || index >= collisionMap.length) {
+  if (
+          row < 0 ||
+          col < 0 ||
+          row >= collisionMap.length ||
+          col >= collisionMap[0].length
+  ) {
     return false;
   }
 
-  return collisionMap[index] !== 1;
+  return collisionMap[row][col] !== 1;
 }
 
 const moveTowards = (current: number, target: number, maxStep: number) => {

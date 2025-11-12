@@ -81,7 +81,7 @@ function getShowerObjects(): ShowerObject[] {
 }
 
 interface SmartShowerProps {
-  completeDevice: () => void;
+  completeDevice?: () => void;
 }
 
 interface ShowerObject {
@@ -167,7 +167,7 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
 
   useEffect(() => {
     return () => {
-      if (shouldCompleteOnUnmount.current) {
+      if (shouldCompleteOnUnmount.current && completeDevice) {
         completeDevice();
       }
     };

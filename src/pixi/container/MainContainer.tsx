@@ -30,52 +30,70 @@ import {DoorBlocker} from "@/pixi/components/DoorBlocker.tsx";
 import {DoorFrame} from "@/pixi/levels/DoorFrame.tsx";
 import {getTexture} from "@/components/character/CharacterSelector.tsx";
 import {SpeechBubble, SpeechBubbleProps} from "@/pixi/components/SpeechBubble.tsx";
+import {InteractiveType} from "@/types/InteractiveType.ts";
 
 interface MainContainerProps {
-    canvasSize: {
-        width: number;
-        height: number
-    };
-    map: MapKey;
-    collisionMap: number[];
-    onMapChange: (newMap: MapKey) => void;
-    isPaused?: boolean;
-    children?: React.ReactNode;
-    interactiveElements?: InteractivePixiElement[];
-    gameService: GameService;
-    room: RoomNames;
+  canvasSize: {
+    width: number;
+    height: number
+  };
+  map: MapKey;
+  collisionMap: number[][];
+  onMapChange: (newMap: MapKey) => void;
+  isPaused?: boolean;
+  children?: React.ReactNode;
+  interactiveElements?: InteractivePixiElement[];
+  gameService: GameService;
+  room: RoomNames;
+  onDeviceOpen?: (deviceName: string) => void;
 }
 
 export const MainContainer = ({
-                                  canvasSize,
-                                  map,
-                                  collisionMap,
-                                  onMapChange,
-                                  isPaused = false,
-                                  children,
+                                canvasSize,
+                                map,
+                                collisionMap,
+                                onMapChange,
+                                isPaused = false,
+                                children,
                                 interactiveElements,
                                 gameService,
                                 room,
+                                onDeviceOpen,
                               }: PropsWithChildren<MainContainerProps>) => {
 
-    const [assetsReady, setAssetsReady] = useState(false);
-    const [cameraSettled, setCameraSettled] = useState(false);
-    const [inTransition, setInTransition] = useState(false);
-    const [pendingTransition, setPendingTransition] =
+  const [assetsReady, setAssetsReady] = useState(false);
+  const [cameraSettled, setCameraSettled] = useState(false);
+  const [inTransition, setInTransition] = useState(false);
+  const [pendingTransition, setPendingTransition] =
           useState<{ to: MapKey; spawn: Position; face?: Direction } | null>(null);
-    const [shouldSnapCamera, setShouldSnapCamera] = useState(false);
-    /**
-     * State to track the spawn position of the character.
-     */
+  const [shouldSnapCamera, setShouldSnapCamera] = useState(false);
+  /**
+   * State to track the spawn position of the character.
+   */
   const characterTexture = useMemo(() => loadTexture(getTexture()), []);
-  const { levelTexture, overlayTexture, doorFloorTexture,
-    doorFrameFrontTexture, doorFrameBackTexture } = useLevelTextures(map);
-  const { tile: characterTile } = useCharacterPosition();
-  const { enabled: tutorialActive, close: closeTutorial } = useTutorialActive();
-  const [blockedDoorTo, setBlockedDoorTo] = useState<RoomNames | null>(null);
-  const [dummy, setDummy] = useState<SpeechBubbleProps | null>(null);
+  const {
+    levelTexture, overlayTexture, doorFloorTexture,
+    doorFrameFrontTexture, doorFrameBackTexture
+  } = useLevelTextures(map);
+  const {tile: characterTile} = useCharacterPosition();
+  const {enabled: tutorialActive, close: closeTutorial} = useTutorialActive();
 
-  useEffect(() => { setShouldSnapCamera(true); setCameraSettled(false); }, [map]);
+  const pixelSize = {
+    width: TILE_SIZE * collisionMap[0].length,
+    height: TILE_SIZE * collisionMap.length
+  };
+
+  /**
+   * reference to control proximity highlights
+   */
+  const proximityRef = useRef<{ getNearbyInteractive: () => InteractivePixiElement | null } | null>(null);
+  const [dummy, setDummy] = useState<SpeechBubbleProps | null>(null);
+  const [blockedDoorTo, setBlockedDoorTo] = useState<RoomNames | null>(null);
+
+  useEffect(() => {
+    setShouldSnapCamera(true);
+    setCameraSettled(false);
+  }, [map]);
 
   useEffect(() => {
     let alive = true;
@@ -98,10 +116,15 @@ export const MainContainer = ({
 
     (async () => {
       await Promise.all(texList.map(waitTexture));
-      requestAnimationFrame(() => { if (alive) setAssetsReady(true); });
+      requestAnimationFrame(() => {
+        if (alive) setAssetsReady(true);
+      });
     })();
 
-    return () => { alive = false; setAssetsReady(false); };
+    return () => {
+      alive = false;
+      setAssetsReady(false);
+    };
   }, [levelTexture, overlayTexture, doorFloorTexture, doorFrameFrontTexture, doorFrameBackTexture]);
 
   const handleCharacterMove = (pos: Position) => {
@@ -128,15 +151,14 @@ export const MainContainer = ({
 
     const spawn = getSpawnForMap(transition.to, map);
     const nextSpawn: Position = spawn?.pos
-            ? { x: spawn.pos.x * TILE_SIZE, y: spawn.pos.y * TILE_SIZE }
-            : { x: DEFAULT_POS_X, y: DEFAULT_POS_Y };
+            ? {x: spawn.pos.x * TILE_SIZE, y: spawn.pos.y * TILE_SIZE}
+            : {x: DEFAULT_POS_X, y: DEFAULT_POS_Y};
 
-      const face: Direction = spawn?.face ?? "UP";
+    const face: Direction = spawn?.face ?? "UP";
 
-      setPendingTransition({ to: transition.to, spawn: nextSpawn, face: face });
-      setInTransition(true);
-      setShouldSnapCamera(true);
-
+    setPendingTransition({to: transition.to, spawn: nextSpawn, face: face});
+    setInTransition(true);
+    setShouldSnapCamera(true);
   };
 
   const showDummy = (p: SpeechBubbleProps) => {
@@ -148,9 +170,9 @@ export const MainContainer = ({
     const front = doorFrameFrontTexture
     const back = doorFrameBackTexture
 
-    if(roomNameToEnum(map) != RoomNames.HALLWAY) return state ? doorFrameBackTexture : doorFrameFrontTexture
-    if (state){
-      switch (room){
+    if (roomNameToEnum(map) != RoomNames.HALLWAY) return state ? doorFrameBackTexture : doorFrameFrontTexture
+    if (state) {
+      switch (room) {
         case RoomNames.LIVINGROOM:
           return [front[0], front[1], front[2]]
         case RoomNames.KITCHEN:
@@ -158,10 +180,10 @@ export const MainContainer = ({
         default:
           return []
       }
-    }else{
-      if (room === RoomNames.BATHROOM){
+    } else {
+      if (room === RoomNames.BATHROOM) {
         return [back[0], back[1], back[2]]
-      }else{
+      } else {
         return []
       }
     }
@@ -169,15 +191,27 @@ export const MainContainer = ({
 
   const doorFrame = (state: boolean) =>
           getTransitionsForMap(map)
-            .map((tr, i) => (
-                    <DoorFrame
-                            key={`${map}-${tr.to}-${i}`}
-                            textures={getDoorFrames(roomNameToEnum(tr.to) as RoomNames,  state)}
-                            map={map}
-                            gameService={gameService}
-                            transition={tr}
-                    />
-            ));
+                  .map((tr, i) => (
+                          <DoorFrame
+                                  key={`${map}-${tr.to}-${i}`}
+                                  textures={getDoorFrames(roomNameToEnum(tr.to) as RoomNames, state)}
+                                  map={map}
+                                  gameService={gameService}
+                                  transition={tr}
+                                  pixelSize={pixelSize}
+                          />
+                  ));
+
+  const handleInteraction = () => {
+    const nearby = proximityRef.current?.getNearbyInteractive();
+    if (!nearby) return;
+
+    if (nearby.type === InteractiveType.SMART_DEVICE && onDeviceOpen) {
+      onDeviceOpen(nearby.name);
+    } else if (nearby.type === InteractiveType.DUMMY) {
+      showDummy({x: nearby.x, y: nearby.y, element: nearby.name});
+    }
+  };
 
   const characterRef = useRef<{
     moveUp: () => void;
@@ -211,28 +245,33 @@ export const MainContainer = ({
                       characterPosition={characterTile}
                       canvasSize={canvasSize}
                       shouldSnap={shouldSnapCamera}
-                      onSnapComplete={() => { setShouldSnapCamera(false); setCameraSettled(true); }}
+                      onSnapComplete={() => {
+                        setShouldSnapCamera(false);
+                        setCameraSettled(true);
+                      }}
                       tutorialEnabled={tutorialActive}
               >
                 {(assetsReady && cameraSettled) && (
                         <>
-                          <Level texture={levelTexture} />
-                          <DoorFloor room={room} map={map} gameService={gameService} textures={doorFloorTexture} />
+                          <Level pixelSize={pixelSize} texture={levelTexture}/>
+                          <DoorFloor pixelSize={pixelSize} room={room} map={map} gameService={gameService} textures={doorFloorTexture}/>
                           {doorFrame(true)}
-                          <ProximityHighlight interactiveElements={interactiveElements} windowWidth={canvasSize.width} windowHeight={canvasSize.height} />
+                          <ProximityHighlight
+                                  ref={proximityRef}
+                                  interactiveElements={interactiveElements}
+                          />
                           <Character
                                   ref={characterRef}
                                   texture={characterTexture}
                                   onMove={handleCharacterMove}
                                   collisionMap={collisionMap}
                                   isPaused={isPaused as boolean}
-                                  interactiveElements={interactiveElements}
-                                  onShowDummy={showDummy}
+                                  onInteractCheck={handleInteraction}
                           />
-                          <LevelOverlay texture={overlayTexture} />
+                          <LevelOverlay pixelSize={pixelSize} texture={overlayTexture}/>
                           {doorFrame(false)}
                           {dummy && (
-                                  <SpeechBubble x={dummy.x} y={dummy.y} element={dummy.element} />
+                                  <SpeechBubble x={dummy.x} y={dummy.y} element={dummy.element}/>
                           )}
                           <DoorBlocker
                                   room={room}
@@ -241,9 +280,9 @@ export const MainContainer = ({
                                   ww={canvasSize.width}
                                   wh={canvasSize.height}
                           />
-                          </>
+                        </>
                 )}
-                </Camera>
+              </Camera>
               {!tutorialActive && (
                       <TransitionOverlay
                               width={canvasSize.width}

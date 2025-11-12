@@ -120,20 +120,21 @@ export class GameService {
     this.navigate('/game');
   }
 
-  pauseGame(): void {
+  pauseGame(source?: string): void {
     this.paused = true;
     if (movementStore.getSnapshot().movementEnabled) {
       movementStore.disable();
     }
+    console.log(`[GameService] pauseGame from: ${source ?? "unknown"}`);
     this.emitPause();
-
   }
 
-  resumeGame(): void {
+  resumeGame(source?: string): void {
     this.paused = false;
     if (!movementStore.getSnapshot().movementEnabled) {
       movementStore.enable();
     }
+    console.log(`[GameService] resumeGame from: ${source ?? "unknown"}`);
     this.emitPause();
   }
 

@@ -3,8 +3,7 @@ import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
 import {useState} from "react";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
-
-type onCompletionCallback = (isCompleted: boolean) => void;
+import React from "react";
 
 interface SmartTvOption {
   id: string;
@@ -15,7 +14,11 @@ interface SmartTvOption {
   comfortScore: number;
 }
 
-export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
+interface SmartTvProps {
+  onCompletion?: (isCompleted: boolean) => void;
+}
+
+export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
   const gameService = useGameService();
   const smartTvDevice: SmartDevice = gameService.getDeviceByName("SmartTv");
   smartTvDevice.getStatBlock().startTimer();
@@ -163,7 +166,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
 
   const handleSuccessMessageClose = () => {
     setShowSuccessMessage(false);
-    onCompletion(true);
+    onCompletion?.(true);
   };
 
   const closeWarning = () => {

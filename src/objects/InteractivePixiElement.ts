@@ -6,7 +6,6 @@ export class InteractivePixiElement {
           public width: number,
           public height: number,
           public name: string,
-          public interaction: () => React.ReactNode | void = () => {},
           public type: InteractiveType = InteractiveType.SMART_DEVICE
   ) {}
 }

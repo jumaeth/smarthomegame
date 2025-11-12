@@ -28,8 +28,7 @@ export const SecurityCameraGame = ({onCompletion}: { onCompletion: onCompletionC
       newSolution(false, t`This is not necessary and a risk to your privacy`, 10, -2, -10, +2),
       newSolution(false, t`This is not necessary and a risk to your privacy`, 10, -2, -10, +2),
     ],
-    handleCompletion: (isCorrect: boolean): void => {
-      console.log("Completed:", isCorrect);
+    handleCompletion: (): void => {
       setFrame(1);
     }
   }
