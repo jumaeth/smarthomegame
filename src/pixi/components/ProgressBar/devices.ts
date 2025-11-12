@@ -16,6 +16,9 @@ import hubSilhouette from "@/assets/progressBar/progressBarIcons/silhouettes/hub
 import showerIcon from "@/assets/progressBar/progressBarIcons/icons/shower.png";
 import showerSilhouette from "@/assets/progressBar/progressBarIcons/silhouettes/showerSilhouette.png";
 
+import mirrorIcon from "@/assets/progressBar/progressBarIcons/icons/mirror.png";
+import mirrorSilhouette from "@/assets/progressBar/progressBarIcons/silhouettes/mirrorSilhouette.png";
+
 type device = {
   name: string;
   icon: string;
@@ -57,6 +60,12 @@ export function getDeviceTexture(name: string, completed: boolean): string{
       name:"SmartHomeHub",
       icon: hubIcon,
       silhouette: hubSilhouette
+    } as device,
+
+    {
+      name:"SmartMirror",
+      icon: mirrorIcon,
+      silhouette: mirrorSilhouette
     } as device,
 
   ]

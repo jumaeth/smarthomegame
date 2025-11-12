@@ -53,23 +53,63 @@ export const Bathroom = () => {
     new InteractivePixiElement(1, 3, 2, 1, "SmartShower", (): void => handleDeviceOpen("SmartShower")),
   ];
 
+  const [activeDevice, setActiveDevice] = useState<string | null>(null);
+  const sdEnabled = useSmarDevicesEnabledState();
+  const paused = usePauseState();
+
+  const smartDeviceCallback = (isCompleted: boolean): void => {
+    if (!activeDevice) return;
+    const device = smartDevices.find((d) => d.name === activeDevice);
+    if (!device) return;
+    if (isCompleted) gameService.completeDevice(device.name);
+    gameService.resumeGame();
+    setActiveDevice(null);
+    checkForRoomCompletion();
+  };
+
+  const handleDeviceOpen = (deviceName: string): void => {
+    setActiveDevice(deviceName);
+    gameService.pauseGame();
+  };
+
+  const checkForRoomCompletion = (): void => {
+    const allCompleted = smartDevices.every((device) => device.getIsCompleted());
+    if (allCompleted) {
+      gameService.completeRoom(roomName);
+    }
+  };
+
+  function onModalClose(): void {
+    setActiveDevice(null);
+    gameService.resumeGame();
+  }
+
+  const interactiveElements = [
+    new InteractivePixiElement(11, 2, 2, 2, "SmartMirror", (): void => handleDeviceOpen("SmartMirror")),
+  ];
+
+  const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
   const collisionMap = LEVEL_COLLISION_MAPS[roomName];
 
   const updateCanvasSize = useCallback(() => {
     setCanvasSize(calculateCanvasSize());
-  }, [])
+  }, []);
 
-  const handleMapChange = (newMap: MapKey) => {
+  function handleMapChange(newMap: MapKey): boolean {
     console.log("Map changed to:", newMap);
     return gameService.leaveRoom(roomName);
-  };
+  }
 
   useEffect(() => {
     window.addEventListener("resize", updateCanvasSize);
     return () => {
       window.removeEventListener("resize", updateCanvasSize);
-    }
-  }, [updateCanvasSize, collisionMap])
+    };
+  }, [updateCanvasSize, collisionMap]);
+
+  const deviceComponents: Record<string, JSX.Element> = {
+    SmartMirror: <SmartMirror completeDevice={() => smartDeviceCallback(true)}/> ,
+  };
 
   const deviceComponents: Record<string, JSX.Element> = {
     SmartShower: <SmartShower completeDevice={() => smartDeviceCallback(true)}/>,

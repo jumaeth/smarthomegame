@@ -6,18 +6,17 @@ import eKey from "@/assets/tutorial/characterPage/cp_e_key.png";
 import highlighting from "@/assets/tutorial/characterPage/cp_highlight.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
 import {Container as PixiContainer, Graphics as PixiGraphics, Sprite as PixiSprite, TextStyle} from "pixi.js";
-import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {ImageProps, TextProps} from "@/pixi/components/Tutorial/util/Types.ts";
 import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
-import {growAnimation} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
-import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
+import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
 import {GROW_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
 import {t} from "@lingui/core/macro";
+import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
 
 export const CharacterPage: React.FC<PageProps> = ({
        windowWidth,
@@ -27,28 +26,12 @@ export const CharacterPage: React.FC<PageProps> = ({
        setNextPage
            }: PropsWithChildren<PageProps>) => {
 
-  type animProps = {
-    startX: number,
-    startY: number,
-    startS: number,
-
-    endX: number,
-    endY: number,
-    endS: number,
-
-    showOthers: boolean
-    duration: number
-  }
-
   const enum Animations {GROW, SHRINK, END}
 
   //states
-  const [onLoad, setOnLoad] = useState(true);
   const [animating, setAnimating] = useState(false);
   const [showChar, setShowChar] = useState(true);
   const [animation, setAnimation] = useState(Animations.GROW);
-  const [allTexts, setAllTexts] = useState<TextProps[]>([]);
-  const [allImages, setAllImages] = useState<ImageProps[]>([]);
 
   //refs
   const textRef = useRef<PixiContainer|null>(null);
@@ -56,6 +39,7 @@ export const CharacterPage: React.FC<PageProps> = ({
   const charRef = useRef<PixiSprite | null >(null);
   const graphicRef = useRef<PixiContainer|null>(null);
   const pressedRef = useRef<boolean>(false);
+  const [introRun, setIntroRun] = useState(false);
 
   //others
   const textsTemp = useMemo(() => [
@@ -68,38 +52,22 @@ export const CharacterPage: React.FC<PageProps> = ({
   //hooks
   const mgrRef = useAnimationManager();
 
-  const setupTexts = useCallback(() => {
-    setAllTexts(prev => [
-      ...prev,
-      { text: textsTemp[0], x: windowWidth*0.2,   y: windowHeight*0.29,  fontSize: 0.04, fontWeight: "bold"   },
-      { text: textsTemp[2], x: windowWidth*0.225, y: windowHeight*0.79,  fontSize: 0.04, fontWeight: "bold"   },
-      { text: textsTemp[4], x: windowWidth*0.8,   y: windowHeight*0.45,  fontSize: 0.04, fontWeight: "bold"   },
-      { text: textsTemp[1], x: windowWidth*0.2,   y: windowHeight*0.35,  fontSize: 0.03, fontWeight: "lighter"},
-      { text: textsTemp[3], x: windowWidth*0.225, y: windowHeight*0.85,  fontSize: 0.03, fontWeight: "lighter"},
-      { text: textsTemp[5], x: windowWidth*0.8,   y: windowHeight*0.525, fontSize: 0.03, fontWeight: "lighter"},
-      { text: textsTemp[6], x: windowWidth*0.5+TILE_SIZE*3, y: windowHeight*0.25, fontSize: 0.07, fontWeight: "bold" },
-    ]);
-  },[textsTemp, windowWidth, windowHeight])
-
-  const setupImages = useCallback( () => {
-    setAllImages(prev => [
-      ...prev,
-      { texture: loadTexture(imageSource[0]), x: windowWidth*0.2,   y: windowHeight*0.18,  scale: 1.15},
-      { texture: loadTexture(imageSource[1]), x: windowWidth*0.225, y: windowHeight*0.7,  scale: 1},
-      { texture: loadTexture(imageSource[2]), x: windowWidth*0.8,   y: windowHeight*0.29,  scale: 1},
-    ]);
+  const textsData = useMemo<TextProps[]>(() => ([
+    { text: textsTemp[0], x: windowWidth*0.2,   y: windowHeight*0.29,  fontSize: 0.04, fontWeight: "bold"   },
+    { text: textsTemp[2], x: windowWidth*0.225, y: windowHeight*0.79,  fontSize: 0.04, fontWeight: "bold"   },
+    { text: textsTemp[4], x: windowWidth*0.8,   y: windowHeight*0.525,  fontSize: 0.04, fontWeight: "bold"   },
+    { text: textsTemp[1], x: windowWidth*0.2,   y: windowHeight*0.35,  fontSize: 0.03, fontWeight: "lighter"},
+    { text: textsTemp[3], x: windowWidth*0.225, y: windowHeight*0.85,  fontSize: 0.03, fontWeight: "lighter"},
+    { text: textsTemp[5], x: windowWidth*0.8,   y: windowHeight*0.6, fontSize: 0.03, fontWeight: "lighter"},
+    { text: textsTemp[6], x: windowWidth*0.525, y: windowHeight*0.25, fontSize: 0.07, fontWeight: "bold" },
+  ]), [textsTemp, windowWidth, windowHeight]);
 
 
-  },[imageSource, windowWidth, windowHeight])
-
-  //init
-  useEffect(() => {
-    if (onLoad) {
-      setupTexts();
-      setupImages();
-      setOnLoad(false);
-    }
-  }, [onLoad, setupImages, setupTexts]);
+  const imagesData = useMemo<ImageProps[]>(() => ([
+    { texture: loadTexture(imageSource[0]), x: windowWidth*0.2,   y: windowHeight*0.18,  scale: 8   },
+    { texture: loadTexture(imageSource[1]), x: windowWidth*0.225, y: windowHeight*0.7,   scale: 6.5 },
+    { texture: loadTexture(imageSource[2]), x: windowWidth*0.8,   y: windowHeight*0.29,  scale: 6.5 },
+  ]), [imageSource, windowWidth, windowHeight]);
 
   //hide explanations  on init
   useLayoutEffect(() => {
@@ -130,6 +98,23 @@ export const CharacterPage: React.FC<PageProps> = ({
     };
   }, [keyControl, animating, Animations.SHRINK]);
 
+  const growChar= useMemo<GrowProps>(() =>  {
+    return {
+    startX: windowWidth / 1.75, startY: windowHeight / 1.5,
+    endX: windowWidth * 0.525, endY: windowHeight * 0.525,
+    startS: Math.min(windowWidth, windowHeight) / 100, endS: Math.min(windowWidth, windowHeight) / 45,
+    duration: GROW_DURATION
+    }
+  }, [windowWidth, windowHeight])
+
+  const shrinkChar= useMemo<GrowProps>(() =>  {
+    return {
+    startX: windowWidth * 0.525, startY: windowHeight * 0.525,
+    endX: windowWidth / 1.75, endY: windowHeight / 1.5,
+    startS: Math.min(windowWidth, windowHeight) / 45, endS: Math.min(windowWidth, windowHeight) / 100,
+    duration: GROW_DURATION
+    }
+  }, [windowWidth, windowHeight])
 
   //manage animations
   useEffect(() => {
@@ -146,27 +131,17 @@ export const CharacterPage: React.FC<PageProps> = ({
       switch (animation) {
 
         case Animations.GROW: {
-          const growChar = {
-            startX: windowWidth / 2 + TILE_SIZE * 4, startY: windowHeight / 2 + TILE_SIZE * 5.9,
-            endX: windowWidth * 0.5 + TILE_SIZE * 3, endY: windowHeight * 0.5,
-            startS: 5, endS: 17, showOthers: true, duration: GROW_DURATION
-          } as animProps
-
+          if (introRun)return
           setAnimating(true);
           await mgr.sequence([() => growAnimation(mgr, sprite, growChar)]);
           toggleExplanations([texts, images, graphics], true);
           await mgr.parallel([() => fadeAnimation(mgr, [texts, images, graphics], FADE_IN)]);
           setAnimating(false);
-
+          setIntroRun(true)
           break;
         }
 
         case Animations.SHRINK: {
-          const shrinkChar = {
-            startX: windowWidth * 0.5 + TILE_SIZE * 3, startY: windowHeight * 0.5,
-            endX: windowWidth / 2 + TILE_SIZE * 4, endY: windowHeight / 2 + TILE_SIZE * 5.9,
-            startS: 17, endS: 5, showOthers: false, duration: GROW_DURATION
-          } as animProps
           setAnimating(true);
           await mgr.parallel([
             () => fadeAnimation(mgr, [texts, images, graphics], FADE_OUT),
@@ -191,28 +166,51 @@ export const CharacterPage: React.FC<PageProps> = ({
     return () => {
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
-  }, [animation, Animations.END, Animations.GROW, Animations.SHRINK, mgrRef, setKeyControl, setNextPage, windowWidth, windowHeight]);
+  }, [animation, Animations.END, Animations.GROW, Animations.SHRINK, mgrRef,
+    setKeyControl, setNextPage, introRun, growChar, shrinkChar]);
 
+  useEffect(() => {
+    const sprite = charRef.current
+    if(!sprite || animating)return;
+    sprite.x = growChar.endX
+    sprite.y = growChar.endY
+    sprite.scale.set(growChar.endS)
+  }, [windowWidth, windowHeight, animating, growChar.endS, growChar.endX, growChar.endY]);
 
   //setup graphics
   const setupLines =  useCallback( (g: PixiGraphics) => {
     g.clear();
 
+    const img = {
+      width: texture.width <= 1 ? 24 * growChar.endS: texture.width * growChar.endS,
+      height: texture.height <= 1 ? 25 * growChar.endS : texture.height * growChar.endS
+    };
+
     //top left
-    g.lineStyle(7, "FFFFFF", 1);
-    g.moveTo(windowWidth*0.27, windowHeight*0.25);
-    g.bezierCurveTo(windowWidth*0.37, windowHeight*0.25, windowWidth*0.37, windowHeight*0.45, windowWidth*0.445, windowHeight*0.45);
+    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "FFFFFF", 1);
+    g.moveTo(textsData[3].x + windowWidth * 0.11, textsData[3].y - windowHeight * 0.03)
+    g.bezierCurveTo(
+            growChar.endX - img.width * 0.6, growChar.endY - img.height * 0.4,
+            growChar.endX - img.width * 0.6,growChar.endY - img.height * 0.135,
+            growChar.endX - img.width * 0.315, growChar.endY - img.height * 0.135
+            )
 
     //bottom
-    g.lineStyle(6, "FFFFFF", 1);
-    g.moveTo(windowWidth*0.31, windowHeight*0.77);
-    g.bezierCurveTo(windowWidth*0.33, windowHeight*0.67, windowWidth*0.43, windowHeight*0.72, windowWidth*0.455, windowHeight*0.67);
+    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "FFFFFF", 1);
+    g.moveTo(textsData[4].x + windowWidth * 0.09,textsData[4].y - windowHeight * 0.075)
+    g.bezierCurveTo(growChar.endX - img.width * 0.7675,growChar.endY + img.height * 0.3,
+            growChar.endX - img.width * 0.374,growChar.endY + img.height * 0.35,
+            growChar.endX - img.width * 0.325,growChar.endY + img.height * 0.261
+    )
 
     //top right
-    g.lineStyle(6, "FFFFFF", 1);
-    g.moveTo(windowWidth*0.7, windowHeight*0.3);
-    g.bezierCurveTo(windowWidth*0.66, windowHeight*0.32, windowWidth*0.65, windowHeight*0.5, windowWidth*0.6, windowHeight*0.5);
-  }, [windowWidth, windowHeight])
+    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "FFFFFF", 1);
+    g.moveTo(textsData[5].x - windowWidth * 0.075, textsData[5].y - windowWidth * 0.035);
+    g.bezierCurveTo(
+            growChar.endX + img.width * 0.4715, growChar.endY - img.height * 0.2,
+            growChar.endX + img.width * 0.437, growChar.endY + img.height * 0.045,
+            growChar.endX + img.width * 0.3, growChar.endY - img.height * 0.045);
+  }, [windowWidth, windowHeight, growChar.endS, growChar.endX, growChar.endY, textsData, texture.height, texture.width])
 
   const lines = () => {
     return (
@@ -225,7 +223,7 @@ export const CharacterPage: React.FC<PageProps> = ({
   const texts = () => {
     return (
             <Container ref={textRef}>
-              {allTexts.map((text, i) => (
+              {textsData.map((text, i) => (
                       <Text
                               key={i}
                               text={text.text}
@@ -251,14 +249,14 @@ export const CharacterPage: React.FC<PageProps> = ({
   const images = () => {
     return (
             <Container ref={imageRef}>
-              {allImages.map((i, k) => (
+              {imagesData.map((i, k) => (
                 <Sprite
                         key={k}
                         texture={i.texture}
                         x={i.x}
                         y={i.y}
                         anchor={0.5}
-                        scale={i.scale}
+                        scale={Math.min(windowWidth, windowHeight) / (100 * i.scale)}
                 />
               ))}
             </Container>
@@ -272,6 +270,7 @@ export const CharacterPage: React.FC<PageProps> = ({
         {showChar && texture && <Sprite
           texture={texture}
           ref={charRef}
+          x={charRef.current?.x as number}
         />}
         {lines()}
         {texts()}
