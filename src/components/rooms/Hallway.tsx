@@ -7,6 +7,8 @@ import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps
 import {useNavigate} from "react-router-dom";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {RoomNames} from "@/objects/RoomNames.ts";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
+import {InteractiveType} from "@/types/InteractiveType.ts";
 
 export const Hallway = () => {
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
@@ -39,6 +41,11 @@ export const Hallway = () => {
     }
   }, [updateCanvasSize, collisionMap])
 
+  const interactivePixiElements = [
+    new InteractivePixiElement(7.1, 2.5, 1, 1, "HallwayFrog", () => {}, InteractiveType.DUMMY),
+  ];
+
+
   return (
           <>
             <Stage width={canvasSize.width} height={canvasSize.height}>
@@ -49,6 +56,7 @@ export const Hallway = () => {
                       onMapChange={handleMapChange}
                       gameService={gameService}
                       room={roomName}
+                      interactiveElements={interactivePixiElements}
               />
             </Stage>
           </>

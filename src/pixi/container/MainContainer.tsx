@@ -29,6 +29,7 @@ import {LevelOverlay} from "@/pixi/levels/LevelOverlay.tsx";
 import {DoorBlocker} from "@/pixi/components/DoorBlocker.tsx";
 import {DoorFrame} from "@/pixi/levels/DoorFrame.tsx";
 import {getTexture} from "@/components/character/CharacterSelector.tsx";
+import {SpeechBubble, SpeechBubbleProps} from "@/pixi/components/SpeechBubble.tsx";
 
 interface MainContainerProps {
     canvasSize: {
@@ -72,6 +73,7 @@ export const MainContainer = ({
   const { tile: characterTile } = useCharacterPosition();
   const { enabled: tutorialActive, close: closeTutorial } = useTutorialActive();
   const [blockedDoorTo, setBlockedDoorTo] = useState<RoomNames | null>(null);
+  const [dummy, setDummy] = useState<SpeechBubbleProps | null>(null);
 
   useEffect(() => { setShouldSnapCamera(true); setCameraSettled(false); }, [map]);
 
@@ -137,6 +139,11 @@ export const MainContainer = ({
 
   };
 
+  const showDummy = (p: SpeechBubbleProps) => {
+    setDummy(p);
+    window.setTimeout(() => setDummy(null), 1500);
+  };
+
   const getDoorFrames = (room: RoomNames, state: boolean) => {
     const front = doorFrameFrontTexture
     const back = doorFrameBackTexture
@@ -180,6 +187,7 @@ export const MainContainer = ({
     interact: () => void
   } | null>(null);
 
+
   const handleMoveUp = () => characterRef.current?.moveUp();
   const handleMoveDown = () => characterRef.current?.moveDown();
   const handleMoveLeft = () => characterRef.current?.moveLeft();
@@ -209,9 +217,9 @@ export const MainContainer = ({
                 {(assetsReady && cameraSettled) && (
                         <>
                           <Level texture={levelTexture} />
-                          <ProximityHighlight interactiveElements={interactiveElements} />
                           <DoorFloor room={room} map={map} gameService={gameService} textures={doorFloorTexture} />
                           {doorFrame(true)}
+                          <ProximityHighlight interactiveElements={interactiveElements} windowWidth={canvasSize.width} windowHeight={canvasSize.height} />
                           <Character
                                   ref={characterRef}
                                   texture={characterTexture}
@@ -219,9 +227,13 @@ export const MainContainer = ({
                                   collisionMap={collisionMap}
                                   isPaused={isPaused as boolean}
                                   interactiveElements={interactiveElements}
+                                  onShowDummy={showDummy}
                           />
                           <LevelOverlay texture={overlayTexture} />
                           {doorFrame(false)}
+                          {dummy && (
+                                  <SpeechBubble x={dummy.x} y={dummy.y} element={dummy.element} />
+                          )}
                           <DoorBlocker
                                   room={room}
                                   to={blockedDoorTo as RoomNames}
@@ -229,7 +241,7 @@ export const MainContainer = ({
                                   ww={canvasSize.width}
                                   wh={canvasSize.height}
                           />
-                        </>
+                          </>
                 )}
                 </Camera>
               {!tutorialActive && (

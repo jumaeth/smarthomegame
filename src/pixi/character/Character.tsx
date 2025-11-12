@@ -6,9 +6,11 @@ import {useCharacterControls} from "@/hooks/character/useCharacterControls";
 import {Direction, Position} from "@/types/movement";
 import {calculateNewTarget, checkCanMove, handleCharacterMovement} from "@/utils/character/movment";
 import {useCharacterAnimation} from "@/hooks/character/useCharacterAnimation";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
-import {characterPositionStore, useCharacterPosition} from "@/utils/character/characterPosition";
-import {useMovementStore} from "@/utils/character/movementEnabled";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
+import {InteractiveType} from "@/types/InteractiveType.ts";
+import {SpeechBubbleProps} from "@/pixi/components/SpeechBubble.tsx";
+import {characterPositionStore, useCharacterPosition} from "@/utils/character/characterPosition.ts";
+import {useMovementStore} from "@/utils/character/movementEnabled.ts";
 
 interface CharacterProps {
   texture: Texture;
@@ -16,6 +18,7 @@ interface CharacterProps {
   collisionMap: number[];
   isPaused: boolean;
   interactiveElements?: InteractivePixiElement[];
+  onShowDummy?: (p: SpeechBubbleProps) => void;
 }
 
 export const Character = forwardRef((
@@ -25,6 +28,7 @@ export const Character = forwardRef((
           collisionMap,
           isPaused = false,
           interactiveElements,
+          onShowDummy,
         }: CharacterProps,
         ref
 ) => {
@@ -94,7 +98,21 @@ export const Character = forwardRef((
 
   const checkForInteraction = () => {
     const interactiveElement = checkForProximity();
-    if (interactiveElement) interactiveElement.interaction();
+    if (!interactiveElement) return;
+
+
+    if (interactiveElement.type === InteractiveType.SMART_DEVICE) {
+      interactiveElement.interaction();
+      return;
+    }
+
+    if (interactiveElement.type === InteractiveType.DUMMY && onShowDummy) {
+      onShowDummy({
+        x: interactiveElement.x,
+        y: interactiveElement.y,
+        element: interactiveElement.name,
+      });
+    }
   };
 
   useImperativeHandle(ref, () => ({

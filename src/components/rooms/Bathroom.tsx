@@ -1,17 +1,19 @@
 import {useCallback, useEffect, useState} from "react";
-import {useGameService} from "@/hooks/gameService/useGameService";
-import {SmartDevice} from "@/objects/SmartDevice";
-import {SmartShower} from "../smart-devices/SmartShower";
-import {calculateCanvasSize} from "@/utils/character/movment";
-import {MapKey} from "@/types/maps";
-import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
+import {calculateCanvasSize} from "@/utils/character/movment.ts";
+import {MapKey} from "@/types/maps.ts";
+import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
 import {Stage} from "@pixi/react";
-import {MainContainer} from "@/pixi/container/MainContainer";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
-import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper";
-import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState";
-import {usePauseState} from "@/hooks/gameService/usePauseState";
-import {RoomNames} from "@/objects/RoomNames";
+import {MainContainer} from "@/pixi/container/MainContainer.tsx";
+import {RoomNames} from "@/objects/RoomNames.ts";
+import {SmartDevice} from "@/objects/SmartDevice.ts";
+import {useSmarDevicesEnabledState} from "@/hooks/gameService/useSmarDevicesEnabledState.ts";
+import {usePauseState} from "@/hooks/gameService/usePauseState.ts";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
+import {InteractiveType} from "@/types/InteractiveType.ts";
+import {SmartShower} from "@/components/smart-devices/SmartShower.tsx";
+import {BasicModalWrapper} from "@/components/general-ui/BasicModalWrapper.tsx";
+import SmartMirror from "@/components/smart-devices/SmartMirror.tsx";
 
 export const Bathroom = () => {
   const gameService = useGameService();
@@ -50,7 +52,10 @@ export const Bathroom = () => {
   }
 
   const interactiveElements = [
+    new InteractivePixiElement(11, 2, 2, 2, "SmartMirror", (): void => handleDeviceOpen("SmartMirror")),
     new InteractivePixiElement(1, 3, 2, 1, "SmartShower", (): void => handleDeviceOpen("SmartShower")),
+    new InteractivePixiElement(14.975, 6.5, 1, 1, "BathroomChick", () => {}, InteractiveType.DUMMY),
+    new InteractivePixiElement(1.15, 6.5, 1.6, 1, "BathroomDrawer", () => {}, InteractiveType.DUMMY),
   ];
 
   const collisionMap = LEVEL_COLLISION_MAPS[roomName];
@@ -73,6 +78,7 @@ export const Bathroom = () => {
 
   const deviceComponents: Record<string, JSX.Element> = {
     SmartShower: <SmartShower completeDevice={() => smartDeviceCallback(true)}/>,
+    SmartMirror: <SmartMirror completeDevice={() => smartDeviceCallback(true)}/>,
   };
 
   return (
