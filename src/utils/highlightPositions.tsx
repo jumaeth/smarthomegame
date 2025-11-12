@@ -119,8 +119,8 @@ export function getHighlightPosition(device: InteractivePixiElement, position: {
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x + TILE_SIZE * 8.56}
-                        y={position.y + TILE_SIZE * 5.5}
+                        x={position.x + TILE_SIZE * 12.4775}
+                        y={position.y + TILE_SIZE * 8.065}
                         texture={loadTexture(hallway_frog as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}

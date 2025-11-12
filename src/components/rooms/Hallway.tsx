@@ -9,7 +9,7 @@ export const Hallway = () => {
   const navigate = useNavigate();
 
   const interactiveElements = [
-    new InteractivePixiElement(7.1, 2.5, 1, 1, "HallwayFrog", InteractiveType.DUMMY),
+    new InteractivePixiElement(16.25, 9.5, 0.5, 1, "HallwayFrog", InteractiveType.DUMMY),
   ];
 
   const handleMapChange = (newMap: MapKey) => {
