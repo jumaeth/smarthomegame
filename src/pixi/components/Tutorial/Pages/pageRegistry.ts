@@ -21,6 +21,7 @@ export interface PageProps {
   setNextPage: (a: number) => void;
   interactiveElements?: InteractivePixiElement[];
   gameService?: GameService;
+  onDeviceOpen?: (deviceName: string) => void;
 }
 
 export const PAGE_COMPONENTS: {
