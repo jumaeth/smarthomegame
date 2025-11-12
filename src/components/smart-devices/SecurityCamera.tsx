@@ -2,13 +2,13 @@ import React from 'react';
 import {SecurityCameraGame} from "@/components/cameraGame/SecurityCameraGame.tsx";
 
 interface SecurityCaneraProps {
-  completeDevice: () => void;
+  completeDevice?: () => void;
 }
 
 export const SecurityCamera: React.FC<SecurityCaneraProps> = ({ completeDevice}) => {
 
   const handleGameComplete = () => {
-    completeDevice();
+    completeDevice?.();
   };
 
 

@@ -5,7 +5,7 @@ import Button from "@/components/general-ui/Button.tsx";
 
 
 interface SmartHomeHubProps {
-  completeDevice: () => void;
+  completeDevice?: () => void;
 }
 
 export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({completeDevice}) => {
@@ -13,7 +13,7 @@ export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({completeDevice}) => {
   const [frame, setFrame] = useState(0);
 
   const handleGameComplete = () => {
-    completeDevice();
+    completeDevice?.();
   };
   const isGameModalOpen = frame === 1;
 
