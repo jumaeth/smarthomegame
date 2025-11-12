@@ -38,7 +38,7 @@ interface MainContainerProps {
     height: number
   };
   map: MapKey;
-  collisionMap: number[];
+  collisionMap: number[][];
   onMapChange: (newMap: MapKey) => void;
   isPaused?: boolean;
   children?: React.ReactNode;
@@ -77,6 +77,11 @@ export const MainContainer = ({
   } = useLevelTextures(map);
   const {tile: characterTile} = useCharacterPosition();
   const {enabled: tutorialActive, close: closeTutorial} = useTutorialActive();
+
+  const pixelSize = {
+    width: TILE_SIZE * collisionMap[0].length,
+    height: TILE_SIZE * collisionMap.length
+  };
 
   /**
    * reference to control proximity highlights
@@ -193,6 +198,7 @@ export const MainContainer = ({
                                   map={map}
                                   gameService={gameService}
                                   transition={tr}
+                                  pixelSize={pixelSize}
                           />
                   ));
 
@@ -247,8 +253,8 @@ export const MainContainer = ({
               >
                 {(assetsReady && cameraSettled) && (
                         <>
-                          <Level texture={levelTexture}/>
-                          <DoorFloor room={room} map={map} gameService={gameService} textures={doorFloorTexture}/>
+                          <Level pixelSize={pixelSize} texture={levelTexture}/>
+                          <DoorFloor pixelSize={pixelSize} room={room} map={map} gameService={gameService} textures={doorFloorTexture}/>
                           {doorFrame(true)}
                           <ProximityHighlight
                                   ref={proximityRef}
@@ -262,7 +268,7 @@ export const MainContainer = ({
                                   isPaused={isPaused as boolean}
                                   onInteractCheck={handleInteraction}
                           />
-                          <LevelOverlay texture={overlayTexture}/>
+                          <LevelOverlay pixelSize={pixelSize} texture={overlayTexture}/>
                           {doorFrame(false)}
                           {dummy && (
                                   <SpeechBubble x={dummy.x} y={dummy.y} element={dummy.element}/>

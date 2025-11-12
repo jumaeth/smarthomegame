@@ -4,16 +4,20 @@ import { useEffect, useState } from "react";
 import { MapKey, Transition } from "@/types/maps";
 import { DoorState } from "@/types/door";
 import { GameService } from "@/services/GameService";
-import { GAME_WIDTH, GAME_HEIGHT, OFFSET_X, OFFSET_Y } from "@/pixi/constants/world-settings";
+import { OFFSET_X, OFFSET_Y } from "@/pixi/constants/world-settings";
 
 type Props = {
+  pixelSize: {
+    width: number;
+    height: number
+  };
   map: MapKey;
   transitions: Transition[];
   textures?: Texture[]; // [Closed, HalfOpen, Open]
   gameService: GameService;
 };
 
-export default function MapDoorOverlay({ map, transitions, textures, gameService }: Props) {
+export default function MapDoorOverlay({ pixelSize, map, transitions, textures, gameService }: Props) {
   const [, tick] = useState(0);
 
   useEffect(() => {
@@ -32,8 +36,8 @@ export default function MapDoorOverlay({ map, transitions, textures, gameService
                   texture={textures[frameIndex]}
                   x={OFFSET_X}
                   y={OFFSET_Y}
-                  width={GAME_WIDTH}
-                  height={GAME_HEIGHT}
+                  width={pixelSize.width}
+                  height={pixelSize.height}
           />
   );
 }

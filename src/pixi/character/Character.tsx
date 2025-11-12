@@ -12,7 +12,7 @@ import {useMovementStore} from "@/utils/character/movementEnabled.ts";
 interface CharacterProps {
   texture: Texture;
   onMove: (pos: Position) => void;
-  collisionMap: number[];
+  collisionMap: number[][];
   isPaused: boolean;
   onInteractCheck?: () => void;
 }
