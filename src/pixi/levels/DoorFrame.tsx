@@ -1,11 +1,15 @@
 import {Sprite} from "@pixi/react";
-import {GAME_HEIGHT, GAME_WIDTH, OFFSET_X, OFFSET_Y} from "@/pixi/constants/world-settings";
+import {OFFSET_X, OFFSET_Y} from "@/pixi/constants/world-settings";
 import {Texture} from "@pixi/core";
 import {DoorState} from "@/types/door";
 import {MapKey, Transition} from "@/types/maps.ts";
 import {GameService} from "@/services/GameService.ts";
 
 interface LevelProps {
+  pixelSize: {
+    width: number;
+    height: number
+  };
   textures: Texture[];
   map: MapKey;
   gameService: GameService;
@@ -18,7 +22,7 @@ const stateToIndex = {
   [DoorState.Open]: 2,
 };
 
-export const DoorFrame = ({ textures, map, gameService, transition}: LevelProps) => {
+export const DoorFrame = ({ pixelSize, textures, map, gameService, transition}: LevelProps) => {
   if (!textures) return null;
 
   const state=gameService.getExitState(map, transition.to);
@@ -29,8 +33,8 @@ export const DoorFrame = ({ textures, map, gameService, transition}: LevelProps)
           <>
             <Sprite
                     texture={texture}
-                    width={GAME_WIDTH}
-                    height={GAME_HEIGHT}
+                    width={pixelSize.width}
+                    height={pixelSize.height}
                     x={OFFSET_X}
                     y={OFFSET_Y}
                     scale={1.0}

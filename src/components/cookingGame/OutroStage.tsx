@@ -2,6 +2,7 @@ import React, {useMemo} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {Graphics, Sprite, Text} from "@pixi/react"
 import {Graphics as PixiGraphics, TextStyle} from "pixi.js";
+import outroImg from "@/assets/cooking-sprites/threeD_Plate.png"
 import {Button} from "@/components/cookingGame/Button.tsx";
 import {Stages} from "@/components/cookingGame/Stages.ts";
 import {t} from "@lingui/core/macro";
@@ -15,7 +16,7 @@ export const OutroStage:React.FC<OutroStageProps> =  ({ setStage }) => {
 
 
   const texturePaths = useMemo(() => ({
-    outro: "/src/assets/cooking-sprites/threeD_Plate.png"
+    outro: outroImg
   }), []);
 
   const text = t`That's it, you've done a great job. Enjoy your pasta! But don't rest too long, there are still plenty of smart devices waiting for you.`;

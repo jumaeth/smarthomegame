@@ -6,6 +6,14 @@ import {EventMode, FederatedPointerEvent, Graphics as PIXIGraphics, Sprite as PI
 import {Stages} from "@/components/cookingGame/Stages.ts";
 import {t} from "@lingui/core/macro";
 import {Score} from "@/components/cookingGame/CookingGameComponent.tsx";
+import recipeOpenImg from "@/assets/cooking-sprites/recipeopen.png";
+import plateImg from "@/assets/cooking-sprites/plate_with_food.png"
+import placeMatImg from "@/assets/cooking-sprites/placemat.png"
+import tableBackgroundImg from "@/assets/cooking-sprites/table_background.png"
+import cutleryImg from "@/assets/cooking-sprites/cutlery.png"
+import glasImg from "@/assets/cooking-sprites/glas.png"
+import napkinImg from "@/assets/cooking-sprites/napkin.png"
+import spoonImg from "@/assets/cooking-sprites/spoon.png"
 
 interface ServeStageProps {
   setStage: (stage: Stages) => void;
@@ -32,14 +40,14 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
   const instruction = t`We are almost finished! \n\nThe last thing we have to do is set the table and serve our dish`;
 
   const texturePaths = useMemo(() => ({
-    recipeOpen: "/src/assets/cooking-sprites/recipeopen.png",
-    tableBackground: "/src/assets/cooking-sprites/table_background.png",
-    placeMat: "/src/assets/cooking-sprites/placemat.png",
-    plate: "/src/assets/cooking-sprites/plate_with_food.png",
-    cutlery: "/src/assets/cooking-sprites/cutlery.png",
-    glas: "/src/assets/cooking-sprites/glas.png",
-    napkin: "/src/assets/cooking-sprites/napkin.png",
-    spoon: "/src/assets/cooking-sprites/spoon.png",
+    recipeOpen: recipeOpenImg,
+    tableBackground: tableBackgroundImg,
+    placeMat: placeMatImg,
+    plate: plateImg,
+    cutlery: cutleryImg,
+    glas: glasImg,
+    napkin: napkinImg,
+    spoon: spoonImg,
   }), []);
 
   const  initialPositions = useRef<Record<string, { x: number; y: number }>>({

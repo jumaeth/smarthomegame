@@ -58,7 +58,6 @@ export const ProgressBarIcons: React.FC<ProgressBarIconsProps> = ({
   const spacing: number = trophyHeight * 0.05;
   const iconHeight: number = trophyHeight * 0.8 - spacing * 4;
   const containerWidth: number = 2 * spacing + Object.entries(texturePaths).length * iconHeight;
-  console.log(containerWidth)
 
   const drawBackground = useCallback((g: PixiGraphics) => {
     g.clear();

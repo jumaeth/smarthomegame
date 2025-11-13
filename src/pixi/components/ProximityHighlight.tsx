@@ -1,23 +1,28 @@
-import {TILE_SIZE} from "@/pixi/constants/world-settings";
-import {PropsWithChildren, useEffect, useRef} from "react";
-import {Container as PixiContainer, Graphics as PixiGraphics} from "pixi.js"
+import {forwardRef, PropsWithChildren, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {Container} from "@pixi/react";
 import {useCharacterPosition} from "@/hooks/character/useCharacterPosition.ts";
-import {getHighlightPosition} from "@/utils/highlightPositions.ts";
 import {getNearbyInteractiveElement} from "@/utils/character/proximity.ts";
-import { pixelToTile } from "@/utils/coords";
+import {pixelToTile} from "@/utils/coords";
+import {getHighlightPosition} from "@/utils/highlightPositions.tsx";
+import {GameService} from "@/services/GameService.ts";
 
 interface ProximityHighlightProps {
   interactiveElements?: InteractivePixiElement[];
+  gameService: GameService;
 }
 
-export const ProximityHighlight = ({
-                                     interactiveElements,
-                                   }: PropsWithChildren<ProximityHighlightProps>) => {
+
+export const ProximityHighlight = forwardRef(({
+                                                interactiveElements,
+        gameService
+                                              }: PropsWithChildren<ProximityHighlightProps>, ref) => {
   const pos = useCharacterPosition();
-  const graphicRef = useRef<PixiContainer | null>(null);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
+  const [interactive, setInteractive] = useState<InteractivePixiElement | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    getNearbyInteractive: () => interactive,
+  }));
 
   useEffect(() => {
     if (!pos) return;
@@ -35,23 +40,23 @@ export const ProximityHighlight = ({
 
     const playerTile = pixelToTile(pos.x, pos.y);
     const interactive = getNearbyInteractiveElement(playerTile, interactiveElements);
-
-    const graphic = graphicRef.current;
-    if (!graphic) return;
-
-    const g = new PixiGraphics();
-
-    if (interactive) {
-      const rect = getHighlightPosition(interactive);
-      g.lineStyle(1, 0xffff00, 0.5);
-      g.drawRoundedRect(rect.x, rect.y, rect.width * TILE_SIZE, rect.height * TILE_SIZE, rect.radius);
-    } else {
-      g.clear();
+    if (!interactive) {
+      setInteractive(null);
+      return;
     }
 
-    graphic.removeChildren();
-    graphic.addChild(g);
+    setInteractive(interactive);
   }, [pos, interactiveElements]);
 
-  return <Container ref={graphicRef} />;
-}
+  const getPosition = () => {
+    return interactive ? {x: interactive.x, y: interactive.y} : {x: 0, y: 0}
+  }
+
+  const isCompleted: boolean = !gameService.getDeviceByName(interactive?.name as string).getIsCompleted()
+
+  return (
+          <>
+            {isCompleted && getPosition().x != 0 && interactive && getHighlightPosition(interactive, getPosition())}
+          </>
+  );
+})
