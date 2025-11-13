@@ -23,7 +23,14 @@ interface RoomWrapperProps {
   onMapChangeOverride?: (newMap: MapKey) => boolean | void;
 }
 
-export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, autoComplete, autoUnlock, onMapChangeOverride }: RoomWrapperProps) => {
+export const RoomWrapper = ({
+                              roomName,
+                              interactiveElements,
+                              deviceComponents,
+                              autoComplete,
+                              autoUnlock,
+                              onMapChangeOverride
+                            }: RoomWrapperProps) => {
   const gameService = useGameService();
   const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
 
@@ -37,28 +44,22 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
   const handleDeviceOpen = (deviceName: string): void => {
     if (gameService.getDeviceByName(deviceName).getIsCompleted()) return;
     if (tutorialActive.enabled && (deviceName !== "SmartTv")) return;
-    console.log("deviceOpen");
     setActiveDevice(deviceName);
-    gameService.pauseGame(`device:${deviceName}`);
+    gameService.pauseGame();
   };
 
   const handleDeviceClose = (): void => {
-    console.log("close");
-    gameService.resumeGame(`device:${activeDevice}`);
+    gameService.resumeGame();
     setActiveDevice(null);
   };
 
   const smartDeviceCallback = (completed: boolean): void => {
-    console.log("complete1");
     if (!activeDevice) return;
-    console.log("complete1.5" + activeDevice);
     const device = smartDevices.find((d) => d.name === activeDevice);
-    console.log(device)
     if (!device) return;
-    console.log("complete2");
 
     if (completed) gameService.completeDevice(device.name);
-    gameService.resumeGame(`device:${device.name}`);
+    gameService.resumeGame();
     setActiveDevice(null);
     checkForRoomCompletion();
   };
@@ -72,7 +73,7 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
 
   const processedElements = interactiveElements.map((el) => {
     if (el.type === InteractiveType.SMART_DEVICE) {
-      return { ...el, onInteract: () => handleDeviceOpen(el.name) };
+      return {...el, onInteract: () => handleDeviceOpen(el.name)};
     }
     return el;
   });
