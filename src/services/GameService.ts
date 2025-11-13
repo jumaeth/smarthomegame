@@ -1,13 +1,15 @@
 import {Game} from "../objects/Game";
 import {Room} from "../objects/Room";
-import {RoomNames} from "../objects/RoomNames";
+import {RoomNames, roomNameToEnum} from "../objects/RoomNames";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore";
 import {CookieService} from "@/services/CookieService";
 import {allRoomStore} from "@/utils/roomStore";
-import {movementStore} from "@/utils/movementEnabled";
-import {t} from "@lingui/core/macro";
+import {movementStore} from "@/utils/character/movementEnabled";
 import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive";
+import {t} from "@lingui/core/macro";
+import {MapKey} from "@/types/maps";
+import {DoorState} from "@/types/door";
 
 
 type DeviceListener = (device: SmartDevice) => void;
@@ -21,10 +23,12 @@ export class GameService {
   private smartDevicesEnabled = true;
   private smartDevicesEnabledListeners = new Set<Listener>();
   private deviceListeners = new Set<DeviceListener>();
+  private exitStateListeners = new Set<() => void>();
 
   constructor(navigate: (path: string) => void) {
-    const saveGame = CookieService.get<Game>('save_game');
-    const tutorialCookie = CookieService.get<boolean>('tutorialState');
+    const saveGame: Game | null = CookieService.get<Game>('save_game');
+    const tutorialCookie: boolean | null = CookieService.get<boolean>('tutorialState');
+
     if (saveGame) {
       const game = Game.fromSerialized(saveGame);
       this.game = game;
@@ -48,6 +52,10 @@ export class GameService {
 
   setUpRooms(): Room[] {
 
+    const hallway = new Room(RoomNames.HALLWAY, []);
+    hallway.complete();
+    hallway.unlockRoom();
+
     const livingRoom = new Room(RoomNames.LIVINGROOM, [
       new SmartDevice("SmartTv", t`This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Uncheck the permissions which you think are not necessary by clicking directly on the checkbox.`),
       new SmartDevice("SmartLights", t`This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Modify your settings by clicking on the sliders. When you are satisfied with your choices continue by pressing the continue button`)
@@ -59,7 +67,12 @@ export class GameService {
       new SmartDevice("SecurityCamera", t`Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them.`),
     ]);
 
-    return [livingRoom, kitchen];
+    const bathroom = new Room(RoomNames.BATHROOM, [
+      new SmartDevice("SmartShower", t`Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable.`),
+      new SmartDevice("SmartMirror", t`You need to configure your smart mirror by choosing a provider for each app. Compare the permissions, features, data retention, and security details of each provider. Expand each provider to see all the details, then make your choice. Remember to explore all providers for each app before making your selection.`),
+    ]);
+
+    return [hallway, livingRoom, kitchen, bathroom];
   }
 
   getAllRooms(): Room[] {
@@ -74,16 +87,11 @@ export class GameService {
     const room: Room | undefined = this.findRoomByName(roomName);
     if (!room) return;
     room.complete();
-    this.navigateAfterComplete();
-    this.onGameStateChange();
-  }
-
-  private navigateAfterComplete(): void {
+    this.getRoom(roomName).unlockRoom();
     if (this.checkGameCompletionConditions()) {
       this.finishGame();
-    } else {
-      this.continueGame();
     }
+    this.onGameStateChange();
   }
 
   checkGameCompletionConditions(): boolean {
@@ -112,20 +120,21 @@ export class GameService {
     this.navigate('/game');
   }
 
-  pauseGame(): void {
+  pauseGame(source?: string): void {
     this.paused = true;
     if (movementStore.getSnapshot().movementEnabled) {
       movementStore.disable();
     }
+    console.log(`[GameService] pauseGame from: ${source ?? "unknown"}`);
     this.emitPause();
-
   }
 
-  resumeGame(): void {
+  resumeGame(source?: string): void {
     this.paused = false;
     if (!movementStore.getSnapshot().movementEnabled) {
       movementStore.enable();
     }
+    console.log(`[GameService] resumeGame from: ${source ?? "unknown"}`);
     this.emitPause();
   }
 
@@ -139,13 +148,20 @@ export class GameService {
     this.emitSmartDevicesEnable();
   }
 
+  toogleRoomIsLocked(roomName: RoomNames): void {
+    const room: Room | undefined = this.findRoomByName(roomName);
+    if (room) room.toggleIsLocked();
+    this.onGameStateChange();
+  }
+
   leaveRoom(roomName: RoomNames): boolean {
     const room: Room | undefined = this.findRoomByName(roomName);
     if (room?.isLocked == false || room?.isLocked == undefined) {
       this.navigate('/game');
       this.onGameStateChange();
+      return true;
     }
-    return true;
+    return false;
   }
 
   changeScore(scoreDelta: number, scoreType: ScoreType): void {
@@ -200,12 +216,43 @@ export class GameService {
     if (device) {
       device.complete();
       this.deviceListeners.forEach(cb => cb(device));
-      if (this.checkRoomCompleted(room)) this.completeRoom(room);
+      if (this.getRoom(room).devices.filter(d => !d.getIsCompleted()).map(d => d.name).length <= 0){
+        this.completeRoom(room);
+      }
       this.onGameStateChange();
     }
   }
 
-  checkRoomCompleted(name: RoomNames): boolean {
+  getRoom(name: RoomNames): Room {
+    return allRoomStore.getRoom(name);
+  }
+
+  subscribeExitStates(cb: () => void): () => void {
+    this.exitStateListeners.add(cb);
+    return () => this.exitStateListeners.delete(cb);
+  }
+
+  getExitState(from: MapKey, to: MapKey): DoorState {
+    const fromRoomName = roomNameToEnum(from) ?? RoomNames.LIVINGROOM;
+    const toRoomName = roomNameToEnum(to) ?? RoomNames.LIVINGROOM;
+
+    const fromRoom = this.findRoomByName(fromRoomName);
+    const toRoom = this.findRoomByName(toRoomName);
+
+    if (!fromRoom || !toRoom){
+      return DoorState.Closed
+    }
+
+    if (fromRoom.isLocked || toRoom.isLocked){
+      return DoorState.Closed;
+    }else if (toRoom.isCompleted){
+      return DoorState.Open;
+    }else{
+      return DoorState.HalfOpen;
+    }
+  }
+
+  checkRoomCompleted(name: RoomNames): boolean{
     return allRoomStore.getRoom(name).devices.every(d => d.getIsCompleted());
   }
 
@@ -218,11 +265,7 @@ export class GameService {
     return this.game;
   }
 
-  public getDeviceByName(deviceName: string): SmartDevice {
-    const device = allRoomStore.getDevice(deviceName);
-    if (!device) {
-      throw new Error(`Device "${deviceName}" not found`);
-    }
-    return device;
+  getDeviceByName(name : string){
+    return  allRoomStore.getAllDevices().find(c => c.name == name) ?? new SmartDevice("DEFAULT")
   }
 }

@@ -1,15 +1,14 @@
 import { CookingGameComponent } from "../cookingGame/CookingGameComponent.tsx";
-import "./Modal.css";
 import React from 'react';
 
 interface SmartKitchenProps {
-  completeDevice: () => void;
+  completeDevice?: (isCompleted: boolean) => void;
 }
 
 export const SmartKitchen: React.FC<SmartKitchenProps> = ({ completeDevice}) => {
 
   const handleGameComplete = () => {
-    completeDevice();
+    completeDevice?.(true);
   };
 
 

@@ -2,6 +2,7 @@ import React, {useEffect, useMemo, useState} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {Graphics, Sprite, Text} from "@pixi/react"
 import {Graphics as PixiGraphics, TextStyle} from "pixi.js";
+import boxImg from "@/assets/cooking-sprites/empty_box.png"
 import {Button} from "@/components/cookingGame/Button.tsx";
 import {Stages} from "@/components/cookingGame/Stages.ts";
 import {t} from "@lingui/core/macro";
@@ -17,7 +18,7 @@ export const IntroStage:React.FC<IntroStageProps> =  ({ setStage }) => {
 
 
   const texturePaths = useMemo(() => ({
-    box: "/src/assets/cooking-sprites/empty_box.png"
+    box: boxImg
   }), []);
 
   const pageTexts = useMemo(() => [

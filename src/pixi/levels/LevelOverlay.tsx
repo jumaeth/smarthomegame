@@ -1,18 +1,22 @@
 import {Sprite} from "@pixi/react";
-import {GAME_HEIGHT, GAME_WIDTH, OFFSET_X, OFFSET_Y} from "@/pixi/constants/world-settings";
+import {OFFSET_X, OFFSET_Y} from "@/pixi/constants/world-settings";
 import {Texture} from "@pixi/core";
 
 interface LevelProps {
+  pixelSize: {
+    width: number;
+    height: number
+  };
   texture: Texture;
 }
 
-export const LevelOverlay = ({texture}: LevelProps) => {
+export const LevelOverlay = ({pixelSize, texture}: LevelProps) => {
   return (
           <>
             <Sprite
                     texture={texture}
-                    width={GAME_WIDTH}
-                    height={GAME_HEIGHT}
+                    width={pixelSize.width}
+                    height={pixelSize.height}
                     x={OFFSET_X}
                     y={OFFSET_Y}
                     scale={1.0}

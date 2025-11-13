@@ -1,46 +1,28 @@
-import {Stage} from "@pixi/react";
-import {useCallback, useEffect, useState} from "react";
-import {calculateCanvasSize} from "@/utils/movment.ts";
-import {MainContainer} from "@/pixi/container/MainContainer.tsx";
-import {MapKey} from "@/types/maps.ts";
-import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
+import {RoomNames} from "@/objects/RoomNames";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
+import {InteractiveType} from "@/types/InteractiveType";
 import {useNavigate} from "react-router-dom";
-import {useGameService} from "@/hooks/gameService/useGameService.tsx";
+import {MapKey} from "@/types/maps";
+import {RoomWrapper} from "@/components/rooms/RoomWrapper.tsx";
 
 export const Hallway = () => {
-  const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
-
-  const roomName = "hallway"; //ToDo find better way to match with GameService
-
-  const collisionMap = LEVEL_COLLISION_MAPS[roomName];
   const navigate = useNavigate();
 
-  const updateCanvasSize = useCallback(() => {
-    setCanvasSize(calculateCanvasSize());
-  }, [])
+  const interactiveElements = [
+    new InteractivePixiElement(16.25, 9.5, 0.5, 1, "HallwayFrog", InteractiveType.DUMMY),
+  ];
 
   const handleMapChange = (newMap: MapKey) => {
     navigate(`/game/${newMap}`);
   };
 
-  useEffect(() => {
-    window.addEventListener("resize", updateCanvasSize);
-    return () => {
-      window.removeEventListener("resize", updateCanvasSize);
-    }
-  }, [updateCanvasSize, collisionMap])
-
   return (
-          <>
-            <Stage width={canvasSize.width} height={canvasSize.height}>
-              <MainContainer
-                      canvasSize={canvasSize}
-                      map={roomName}
-                      collisionMap={collisionMap}
-                      onMapChange={handleMapChange}
-                      gameService={useGameService()}
-              />
-            </Stage>
-          </>
+          <RoomWrapper
+                  roomName={RoomNames.HALLWAY}
+                  interactiveElements={interactiveElements}
+                  autoComplete
+                  autoUnlock
+                  onMapChangeOverride={handleMapChange}
+          />
   );
-}
+};
