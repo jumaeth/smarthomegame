@@ -1,48 +1,28 @@
-import {useCallback, useEffect, useState} from "react";
-import {useGameService} from "@/hooks/gameService/useGameService.tsx";
-import {calculateCanvasSize} from "@/utils/character/movment.ts";
-import {MapKey} from "@/types/maps.ts";
-import {LEVEL_COLLISION_MAPS} from "@/pixi/constants/levels/level-collision-maps.ts";
-import {Stage} from "@pixi/react";
-import {MainContainer} from "@/pixi/container/MainContainer.tsx";
-import {RoomNames} from "@/objects/RoomNames.ts";
+import {RoomWrapper} from "@/components/rooms/RoomWrapper";
+import {InteractivePixiElement} from "@/objects/InteractivePixiElement";
+import {RoomNames} from "@/objects/RoomNames";
+import {InteractiveType} from "@/types/InteractiveType";
+import {SmartShower} from "@/components/smart-devices/SmartShower.tsx";
+import SmartMirror from "@/components/smart-devices/SmartMirror.tsx";
 
 export const Bathroom = () => {
-  const gameService = useGameService();
-  const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
+  const interactiveElements = [
+    new InteractivePixiElement(11, 2, 2, 2, "SmartMirror", InteractiveType.SMART_DEVICE),
+    new InteractivePixiElement(1, 3, 2, 1, "SmartShower", InteractiveType.SMART_DEVICE),
+    new InteractivePixiElement(14.975, 6.5, 1, 1, "BathroomChick", InteractiveType.DUMMY),
+    new InteractivePixiElement(1.15, 6.5, 1.6, 1, "BathroomDrawer", InteractiveType.DUMMY),
+  ];
 
-  const roomName = RoomNames.BATHROOM;
-
-  const collisionMap = LEVEL_COLLISION_MAPS[roomName];
-
-  const updateCanvasSize = useCallback(() => {
-    setCanvasSize(calculateCanvasSize());
-  }, [])
-
-  const handleMapChange = (newMap: MapKey) => {
-    console.log("Map changed to:", newMap);
-    return gameService.leaveRoom(roomName);
+  const deviceComponents = {
+    SmartShower: <SmartShower/>,
+    SmartMirror: <SmartMirror/>,
   };
 
-  useEffect(() => {
-    window.addEventListener("resize", updateCanvasSize);
-    return () => {
-      window.removeEventListener("resize", updateCanvasSize);
-    }
-  }, [updateCanvasSize, collisionMap])
-
   return (
-          <>
-            <Stage width={canvasSize.width} height={canvasSize.height}>
-              <MainContainer
-                      canvasSize={canvasSize}
-                      map={roomName}
-                      collisionMap={collisionMap}
-                      onMapChange={handleMapChange}
-                      gameService={useGameService()}
-                      room={roomName}
-              />
-            </Stage>
-          </>
+          <RoomWrapper
+                  roomName={RoomNames.BATHROOM}
+                  interactiveElements={interactiveElements}
+                  deviceComponents={deviceComponents}
+          />
   );
 };

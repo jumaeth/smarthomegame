@@ -5,6 +5,7 @@ import {TextStyle} from "pixi.js";
 import {Button} from "@/components/cookingGame/Button.tsx";
 import {Stages} from "@/components/cookingGame/Stages.ts";
 import {t} from "@lingui/core/macro";
+import recipeOpenImg from "@/assets/cooking-sprites/recipeopen.png";
 
 interface RecipeStageProps {
   setStage: (stage: Stages) => void;
@@ -17,7 +18,7 @@ export const RecipeStage:React.FC<RecipeStageProps> =  ({ setStage }) => {
 
 
   const texturePaths = useMemo(() => ({
-    recipeOpen: "/src/assets/cooking-sprites/recipeopen.png"
+    recipeOpen: recipeOpenImg
   }), []);
 
   const pageTexts = useMemo(() => [
