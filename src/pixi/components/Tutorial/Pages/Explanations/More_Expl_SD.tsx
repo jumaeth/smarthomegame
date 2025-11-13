@@ -31,7 +31,8 @@ export const More_Expl_SD: React.FC<PageProps> = ({
         setKeyControl,
         setNextPage,
         interactiveElements,
-        gameService
+        gameService,
+        onDeviceOpen
            }: PropsWithChildren<PageProps>) => {
   const enum Animations { INTRO, OUTRO, END}
 
@@ -165,7 +166,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     });
 
     if (interactiveElement?.x === 4 && interactiveElement.y === 2) {
-      interactiveElement.interaction();
+      onDeviceOpen?.("SmartTv");
       return true;
     }
     return false;

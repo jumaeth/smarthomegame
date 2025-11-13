@@ -4,16 +4,19 @@ import {newSolution, Solution} from "@/types/solution.ts";
 import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
+import React from "react";
 
-type onCompletionCallback = (isCompleted: boolean) => void;
+interface SmartLightsProps {
+  onCompletion?: (isCompleted: boolean) => void;
+}
 
-export const SmartLights = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
+export const SmartLights: React.FC<SmartLightsProps> = ({ onCompletion }) => {
   const gameService = useGameService();
   const smartLightsDevice: SmartDevice = gameService.getDeviceByName("SmartTv");
 
   const handleQuizCompletion = (isCompleted: boolean) => {
     if (isCompleted) {
-      onCompletion(isCompleted);
+      onCompletion?.(isCompleted);
     }
     const calculatedScores = {
       privacy: gameService.getScore().getPrivacyScore(),
