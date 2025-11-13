@@ -1,22 +1,22 @@
 import {forwardRef, PropsWithChildren, useEffect, useImperativeHandle, useRef, useState} from "react";
-import {Container as PixiContainer} from "pixi.js"
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {Container} from "@pixi/react";
 import {useCharacterPosition} from "@/hooks/character/useCharacterPosition.ts";
 import {getNearbyInteractiveElement} from "@/utils/character/proximity.ts";
 import {pixelToTile} from "@/utils/coords";
 import {getHighlightPosition} from "@/utils/highlightPositions.tsx";
+import {GameService} from "@/services/GameService.ts";
 
 interface ProximityHighlightProps {
   interactiveElements?: InteractivePixiElement[];
+  gameService: GameService;
 }
 
 
 export const ProximityHighlight = forwardRef(({
                                                 interactiveElements,
+        gameService
                                               }: PropsWithChildren<ProximityHighlightProps>, ref) => {
   const pos = useCharacterPosition();
-  const graphicRef = useRef<PixiContainer | null>(null);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
   const [interactive, setInteractive] = useState<InteractivePixiElement | null>(null);
 
@@ -52,10 +52,11 @@ export const ProximityHighlight = forwardRef(({
     return interactive ? {x: interactive.x, y: interactive.y} : {x: 0, y: 0}
   }
 
+  const isCompleted: boolean = !gameService.getDeviceByName(interactive?.name as string).getIsCompleted()
+
   return (
           <>
-            <Container ref={graphicRef}/>
-            {getPosition().x != 0 && interactive && getHighlightPosition(interactive, getPosition())}
+            {isCompleted && getPosition().x != 0 && interactive && getHighlightPosition(interactive, getPosition())}
           </>
   );
 })

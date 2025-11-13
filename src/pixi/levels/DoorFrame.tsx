@@ -29,8 +29,6 @@ export const DoorFrame = ({ pixelSize, textures, map, gameService, transition}: 
   const texture = textures[stateToIndex[state]];
   if (!texture) return null;
 
-  console.log("To: "+transition.to + "\nPos: " + transition.pos.x + "/" +transition.pos.y)
-
   return (
           <>
             <Sprite

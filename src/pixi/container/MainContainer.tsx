@@ -259,6 +259,7 @@ export const MainContainer = ({
                           <ProximityHighlight
                                   ref={proximityRef}
                                   interactiveElements={interactiveElements}
+                                  gameService={gameService}
                           />
                           <Character
                                   ref={characterRef}

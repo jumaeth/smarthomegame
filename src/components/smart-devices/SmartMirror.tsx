@@ -16,7 +16,7 @@ import {Assets, Texture} from "pixi.js";
 import {Stage, TilingSprite} from "@pixi/react";
 
 interface SmartMirrorProps {
-  completeDevice?: () => void;
+  completeDevice?: (isCompleted: boolean) => void;
 }
 
 type Provider = {
@@ -156,7 +156,7 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
       smartDevice.getStatBlock().setValue("Smart Mirror Points", privacyScore);
       smartDevice.getStatBlock().stopTimer();
       gameService.completeDevice("SmartMirror");
-      completeDevice?.();
+      completeDevice?.(true);
     }
   }, [allSolved, completeDevice, gameService, smartDevice]);
 

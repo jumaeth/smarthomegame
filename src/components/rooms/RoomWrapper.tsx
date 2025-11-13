@@ -35,20 +35,27 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
   const collisionMap = LEVEL_COLLISION_MAPS[roomName];
 
   const handleDeviceOpen = (deviceName: string): void => {
+    if (gameService.getDeviceByName(deviceName).getIsCompleted()) return;
     if (tutorialActive.enabled && (deviceName !== "SmartTv")) return;
+    console.log("deviceOpen");
     setActiveDevice(deviceName);
     gameService.pauseGame(`device:${deviceName}`);
   };
 
   const handleDeviceClose = (): void => {
+    console.log("close");
     gameService.resumeGame(`device:${activeDevice}`);
     setActiveDevice(null);
   };
 
   const smartDeviceCallback = (completed: boolean): void => {
+    console.log("complete1");
     if (!activeDevice) return;
+    console.log("complete1.5" + activeDevice);
     const device = smartDevices.find((d) => d.name === activeDevice);
+    console.log(device)
     if (!device) return;
+    console.log("complete2");
 
     if (completed) gameService.completeDevice(device.name);
     gameService.resumeGame(`device:${device.name}`);
