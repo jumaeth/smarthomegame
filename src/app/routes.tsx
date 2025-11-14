@@ -11,6 +11,7 @@ import {IntroPage} from "@/pages/IntroPage.tsx";
 import ReloadHandler from "@/app/ReloadHandler.tsx";
 import {ContinueGame} from "@/pages/ContinueGame.tsx";
 import {Bathroom} from "@/components/rooms/Bathroom.tsx";
+import {Bedroom} from "@/components/rooms/Bedroom.tsx";
 
 const AppRoutes = () => (
         <Router>
@@ -24,6 +25,7 @@ const AppRoutes = () => (
               <Route path="livingroom" element={<LivingRoom/>}/>
               <Route path="kitchen" element={<Kitchen/>}/>
               <Route path="bathroom" element={<Bathroom/>}/>
+              <Route path="bedroom" element={<Bedroom/>}/>
               <Route path="hallway" element={<Hallway/>}/>
               <Route path="game-over" element={<GameOver/>}/>
               <Route path="continue-game" element={<ContinueGame/>}/>

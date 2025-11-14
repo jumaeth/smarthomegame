@@ -25,6 +25,7 @@ export type MapKey =
         | 'hallway'
         | 'kitchen'
         | 'bathroom'
+        | 'bedroom'
         ;
 
 export type DeviceKey=
