@@ -29,7 +29,7 @@ start-server-job:
     - export PATH=$PATH:/root/.local/bin
   script:
     - . pipeline/cd/IP34-25bb_SmartHomeEscape-openrc.sh
-    - . pipeline/cd/server_running.sh  
+    - . pipeline/cd/server_running.sh
 
 lint-job:
   stage: lint
@@ -78,12 +78,7 @@ build-dev-container-job:
   stage: build
   tags:
     - dind
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
+  image: docker:29.0
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
   needs:
@@ -91,6 +86,7 @@ build-dev-container-job:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
+    - docker info
     - docker build -f devEnvDockerfile --tag $CI_REGISTRY_IMAGE:dev_environment-latest .
     - docker build -f pipeline/cd/nginxDevDockerfile --tag $CI_REGISTRY_IMAGE:custom_nginx_dev-latest .
     - docker push $CI_REGISTRY_IMAGE:dev_environment-latest
@@ -100,12 +96,7 @@ build-testing-container-job:
   stage: build
   tags:
     - dind
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
+  image: docker:29.0
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $TEST_BRANCH_NAME'
   needs:
@@ -113,6 +104,7 @@ build-testing-container-job:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
+    - docker info
     - docker build -f testingEnvDockerfile --tag $CI_REGISTRY_IMAGE:testing_environment-latest .
     - docker build -f pipeline/cd/nginxTestingDockerfile --tag $CI_REGISTRY_IMAGE:custom_nginx_testing-latest .
     - docker push $CI_REGISTRY_IMAGE:testing_environment-latest
@@ -205,10 +197,10 @@ deploy-test-job:
         -e CI_REGISTRY_USER="$CI_REGISTRY_USER" \
         test_container sh -c '
           cd /home/deploy &&
-        
+      
           WEBSERVER_CONTAINER_RUNNING=`docker ps -q -f name=webserver`
           WEBSERVER_CONTAINER_EXISTING=`docker ps -qa -f name=webserver`
-          
+      
           if [ "$WEBSERVER_CONTAINER_RUNNING" ]; then
             echo "[INFO] Webserver is already running. Restarting..."
           elif [ "$WEBSERVER_CONTAINER_EXISTING" ]; then
@@ -216,7 +208,7 @@ deploy-test-job:
           else
             echo "[INFO] Webserver not existing. Creating new one..."
           fi
-          
+      
           echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
           docker rm -f webserver 2>/dev/null || true
           docker pull "$TESTING_NGINX_IMAGE"
@@ -260,10 +252,10 @@ deploy-dev-job:
       
         echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
         docker pull "$DEV_IMAGE"
-            
+      
         DEV_CONTAINER_RUNNING=`docker ps -q -f name=dev_container`
         DEV_CONTAINER_EXISTING=`docker ps -qa -f name=dev_container`
-        
+      
         if [ "$DEV_CONTAINER_RUNNING" ]; then
             echo "[INFO] dev_container is already running. Skipping creation."
         elif [ "$DEV_CONTAINER_EXISTING" ]; then
@@ -274,7 +266,7 @@ deploy-dev-job:
             docker run -d --privileged -p 8090:8090 --name dev_container "$DEV_IMAGE"
             sleep 5
         fi
-        
+      
         docker exec \
         -e DEV_NGINX_IMAGE="$DEV_NGINX_IMAGE" \
         -e CI_REGISTRY_PASSWORD="$CI_REGISTRY_PASSWORD" \
@@ -293,7 +285,7 @@ deploy-dev-job:
           else
             echo "[INFO] Webserver not existing. Creating new one..."
           fi
-          
+      
           echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
           docker rm -f webserver 2>/dev/null || true
           docker pull "$DEV_NGINX_IMAGE"
