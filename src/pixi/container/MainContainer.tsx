@@ -181,10 +181,13 @@ export const MainContainer = ({
           return []
       }
     } else {
-      if (room === RoomNames.BATHROOM) {
-        return [back[0], back[1], back[2]]
-      } else {
-        return []
+      switch (room) {
+        case RoomNames.BATHROOM:
+          return [back[0], back[1], back[2]];
+        case RoomNames.BEDROOM:
+          return [back[3], back[4], back[5]];
+        default:
+          return [];
       }
     }
   }
