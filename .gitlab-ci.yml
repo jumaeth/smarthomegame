@@ -23,8 +23,8 @@ start-server-job:
   rules:
     - if: '$CI_PIPELINE_SOURCE == $SCHEDULE'
   before_script:
-    - apt update
-    - apt install -y python3-dev pipx
+    - apk update
+    - apk add --no-cache python3 py3-pipx
     - pipx install python-openstackclient
     - export PATH=$PATH:/root/.local/bin
   script:

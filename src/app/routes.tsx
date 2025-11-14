@@ -13,7 +13,7 @@ import {ContinueGame} from "@/pages/ContinueGame.tsx";
 import {Bathroom} from "@/components/rooms/Bathroom.tsx";
 
 const AppRoutes = () => (
-        <Router>
+        <Router basename="/smarthome-escape">
           <ReloadHandler/>
           <Routes>
             <Route index element={<HomePage/>}/>
