@@ -31,9 +31,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     setShowIcons(!showIcons);
   }
 
-  const trophyHeight: number = windowWidth * 0.1;
-  const trophyWidth: number = windowWidth * 0.075;
-  const spacing: number = 4;
+  const trophyHeight: number = windowWidth * 0.05;
+  const trophyWidth: number = trophyHeight / 818 * 726;
+  const spacing: number = 15;
 
   return (
           <>
@@ -53,7 +53,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
             </Sprite>)}
             {showIcons && <ProgressBarIcons
                     x={x + trophyWidth + spacing}
-                    y={y + spacing}
+                    y={y}
                     trophyHeight={trophyHeight}
                     gameService={gameService}
             />}
