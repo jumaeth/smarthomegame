@@ -6,7 +6,7 @@ import SmartMirror from "@/components/smart-devices/SmartMirror.tsx";
 
 export const Bedroom = () => {
   const interactiveElements = [
-    new InteractivePixiElement(1, 5, 2, 2, "SmartMirror", InteractiveType.SMART_DEVICE),
+    new InteractivePixiElement(1, 6, 2, 2, "SmartMirror", InteractiveType.SMART_DEVICE),
   ];
 
   const deviceComponents = {
