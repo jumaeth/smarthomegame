@@ -1,4 +1,3 @@
-// File: `src/pages/GameOver.tsx`
 import {useGameService} from "../hooks/gameService/useGameService.tsx";
 import {GameScore} from "@/objects/GameScore.ts";
 import {GameService} from "@/services/GameService.ts";
@@ -49,13 +48,17 @@ export function GameOver() {
                     <Trans>{victoryState?.displayText}</Trans>
                   </h2>
 
-                  <p className="mt-2 text-sm text-gray-300">
-                    <Trans>Privacy</Trans>:
-                    <span className="ml-2 font-medium text-gray-100">{String(gameScore.getPrivacyScore() ?? "-")}</span>
-                    <span className="mx-2 text-gray-500">·</span>
-                    <Trans>Comfort</Trans>:
-                    <span className="ml-2 font-medium text-gray-100">{String(gameScore.getComfortScore() ?? "-")}</span>
-                  </p>
+                  <div className="mt-4 flex flex-wrap gap-3 items-center">
+                    <div className="flex items-center  text-white rounded-lg px-4 py-2 shadow-md">
+                      <div className="text-xl uppercase opacity-90 mr-3"><Trans>Privacy Score</Trans></div>
+                      <div className="text-4xl font-bold tabular-nums">{String(gameScore.getPrivacyScore() ?? "-")}</div>
+                    </div>
+
+                    <div className="flex items-center  text-white rounded-lg px-4 py-2 shadow-md">
+                      <div className="text-xl uppercase opacity-90 mr-3"><Trans>Comfort Score</Trans></div>
+                      <div className="text-4xl font-bold tabular-nums">{String(gameScore.getComfortScore() ?? "-")}</div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap gap-3 items-center">
