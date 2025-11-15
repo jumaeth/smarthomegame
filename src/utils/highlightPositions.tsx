@@ -89,8 +89,8 @@ export function getHighlightPosition(device: InteractivePixiElement, position: {
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x + TILE_SIZE * 8.31}
-                        y={position.y + TILE_SIZE * 5.51}
+                        x={position.x + TILE_SIZE * 8.93}
+                        y={position.y + TILE_SIZE * 5.27}
                         texture={loadTexture(mirror as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
