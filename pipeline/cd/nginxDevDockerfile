@@ -1,6 +1,6 @@
 FROM nginx:alpine
 
-COPY ./build /usr/share/nginx/html
+COPY ./build /usr/share/nginx/html/smarthome-escape
 COPY ./config/nginxDevelopment.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
