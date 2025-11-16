@@ -153,7 +153,7 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
         gameService.changeScore(comfortScore, 'comfort');
       }
 
-      smartDevice.getStatBlock().setValue("Smart Shower Points", privacyScore);
+      smartDevice.getStatBlock().setValue(t`Smart Shower Points`, privacyScore);
       shouldCompleteOnUnmount.current = true;
     }
   }, [allCompleted, smartDevice, gameService]);

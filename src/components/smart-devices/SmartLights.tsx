@@ -22,8 +22,8 @@ export const SmartLights: React.FC<SmartLightsProps> = ({ onCompletion }) => {
       privacy: gameService.getScore().getPrivacyScore(),
       comfort: gameService.getScore().getComfortScore()
     };
-    smartLightsDevice.getStatBlock().setValue("Smart Lights Privacy Score", calculatedScores.privacy);
-    smartLightsDevice.getStatBlock().setValue("Smart Lights Comfort Score", calculatedScores.comfort);
+    smartLightsDevice.getStatBlock().setValue(t`Smart Lights Privacy Score`, calculatedScores.privacy);
+    smartLightsDevice.getStatBlock().setValue(t`Smart Lights Comfort Score`, calculatedScores.comfort);
   };
 
   const solutions: Solution[] = [

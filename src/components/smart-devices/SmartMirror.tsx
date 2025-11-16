@@ -148,7 +148,7 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
         gameService.changeScore(comfortScore, 'comfort');
       }
       
-      smartDevice.getStatBlock().setValue("Smart Mirror Points", privacyScore);
+      smartDevice.getStatBlock().setValue(t`Smart Mirror Points`, privacyScore);
       gameService.completeDevice("SmartMirror");
       completeDevice?.(true);
     }

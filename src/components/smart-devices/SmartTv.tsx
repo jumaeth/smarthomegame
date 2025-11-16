@@ -143,8 +143,8 @@ export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
       gameService.changeScore(totalComfortScore, 'comfort');
       setShowSuccessMessage(true);
     }
-    smartTvDevice.getStatBlock().setValue("Smart TV Comfort Score", totalComfortScore);
-    smartTvDevice.getStatBlock().setValue("Smart TV Privacy Score", totalPrivacyScore);
+    smartTvDevice.getStatBlock().setValue(t`Smart TV Comfort Score`, totalComfortScore);
+    smartTvDevice.getStatBlock().setValue(t`Smart TV Privacy Score`, totalPrivacyScore);
   };
 
   const handleReconfigure = () => {
