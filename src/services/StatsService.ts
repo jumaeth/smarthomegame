@@ -47,7 +47,7 @@ export class StatsService {
 
   generateLineForStatKeyWithMiliValues(devices: SmartDevice[], statKey: StatsKeys): string {
     let line: string = "";
-    const statKeyName = i18n._(StatsKeys[statKey]); // Enum-Name als String
+    const statKeyName = StatsKeys[statKey]; // Enum-Name als String
 
     devices.forEach(device => {
       const value: number = Number(device.getStatBlock().findByName(statKey));
@@ -59,7 +59,7 @@ export class StatsService {
 
   generateLineForStatKey(devices: SmartDevice[], statKey: StatsKeys): string {
     let line: string = "";
-    const statKeyName =  i18n._(StatsKeys[statKey]); // Enum-Name als String
+    const statKeyName =  StatsKeys[statKey]; // Enum-Name als String
 
     devices.forEach(device => {
       line += statKeyName + this.CSV_SEPARATOR;
