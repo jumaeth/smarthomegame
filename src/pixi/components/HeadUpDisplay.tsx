@@ -55,7 +55,7 @@ export const HeadUpDisplay: React.FC<HeadUpDisplayProps> = ({
   const assistantPhoneIconPosX: number = 0;
   const assistantPhoneIconPosY: number = 0;
   const ProgressBarWidth: number = windowWidth * 0.13;
-  const spacing: number = 4;
+  const spacing: number = 30;
 
   return (
           <>

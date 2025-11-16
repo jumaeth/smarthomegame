@@ -2,7 +2,8 @@ export enum RoomNames {
   LIVINGROOM = "livingroom",
   HALLWAY = "hallway",
   KITCHEN = "kitchen",
-  BATHROOM = "bathroom"
+  BATHROOM = "bathroom",
+  BEDROOM = "bedroom"
 }
 
 export function roomNameToEnum(roomName: string): RoomNames | undefined {

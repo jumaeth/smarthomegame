@@ -2,6 +2,7 @@ import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 import {RoomNames} from "@/objects/RoomNames.ts";
 import {LIVINGROOM_DOOR_POS} from "@/pixi/constants/levels/maps/livingroom-map.ts";
 import {
+  HALLWAY_TO_BEDROOM_DOOR_POS,
   HALLWAY_TO_BATHROOM_DOOR_POS,
   HALLWAY_TO_KITCHEN_DOOR_POS,
   HALLWAY_TO_LIVINGROOM_DOOR_POS
@@ -23,6 +24,7 @@ export function getBlockOffset(from: RoomNames, to: RoomNames, ww: number, wh: n
     case RoomNames.LIVINGROOM:
     case RoomNames.KITCHEN:
     case RoomNames.BATHROOM:
+    case RoomNames.BEDROOM:
       return {
         x: LIVINGROOM_DOOR_POS.x * TILE_SIZE + CIRCLE_OFFSET_X,
         y: LIVINGROOM_DOOR_POS.y * TILE_SIZE - wh * 0.0065,
@@ -51,6 +53,13 @@ export function getBlockOffset(from: RoomNames, to: RoomNames, ww: number, wh: n
             y: HALLWAY_TO_BATHROOM_DOOR_POS.y * TILE_SIZE - wh * 0.0075,
             bx:  HALLWAY_TO_BATHROOM_DOOR_POS.x * TILE_SIZE  + BAR_OFFSET_X,
             by: HALLWAY_TO_BATHROOM_DOOR_POS.y * TILE_SIZE - wh * 0.009
+          } as BlockOffset;
+        case RoomNames.BEDROOM:
+          return {
+            x: HALLWAY_TO_BEDROOM_DOOR_POS.x * TILE_SIZE + CIRCLE_OFFSET_X,
+            y: HALLWAY_TO_BEDROOM_DOOR_POS.y * TILE_SIZE - wh * 0.0075,
+            bx:  HALLWAY_TO_BEDROOM_DOOR_POS.x * TILE_SIZE  + BAR_OFFSET_X,
+            by: HALLWAY_TO_BEDROOM_DOOR_POS.y * TILE_SIZE - wh * 0.009
           } as BlockOffset;
       }
     return {x: 0, y: 0, bx: 0, by: 0}
