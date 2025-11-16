@@ -137,11 +137,6 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
 
   React.useEffect(() => {
     if (!smartDevice) return;
-    smartDevice.getStatBlock().startTimer();
-  }, [smartDevice]);
-
-  React.useEffect(() => {
-    if (!smartDevice) return;
     if (allSolved) {
       const privacyScore = totalPoints.current.privacy || 0;
       const comfortScore = totalPoints.current.comfort || 0;
@@ -154,7 +149,6 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
       }
       
       smartDevice.getStatBlock().setValue("Smart Mirror Points", privacyScore);
-      smartDevice.getStatBlock().stopTimer();
       gameService.completeDevice("SmartMirror");
       completeDevice?.(true);
     }
@@ -316,4 +310,3 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
 };
 
 export default SmartMirror;
-

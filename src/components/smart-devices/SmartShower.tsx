@@ -110,12 +110,6 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
 
   const showerObjects = getShowerObjects();
 
-  useEffect(() => {
-    if (smartDevice) {
-      smartDevice.getStatBlock().startTimer();
-    }
-  }, [smartDevice]);
-
   const isGameModalOpen = frame === 1;
 
   const handleObjectClick = (object: ShowerObject) => {
@@ -160,7 +154,6 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
       }
 
       smartDevice.getStatBlock().setValue("Smart Shower Points", privacyScore);
-      smartDevice.getStatBlock().stopTimer();
       shouldCompleteOnUnmount.current = true;
     }
   }, [allCompleted, smartDevice, gameService]);

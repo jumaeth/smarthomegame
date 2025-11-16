@@ -7,6 +7,7 @@ export class StatsService {
   private CSV_SEPARATOR: string = ";";
   private LINE_BREAK: string = "\n";
 
+  // Slice Operation on each line to remove the superfluous last collumn
   generateCsvString(game: Game): string {
     let csvString: string = "";
     const allDevices = game.getRooms().flatMap(room => room.devices);
@@ -26,7 +27,7 @@ export class StatsService {
       const amountOfDevices = room.devices.length;
       roomLine += room.name + this.CSV_SEPARATOR.repeat(amountOfDevices * 2);
     })
-    return roomLine;
+    return roomLine.slice(0, -1);
   }
 
   generateDevicesNamesLine(devices: SmartDevice[]): string {
@@ -34,14 +35,26 @@ export class StatsService {
     devices.forEach(device => {
       deviceNamesLine += device.name + this.CSV_SEPARATOR.repeat(2);
     })
-    return deviceNamesLine;
+    return deviceNamesLine.slice(0, -1);
   }
 
   generateCommonValuesLines(devices: SmartDevice[]): string {
     let commonValuesLines: string = "";
     commonValuesLines += this.generateLineForStatKey(devices, StatsKeys.AMOUNT_OF_DEVICE_SESSIONS) + this.LINE_BREAK;
-    commonValuesLines += this.generateLineForStatKey(devices, StatsKeys.TIME_IN_DEVICE) + this.LINE_BREAK;
+    commonValuesLines += this.generateLineForStatKeyWithMiliValues(devices, StatsKeys.TIME_IN_DEVICE) + this.LINE_BREAK;
     return commonValuesLines;
+  }
+
+  generateLineForStatKeyWithMiliValues(devices: SmartDevice[], statKey: StatsKeys): string {
+    let line: string = "";
+    const statKeyName = StatsKeys[statKey]; // Enum-Name als String
+
+    devices.forEach(device => {
+      const value: number = Number(device.getStatBlock().findByName(statKey));
+      line += statKeyName + this.CSV_SEPARATOR;
+      line += (value/1000) + this.CSV_SEPARATOR;
+    })
+    return line.slice(0, -1);
   }
 
   generateLineForStatKey(devices: SmartDevice[], statKey: StatsKeys): string {
@@ -52,7 +65,7 @@ export class StatsService {
       line += statKeyName + this.CSV_SEPARATOR;
       line += device.getStatBlock().findByName(statKey) + this.CSV_SEPARATOR;
     })
-    return line;
+    return line.slice(0, -1);
   }
 
   generateDeviceSpecificValuesLines(devices: SmartDevice[]): string {
@@ -75,11 +88,11 @@ export class StatsService {
         }
       })
 
-      while(i < ammountOfLines - 1) {
-        deviceSpecificValuesLines[i] += this.CSV_SEPARATOR+this.CSV_SEPARATOR;
+      while (i < ammountOfLines - 1) {
+        deviceSpecificValuesLines[i] += this.CSV_SEPARATOR + this.CSV_SEPARATOR;
         i++;
       }
     })
-    return deviceSpecificValuesLines.join(this.LINE_BREAK);
+    return deviceSpecificValuesLines.map(line => line.slice(0, -1)).join(this.LINE_BREAK);
   }
 }
