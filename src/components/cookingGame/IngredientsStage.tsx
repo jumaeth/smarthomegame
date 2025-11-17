@@ -244,7 +244,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
                           lineColor={0x5d3c1a}
                           width={90}
                           height={35}
-                          label={"Weiter"}
+                          label={t`Continue`}
                           action={action}
                   />
         </>
