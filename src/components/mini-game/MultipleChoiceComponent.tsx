@@ -87,7 +87,7 @@ export const MultipleChoiceComponent = ({
                                           }`}
                                   >
                   <span className="ml-8">
-                    {isCorrect ? "✅ " + solutions[i].solutionMessage : "❌ " + solutions[i].solutionMessage}
+                    {isCorrect ? "✅ " + solutions[i].solutionCorrectMessage : "❌ " + solutions[i].solutionWrongMessage}
                   </span>
                                     <span>
                     {isCorrect ? formatWithSign.format(solutions[i].privacyScoreGain) : formatWithSign.format(solutions[i].privacyScorePenalty)}

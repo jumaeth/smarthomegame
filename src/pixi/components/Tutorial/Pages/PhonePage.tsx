@@ -42,15 +42,15 @@ export const PhonePage: React.FC<PageProps> = ({
 
 
   const textArr  = useMemo( () => [
-    t`The help app`,
-    t`Want to see this tutorial again or find out how to control the game? - Use the help app!`,
+    t`The layout`,
+    t`Clicking on the phone opens the blueprint of the house. Here you can check where the different rooms are located.`,
+    t`The rooms`,
+    t`In every room, you’ll find some items – some of them are Smart Devices. Adjust their privacy settings and solve the mini-games to unlock your Smart Home! `,
+    t`You are here`,
+    t`This is where you start the game. Try not to get lost!`,
     t``,
     t``,
-    t`The settings`,
-    t`Use this app to change the settings, including language, sound or touch controls`,
-    t``,
-    t``,
-    t`The Phone`
+    t`The Map`
 
 ], [])
 
@@ -182,23 +182,13 @@ export const PhonePage: React.FC<PageProps> = ({
     g.clear();
 
     //top left
-    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#135690", 1);
+    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#00458f", 1);
     g.moveTo(windowWidth*0.4475, windowHeight*0.395);
     g.lineTo(windowWidth*0.275, windowHeight*0.3);
 
-    //bottom left
-    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#1C557D", 1);
-    g.moveTo(windowWidth*0.45, windowHeight*0.46);
-    g.lineTo(windowWidth*0.225, windowHeight*0.675);
-
-    //bottom right
-    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#7CB3D3", 1);
-    g.moveTo(windowWidth*0.55, windowHeight*0.475);
-    g.lineTo(windowWidth*0.7, windowHeight*0.7);
-
     //top right
-    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#EB992E", 1);
-    g.moveTo(windowWidth*0.55, windowHeight*0.34);
+    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#CC0000", 1);
+    g.moveTo(windowWidth*0.489, windowHeight*0.43);
     g.lineTo(windowWidth*0.655, windowHeight*0.3);
 
   }, [windowWidth, windowHeight])
