@@ -4,7 +4,7 @@ import {newSolution, Solution} from "@/types/solution.ts";
 import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComponent.tsx";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
-import React from "react";
+import React, {useState} from "react";
 
 interface SmartLightsProps {
   onCompletion?: (isCompleted: boolean) => void;
@@ -12,7 +12,9 @@ interface SmartLightsProps {
 
 export const SmartLights: React.FC<SmartLightsProps> = ({ onCompletion }) => {
   const gameService = useGameService();
-  const smartLightsDevice: SmartDevice = gameService.getDeviceByName("SmartTv");
+  const smartLightsDevice: SmartDevice = gameService.getDeviceByName("SmartLights");
+  const [showDialogue, setShowDialogue] = useState(true);
+
 
   const handleQuizCompletion = (isCompleted: boolean) => {
     if (isCompleted) {
@@ -40,6 +42,30 @@ export const SmartLights: React.FC<SmartLightsProps> = ({ onCompletion }) => {
     t`Record energy consumption`,
     t`Connect to smart app`,
   ];
+
+  if (showDialogue) {
+    return (
+            <div className="flex flex-col items-center justify-center p-4">
+
+              <h1 className="text-white text-3xl font-bold mb-8">
+                <Trans>Smart Lights Setup</Trans></h1>
+              <div className="text-xl bg-white p-5 rounded-lg text-gray-700 w-full max-w-3xl mb-6">
+                <p className="leading-relaxed">
+                  <Trans>Oh no! Your smart lamp is corrupted as well. Even though it is nice to change colours,
+                    you surely don't want to have a disco lamp running all day long. Luckily, there is an easy solution:
+                    toggle the right permissions to regain control. But think carefully! Restrictive settings might
+                    lose you a lot of comfort. Try to figure out the right balance between comfort and privacy.
+                  </Trans></p>
+              </div>
+              <button onClick={() => setShowDialogue(false)}
+                      className="px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
+                      rounded-[30px] shadow-md transition-colors cursor-pointer"
+              >
+                <Trans>Continue</Trans>
+              </button>
+            </div>
+    );
+  }
 
   return (
           <div className="text-white px-[30px] py-[12px] w-[800px]">
