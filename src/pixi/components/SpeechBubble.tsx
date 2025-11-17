@@ -30,6 +30,9 @@ export function SpeechBubble({
     KitchenPainting: t`A real Picasso!`,
     BathroomChick: t`Am I an easter egg?`,
     BathroomDrawer: t`Looking pretty today`,
+    HallwayDog: t`Can I pet that dog?`,
+    HallwayExit: t`It's locked!`,
+    BedroomFish: t`*blub*`
   };
 
   const text = textMap[element] ?? "";
