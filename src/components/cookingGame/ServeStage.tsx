@@ -323,7 +323,7 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
                    lineColor={0x5d3c1a}
                    width={90}
                    height={35}
-                   label={"Weiter"}
+                   label={t`Continue`}
                    action={pageUP}
                 />
               </>
