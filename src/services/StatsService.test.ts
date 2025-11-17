@@ -28,7 +28,7 @@ describe("StatsService", () => {
     device5.getStatBlock().setValue("Score", "1701");
     const statsService = new StatsService();
     const csv = statsService.generateCsvString(game);
-    console.log("generated string:");
+    console.log("generated string:"); //Log statement for manual verification of csv string
     console.log(csv);
     expect(typeof csv).toBe("string");
     expect(csv.length).toBeGreaterThan(0);

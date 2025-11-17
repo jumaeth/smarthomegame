@@ -1,7 +1,9 @@
 import {Game} from "../objects/Game";
 import {Room} from "../objects/Room";
 import {SmartDevice} from "../objects/SmartDevice";
-import {StatsKeys} from "../objects/StatsKeys";
+import {statisticsDisplayName, StatsKeys} from "../objects/StatsKeys";
+import {deviceDisplayName, deviceNameToEnum} from "@/objects/DeviceNames";
+import {roomDisplayName, roomNameToEnum} from "@/objects/RoomNames";
 
 export class StatsService {
   private CSV_SEPARATOR: string = ";";
@@ -25,7 +27,12 @@ export class StatsService {
     let roomLine: string = "";
     rooms.forEach(room => {
       const amountOfDevices = room.devices.length;
-      roomLine += room.name + this.CSV_SEPARATOR.repeat(amountOfDevices * 2);
+      const roomEnum = roomNameToEnum(room.name);
+      if (!roomEnum || amountOfDevices === 0) {
+        return;
+      }
+      const roomName: string = roomDisplayName[roomEnum]();
+      roomLine += roomName + this.CSV_SEPARATOR.repeat(amountOfDevices * 2);
     })
     return roomLine.slice(0, -1);
   }
@@ -33,7 +40,13 @@ export class StatsService {
   generateDevicesNamesLine(devices: SmartDevice[]): string {
     let deviceNamesLine: string = "";
     devices.forEach(device => {
-      deviceNamesLine += device.name + this.CSV_SEPARATOR.repeat(2);
+      const deviceEnum = deviceNameToEnum(device.name);
+      console.log("deviceName", deviceEnum);
+      if (!deviceEnum) {
+        return;
+      }
+      const deviceName: string = deviceDisplayName[deviceEnum]();
+      deviceNamesLine += deviceName + this.CSV_SEPARATOR.repeat(2);
     })
     return deviceNamesLine.slice(0, -1);
   }
@@ -47,19 +60,19 @@ export class StatsService {
 
   generateLineForStatKeyWithMiliValues(devices: SmartDevice[], statKey: StatsKeys): string {
     let line: string = "";
-    const statKeyName = StatsKeys[statKey]; // Enum-Name als String
+    const statKeyName: string = statisticsDisplayName[statKey]();
 
     devices.forEach(device => {
       const value: number = Number(device.getStatBlock().findByName(statKey));
       line += statKeyName + this.CSV_SEPARATOR;
-      line += (value/1000) + this.CSV_SEPARATOR;
+      line += (value / 1000) + this.CSV_SEPARATOR;
     })
     return line.slice(0, -1);
   }
 
   generateLineForStatKey(devices: SmartDevice[], statKey: StatsKeys): string {
     let line: string = "";
-    const statKeyName =  StatsKeys[statKey]; // Enum-Name als String
+    const statKeyName = statisticsDisplayName[statKey]();
 
     devices.forEach(device => {
       line += statKeyName + this.CSV_SEPARATOR;
