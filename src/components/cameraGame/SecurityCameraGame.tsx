@@ -23,10 +23,10 @@ export const SecurityCameraGame = ({onCompletion}: { onCompletion: onCompletionC
       t`AI image recognition`
     ],
     solutions: [
-      newSolution(true, t`This setting is ok`, 0, 5, 0, -5),
-      newSolution(true, t`This setting is ok`, 0, 10, 0, -10),
-      newSolution(false, t`This is not necessary and a risk to your privacy`, 10, -2, -10, +2),
-      newSolution(false, t`This is not necessary and a risk to your privacy`, 10, -2, -10, +2),
+      newSolution(true, t`This setting is ok`,  t`This setting is not ok`, 0, 5, 0, -5),
+      newSolution(true, t`This setting is ok`, t`This setting is not ok`, 0, 10, 0, -10),
+      newSolution(false, t`This is not necessary and a risk to your privacy`, t`This setting is ok`,10, -2, -10, +2),
+      newSolution(false, t`This is not necessary and a risk to your privacy`, t`This setting is ok`,10, -2, -10, +2),
     ],
     handleCompletion: (): void => {
       setFrame(1);
@@ -36,19 +36,19 @@ export const SecurityCameraGame = ({onCompletion}: { onCompletion: onCompletionC
   const CaptchaComponentProps = {
     pictureFolder: "camera-placements",
     solutions: [
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(false, t`This is a bad place for a camera, it is not recommended to place a camera in your bedroom for privacy reasons.`, 10, -2, -10, 0),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(false, t`This is a bad place for a camera, it is not recommended to place a camera in your bathroom for privacy reasons`, 10, -2, -10, 0),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(false, t`This is a bad place for a camera, it is not recommended to place a camera pointing at your pool for privacy reasons`, 10, -2, -10, 0),
+      newSolution(true, t`Correct, this placement is acceptable`, t`Wrong, this placement is not acceptable`,0, 2, 0, -2),
+      newSolution(true, t`Correct, this placement is acceptable`, t`Wrong, this placement is not acceptable`,0, 2, 0, -2),
+      newSolution(true, t`Correct, this placement is acceptable`, t`Wrong, this placement is not acceptable`,0, 2, 0, -2),
+      newSolution(false, t`This is a bad place for a camera, it is not recommended to place a camera in your bedroom for privacy reasons.`, t`Correct, this placement is acceptable`,10, -2, -10, 0),
+      newSolution(true, t`Correct, this placement is acceptable`, t`Wrong, this placement is not acceptable`,0, 2, 0, -2),
+      newSolution(false, t`This is a bad place for a camera, it is not recommended to place a camera in your bathroom for privacy reasons`, t`Correct, this placement is acceptable`,10, -2, -10, 0),
+      newSolution(true, t`Correct, this placement is acceptable`, t`Wrong, this placement is not acceptable`,0, 2, 0, -2),
+      newSolution(true, t`Correct, this placement is acceptable`, t`Wrong, this placement is not acceptable`,0, 2, 0, -2),
+      newSolution(true, t`Correct, this placement is acceptable`, t`Wrong, this placement is not acceptable`,0, 2, 0, -2),
+      newSolution(true, t`Correct, this placement is acceptable`, t`Wrong, this placement is not acceptable`,0, 2, 0, -2),
+      newSolution(true, t`Correct, this placement is acceptable`, t`Wrong, this placement is not acceptable`,0, 2, 0, -2),
+      newSolution(true, t`Correct, this placement is acceptable`, t`Wrong, this placement is not acceptable`,0, 2, 0, -2),
+      newSolution(false, t`This is a bad place for a camera, it is not recommended to place a camera pointing at your pool for privacy reasons`, t`Correct, this placement is acceptable`,10, -2, -10, 0),
     ],
     handleCompletion: handleQuizCompletion,
   };

@@ -30,10 +30,10 @@ export const SmartLights: React.FC<SmartLightsProps> = ({ onCompletion }) => {
   };
 
   const solutions: Solution[] = [
-    newSolution(true, t`This setting is acceptable`, 5, 0, 1, -5),
-    newSolution(true, t`This setting is acceptable`, 5, 0, 1, -5),
-    newSolution(false, t`This setting is not acceptable`, 10, -2, -10, +2),
-    newSolution(false, t`This setting is not acceptable`, 10, -6, +10, +6),
+    newSolution(true, t`Bluetooth brings great functionality`, t`Bluetooth isn't dangerous for your device`, 5, 0, 1, -5),
+    newSolution(true, t`Wifi is needed to control the lamp`,  t`No Wifi, fancy coloured lamp`, 5, 0, 1, -5),
+    newSolution(false, t`Correct, adds to much permissions`, t`Not needed to switch the light on and of`, 10, -2, -10, +2),
+    newSolution(false, t`Correct, this isn't a must`, t`Can be an access point for intruders`, 10, -6, +10, +6),
   ];
 
   const questions: string[] = [
