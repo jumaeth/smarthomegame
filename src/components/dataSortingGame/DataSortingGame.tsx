@@ -309,25 +309,34 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
             >
 
               <div className="bg-white rounded-xl p-6 w-[100%] font-['LoResRegular',sans-serif]">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl mb-4">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl mb-6">
                   <Trans>🎉 Congratulations! 🎉</Trans>
                 </h1>
 
-                <p className="text-base sm:text-xl mb-1">
-                  <Trans>All items were sorted!</Trans>
-                </p>
+                <div className="space-y-6 mb-6">
+                  <div className="border-b border-gray-300 pb-4">
+                    <p className="text-xl sm:text-2xl md:text-3xl font-semibold">
+                      <Trans>All items were sorted!</Trans>
+                    </p>
+                  </div>
 
-                {firstTrySuccesses.length > 0 && (
-                        <p className="text-base sm:text-xl  mb-1">
-                          <Trans>Answered correctly on the first attempt:</Trans> <span style={{ textShadow: '1px 1px 3px rgba(120, 53, 15, 0.8)' }}>{firstTrySuccesses.length}</span> <Trans>of</Trans> <span style={{ textShadow: '1px 1px 3px rgba(120, 53, 15, 0.8)' }}>{DATA_ITEMS.length}</span>
-                        </p>
-                )}
+                  {firstTrySuccesses.length > 0 && (
+                          <div className="border-b border-gray-300 pb-4">
+                            <p className="text-xl sm:text-2xl md:text-3xl font-semibold">
+                              <Trans>Answered correctly on the first attempt:</Trans> <span style={{ textShadow: '1px 1px 3px rgba(120, 53, 15, 0.8)' }}>{firstTrySuccesses.length}</span> <Trans>of</Trans> <span style={{ textShadow: '1px 1px 3px rgba(120, 53, 15, 0.8)' }}>{DATA_ITEMS.length}</span>
+                            </p>
+                          </div>
+                  )}
 
-                <p className="text-base sm:text-xl mb-1">
-                  <Trans>Completion bonus:</Trans><span
-                        style={{textShadow: '1px 1px 3px rgba(120, 53, 15, 0.6)'}}> + {bonus.privacy}<Trans> privacy</Trans>, + {bonus.comfort} <Trans>comfort</Trans></span>
-                </p>
-                <p className="text-base sm:text-xl mb-4">
+                  <div className="border-b border-gray-300 pb-4">
+                    <p className="text-xl sm:text-2xl md:text-3xl font-semibold">
+                      <Trans>Completion bonus:</Trans><span
+                            style={{textShadow: '1px 1px 3px rgba(120, 53, 15, 0.6)'}}> + {bonus.privacy}<Trans> privacy</Trans>, + {bonus.comfort} <Trans>comfort</Trans></span>
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-lg sm:text-xl mb-4">
                   <Trans>The Smart Home Hub is now unlocked, but you can try again if you want!</Trans>
                 </p>
 
