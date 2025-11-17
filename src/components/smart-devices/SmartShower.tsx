@@ -198,7 +198,7 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
 
                       <div className="text-xl bg-white p-5 rounded-lg text-gray-700 w-full max-w-3xl mb-6">
                         <p className="leading-relaxed">
-                          <Trans>Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable.</Trans>
+                          <Trans>Your Smart Shower is designed to optimize water usage and help you consume wisely. It’s highly sustainable—but it may collect more data than necessary. Identify the smart gadgets within the Smart Shower and deactivate their data permissions if you believe they compromise your privacy.</Trans>
                         </p>
                       </div>
 
@@ -222,6 +222,10 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
                       <h1 className="text-3xl text-center font-['LoResBold',sans-serif] mb-4">
                         <Trans>Smart Shower Configuration</Trans>
                       </h1>
+
+                      <h2 className="text-base text-center">
+                        <Trans>Find the relevant objects for the smart shower. Think carefully about which features you want to enable or disable.</Trans>
+                      </h2>
 
                       <div className="flex-1 flex items-center justify-center p-4 relative">
                         {selectedObject && (
