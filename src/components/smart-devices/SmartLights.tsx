@@ -12,7 +12,7 @@ interface SmartLightsProps {
 
 export const SmartLights: React.FC<SmartLightsProps> = ({ onCompletion }) => {
   const gameService = useGameService();
-  const smartLightsDevice: SmartDevice = gameService.getDeviceByName("SmartTv");
+  const smartLightsDevice: SmartDevice = gameService.getDeviceByName("SmartLights");
 
   const handleQuizCompletion = (isCompleted: boolean) => {
     if (isCompleted) {
@@ -22,9 +22,8 @@ export const SmartLights: React.FC<SmartLightsProps> = ({ onCompletion }) => {
       privacy: gameService.getScore().getPrivacyScore(),
       comfort: gameService.getScore().getComfortScore()
     };
-    smartLightsDevice.getStatBlock().setValue("Smart Lights Privacy Score", calculatedScores.privacy);
-    smartLightsDevice.getStatBlock().setValue("Smart Lights Comfort Score", calculatedScores.comfort);
-    smartLightsDevice.getStatBlock().stopTimer();
+    smartLightsDevice.getStatBlock().setValue(t`Smart Lights Privacy Score`, calculatedScores.privacy);
+    smartLightsDevice.getStatBlock().setValue(t`Smart Lights Comfort Score`, calculatedScores.comfort);
   };
 
   const solutions: Solution[] = [

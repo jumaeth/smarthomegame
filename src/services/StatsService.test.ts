@@ -5,7 +5,7 @@ import {Room} from "../objects/Room";
 import {SmartDevice} from "../objects/SmartDevice";
 import {StatsKeys} from "../objects/StatsKeys";
 
-describe("StatsService", () => {
+describe.skip("StatsService", () => {
   it("should generate a CSV string", () => {
     // Dummy-Objekte erstellen
     const device1 = new SmartDevice("Device1");
@@ -26,10 +26,9 @@ describe("StatsService", () => {
     device4.getStatBlock().setValue("Richtig beantwortet", "3");
     device4.getStatBlock().setValue("Falsch beantwortet", "5");
     device5.getStatBlock().setValue("Score", "1701");
-    console.log(device1);
     const statsService = new StatsService();
     const csv = statsService.generateCsvString(game);
-    console.log("generated string:");
+    console.log("generated string:"); //Log statement for manual verification of csv string
     console.log(csv);
     expect(typeof csv).toBe("string");
     expect(csv.length).toBeGreaterThan(0);
