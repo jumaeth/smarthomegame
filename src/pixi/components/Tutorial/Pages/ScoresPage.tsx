@@ -210,7 +210,6 @@ export const ScoresPage: React.FC<PageProps> = ({
                               text={text.text}
                               x={text.x}
                               y={text.y}
-                              anchor={0}
                               style={new TextStyle({
                                 fontFamily: "LoResRegular",
                                 fontSize: Math.min(windowWidth, windowHeight) * text.fontSize,
