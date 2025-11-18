@@ -14,7 +14,7 @@ import {Bathroom} from "@/components/rooms/Bathroom.tsx";
 import {Bedroom} from "@/components/rooms/Bedroom.tsx";
 
 const AppRoutes = () => (
-        <Router basename="/smarthome-escape">
+        <Router basename="/smarthome-challenge">
           <ReloadHandler/>
           <Routes>
             <Route index element={<HomePage/>}/>
