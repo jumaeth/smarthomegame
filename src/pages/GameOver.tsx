@@ -45,7 +45,7 @@ export function GameOver() {
               <div className="space-y-6">
                 <div>
                   <h2 className="text-3xl leading-tight text-gray-100">
-                    <Trans>{victoryState?.displayText}</Trans>
+                    <p>{victoryState?.displayText?.() ?? ""}</p>
                   </h2>
 
                   <div className="mt-4 flex flex-wrap gap-3 items-center">

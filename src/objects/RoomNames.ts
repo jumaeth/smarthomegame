@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+
 export enum RoomNames {
   LIVINGROOM = "livingroom",
   HALLWAY = "hallway",
@@ -14,3 +16,11 @@ export function roomNameToEnum(roomName: string): RoomNames | undefined {
   }
   return undefined;
 }
+
+export const roomDisplayName:Record<RoomNames, () => string> = {
+  [RoomNames.LIVINGROOM]: () => t`Living Room`,
+  [RoomNames.HALLWAY]: () => t`Hallway`,
+  [RoomNames.KITCHEN]: () => t`Kitchen`,
+  [RoomNames.BATHROOM]: () => t`Bathroom`,
+  [RoomNames.BEDROOM]: () => t`Bedroom`
+};

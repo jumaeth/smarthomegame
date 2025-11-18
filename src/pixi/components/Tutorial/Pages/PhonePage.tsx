@@ -48,8 +48,6 @@ export const PhonePage: React.FC<PageProps> = ({
     t`In every room, you’ll find some items – some of them are Smart Devices. Adjust their privacy settings and solve the mini-games to unlock your Smart Home! `,
     t`You are here`,
     t`This is where you start the game. Try not to get lost!`,
-    t``,
-    t``,
     t`The Map`
 
 ], [])
@@ -164,18 +162,16 @@ export const PhonePage: React.FC<PageProps> = ({
 
   //setup graphics
   const textsData = useMemo<TextProps[]>( ()=> ([
-    { text: textArr[0], x: windowWidth*0.12,   y: windowHeight*0.2,  fontSize: 0.035, fontWeight: "bold"   },
-    { text: textArr[2], x: windowWidth*0.14, y: windowHeight*0.7,  fontSize: 0.035, fontWeight: "bold"   },
-    { text: textArr[4], x: windowWidth*0.725, y: windowHeight*0.3,  fontSize: 0.035, fontWeight: "bold"   },
-    { text: textArr[6], x: windowWidth*0.75, y: windowHeight*0.75,  fontSize: 0.035, fontWeight: "bold"   },
+    { text: textArr[0], x: windowWidth*0.05,   y: windowHeight*0.2,  fontSize: 0.035, fontWeight: "bold"   },
+    { text: textArr[2], x: windowWidth*0.4, y: windowHeight*0.7,  fontSize: 0.035, fontWeight: "bold"   },
+    { text: textArr[4], x: windowWidth*0.7, y: windowHeight*0.2,  fontSize: 0.035, fontWeight: "bold"   },
 
-    { text: textArr[1], x: windowWidth*0.188,   y: windowHeight*0.265,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.25},
-    { text: textArr[3], x: windowWidth*0.2, y: windowHeight*0.755,  fontSize: 0.025, fontWeight: "lighter"},
-    { text: textArr[5], x: windowWidth*0.785,   y: windowHeight*0.365,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.28},
-    { text: textArr[7], x: windowWidth*0.8125, y: windowHeight*0.815,  fontSize: 0.025, fontWeight: "lighter"},
+    { text: textArr[1], x: windowWidth*0.05,   y: windowHeight*0.25,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.25},
+    { text: textArr[3], x: windowWidth*0.4, y: windowHeight*0.75,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.25},
+    { text: textArr[5], x: windowWidth*0.7,   y: windowHeight*0.25,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.28},
 
-    { text: textArr[8], x: windowWidth*0.5, y: windowHeight*0.125, fontSize: 0.06, fontWeight: "bold" },
-  ]),[textArr, windowWidth, windowHeight])
+    { text: textArr[6], x: growChar.endX - texture.width * growChar.endS * 0.1, y: windowHeight*0.05, fontSize: 0.07, fontWeight: "bold" },
+  ]),[windowWidth, windowHeight, growChar.endS, growChar.endX, textArr, texture.width])
 
   //define line properties
   const drawLines =  useCallback( (g: PixiGraphics) => {
@@ -183,13 +179,13 @@ export const PhonePage: React.FC<PageProps> = ({
 
     //top left
     g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#00458f", 1);
-    g.moveTo(windowWidth*0.4475, windowHeight*0.395);
-    g.lineTo(windowWidth*0.275, windowHeight*0.3);
+    g.moveTo(windowWidth*0.4, windowHeight*0.39);
+    g.lineTo(windowWidth*0.3, windowHeight*0.275);
 
     //top right
     g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#CC0000", 1);
     g.moveTo(windowWidth*0.489, windowHeight*0.43);
-    g.lineTo(windowWidth*0.655, windowHeight*0.3);
+    g.lineTo(windowWidth*0.675, windowHeight*0.25);
 
   }, [windowWidth, windowHeight])
 
@@ -212,7 +208,6 @@ export const PhonePage: React.FC<PageProps> = ({
                               text={text.text}
                               x={text.x}
                               y={text.y}
-                              anchor={0.5}
                               style={new TextStyle({
                                 fontFamily: "LoResRegular",
                                 fontSize: Math.min(windowWidth, windowHeight) * text.fontSize,

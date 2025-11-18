@@ -12,6 +12,7 @@ import {OutroStage} from "@/components/cookingGame/OutroStage.tsx";
 import {IntroStage} from "@/components/cookingGame/IntroStage.tsx";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
+import {t} from "@lingui/core/macro";
 
 interface CookingGameComponentProps {
   onCompletion: () => void;
@@ -33,8 +34,7 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   const initStateRef=useRef(true);
   const totalPoints=useRef<Map<Score, number>>(new Map<Score, number>);
   const gameService = useGameService();
-  const device:SmartDevice = gameService.getDeviceByName("SmartTv");
-  device.getStatBlock().startTimer();
+  const device:SmartDevice = gameService.getDeviceByName("SmartKitchen");
 
 
   const secureSetStage= (stage : Stages) =>{
@@ -49,8 +49,7 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
         if (comfort)gameService.changeScore(comfort, "comfort");
       }
       const statsScore:number = points.get(Score.Privacy) ?? 0;
-      device.getStatBlock().setValue("Smart Kitchen Points",statsScore);
-      device.getStatBlock().stopTimer();
+      device.getStatBlock().setValue(t`Smart Kitchen Points`,statsScore);
       onCompletion();
     }else if(stage === nextStage){
       setNextStage(prev=>prev+1);

@@ -39,6 +39,8 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
     if (tutorialActive.enabled && (deviceName !== "SmartTv")) return;
     console.log("deviceOpen");
     setActiveDevice(deviceName);
+    const smartDevice: SmartDevice = gameService.getDeviceByName(deviceName);
+    smartDevice.getStatBlock().startTimer();
     gameService.pauseGame(`device:${deviceName}`);
   };
 
@@ -49,13 +51,11 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
   };
 
   const smartDeviceCallback = (completed: boolean): void => {
-    console.log("complete1");
     if (!activeDevice) return;
-    console.log("complete1.5" + activeDevice);
     const device = smartDevices.find((d) => d.name === activeDevice);
     console.log(device)
     if (!device) return;
-    console.log("complete2");
+    device.getStatBlock().stopTimer();
 
     if (completed) gameService.completeDevice(device.name);
     gameService.resumeGame(`device:${device.name}`);

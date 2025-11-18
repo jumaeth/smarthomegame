@@ -26,5 +26,5 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
-  base: '/smarthome-escape',
+  base: '/smarthome-challenge',
 });

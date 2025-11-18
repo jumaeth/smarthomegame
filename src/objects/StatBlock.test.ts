@@ -40,6 +40,9 @@ describe('StatBlock', () => {
     localStatBlock.startTimer();
     expect(localStatBlock.findByName(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS)).toBe("1");
     localStatBlock.startTimer();
+    expect(localStatBlock.findByName(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS)).toBe("1");
+    localStatBlock.stopTimer()
+    localStatBlock.startTimer();
     expect(localStatBlock.findByName(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS)).toBe("2");
   });
 

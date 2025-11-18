@@ -69,6 +69,10 @@ export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({completeDevice}) => {
                         <Trans>Data Sorting Challenge</Trans>
                       </h1>
 
+                      <p className="text-base text-center text-gray-300 mb-4 mt-2">
+                        <Trans>Drag and drop the datapoints to the correct category</Trans>
+                      </p>
+
                       <div className="p-[14px] px-[28px] mb-4">
                         <DataSortingGame onCompletion={handleGameComplete}/>
                       </div>
