@@ -98,8 +98,8 @@ build-prod-container-job:
   stage: build
   image: docker:29-cli
   tags: [docker_runner]
-#  rules:
-#    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PROD_BRANCH_NAME'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PROD_BRANCH_NAME'
   needs:
     - build-job
   before_script:
@@ -159,15 +159,15 @@ deploy-dev:
     - ssh development@$SERVER_IP "cd /app && 
       export CI_REGISTRY_IMAGE='$CI_REGISTRY_IMAGE' && CI_REGISTRY_USER='$CI_REGISTRY_USER' && CI_REGISTRY='$CI_REGISTRY' && CI_REGISTRY_PASSWORD='$CI_REGISTRY_PASSWORD' 
       echo '$CI_REGISTRY_PASSWORD' | docker login --username '$CI_REGISTRY_USER' --password-stdin '$CI_REGISTRY' &&
-      docker compose -f docker-compose.deploy.yml --profile dev up -d --remove-orphans"
+      docker compose -f docker-compose.deploy.yml --profile dev up -d --remove-orphans" --pull always
 
 deploy-prod:
   stage: deploy
   image: docker:29-cli
   tags: [docker_runner]
   before_script: []
-#  rules:
-#    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PROD_BRANCH_NAME'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PROD_BRANCH_NAME'
   script:
     # Setup ssh
     - apk add --no-cache openssh-client
@@ -183,5 +183,5 @@ deploy-prod:
     - ssh development@$SERVER_IP "cd /app &&
       export CI_REGISTRY_IMAGE='$CI_REGISTRY_IMAGE' && CI_REGISTRY_USER='$CI_REGISTRY_USER' && CI_REGISTRY='$CI_REGISTRY' && CI_REGISTRY_PASSWORD='$CI_REGISTRY_PASSWORD'
       echo '$CI_REGISTRY_PASSWORD' | docker login --username '$CI_REGISTRY_USER' --password-stdin '$CI_REGISTRY' &&
-      docker compose -f docker-compose.deploy.yml --profile prod up -d --remove-orphans"
+      docker compose -f docker-compose.deploy.yml --profile prod up -d --remove-orphans" --pull always
 
