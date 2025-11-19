@@ -4,6 +4,7 @@ variables:
   DEV_BRANCH_NAME: "development"
   PROD_BRANCH_NAME: "main"
   SCHEDULE: "schedule"
+  SERVER_IP: 86.119.46.247
 
 stages:
   - schedule
@@ -61,8 +62,8 @@ test-job:
 
 build-job:
   stage: build
-  rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
+#  rules:
+#    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
   before_script:
     - npm install
   script:
@@ -82,8 +83,8 @@ build-dev-container-job:
   stage: build
   image: docker:29-cli
   tags: [docker_runner]
-  rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
+#  rules:
+#    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
   needs:
     - build-job
   before_script:
@@ -140,21 +141,34 @@ deploy-dev:
   stage: deploy
   image: docker:29-cli
   tags: [docker_runner]
-  rules:
-    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
+#  rules:
+#    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
   script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-    - docker compose -f docker-compose.deploy.yml --profile dev pull
-    - docker compose -f docker-compose.deploy.yml --profile dev up -d --remove-orphans
+    # Setup ssh
+    - apk add --no-cache openssh-client
+    - eval `ssh-agent`
+    - echo "$SSH_PK_DEVELOPMENT" | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - touch ~/.ssh/known_hosts
+    - chmod 600 ~/.ssh/known_hosts
+    - echo $SSH_HOST_KEY >> ~/.ssh/known_hosts
+    # Copy docker compose and start on host via ssh
+    - scp docker-compose.deploy.yml development@$SERVER_IP:/app/docker-compose.deploy.yml
+    - ssh development@$SERVER_IP "cd /app && \ 
+      CI_REGISTRY_IMAGE='$CI_REGISTRY_IMAGE' && CI_REGISTRY_USER='$CI_REGISTRY_USER' && CI_REGISTRY='$CI_REGISTRY' && CI_REGISTRY_PASSWORD='$CI_REGISTRY_PASSWORD' \
+      echo '$CI_REGISTRY_PASSWORD' | docker login --username '$CI_REGISTRY_USER' --password-stdin '$CI_REGISTRY' \
+      docker compose -f docker-compose.deploy.yml --profile dev up -d --remove-orphans"
 
 deploy-prod:
   stage: deploy
-  image: docker:28-cli
+  image: docker:29-cli
   tags: [docker_runner]
   rules:
     - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PROD_BRANCH_NAME'
   script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-    - docker compose -f docker-compose.deploy.yml --profile prod pull
-    - docker compose -f docker-compose.deploy.yml --profile prod up -d --remove-orphans
+    - apk add --no-cache openssh-client
+    - scp docker-compose.deploy.yml development@$SERVER_IP:/app/docker-compose.deploy.yml
+    - ssh development@$SERVER_IP \
+      "cd /app && CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE docker compose -f docker-compose.deploy.yml --profile prod up -d --remove-orphans"
 
