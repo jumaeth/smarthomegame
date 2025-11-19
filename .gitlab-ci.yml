@@ -24,8 +24,7 @@ start-server-job:
     - if: '$CI_PIPELINE_SOURCE == $SCHEDULE'
   before_script:
     - apk update
-    - apk add --no-cache build-base
-    - apk add --no-cache python3-dev pipx
+    - apk add --no-cache build-base python3-dev pipx linux-headers
     - pipx install python-openstackclient
     - export PATH=$PATH:/root/.local/bin
   script:
