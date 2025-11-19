@@ -62,8 +62,8 @@ test-job:
 
 build-job:
   stage: build
-#  rules:
-#    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE'
   before_script:
     - npm install
   script:
