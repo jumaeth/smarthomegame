@@ -20,8 +20,8 @@ before_script:
 
 start-server-job:
   stage: schedule
-#  rules:
-#    - if: '$CI_PIPELINE_SOURCE == $SCHEDULE'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == $SCHEDULE'
   before_script:
     - apk update
     - apk add --no-cache build-base python3-dev pipx linux-headers
