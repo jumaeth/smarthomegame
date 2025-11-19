@@ -134,7 +134,7 @@ export const MainContainer = ({
     const tileY = Math.floor(pos.y / TILE_SIZE);
     const transition = getMapTransition(map, tileX, tileY);
 
-    if (!transition || tutorialActive) {
+    if (!transition || tutorialActive || characterPositionStore.getFacing() != transition.faceToEnter) {
       setBlockedDoorTo(null);
       return;
     }
@@ -269,7 +269,7 @@ export const MainContainer = ({
                                   texture={characterTexture}
                                   onMove={handleCharacterMove}
                                   collisionMap={collisionMap}
-                                  isPaused={isPaused as boolean}
+                                  isPaused={isPaused as boolean || inTransition}
                                   onInteractCheck={handleInteraction}
                           />
                           <LevelOverlay pixelSize={pixelSize} texture={overlayTexture}/>

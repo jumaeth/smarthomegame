@@ -34,6 +34,7 @@ export const Character = forwardRef((
   const targetPosition = useRef<Position | null>(null);
   const currentDirection = useRef<Direction>(characterPositionStore.getFacing());
   const isMoving = useRef(false);
+  const lastFace = useRef<Direction>(currentDirection.current);
 
   const { direction } = useCharacterControls();
   const { movementEnabled } = useMovementStore();
@@ -48,7 +49,7 @@ export const Character = forwardRef((
 
   useEffect(() => {
     updateSprite(currentDirection.current, false);
-  }, []);
+  }, [updateSprite]);
 
   const setNextTarget = useCallback((dir: Direction) => {
     if (targetPosition.current) return;
@@ -110,6 +111,12 @@ export const Character = forwardRef((
     }
 
     const face = currentDirection.current ?? characterPositionStore.getFacing();
+
+    if (face !== lastFace.current) {
+      lastFace.current = face;
+      onMove(posRef.current);
+    }
+
     updateSprite(face, isMoving.current);
   });
 
