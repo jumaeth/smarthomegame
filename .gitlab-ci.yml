@@ -141,6 +141,7 @@ deploy-dev:
   stage: deploy
   image: docker:29-cli
   tags: [docker_runner]
+  before_script: []
 #  rules:
 #    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $DEV_BRANCH_NAME'
   script:
