@@ -3,6 +3,7 @@ import {StatsKeys} from "./StatsKeys";
 export class StatBlock {
   private readonly values: Map<StatsKeys | string, string>;
   private startTimeTimestamp: number = 0;
+  private isTimerRunning: boolean = false;
 
 
   constructor() {
@@ -25,19 +26,24 @@ export class StatBlock {
   }
 
   public startTimer(): void {
+    if (this.isTimerRunning){
+      return;
+    }
     this.startTimeTimestamp = Date.now();
     const amountOfSessions = Number(this.values.get(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS) ?? "0");
     this.values.set(StatsKeys.AMOUNT_OF_DEVICE_SESSIONS, String(amountOfSessions + 1))
+    this.isTimerRunning = true;
   }
 
   public stopTimer(): void {
-    if (!this.startTimeTimestamp) {
+    if (!this.isTimerRunning) {
       throw new Error("Timer was not started.");
     }
     const elapsed: number = Date.now() - this.startTimeTimestamp;
     const previousTime: number = Number(this.values.get(StatsKeys.TIME_IN_DEVICE) ?? 0);
     this.values.set(StatsKeys.TIME_IN_DEVICE, String(previousTime + elapsed));
     this.startTimeTimestamp = 0;
+    this.isTimerRunning = false;
   }
 
 

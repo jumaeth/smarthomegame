@@ -17,7 +17,7 @@ const HelpButton = ({newMessage, smartDevice}: HelpButtonProps) => {
   const [message, setMessage] = useState(t`wow interesting task you got there, do you need help with anything?`)
 
   const onYes: () => void = (): void => {
-    setMessage(smartDevice ? smartDevice.getHelpText() : t`this is more difficult than i thought, unfortunately I cannot support you with this.`)
+    setMessage(smartDevice ? smartDevice.getHelpText() : t`This is more difficult than i thought, unfortunately I cannot support you with this.`)
     setButtons(<div>{close}</div>)
   }
 
@@ -36,9 +36,9 @@ const HelpButton = ({newMessage, smartDevice}: HelpButtonProps) => {
     setWasRead(true);
   }
 
-  const yes = <Button onClick={onYes}><Trans>yes</Trans></Button>;
-  const no = <Button onClick={onNo}><Trans>no</Trans></Button>;
-  const close = <Button onClick={closeMessage}><Trans>close</Trans></Button>;
+  const yes = <Button onClick={onYes}><Trans>Yes</Trans></Button>;
+  const no = <Button onClick={onNo}><Trans>No</Trans></Button>;
+  const close = <Button onClick={closeMessage}><Trans>Close</Trans></Button>;
   const [wasRead, setWasRead] = useState(!newMessage);
 
   const [buttons, setButtons] = useState(<div>{yes}{no}</div>)

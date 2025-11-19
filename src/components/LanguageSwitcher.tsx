@@ -1,8 +1,5 @@
 import {i18n} from "@lingui/core";
-
-function setLocaleCookie(locale: string) {
-  document.cookie = `locale=${locale}; path=/; max-age=31536000`; // 1 year
-}
+import {setLocaleCookie} from "@/utils/cookie/languageCookie.ts";
 
 const LanguageSwitcher = () => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

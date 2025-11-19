@@ -2,6 +2,9 @@ import React, {RefObject, useEffect, useMemo, useState} from "react";
 import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
 import {Button} from "./Button.tsx";
 import {TextStyle} from "pixi.js";
+import recipeOpenImg from "@/assets/cooking-sprites/recipeopen.png"
+import marketImg from "@/assets/cooking-sprites/marketstand.png"
+import marketBackgroundImg from "@/assets/cooking-sprites/market_background.png"
 import {Sprite, Text} from "@pixi/react";
 import {Stages} from "@/components/cookingGame/Stages.ts";
 import {t} from "@lingui/core/macro";
@@ -15,9 +18,9 @@ interface IngredientsStageProps {
 export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, setTotalPoints }) => {
 
   const texturePaths= useMemo(() => ({
-    recipeOpen: "/src/assets/cooking-sprites/recipeopen.png",
-    market: "/src/assets/cooking-sprites/marketstand.png",
-    marketBackground: "/src/assets/cooking-sprites/market_background.png",
+    recipeOpen: recipeOpenImg,
+    market: marketImg,
+    marketBackground: marketBackgroundImg,
   }), []);
 
 
@@ -208,10 +211,6 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
   };
 
   useEffect(() => {
-    console.log(loaded)
-  }, [loaded]);
-
-  useEffect(() => {
     if (page === offset + 1 + btnTexts.length) {
       setText(assembleSummaryText());
     }
@@ -245,7 +244,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
                           lineColor={0x5d3c1a}
                           width={90}
                           height={35}
-                          label={"Weiter"}
+                          label={t`Continue`}
                           action={action}
                   />
         </>

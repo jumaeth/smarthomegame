@@ -5,3 +5,17 @@
   padding: 0;
   margin: 0;
 }
+
+@font-face {
+  font-family: 'LoResRegular';
+  src: url('/public/fonts/LoRes12OT-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LoResBold';
+  src: url('/public/fonts/LoRes12OT-Bold.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}

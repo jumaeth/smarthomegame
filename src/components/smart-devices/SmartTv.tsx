@@ -1,11 +1,9 @@
-import "./Modal.css";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
 import {useState} from "react";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
-
-type onCompletionCallback = (isCompleted: boolean) => void;
+import React from "react";
 
 interface SmartTvOption {
   id: string;
@@ -16,10 +14,13 @@ interface SmartTvOption {
   comfortScore: number;
 }
 
-export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) => {
+interface SmartTvProps {
+  onCompletion?: (isCompleted: boolean) => void;
+}
+
+export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
   const gameService = useGameService();
-  const smartTvDevice:SmartDevice = gameService.getDeviceByName("SmartTv");
-  smartTvDevice.getStatBlock().startTimer();
+  const smartTvDevice: SmartDevice = gameService.getDeviceByName("SmartTv");
   const [showDialogue, setShowDialogue] = useState(true);
   const [showWarning, setShowWarning] = useState<string | null>(null);
   const [showReconfigureWarning, setShowReconfigureWarning] = useState(false);
@@ -116,7 +117,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
     }
 
     setOptions((prev: SmartTvOption[]) => prev.map((opt: SmartTvOption) =>
-      opt.id === id ? { ...opt, checked } : opt
+            opt.id === id ? {...opt, checked} : opt
     ));
   };
 
@@ -142,11 +143,8 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
       gameService.changeScore(totalComfortScore, 'comfort');
       setShowSuccessMessage(true);
     }
-    smartTvDevice.getStatBlock().setValue("Smart TV Comfort Score", totalComfortScore);
-    smartTvDevice.getStatBlock().setValue("Smart TV Privacy Score", totalPrivacyScore);
-    smartTvDevice.getStatBlock().stopTimer();
-    console.log("Smart TV settings calculated!");
-    console.log(`Privacy Score: ${totalPrivacyScore}, Comfort Score: ${totalComfortScore}`);
+    smartTvDevice.getStatBlock().setValue(t`Smart TV Comfort Score`, totalComfortScore);
+    smartTvDevice.getStatBlock().setValue(t`Smart TV Privacy Score`, totalPrivacyScore);
   };
 
   const handleReconfigure = () => {
@@ -164,7 +162,7 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
 
   const handleSuccessMessageClose = () => {
     setShowSuccessMessage(false);
-    onCompletion(true);
+    onCompletion?.(true);
   };
 
   const closeWarning = () => {
@@ -173,163 +171,121 @@ export const SmartTv = ({onCompletion}: { onCompletion: onCompletionCallback }) 
 
   if (showDialogue) {
     return (
-      <div className="modal-content">
-        <h1><Trans>Smart TV Setup</Trans></h1>
-        <div style={{marginBottom: '20px', padding: '15px', backgroundColor: '#f0f0f0', borderRadius: '8px'}}>
-          <p style={{color: '#333', margin: 0}}><Trans>Your Smart TV was reset to its default settings. Uncheck settings if you think you do not need them for your Smart TV to be working smart, and leave the permissions if they are needed for your TV experience. Choose wisely - your decisions impact your privacy status!</Trans></p>
-        </div>
-        <button onClick={() => setShowDialogue(false)} style={{padding: '10px 20px', fontSize: '16px'}}>
-          <Trans>Continue</Trans>
-        </button>
-      </div>
+            <div className="flex flex-col items-center justify-center p-4">
+
+              <h1 className="text-white text-3xl font-bold mb-8">
+                <Trans>Smart TV Setup</Trans></h1>
+              <div className="text-xl bg-white p-5 rounded-lg text-gray-700 w-full max-w-3xl mb-6">
+                <p className="leading-relaxed">
+                  <Trans>Your Smart TV was reset to its default settings. Uncheck
+                    settings if you think you do not need them for your Smart TV to be working smart, and leave the
+                    permissions if they are needed for your TV experience. Choose wisely - your decisions impact your
+                    privacy status!</Trans></p>
+              </div>
+              <button onClick={() => setShowDialogue(false)}
+                      className="px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
+                      rounded-[30px] shadow-md transition-colors cursor-pointer"
+              >
+                <Trans>Continue</Trans>
+              </button>
+            </div>
     );
   }
 
   return (
-    <div className="modal-content">
-      <h1><Trans>Smart TV Settings</Trans></h1>
 
-      <div style={{marginBottom: '20px'}}>
-        <p><Trans>Select which features you want to enable for your Smart TV:</Trans></p>
-      </div>
+          <div className="text-2xl text-white px-[30px] py-[12px] w-[800px]">
+            <h1 className="text-center text-3xl mb-4 font-['LoResBold',sans-serif] "><Trans>Smart TV Settings</Trans></h1>
 
-      <div style={{maxHeight: '400px', overflowY: 'auto', marginBottom: '20px'}}>
-        {options.map((option: SmartTvOption) => (
-          <div key={option.id} style={{marginBottom: '10px', padding: '10px', border: '1px solid #ddd', borderRadius: '5px'}}>
-            <label style={{display: 'flex', alignItems: 'center', cursor: 'pointer'}}>
-              <input
-                type="checkbox"
-                checked={option.checked}
-                onChange={(e) => handleOptionChange(option.id, e.target.checked)}
-                style={{marginRight: '10px', transform: 'scale(1.2)'}}
-              />
-              <span>{option.label}</span>
-            </label>
-          </div>
-        ))}
-      </div>
+            <div className="text-xl px-[5px]">
+              <p><Trans>Select which features you want to enable for your Smart TV:</Trans></p>
 
-      <button
-        onClick={handleSubmit}
-        style={{
-          padding: '12px 24px',
-          fontSize: '16px'
-        }}
-      >
-        <Trans>Send answer</Trans>
-      </button>
+            <div className="max-h-[400px] overflow-y-auto mb-5">
+              {options.map((option: SmartTvOption) => (
+                      <div key={option.id} className="mt-2.5 mb-3 p-3 border border-grey-400 rounded-md">
+                        <label className="flex items-center cursor-pointer">
+                          <input
+                                  type="checkbox"
+                                  checked={option.checked}
+                                  onChange={(e) => handleOptionChange(option.id, e.target.checked)}
+                                  className="mr-5 scale-[1.8] accent-[#37a820]"
+                          />
+                          <span>{option.label}</span>
+                        </label>
+                      </div>
+              ))}
+            </div>
 
-      {showWarning && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          backgroundColor: 'white',
-          padding: '20px',
-          border: '2px solid #ffc107',
-          borderRadius: '8px',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-          zIndex: 1000,
-          maxWidth: '400px'
-        }}>
-          <h4 style={{marginTop: 0, color: '#856404'}}><Trans>⚠️ Warning</Trans></h4>
-          <p style={{marginBottom: '15px', color: '#333'}}>{showWarning}</p>
-          <button
-            onClick={closeWarning}
-            style={{
-              padding: '8px 16px'
-            }}
-          >
-            <Trans>Continue</Trans>
-          </button>
-        </div>
-      )}
-
-      {showReconfigureWarning && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          backgroundColor: 'white',
-          padding: '24px',
-          border: '2px solid #dc3545',
-          borderRadius: '8px',
-          boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-          zIndex: 1000,
-          maxWidth: '500px'
-        }}>
-          <h4 style={{marginTop: 0, color: '#dc3545', fontSize: '18px', fontWeight: 'bold', marginBottom: '12px'}}><Trans>⚠️ Privacy Warning</Trans></h4>
-          <p style={{marginBottom: '20px', color: '#333', lineHeight: '1.5', fontSize: '14px'}}>
-            <Trans>Your current settings result in a higher privacy loss than comfort gain. This may not be the optimal balance for your privacy.</Trans>
-          </p>
-          <div style={{display: 'flex', gap: '10px', justifyContent: 'center'}}>
             <button
-              onClick={handleReconfigure}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#6c757d',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
+                    onClick={handleSubmit}
+                    className="px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
+                              rounded-[30px] shadow-md transition-colors cursor-pointer text-white
+                              mx-auto block w-full max-w-[30%] mb-2"
             >
-              <Trans>Reconfigure</Trans>
-            </button>
-            <button
-              onClick={handleConfirmSettings}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#dc3545',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
-              <Trans>Continue Anyway</Trans>
+              <Trans>Send answer</Trans>
             </button>
           </div>
-        </div>
-      )}
 
-      {showSuccessMessage && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          backgroundColor: 'white',
-          padding: '24px',
-          border: '2px solid #28a745',
-          borderRadius: '8px',
-          boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-          zIndex: 1000,
-          maxWidth: '400px'
-        }}>
-          <h4 style={{marginTop: 0, color: '#28a745', fontSize: '18px', fontWeight: 'bold', marginBottom: '12px'}}><Trans>✅ Device Configured</Trans></h4>
-          <p style={{marginBottom: '20px', color: '#333', lineHeight: '1.5', fontSize: '14px'}}>
-            {calculatedScores.privacy < 0 && Math.abs(calculatedScores.privacy) > calculatedScores.comfort
-              ? <Trans>Your Smart TV has been configured with your chosen settings.</Trans>
-              : <Trans>Your Smart TV has been configured with a good balance of privacy and comfort!</Trans>}
-          </p>
-          <button
-            onClick={handleSuccessMessageClose}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#28a745',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            <Trans>Continue</Trans>
-          </button>
-        </div>
-      )}
-    </div>
+            {showWarning && (
+                    <div className="absolute text-xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 rounded-lg
+                    shadow-md text-center text-[#222222] bg-[#FEF3C7]">
+                      <h3 className="text-2xl font-bold mb-2"><Trans>Warning ⚠️</Trans></h3>
+                      <p className="mb-4">{showWarning}</p>
+                      <button
+                              onClick={closeWarning}
+                              className="px-6 py-2 bg-amber-700 hover:bg-amber-800 text-white rounded-xl transition-colors cursor-pointer w-full"
+                      >
+                        <Trans>Continue</Trans>
+                      </button>
+                    </div>
+            )}
+
+            {showReconfigureWarning && (
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 rounded-lg
+                     shadow-md z-10 text-center text-[#222222] bg-[#FECACA]">
+                      <h3 className="text-2xl font-bold mb-2"><Trans>❗️ Privacy Warning ❗️</Trans></h3>
+                      <p className="mb-4 text-xl">
+                        <Trans>Your current settings result in a higher privacy loss than comfort gain. This may not
+                          be the optimal balance for your privacy.</Trans>
+                      </p>
+                      <div className="flex gap-2.5 justify-center">
+                        <button
+                                onClick={handleReconfigure}
+                                className="px-8 py-[10px] text-white text-lg font-semibold bg-green-600 hover:bg-green-700
+                      rounded-xl shadow-md transition-colors cursor-pointer"
+                        >
+                          <Trans>Reconfigure</Trans>
+                        </button>
+                        <button
+                                onClick={handleConfirmSettings}
+                                className="px-3 py-[10px] text-white bg-red-600 text-lg font-semibold hover:bg-red-700
+                      rounded-xl shadow-md transition-colors cursor-pointer"
+                        >
+                          <Trans>Continue anyway</Trans>
+                        </button>
+                      </div>
+                    </div>
+            )}
+
+            {showSuccessMessage && (
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 rounded-lg
+                    shadow-md z-10 text-center text-[#222222] bg-[#d1fae5]">
+                      <h3 className="text-2xl font-bold mb-2"><Trans>Device Configured ✅ </Trans></h3>
+                      <p className="mb-4 text-xl">
+                        {calculatedScores.privacy < 0 && Math.abs(calculatedScores.privacy) > calculatedScores.comfort
+                                ? <Trans>Your Smart TV has been configured with your chosen settings.</Trans>
+                                : <Trans>Your Smart TV has been configured with a good balance of privacy and
+                                  comfort!</Trans>}
+                      </p>
+                      <button
+                              onClick={handleSuccessMessageClose}
+                              className="px-6 py-2 text-white text-lg font-semibold bg-green-600 hover:bg-green-700
+                      rounded-xl shadow-md transition-colors cursor-pointer w-full"
+                      >
+                        <Trans>Continue</Trans>
+                      </button>
+                    </div>
+            )}
+          </div>
   );
 };

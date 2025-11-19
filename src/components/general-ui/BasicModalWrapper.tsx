@@ -24,15 +24,24 @@ export const BasicModalWrapper = ({content, isOpen, onClose, showBg, activeDevic
   if (!isOpen) return null;
 
   return (
-          <div className="fixed inset-0">
-            {showBg && <div className="overlay" onClick={onClose}/>}
-            <div className="invisible ..."></div>
-            <div className="col-span-2 bg-black/75 w-full h-full" onClick={onClose}/>
-            <HelpButton newMessage={newMessage} smartDevice={activeDevice}/>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#3a3a3a] border-4 border-white shadow-[0_0_0_6px_black] p-4 max-w-[90vw] max-h-[90vh] text-[18px] leading-[1.4] z-[100] w-auto h-auto rounded-none overflow-visible">
-              <CloseModalButton onClick={onClose} ariaLabel={"Schliessen"}>x</CloseModalButton>
-              <div className="bg-[#4a4a4a] px-[28px] py-[14px] rounded-[3px]">{content}</div>
+          <>
+            {showBg && (
+                    <div className="absolute w-full h-full bg-black/75" onClick={onClose}/>
+            )}
+            <div className="absolute w-full h-full grid items-center justify-items-center" onClick={onClose}>
+              <div className="relative h-auto w-auto grid items-center justify-items-center bg-[#3a3a3a] border-4 border-white shadow-[0_0_0_6px_black] z-[100]"
+                   onClick={(e) => e.stopPropagation()}>
+                <CloseModalButton onClick={onClose} ariaLabel={"Schliessen"}/>
+                <div className="h-auto max-h-[85vh] overflow-y-auto w-auto max-w-[85vw] overflow-x-auto p-3 grid grid-cols-1 items-center justify-items-center">
+                  {content}
+                </div>
+              </div>
             </div>
-          </div>
+            <div className="absolute">
+              <HelpButton newMessage={newMessage} smartDevice={activeDevice}/>
+            </div>
+          </>
+
   );
 };
+

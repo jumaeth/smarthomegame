@@ -1,5 +1,5 @@
-import {Direction, Position} from "@/types/movement";
-import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings";
+import {Direction, Position} from "@/types/movement.ts";
+import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings.ts";
 
 type Listener = () => void;
 type TeleportListener = (p: TeleportPayload) => void;

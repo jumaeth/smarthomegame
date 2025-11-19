@@ -1,21 +1,20 @@
 import {forwardRef, useCallback, useEffect, useImperativeHandle, useRef} from "react";
 import {Texture} from "pixi.js";
 import {Container, Sprite, useTick} from "@pixi/react";
-import {ANIMATION_SPEED, MOVE_SPEED, TILE_SIZE} from "@/pixi/constants/world-settings";
+import {ANIMATION_SPEED, MOVE_SPEED} from "@/pixi/constants/world-settings";
 import {useCharacterControls} from "@/hooks/character/useCharacterControls";
 import {Direction, Position} from "@/types/movement";
-import {calculateNewTarget, checkCanMove, handleCharacterMovement} from "@/utils/movment";
+import {calculateNewTarget, checkCanMove, handleCharacterMovement} from "@/utils/character/movment";
 import {useCharacterAnimation} from "@/hooks/character/useCharacterAnimation";
-import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {characterPositionStore, useCharacterPosition} from "@/utils/characterPosition";
-import {useMovementStore} from "@/utils/movementEnabled.ts";
+import {characterPositionStore, useCharacterPosition} from "@/utils/character/characterPosition.ts";
+import {useMovementStore} from "@/utils/character/movementEnabled.ts";
 
 interface CharacterProps {
   texture: Texture;
   onMove: (pos: Position) => void;
-  collisionMap: number[];
+  collisionMap: number[][];
   isPaused: boolean;
-  interactiveElements?: InteractivePixiElement[];
+  onInteractCheck?: () => void;
 }
 
 export const Character = forwardRef((
@@ -24,7 +23,7 @@ export const Character = forwardRef((
           onMove,
           collisionMap,
           isPaused = false,
-          interactiveElements,
+          onInteractCheck,
         }: CharacterProps,
         ref
 ) => {
@@ -71,31 +70,9 @@ export const Character = forwardRef((
     return () => { off(); };
   }, [updateSprite]);
 
-  const checkForProximity = () => {
-    const { x, y } = posRef.current;
-    const targetX = x / TILE_SIZE;
-    const targetY = y / TILE_SIZE;
-
-    const interactiveElement = interactiveElements?.find(element => {
-      const elementLeft = element.x - 1;
-      const elementRight = element.x + element.width;
-      const elementTop = element.y - 1;
-      const elementBottom = element.y + element.height;
-      return (
-              targetX >= elementLeft &&
-              targetX <= elementRight &&
-              targetY >= elementTop &&
-              targetY <= elementBottom
-      );
-    });
-
-    return interactiveElement ?? null;
-  };
-
-  const checkForInteraction = () => {
-    const interactiveElement = checkForProximity();
-    if (interactiveElement) interactiveElement.interaction();
-  };
+  const checkForInteraction = useCallback(() => {
+    if (onInteractCheck) onInteractCheck();
+  }, [onInteractCheck]);
 
   useImperativeHandle(ref, () => ({
     moveUp: () => setNextTarget("UP"),

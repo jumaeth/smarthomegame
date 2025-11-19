@@ -61,13 +61,13 @@ export const MultipleChoiceComponent = ({
   });
 
   return (
-          <div className="grid">
-            <ul className="my-4">
+          <div className="flex flex-col items-center">
+            <ul className="my-2 w-full">
               {questions.map((q, i) => {
                 const isCorrect = answers[i] === solutions[i].booleanSolution;
                 return (
-                        <li key={i} className="my-4">
-                          <label className="flex">
+                        <li key={i} className="mt-2.5 mb-3 p-3 border border-grey-400 rounded-md">
+                          <label className="flex items-center cursor-pointer">
                             {q}
                             <div className="ml-auto">
                               <Toggle
@@ -82,12 +82,12 @@ export const MultipleChoiceComponent = ({
                           </label>
                           {isSubmitted && (
                                   <div
-                                          className={`flex space-x-2 transition-opacity duration-1000 ${
+                                          className={`flex space-x-2 transition-opacity${
                                                   fadeOut ? 'opacity-0' : 'opacity-100'
                                           }`}
                                   >
                   <span className="ml-8">
-                    {isCorrect ? "✅ " + solutions[i].solutionMessage : "❌ " + solutions[i].solutionMessage}
+                    {isCorrect ? "✅ " + solutions[i].solutionCorrectMessage : "❌ " + solutions[i].solutionWrongMessage}
                   </span>
                                     <span>
                     {isCorrect ? formatWithSign.format(solutions[i].privacyScoreGain) : formatWithSign.format(solutions[i].privacyScorePenalty)}
@@ -104,11 +104,15 @@ export const MultipleChoiceComponent = ({
               })}
             </ul>
             {!isSubmitted ? (
-                    <Button onClick={submitAnswer}>
+                    <Button onClick={submitAnswer} className="px-10 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
+                      rounded-xl shadow-md cursor-pointer">
                       <Trans>Send answer</Trans>
                     </Button>
             ) : (
-                    <Button onClick={continueGame}><Trans>Continue</Trans></Button>
+                    <Button onClick={continueGame} className="px-10 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
+                      rounded-xl shadow-md cursor-pointer">
+                      <Trans>Continue</Trans>
+                    </Button>
             )}
           </div>
   );

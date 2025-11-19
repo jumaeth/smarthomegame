@@ -2,7 +2,7 @@ import AppRoutes from "./app/routes.tsx";
 
 function App() {
   return (
-          <div>
+          <div className="font-['LoResRegular',sans-serif]">
               <AppRoutes/>
           </div>
   );

@@ -1,75 +1,62 @@
-import {TILE_SIZE} from "@/pixi/constants/world-settings";
-import {PropsWithChildren, useRef} from "react";
-import {Container as PixiContainer, Graphics as PixiGraphics} from "pixi.js"
+import {forwardRef, PropsWithChildren, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {InteractivePixiElement} from "@/objects/InteractivePixiElement.ts";
-import {Container, useTick} from "@pixi/react";
 import {useCharacterPosition} from "@/hooks/character/useCharacterPosition.ts";
-import {getHighlightPosition} from "@/utils/highlightPositions.ts";
-
+import {getNearbyInteractiveElement} from "@/utils/character/proximity.ts";
+import {pixelToTile} from "@/utils/coords";
+import {getHighlightPosition} from "@/utils/highlightPositions.tsx";
+import {GameService} from "@/services/GameService.ts";
 
 interface ProximityHighlightProps {
-    interactiveElements?: InteractivePixiElement[];
+  interactiveElements?: InteractivePixiElement[];
+  gameService: GameService;
 }
-export const ProximityHighlight = ({
-                                       interactiveElements,
-                                     }: PropsWithChildren<ProximityHighlightProps>) => {
-
-    const pos = useCharacterPosition();
-    const graphicRef = useRef<PixiContainer|null>(null);
 
 
-    const checkForProximity = () => {
-      if (!pos) {
-        return null;
-      }
+export const ProximityHighlight = forwardRef(({
+                                                interactiveElements,
+        gameService
+                                              }: PropsWithChildren<ProximityHighlightProps>, ref) => {
+  const pos = useCharacterPosition();
+  const lastPos = useRef<{ x: number; y: number } | null>(null);
+  const [interactive, setInteractive] = useState<InteractivePixiElement | null>(null);
 
-      const targetX = pos.x / TILE_SIZE;
-      const targetY = pos.y / TILE_SIZE;
+  useImperativeHandle(ref, () => ({
+    getNearbyInteractive: () => interactive,
+  }));
 
-      const interactiveElement = interactiveElements?.find((element: InteractivePixiElement) => {
-        const elementLeft = element.x-1;
-        const elementRight = element.x + (element.width ) ;
-        const elementTop = element.y-1;
-        const elementBottom = element.y + (element.height) ;
-        return (
-                targetX >= elementLeft &&
-                targetX <= elementRight &&
-                targetY >= elementTop &&
-                targetY <= elementBottom
-        );
-      });
+  useEffect(() => {
+    if (!pos) return;
 
-      if (interactiveElement)return interactiveElement;
-      else return null;
-    }
-      const checkForHighlight = () => {
-      if (!pos) {
-        return null;
-      }
-
-      const interactive = checkForProximity();
-
-      const graphic = graphicRef.current;
-      if(!graphic)return;
-      const g = new PixiGraphics
-      if (interactive) {
-
-        const rect = getHighlightPosition(interactive);
-
-        g.lineStyle(1, 0xFFFF00, 0.5);
-        g.drawRoundedRect(rect.x, rect.y, rect.width* TILE_SIZE, rect.height* TILE_SIZE, rect.radius);
-
-      }else{
-        if(!graphic)return;
-        g.clear();
-      }
-
-      graphic.removeChildren();
-      graphic.addChild(g);
-
+    // Only check if the position actually changed
+    if (
+            lastPos.current &&
+            lastPos.current.x === pos.x &&
+            lastPos.current.y === pos.y
+    ) {
+      return;
     }
 
-    useTick(() => {checkForHighlight();});
+    lastPos.current = pos;
 
-    return (<Container ref={graphicRef}/>);
-}
+    const playerTile = pixelToTile(pos.x, pos.y);
+    const interactive = getNearbyInteractiveElement(playerTile, interactiveElements);
+    if (!interactive) {
+      setInteractive(null);
+      return;
+    }
+
+    setInteractive(interactive);
+  }, [pos, interactiveElements]);
+
+  const getPosition = () => {
+    return interactive ? {x: interactive.x, y: interactive.y} : {x: 0, y: 0}
+  }
+
+  const isCompleted: boolean = !gameService.getDeviceByName(interactive?.name as string).getIsCompleted()
+
+  return (
+          <>
+            {isCompleted && getPosition().x != 0 && interactive && getHighlightPosition(interactive, getPosition())}
+          </>
+  );
+})

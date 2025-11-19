@@ -11,6 +11,7 @@ import wallImg from '@/assets/cooking-sprites/wall.png';
 import cookingFieldImg from '@/assets/cooking-sprites/cookingfield.png';
 import foodProcessorImg from '@/assets/cooking-sprites/foodprocessor.png';
 import microwaveImg from '@/assets/cooking-sprites/microwave.png';
+import steamerImg from '@/assets/cooking-sprites/steamer.png'
 import {t} from "@lingui/core/macro";
 import {Score} from "@/components/cookingGame/CookingGameComponent.tsx";
 
@@ -40,7 +41,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
         cookingField: cookingFieldImg,
         foodProcessor: foodProcessorImg,
         microwave: microwaveImg,
-        steamer: "/src/assets/cooking-sprites/steamer.png"
+        steamer: steamerImg
     }), []);
 
 
@@ -140,9 +141,9 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
         const total = ["["];
         for (let i = 0; i < s; i++) {
             if (i < 4) {
-                total.push("𐄂|");
+                total.push("X|");
             } else {
-                total.push("𐄂");
+                total.push("X");
             }
         }
         for (let i = 0; i < 5 - s; i++) {

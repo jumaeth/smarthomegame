@@ -5,7 +5,7 @@ import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore";
 import {CookieService} from "@/services/CookieService";
 import {allRoomStore} from "@/utils/roomStore";
-import {movementStore} from "@/utils/movementEnabled";
+import {movementStore} from "@/utils/character/movementEnabled";
 import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive";
 import {t} from "@lingui/core/macro";
 import {MapKey} from "@/types/maps";
@@ -67,10 +67,15 @@ export class GameService {
       new SmartDevice("SecurityCamera", t`Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them.`),
     ]);
 
-    const bathroom = new Room(RoomNames.BATHROOM, []);
-    bathroom.complete()
+    const bathroom = new Room(RoomNames.BATHROOM, [
+      new SmartDevice("SmartShower", t`Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable.`),
+    ]);
 
-    return [livingRoom, hallway, kitchen, bathroom];
+    const bedroom = new Room(RoomNames.BEDROOM, [
+      new SmartDevice("SmartMirror", t`You need to configure your smart mirror by choosing a provider for each app. Compare the permissions, features, data retention, and security details of each provider. Expand each provider to see all the details, then make your choice. Remember to explore all providers for each app before making your selection.`),
+    ]);
+
+    return [hallway, livingRoom, kitchen, bathroom, bedroom];
   }
 
   getAllRooms(): Room[] {
@@ -118,20 +123,21 @@ export class GameService {
     this.navigate('/game');
   }
 
-  pauseGame(): void {
+  pauseGame(source?: string): void {
     this.paused = true;
     if (movementStore.getSnapshot().movementEnabled) {
       movementStore.disable();
     }
+    console.log(`[GameService] pauseGame from: ${source ?? "unknown"}`);
     this.emitPause();
-
   }
 
-  resumeGame(): void {
+  resumeGame(source?: string): void {
     this.paused = false;
     if (!movementStore.getSnapshot().movementEnabled) {
       movementStore.enable();
     }
+    console.log(`[GameService] resumeGame from: ${source ?? "unknown"}`);
     this.emitPause();
   }
 

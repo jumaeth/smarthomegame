@@ -9,7 +9,6 @@ interface ProgressBarProps {
   x: number;
   y: number;
   windowWidth: number;
-  windowHeight: number;
   gameService: GameService;
 }
 
@@ -17,12 +16,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                                                           x,
                                                           y,
                                                           windowWidth,
-                                                          windowHeight,
                                                           gameService
                                                         }: ProgressBarProps) => {
 
   const texturePaths = useMemo(
-          () => ({ trophy: trophyUrl }),
+          () => ({trophy: trophyUrl}),
           []
   );
   const {textures, loaded} = useLoadTextures(texturePaths);
@@ -33,12 +31,17 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     setShowIcons(!showIcons);
   }
 
+  const trophyHeight: number = windowWidth * 0.05;
+  const trophyWidth: number = trophyHeight / 818 * 726;
+  const spacing: number = 15;
+
   return (
           <>
             {loaded && (<Sprite
                     x={x}
                     y={y}
-                    scale={{ x: windowWidth * 0.00005, y: windowHeight * 0.0001 }}
+                    height={trophyHeight}
+                    width={trophyWidth}
                     interactive={true}
                     pointerover={() => setHovered(true)}
                     pointerdown={action}
@@ -49,10 +52,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
             >
             </Sprite>)}
             {showIcons && <ProgressBarIcons
-                    x={x}
+                    x={x + trophyWidth + spacing}
                     y={y}
-                    windowWidth={windowWidth}
-                    windowHeight={windowHeight}
+                    trophyHeight={trophyHeight}
                     gameService={gameService}
             />}
           </>
