@@ -1,12 +1,12 @@
 services:
   web-dev:
     image: ${CI_REGISTRY_IMAGE}:app_dev-latest
-    ports: ["8091:8091"]
+    ports: ["8091:80"]
     profiles: ["dev"]
     restart: unless-stopped
 
   web-prod:
     image: ${CI_REGISTRY_IMAGE}:app_prod-latest
-    ports: ["8081:8091"]
+    ports: ["8081:80"]
     profiles: ["prod"]
     restart: unless-stopped
