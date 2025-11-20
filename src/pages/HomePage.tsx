@@ -5,7 +5,7 @@ import Button from "@/components/general-ui/Button.tsx";
 import {CookieService} from "@/services/CookieService.ts";
 import {Trans} from "@lingui/react/macro";
 import LanguageSwitcher from "@/components/LanguageSwitcher.tsx";
-import bgImage from "@/assets/intro/page/welcomepage_logo.jpeg";
+import bgImage from "@/assets/intro/page/welcomepage.png";
 import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive.ts";
 import CharacterSelector from "@/components/character/CharacterSelector.tsx";
 
