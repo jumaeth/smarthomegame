@@ -133,30 +133,47 @@ export default function HomePage() {
                   </a>
                 </div>
 
-                {/* Links */}
-                <div className="flex flex-wrap gap-6 text-sm">
+                {/* Links EN */}
+                <div className="flex flex-col gap-2 text-sm">
                   <a
                           href="/legal-notice"
                           className="underline hover:no-underline"
                           target="_blank"
                           rel="noreferrer"
                   >
-                    <Trans>Legal Notice/Impressum</Trans>
+                    <Trans>Legal Notice</Trans>
+                  </a>
+                  <a
+                          href="/privacy-policy"
+                          className="underline hover:no-underline"
+                          target="_blank"
+                          rel="noreferrer"
+                  >
+                    <Trans>Privacy Policy</Trans>
                   </a>
                 </div>
 
-                <div className="flex flex-wrap gap-6 text-sm">
+                {/* Links DE */}
+                <div className="flex flex-col gap-2 text-sm">
                   <a
                           href="/impressum"
                           className="underline hover:no-underline"
                           target="_blank"
                           rel="noreferrer"
                   >
-                    <Trans>Privacy Policy/Datenschutzerklärung</Trans>
+                    <Trans>Impressum</Trans>
+                  </a>
+                  <a
+                          href="/privacy-policye"
+                          className="underline hover:no-underline"
+                          target="_blank"
+                          rel="noreferrer"
+                  >
+                    <Trans>Datenschutzerklärung</Trans>
                   </a>
                 </div>
 
-                {/* Logos */}
+                {/* Logo PH */}
                 <div className="flex items-center gap-6">
                   <a
                           href="https://www.ph-freiburg.de/"
