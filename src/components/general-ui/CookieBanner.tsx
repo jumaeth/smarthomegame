@@ -1,5 +1,4 @@
 import Button from "@/components/general-ui/Button.tsx";
-import Toggle from "@/components/general-ui/Toggle.tsx";
 import {useState} from "react";
 import gifCookie from "@/assets/intro/page/cookie-gif-2.gif";
 import {Trans} from "@lingui/react/macro";
@@ -31,7 +30,7 @@ export const CookieBanner = ({
     onComplete(selection);
   };
 
-  const [isSavegameEnabled, setIsSavegameEnabled] = useState<boolean>(true);
+  const [, setIsSavegameEnabled] = useState<boolean>(true);
 
   const accept: () => void = (): void => {
     submitAnswer(true)
@@ -53,11 +52,6 @@ export const CookieBanner = ({
               />
             </div>
             <div className={"w-[max(30rem,30vw)]"}><BannerText/></div>
-            <h2 className={'bold text-2xl'}><Trans>your settings</Trans></h2>
-            <div className={"flex items-center"}>
-              <Toggle isOn={isSavegameEnabled} disabled={true} offColor={"bg-red-400"}/><p><Trans>Save my game
-              progress</Trans></p>
-            </div>
             <p className={"w-[max(30rem,30vw)]"}><Trans>You can withdraw your consent at any time or adjust your cookie
               settings. Further information can be found in our privacy policy.</Trans></p>
             <Button onClick={accept} className={"m-2"}><Trans>accept</Trans></Button>
