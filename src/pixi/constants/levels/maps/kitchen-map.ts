@@ -17,7 +17,7 @@ export const KITCHEN_COL_MAP: number[][] = [
 const KITCHEN_SPAWN_POS = {x: 9, y: 9} as Position;
 
 export const KITCHEN_TRANSITIONS: Transition[] = [
-  {pos: KITCHEN_SPAWN_POS, to: 'hallway'},
+  {pos: KITCHEN_SPAWN_POS, to: 'hallway', faceToEnter: "DOWN"},
 ];
 
 export const KITCHEN_OVERLAYS: Overlay[] = [
