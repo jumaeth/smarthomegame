@@ -2,12 +2,15 @@
 
 ## Adding Languages
 
-Edit `lingui.config.js` in the project root. Modify the `locales` array (line 5) and append new language codes. The content inside `<Trans>` tags must use the `sourceLocale` language. In this project, the source and fallback language is English.
+Edit `lingui.config.js` in the project root. Modify the `locales` array (line 5) and append new language codes. The
+content inside `<Trans>` or `t` tags must use the `sourceLocale` language. In this project, the source and fallback
+language is English.
 
-Example `<Trans>` usage:
+Example `<Trans>` and `t` usage:
 
 ```
 <Trans> example text </Trans>
+const someString = t`example text`
 ```
 
 Example `lingui.config.js`:
@@ -30,10 +33,12 @@ Example `lingui.config.js`:
 ## Translation File Structure
 
 Translation data is located under `src/locales/`. Each language has its own directory containing:
+
 - `.po` files for translators
 - Compiled `.ts` files for production
 
-When new translatable text is added or when new languages are introduced, the translation files must be regenerated or updated.
+When new translatable text is added or when new languages are introduced, the translation files must be regenerated or
+updated.
 
 Extraction command:
 
