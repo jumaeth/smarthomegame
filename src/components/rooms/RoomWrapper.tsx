@@ -13,6 +13,7 @@ import {RoomNames} from "@/objects/RoomNames";
 import {MapKey} from "@/types/maps";
 import {SmartDevice} from "@/objects/SmartDevice";
 import {InteractiveType} from "@/types/InteractiveType.ts";
+import {DeviceNames} from "@/objects/DeviceNames.ts";
 
 interface RoomWrapperProps {
   roomName: RoomNames;
@@ -34,9 +35,9 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
   const collisionMap = LEVEL_COLLISION_MAPS[roomName];
 
-  const handleDeviceOpen = (deviceName: string): void => {
+  const handleDeviceOpen = (deviceName: DeviceNames): void => {
     if (gameService.getDeviceByName(deviceName).getIsCompleted()) return;
-    if (tutorialActive.enabled && (deviceName !== "SmartTv")) return;
+    if (tutorialActive.enabled && (deviceName !== DeviceNames.SMART_TV)) return;
     console.log("deviceOpen");
     setActiveDevice(deviceName);
     const smartDevice: SmartDevice = gameService.getDeviceByName(deviceName);

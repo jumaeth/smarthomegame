@@ -1,9 +1,9 @@
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
-import {useState} from "react";
+import React, {useState} from "react";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
-import React from "react";
+import {DeviceNames} from "@/objects/DeviceNames.ts";
 
 interface SmartTvOption {
   id: string;
@@ -20,7 +20,7 @@ interface SmartTvProps {
 
 export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
   const gameService = useGameService();
-  const smartTvDevice: SmartDevice = gameService.getDeviceByName("SmartTv");
+  const smartTvDevice: SmartDevice = gameService.getDeviceByName(DeviceNames.SMART_TV);
   const [showDialogue, setShowDialogue] = useState(true);
   const [showWarning, setShowWarning] = useState<string | null>(null);
   const [showReconfigureWarning, setShowReconfigureWarning] = useState(false);

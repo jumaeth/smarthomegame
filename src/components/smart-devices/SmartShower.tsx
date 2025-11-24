@@ -1,11 +1,12 @@
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Button from "@/components/general-ui/Button";
 import {useGameService} from "@/hooks/gameService/useGameService";
 import {SmartDevice} from "@/objects/SmartDevice";
 import sceneImg from "@/assets/smart-shower/scene.png";
 import checkImg from "@/assets/smart-shower/check.png";
+import {DeviceNames} from "@/objects/DeviceNames.ts";
 
 function getShowerObjects(): ShowerObject[] {
   return [
@@ -99,7 +100,7 @@ interface ShowerObject {
 
 export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
   const gameService = useGameService();
-  const smartDevice: SmartDevice | undefined = gameService.getDeviceByName("SmartShower");
+  const smartDevice: SmartDevice | undefined = gameService.getDeviceByName(DeviceNames.SMART_SHOWER);
 
   const [frame, setFrame] = useState(0);
   const [selectedObject, setSelectedObject] = useState<ShowerObject | null>(null);

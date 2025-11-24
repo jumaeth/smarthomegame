@@ -14,6 +14,7 @@ import weatherBWImg from "@/assets/smart-mirror/weatherBW.png";
 import weatherImg from "@/assets/smart-mirror/weather.png";
 import {Assets, Texture} from "pixi.js";
 import {Stage, TilingSprite} from "@pixi/react";
+import {DeviceNames} from "@/objects/DeviceNames.ts";
 
 interface SmartMirrorProps {
   completeDevice?: (isCompleted: boolean) => void;
@@ -59,7 +60,7 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
     });
   }, []);
   const gameService = useGameService();
-  const smartDevice: SmartDevice | undefined = gameService.getDeviceByName("SmartMirror");
+  const smartDevice: SmartDevice | undefined = gameService.getDeviceByName(DeviceNames.SMART_MIRROR);
   const [showDialogue, setShowDialogue] = useState(true);
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
   const [solvedApps, setSolvedApps] = useState<Record<string, boolean>>({});

@@ -13,6 +13,7 @@ import {IntroStage} from "@/components/cookingGame/IntroStage.tsx";
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import {t} from "@lingui/core/macro";
+import {DeviceNames} from "@/objects/DeviceNames.ts";
 
 interface CookingGameComponentProps {
   onCompletion: () => void;
@@ -34,7 +35,7 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   const initStateRef=useRef(true);
   const totalPoints=useRef<Map<Score, number>>(new Map<Score, number>);
   const gameService = useGameService();
-  const device:SmartDevice = gameService.getDeviceByName("SmartKitchen");
+  const device:SmartDevice = gameService.getDeviceByName(DeviceNames.SMART_KITCHEN);
 
 
   const secureSetStage= (stage : Stages) =>{

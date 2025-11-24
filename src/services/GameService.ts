@@ -10,6 +10,7 @@ import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive";
 import {t} from "@lingui/core/macro";
 import {MapKey} from "@/types/maps";
 import {DoorState} from "@/types/door";
+import {DeviceNames} from "@/objects/DeviceNames";
 
 
 type DeviceListener = (device: SmartDevice) => void;
@@ -57,22 +58,22 @@ export class GameService {
     hallway.unlockRoom();
 
     const livingRoom = new Room(RoomNames.LIVINGROOM, [
-      new SmartDevice("SmartTv", t`This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Uncheck the permissions which you think are not necessary by clicking directly on the checkbox.`),
-      new SmartDevice("SmartLights", t`This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Modify your settings by clicking on the sliders. When you are satisfied with your choices continue by pressing the continue button`)
+      new SmartDevice(DeviceNames.SMART_TV, t`This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Uncheck the permissions which you think are not necessary by clicking directly on the checkbox.`),
+      new SmartDevice(DeviceNames.SMART_LIGHTS, t`This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Modify your settings by clicking on the sliders. When you are satisfied with your choices continue by pressing the continue button`)
     ]);
 
     const kitchen = new Room(RoomNames.KITCHEN, [
-      new SmartDevice("SmartHomeHub", t`Did you know personal data of members of the European Union are protected by the General Data Protection Regulation GDPR? The GDPR protects your personal information by law, and you may request its protection even if the data processor is not located in the EU. The GDPR even grants higher protection to especially sensitive data, that means data which might be abused against you are sorted into special categories. For example, this could be private information on your religion, or political views. Have you understood what the GDPR protects? Decide if provided information is public, personal, or personal and sensitive by dragging and dropping.`),
-      new SmartDevice("SmartKitchen", t`You need to cook a meal. lets try to focus on privacy friendly but still practical choices. The minigame will let you know what the next steps are to complet the game.`),
-      new SmartDevice("SecurityCamera", t`Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them.`),
+      new SmartDevice(DeviceNames.SMART_HOME_HUB, t`Did you know personal data of members of the European Union are protected by the General Data Protection Regulation GDPR? The GDPR protects your personal information by law, and you may request its protection even if the data processor is not located in the EU. The GDPR even grants higher protection to especially sensitive data, that means data which might be abused against you are sorted into special categories. For example, this could be private information on your religion, or political views. Have you understood what the GDPR protects? Decide if provided information is public, personal, or personal and sensitive by dragging and dropping.`),
+      new SmartDevice(DeviceNames.SMART_KITCHEN, t`You need to cook a meal. lets try to focus on privacy friendly but still practical choices. The minigame will let you know what the next steps are to complet the game.`),
+      new SmartDevice(DeviceNames.SECURITY_CAMERA, t`Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them.`),
     ]);
 
     const bathroom = new Room(RoomNames.BATHROOM, [
-      new SmartDevice("SmartShower", t`Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable.`),
+      new SmartDevice(DeviceNames.SMART_SHOWER, t`Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable.`),
     ]);
 
     const bedroom = new Room(RoomNames.BEDROOM, [
-      new SmartDevice("SmartMirror", t`You need to configure your smart mirror by choosing a provider for each app. Compare the permissions, features, data retention, and security details of each provider. Expand each provider to see all the details, then make your choice. Remember to explore all providers for each app before making your selection.`),
+      new SmartDevice(DeviceNames.SMART_MIRROR, t`You need to configure your smart mirror by choosing a provider for each app. Compare the permissions, features, data retention, and security details of each provider. Expand each provider to see all the details, then make your choice. Remember to explore all providers for each app before making your selection.`),
     ]);
 
     return [hallway, livingRoom, kitchen, bathroom, bedroom];
@@ -268,7 +269,7 @@ export class GameService {
     return this.game;
   }
 
-  getDeviceByName(name : string){
-    return  allRoomStore.getAllDevices().find(c => c.name == name) ?? new SmartDevice("DEFAULT")
+  getDeviceByName(name : DeviceNames):SmartDevice{
+    return  allRoomStore.getAllDevices().find(c => c.name == name);
   }
 }

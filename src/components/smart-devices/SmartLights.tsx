@@ -5,6 +5,7 @@ import {MultipleChoiceComponent} from "@/components/mini-game/MultipleChoiceComp
 import {useGameService} from "@/hooks/gameService/useGameService.tsx";
 import {SmartDevice} from "@/objects/SmartDevice.ts";
 import React, {useState} from "react";
+import {DeviceNames} from "@/objects/DeviceNames.ts";
 
 interface SmartLightsProps {
   onCompletion?: (isCompleted: boolean) => void;
@@ -12,7 +13,7 @@ interface SmartLightsProps {
 
 export const SmartLights: React.FC<SmartLightsProps> = ({ onCompletion }) => {
   const gameService = useGameService();
-  const smartLightsDevice: SmartDevice = gameService.getDeviceByName("SmartLights");
+  const smartLightsDevice: SmartDevice = gameService.getDeviceByName(DeviceNames.SMART_LIGHTS);
   const [showDialogue, setShowDialogue] = useState(true);
 
 
