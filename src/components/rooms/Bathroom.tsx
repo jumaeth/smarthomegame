@@ -9,6 +9,7 @@ export const Bathroom = () => {
     new InteractivePixiElement(1, 3, 2, 1, "SmartShower", InteractiveType.SMART_DEVICE),
     new InteractivePixiElement(14.975, 6.5, 1, 1, "BathroomChick", InteractiveType.DUMMY),
     new InteractivePixiElement(1.15, 6.5, 1.6, 1, "BathroomDrawer", InteractiveType.DUMMY),
+    new InteractivePixiElement(15.015, 2.5, 0.9, 1.5, "BathroomToilet", InteractiveType.DUMMY),
   ];
 
   const deviceComponents = {
