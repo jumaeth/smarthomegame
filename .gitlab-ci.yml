@@ -185,3 +185,18 @@ deploy-prod:
       echo '$CI_REGISTRY_PASSWORD' | docker login --username '$CI_REGISTRY_USER' --password-stdin '$CI_REGISTRY' &&
       docker compose -f docker-compose.deploy.yml --profile prod up -d --remove-orphans" --pull always
 
+deploy-ph-freiburg:
+  stage: deploy
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != $SCHEDULE && $CI_COMMIT_BRANCH == $PROD_BRANCH_NAME'
+  before_script:
+    - apk add --no-cache openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PK_DEVELOPMENT" | base64 -d > ~/.ssh/gitlab_ci_deploy
+    - chmod 600 ~/.ssh/gitlab_ci_deploy
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/gitlab_ci_deploy
+    - echo "$SSH_HOST_KEY" >> ~/.ssh/known_hosts
+  script:
+    # Copy build output to ph-server
+    - scp -r build/* dataprogames@dataprogames.ph-freiburg.de:/home/dataprogames/htdocs/smarthome-challenge/

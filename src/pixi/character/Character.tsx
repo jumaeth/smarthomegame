@@ -49,7 +49,7 @@ export const Character = forwardRef((
 
   useEffect(() => {
     updateSprite(currentDirection.current, false);
-  }, [updateSprite]);
+  }, []);
 
   const setNextTarget = useCallback((dir: Direction) => {
     if (targetPosition.current) return;
