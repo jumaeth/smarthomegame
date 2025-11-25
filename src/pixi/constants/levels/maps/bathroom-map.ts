@@ -14,7 +14,7 @@ export const BATHROOM_COL_MAP: number[][] = [
 ];
 
 export const BATHROOM_TRANSITIONS: Transition[] = [
-  {pos: {x: 9, y: 9}, to: 'hallway'},
+  {pos: {x: 9, y: 9}, to: 'hallway', faceToEnter: "DOWN"},
 ];
 
 export const BATHROOM_OVERLAYS: Overlay[] = [

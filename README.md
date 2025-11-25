@@ -59,6 +59,9 @@ This will locally preview the production build.
 
 ---
 
+## Multi Language setup
+  [Documentation Translation File](Documents/DocumentationTranslationFile.md)
+
 ## Project Status
 
 🚧 Currently in development.\
