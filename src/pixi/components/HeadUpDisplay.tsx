@@ -108,6 +108,7 @@ export const HeadUpDisplay: React.FC<HeadUpDisplayProps> = ({
                     x={assistantPhoneIconWidth + spacing}
                     y={spacing}
                     windowWidth={windowWidth}
+                    windowHeight={windowHeight}
                     gameService={gameService}/>
           </>
   )
