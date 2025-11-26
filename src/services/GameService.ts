@@ -4,7 +4,6 @@ import {RoomNames, roomNameToEnum} from "../objects/RoomNames";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore";
 import {CookieService} from "@/services/CookieService";
-import {allRoomStore} from "@/utils/roomStore";
 import {movementStore} from "@/utils/character/movementEnabled";
 import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive";
 import {t} from "@lingui/core/macro";
@@ -31,21 +30,18 @@ export class GameService {
     const tutorialCookie: boolean | null = CookieService.get<boolean>('tutorialState');
 
     if (saveGame) {
-      const game = Game.fromSerialized(saveGame);
-      this.game = game;
-      allRoomStore.set(game.getRooms());
+      this.game = Game.fromSerialized(saveGame);
       if (tutorialCookie != null) tutorialActiveStore.set(tutorialCookie);
     } else {
       const newRooms = this.setUpRooms();
       this.game = new Game(newRooms);
-      if (allRoomStore.getAll().length === 0) allRoomStore.set(newRooms);
     }
     this.navigate = navigate;
   }
 
   onGameStateChange(): void {
     CookieService.set("save_game", {
-      rooms: allRoomStore.getAll().map(r => r.toSerialized()),
+      rooms: this.game.getRooms().map(r => r.toSerialized()),
       score: this.game.getScore().toSerialized(),
     });
     CookieService.set("tutorialState", tutorialActiveStore.get());
@@ -80,7 +76,7 @@ export class GameService {
   }
 
   getAllRooms(): Room[] {
-    return allRoomStore.getAll();
+    return this.game.getRooms();
   }
 
   private findRoomByName(roomName: RoomNames): Room | undefined {
@@ -99,7 +95,7 @@ export class GameService {
   }
 
   checkGameCompletionConditions(): boolean {
-    return allRoomStore.getAll().every((room: Room) => room.isCompleted);
+    return this.game.getRooms().every((room: Room) => room.isCompleted);
   }
 
   getDeviceForRoom(roomName: RoomNames): SmartDevice[] {
@@ -110,7 +106,6 @@ export class GameService {
   reset(): boolean {
     const newRooms = this.setUpRooms();
     this.game = new Game(newRooms);
-    allRoomStore.set(newRooms);
     this.navigate('/');
     this.onGameStateChange();
     return true;
@@ -168,6 +163,7 @@ export class GameService {
     return false;
   }
 
+  //ToDo Depreacated remove later #189
   changeScore(scoreDelta: number, scoreType: ScoreType): void {
     if (scoreType === 'privacy') this.game.modifyScore(scoreDelta, 0);
     if (scoreType === 'comfort') this.game.modifyScore(0, scoreDelta);
@@ -214,21 +210,23 @@ export class GameService {
     return this.game.calculateScore();
   }
 
-  completeDevice(name: string): void {
-    const device = allRoomStore.getDevice(name);
-    const room = allRoomStore.getRoomForDevice(name);
-    if (device) {
+  completeDevice(name: DeviceNames): void {
+    const device = this.getDeviceByName(name);
+    const room = this.getRoomForDevice(name);
+    if (device && room) {
       device.complete();
       this.deviceListeners.forEach(cb => cb(device));
-      if (this.getRoom(room).devices.filter(d => !d.getIsCompleted()).map(d => d.name).length <= 0){
-        this.completeRoom(room);
+      if (this.getRoom(room.name).devices.filter(d => !d.getIsCompleted()).map(d => d.name).length <= 0){
+        this.completeRoom(room.name);
       }
       this.onGameStateChange();
     }
   }
 
   getRoom(name: RoomNames): Room {
-    return allRoomStore.getRoom(name);
+    const room = this.game.getRooms().find(r => r.name === name);
+    if (!room) throw new Error(`Room ${name} not found`);
+    return room;
   }
 
   subscribeExitStates(cb: () => void): () => void {
@@ -256,10 +254,6 @@ export class GameService {
     }
   }
 
-  checkRoomCompleted(name: RoomNames): boolean{
-    return allRoomStore.getRoom(name).devices.every(d => d.getIsCompleted());
-  }
-
   onDeviceStateChanged(listener: DeviceListener): () => void {
     this.deviceListeners.add(listener);
     return () => this.deviceListeners.delete(listener);
@@ -276,5 +270,9 @@ export class GameService {
       throw new Error(`Device with name ${name} not found`);
     }
     return device;
+  }
+
+  getRoomForDevice(name : DeviceNames): Room | undefined {
+    return this.game.getRooms().find(r => r.devices.some(d => d.name === name));
   }
 }
