@@ -1,5 +1,5 @@
 import React, {PropsWithChildren, useCallback, useEffect, useRef, useState} from "react";
-import {Container as PixiContainer, Text, TextStyle} from "pixi.js";
+import {Container as PixiContainer, Rectangle, Text, TextStyle} from "pixi.js";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
@@ -126,9 +126,15 @@ export const IntroPage: React.FC<PageProps> = ({
 
   return (
       <>
+        <Container
+         eventMode="static"
+         hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
+         pointertap={continueTutorial}
+        >
           <Container
                   ref={rootRef}
           />
+        </Container>
       </>
   )
 };

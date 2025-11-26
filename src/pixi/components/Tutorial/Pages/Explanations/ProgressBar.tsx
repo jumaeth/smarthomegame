@@ -4,7 +4,7 @@ import pointing from "@/assets/tutorial/finalExpl/pointingLeft.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
-  Graphics as PixiGraphics,
+  Graphics as PixiGraphics, Rectangle,
   Sprite as PixiSprite,
   Text as PixiText,
   TextStyle,
@@ -155,19 +155,22 @@ export const ProgressBar: React.FC<PageProps> = ({
     sprite.scale.set(anim1.endS)
   }, [windowWidth, windowHeight, anim1.endS, anim1.endX, anim1.endY, animating]);
 
+  const continueTutorial = useCallback( () => {
+    if (animating) return
+    ProgressBarStatusStore.set(false)
+    setAnimation(Animations.OUTRO)
+  },[Animations.OUTRO, animating])
+
   useEffect(() => {
     if (keyControl != Pages.PROGRESS_BAR || animating) return;
 
     const onSpecialPressed = (e: KeyboardEvent) => {
-      if (e.code === "Space") {
-        ProgressBarStatusStore.set(false)
-        setAnimation(Animations.OUTRO)
-      };
+      if (e.code === "Space") continueTutorial()
     };
 
     window.addEventListener("keydown", onSpecialPressed);
     return () => window.removeEventListener("keydown", onSpecialPressed);
-  }, [keyControl, animating, Animations.OUTRO]);
+  }, [keyControl, animating, Animations.OUTRO, continueTutorial]);
 
 
   const setupTexts = useCallback(() => {
@@ -304,10 +307,16 @@ export const ProgressBar: React.FC<PageProps> = ({
 
   return (
           <>
-            {background()}
-            {textureRobot && <Sprite texture={textureRobot} ref={robotRef} />}
-            {graphics()}
-            {texts()}
+            <Container
+                    eventMode="static"
+                    hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
+                    pointertap={continueTutorial}
+            >
+              {background()}
+              {textureRobot && <Sprite texture={textureRobot} ref={robotRef} />}
+              {graphics()}
+              {texts()}
+            </Container>
           </>
   );
 };
