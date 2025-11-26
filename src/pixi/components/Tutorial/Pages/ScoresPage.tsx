@@ -2,7 +2,13 @@ import React, {PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMe
 import {Container, Graphics, Sprite, Text} from "@pixi/react";
 import scoresImage from "@/assets/tutorial/scoresPage/scores.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
-import {Container as PixiContainer, Graphics as PixiGraphics, Sprite as PixiSprite, TextStyle} from "pixi.js";
+import {
+  Container as PixiContainer,
+  Graphics as PixiGraphics,
+  Rectangle,
+  Sprite as PixiSprite,
+  TextStyle
+} from "pixi.js";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
@@ -143,6 +149,11 @@ export const ScoresPage: React.FC<PageProps> = ({
     }
   }, [windowWidth, windowHeight, animating, growChar, introRun]);
 
+  const continueTutorial = useCallback(() => {
+    if (animating) return
+    setAnimation(Animations.SHRINK);
+  },[Animations.SHRINK, animating])
+
   //keyControls
   useEffect(() => {
     if(keyControl != Pages.SCORES || animating)return;
@@ -150,7 +161,7 @@ export const ScoresPage: React.FC<PageProps> = ({
     const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
       switch (e.code) {
         case "Space":
-          setAnimation(Animations.SHRINK);
+          continueTutorial()
       }
     }
 
@@ -160,7 +171,7 @@ export const ScoresPage: React.FC<PageProps> = ({
     return () => {
       events.forEach(func => window.removeEventListener("keydown", func));
     };
-  }, [keyControl, animating, Animations.SHRINK]);
+  }, [keyControl, animating, Animations.SHRINK, continueTutorial]);
 
 
   //setup graphics
@@ -235,12 +246,18 @@ export const ScoresPage: React.FC<PageProps> = ({
 
   return (
       <>
-        {showChar && texture && <Sprite
-          texture={texture}
-          ref={charRef}
-        />}
-        {lines()}
-        {texts()}
+        <Container
+                eventMode="static"
+                hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
+                pointertap={continueTutorial}
+        >
+          {showChar && texture && <Sprite
+                  texture={texture}
+                  ref={charRef}
+          />}
+          {lines()}
+          {texts()}
+        </Container>
       </>
   )
 };

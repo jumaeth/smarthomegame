@@ -5,7 +5,7 @@ import robot from "@/assets/tutorial/explainTVPage/sad.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
-  Graphics as PixiGraphics,
+  Graphics as PixiGraphics, Rectangle,
   Sprite as PixiSprite,
   Text as PixiText,
   TextStyle
@@ -161,6 +161,11 @@ export const More_Expl: React.FC<PageProps> = ({
 
   //----------user input----------
 
+  const continueTutorial = useCallback( () => {
+    if (animating) return
+    setAnimation(Animations.OUTRO)
+  },[Animations.OUTRO, animating])
+
   //keyControls
   useEffect(() => {
     if(keyControl != Pages.MORE_EXPL || animating)return;
@@ -168,7 +173,7 @@ export const More_Expl: React.FC<PageProps> = ({
     const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
       switch (e.code) {
         case "Space":
-          setAnimation(Animations.OUTRO);
+          continueTutorial()
           break;
       }
     }
@@ -179,7 +184,7 @@ export const More_Expl: React.FC<PageProps> = ({
     return () => {
       events.forEach(func => window.removeEventListener("keydown", func));
     };
-  }, [keyControl, animating, Animations.OUTRO]);
+  }, [keyControl, animating, Animations.OUTRO, continueTutorial]);
 
 
 
@@ -299,17 +304,23 @@ export const More_Expl: React.FC<PageProps> = ({
 
   return (
       <>
-        {texture && <Sprite
-          texture={texture}
-          ref={charRef}
-        />}
-        {background()}
-        {graphics()}
-        {texts()}
-        {textureRobot && <Sprite
-          texture={textureRobot}
-          ref={robotRef}
-        />}
+        <Container
+                eventMode="static"
+                hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
+                pointertap={continueTutorial}
+        >
+          {texture && <Sprite
+                  texture={texture}
+                  ref={charRef}
+          />}
+          {background()}
+          {graphics()}
+          {texts()}
+          {textureRobot && <Sprite
+                  texture={textureRobot}
+                  ref={robotRef}
+          />}
+        </Container>
       </>
   )
 };
