@@ -68,8 +68,6 @@ export const ProgressBar: React.FC<PageProps> = ({
             const text = textRef.current;
             if (!graphic || !text) return;
 
-            ProgressBarStatusStore.set(true)
-
             await mgr.parallel([
               () => growAnimation(mgr, robot, growProps),
               () => fadeAnimation(mgr, [graphic, text], fadeIn),
@@ -84,8 +82,6 @@ export const ProgressBar: React.FC<PageProps> = ({
             const graphic = graphicRef.current;
             const text = textRef.current;
             if (!graphic || !text) return;
-
-            ProgressBarStatusStore.set(false)
             await mgr.parallel([() => fadeAnimation(mgr, [robot, graphic, text], fadeOut)]);
           },
           [mgrRef]
@@ -126,7 +122,7 @@ export const ProgressBar: React.FC<PageProps> = ({
           const fadeIn: FadeProps = { duration: 500, startA: 0, endA: 1 };
           if (introRun)return
           setAnimating(true);
-          console.log("before Intro Anim")
+          ProgressBarStatusStore.set(true)
           await runIntroAnim(robot, anim1, fadeIn);
           setAnimating(false);
           setAnimation(Animations.IDLE);
@@ -163,7 +159,10 @@ export const ProgressBar: React.FC<PageProps> = ({
     if (keyControl != Pages.PROGRESS_BAR || animating) return;
 
     const onSpecialPressed = (e: KeyboardEvent) => {
-      if (e.code === "Space") setAnimation(Animations.OUTRO);
+      if (e.code === "Space") {
+        ProgressBarStatusStore.set(false)
+        setAnimation(Animations.OUTRO)
+      };
     };
 
     window.addEventListener("keydown", onSpecialPressed);
@@ -191,17 +190,12 @@ export const ProgressBar: React.FC<PageProps> = ({
 
     const smartDevices = gameService?.getAllRooms().flatMap(r => r.devices) ?? []
 
-    const trophyWidth = windowHeight * 0.09325
-    const gap = windowWidth * 0.006
-    //const smarDeviceIconWidth = windowWidth * 0.03
-    //const progressbarWidth = trophyWidth + gap + smarDeviceIconWidth * smartDevices.length + gap * 2
+    const base = Math.min(windowWidth, windowHeight);
 
-    const aspectRatio = windowWidth / windowHeight;
-
-    console.log("ww: "+windowWidth)
-    console.log("wh: "+windowHeight)
-
-    console.log(windowHeight * 0.02 * aspectRatio)
+    const trophyWidth: number = windowWidth * 0.0575;
+    const trophyHeight: number = base * 0.1175;
+    const smarDeviceIconWidth = base * 0.06;
+    const totalWidth = trophyWidth + smarDeviceIconWidth * smartDevices.length
 
     const b = new PixiGraphics();
     b.clear();
@@ -209,10 +203,10 @@ export const ProgressBar: React.FC<PageProps> = ({
     b.drawRect(0, 0, windowWidth, windowHeight);
     b.beginHole();
     b.drawRoundedRect(
-            windowWidth * 0.11,
-            windowHeight * 0.018 * aspectRatio,
-            50,
-            windowHeight * 0.1375,
+            windowWidth * 0.095,
+            windowHeight * 0.0375,
+            totalWidth,
+            trophyHeight,
             10
     );
     b.endHole();
@@ -220,7 +214,7 @@ export const ProgressBar: React.FC<PageProps> = ({
 
     parent.children.filter(c => c instanceof PixiGraphics).forEach(c => parent.removeChild(c))
     parent.addChild(b)
-  }, [windowWidth, windowHeight]);
+  }, [windowWidth, windowHeight, gameService]);
 
   const setupGraphics = useCallback(() => {
     const parent = graphicRef.current;

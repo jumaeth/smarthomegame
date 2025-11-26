@@ -134,12 +134,19 @@ export const PhonePage: React.FC<PageProps> = ({
 
 
   useEffect(() => {
-    const sprite = charRef.current
-    if(!sprite || animating)return;
-    sprite.x = growChar.endX
-    sprite.y = growChar.endY
-    sprite.scale.set(growChar.endS)
-  }, [windowWidth, windowHeight, animating, growChar.endS, growChar.endX, growChar.endY]);
+    const sprite = charRef.current;
+    if (!sprite || animating) return;
+
+    if (!introRun) {
+      sprite.x = growChar.startX;
+      sprite.y = growChar.startY;
+      sprite.scale.set(growChar.startS);
+    } else {
+      sprite.x = growChar.endX;
+      sprite.y = growChar.endY;
+      sprite.scale.set(growChar.endS);
+    }
+  }, [windowWidth, windowHeight, animating, growChar, introRun]);
 
   //keyControls
   useEffect(() => {
@@ -170,8 +177,8 @@ export const PhonePage: React.FC<PageProps> = ({
     { text: textArr[3], x: windowWidth*0.4, y: windowHeight*0.75,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.25},
     { text: textArr[5], x: windowWidth*0.7,   y: windowHeight*0.25,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.28},
 
-    { text: textArr[6], x: growChar.endX - texture.width * growChar.endS * 0.1, y: windowHeight*0.05, fontSize: 0.07, fontWeight: "bold" },
-  ]),[windowWidth, windowHeight, growChar.endS, growChar.endX, textArr, texture.width])
+    { text: textArr[6], x: windowWidth * 0.425,   y: windowHeight * 0.15, fontSize: 0.07, fontWeight: "bold" },
+  ]),[windowWidth, windowHeight, textArr])
 
   //define line properties
   const drawLines =  useCallback( (g: PixiGraphics) => {
