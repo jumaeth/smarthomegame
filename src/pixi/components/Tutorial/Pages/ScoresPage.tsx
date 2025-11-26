@@ -129,12 +129,19 @@ export const ScoresPage: React.FC<PageProps> = ({
     setKeyControl, setNextPage, growChar, shrinkChar, introRun]);
 
   useEffect(() => {
-    const sprite = charRef.current
-    if(!sprite || animating)return;
-    sprite.x = growChar.endX
-    sprite.y = growChar.endY
-    sprite.scale.set(growChar.endS)
-  }, [windowWidth, windowHeight, animating, growChar.endS, growChar.endX, growChar.endY]);
+    const sprite = charRef.current;
+    if (!sprite || animating) return;
+
+    if (!introRun) {
+      sprite.x = growChar.startX;
+      sprite.y = growChar.startY;
+      sprite.scale.set(growChar.startS);
+    } else {
+      sprite.x = growChar.endX;
+      sprite.y = growChar.endY;
+      sprite.scale.set(growChar.endS);
+    }
+  }, [windowWidth, windowHeight, animating, growChar, introRun]);
 
   //keyControls
   useEffect(() => {
@@ -162,8 +169,8 @@ export const ScoresPage: React.FC<PageProps> = ({
       { text: textArr[2], x: windowWidth*0.575, y: windowHeight*0.625,  fontSize: 0.04, fontWeight: "bold" },
       { text: textArr[1], x: windowWidth*0.1025,   y: windowHeight*0.65,  fontSize: 0.03, fontWeight: "lighter"},
       { text: textArr[3], x: windowWidth*0.5775, y: windowHeight*0.675,  fontSize: 0.03, fontWeight: "lighter", wrap: 0.36},
-      { text: textArr[4], x: growChar.endX - texture.width * growChar.endS * 0.1, y: windowHeight*0.05, fontSize: 0.07, fontWeight: "bold" },
-    ],[windowWidth, windowHeight, growChar.endS, growChar.endX, textArr, texture.width]);
+      { text: textArr[4], x: windowWidth * 0.5, y: windowHeight * 0.05, fontSize: 0.07, fontWeight: "bold" },
+    ],[windowWidth, windowHeight, textArr]);
 
   const drawLines =  useCallback( (g: PixiGraphics) => {
     g.clear();

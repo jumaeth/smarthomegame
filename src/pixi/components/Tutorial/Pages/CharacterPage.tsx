@@ -170,12 +170,19 @@ export const CharacterPage: React.FC<PageProps> = ({
     setKeyControl, setNextPage, introRun, growChar, shrinkChar]);
 
   useEffect(() => {
-    const sprite = charRef.current
-    if(!sprite || animating)return;
-    sprite.x = growChar.endX
-    sprite.y = growChar.endY
-    sprite.scale.set(growChar.endS)
-  }, [windowWidth, windowHeight, animating, growChar.endS, growChar.endX, growChar.endY]);
+    const sprite = charRef.current;
+    if (!sprite || animating) return;
+
+    if (!introRun) {
+      sprite.x = growChar.startX;
+      sprite.y = growChar.startY;
+      sprite.scale.set(growChar.startS);
+    } else {
+      sprite.x = growChar.endX;
+      sprite.y = growChar.endY;
+      sprite.scale.set(growChar.endS);
+    }
+  }, [windowWidth, windowHeight, animating, growChar, introRun]);
 
   //setup graphics
   const setupLines =  useCallback( (g: PixiGraphics) => {

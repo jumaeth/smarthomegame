@@ -1,14 +1,7 @@
-import React, {
-  PropsWithChildren,
-  useCallback,
-  useEffect, useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Container, Sprite, Text } from "@pixi/react";
+import React, {PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState,} from "react";
+import {Container, Sprite, Text} from "@pixi/react";
 import pointing from "@/assets/tutorial/finalExpl/pointingLeft.png";
-import { loadTexture } from "@/utils/loadTexture.ts";
+import {loadTexture} from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
   Graphics as PixiGraphics,
@@ -16,12 +9,12 @@ import {
   Text as PixiText,
   TextStyle,
 } from "pixi.js";
-import { Pages } from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import { growAnimation, GrowProps } from "@/pixi/components/Tutorial/anim/growAnimation.ts";
-import { PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import { fadeAnimation, FadeProps } from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
-import { useAnimationManager } from "@/hooks/tutorial/useAnimationManager.tsx";
-import { t } from "@lingui/core/macro";
+import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
+import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
+import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
+import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
+import {t} from "@lingui/core/macro";
 import {ProgressBarStatusStore} from "@/utils/progressBarStatus.ts";
 import {fill, stroke} from "@/pixi/components/Tutorial/util/TutorialColors.ts";
 
@@ -30,7 +23,7 @@ export const ProgressBar: React.FC<PageProps> = ({
                                                      windowHeight,
                                                      keyControl,
                                                      setKeyControl,
-                                                     gameService,
+                                                     gameService
                                                    }: PropsWithChildren<PageProps>) => {
   const enum Animations {
     IDLE,
@@ -75,8 +68,6 @@ export const ProgressBar: React.FC<PageProps> = ({
             const text = textRef.current;
             if (!graphic || !text) return;
 
-            ProgressBarStatusStore.set(true)
-
             await mgr.parallel([
               () => growAnimation(mgr, robot, growProps),
               () => fadeAnimation(mgr, [graphic, text], fadeIn),
@@ -91,8 +82,6 @@ export const ProgressBar: React.FC<PageProps> = ({
             const graphic = graphicRef.current;
             const text = textRef.current;
             if (!graphic || !text) return;
-
-            ProgressBarStatusStore.set(false)
             await mgr.parallel([() => fadeAnimation(mgr, [robot, graphic, text], fadeOut)]);
           },
           [mgrRef]
@@ -133,6 +122,7 @@ export const ProgressBar: React.FC<PageProps> = ({
           const fadeIn: FadeProps = { duration: 500, startA: 0, endA: 1 };
           if (introRun)return
           setAnimating(true);
+          ProgressBarStatusStore.set(true)
           await runIntroAnim(robot, anim1, fadeIn);
           setAnimating(false);
           setAnimation(Animations.IDLE);
@@ -169,7 +159,10 @@ export const ProgressBar: React.FC<PageProps> = ({
     if (keyControl != Pages.PROGRESS_BAR || animating) return;
 
     const onSpecialPressed = (e: KeyboardEvent) => {
-      if (e.code === "Space") setAnimation(Animations.OUTRO);
+      if (e.code === "Space") {
+        ProgressBarStatusStore.set(false)
+        setAnimation(Animations.OUTRO)
+      };
     };
 
     window.addEventListener("keydown", onSpecialPressed);
@@ -195,25 +188,33 @@ export const ProgressBar: React.FC<PageProps> = ({
     const parent = backgroundRef.current;
     if (!parent) return;
 
+    const smartDevices = gameService?.getAllRooms().flatMap(r => r.devices) ?? []
+
+    const base = Math.min(windowWidth, windowHeight);
+
+    const trophyWidth: number = windowWidth * 0.0575;
+    const trophyHeight: number = base * 0.1175;
+    const smarDeviceIconWidth = base * 0.06;
+    const totalWidth = trophyWidth + smarDeviceIconWidth * smartDevices.length
+
     const b = new PixiGraphics();
     b.clear();
     b.beginFill("#000000", 0.7);
     b.drawRect(0, 0, windowWidth, windowHeight);
     b.beginHole();
     b.drawRoundedRect(
-            0.1275*windowWidth,
-            0.035*windowHeight,
-            windowWidth * 0.1875,
-            windowHeight * 0.1,
+            windowWidth * 0.095,
+            windowHeight * 0.0375,
+            totalWidth,
+            trophyHeight,
             10
     );
     b.endHole();
     b.endFill();
 
-    //replaceChildren(parent, [b]);
     parent.children.filter(c => c instanceof PixiGraphics).forEach(c => parent.removeChild(c))
     parent.addChild(b)
-  }, [windowWidth, windowHeight]);
+  }, [windowWidth, windowHeight, gameService]);
 
   const setupGraphics = useCallback(() => {
     const parent = graphicRef.current;
@@ -244,7 +245,6 @@ export const ProgressBar: React.FC<PageProps> = ({
     if (!initedRef.current) {
       initedRef.current = true;
       gameService?.pauseGame();
-      // delay one frame so refs are definitely set before we draw
       const id = requestAnimationFrame(() => setAnimation(Animations.INTRO));
       return () => cancelAnimationFrame(id);
     }
