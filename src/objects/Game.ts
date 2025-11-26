@@ -32,6 +32,7 @@ export class Game {
     return this.score;
   }
 
+  //Deprecated, use calculateScore instead ToDo Remove in #189
   modifyScore(privacyScoreDelta: number, comfortScoreDelta: number): void {
     this.score.setPrivacyScore(privacyScoreDelta + this.score.getPrivacyScore());
     this.score.setComfortScore(comfortScoreDelta + this.score.getComfortScore());

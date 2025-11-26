@@ -3,7 +3,8 @@ import {Room} from "@/objects/Room";
 import {SmartDevice} from "@/objects/SmartDevice";
 import {CookieService} from '@/services/CookieService';
 import {RoomNames} from "@/objects/RoomNames";
-import { movementStore } from '@/utils/character/movementEnabled';
+import {movementStore} from '@/utils/character/movementEnabled';
+import {DeviceNames} from "@/objects/DeviceNames.ts";
 
 // mock CookieService to avoid document access
 jest.mock('@/services/CookieService', () => ({
@@ -21,8 +22,8 @@ describe('GameService', () => {
   beforeEach(() => {
     const rooms = [
       new Room(RoomNames.LIVINGROOM, [
-        new SmartDevice("SmartTv"),
-        new SmartDevice("SmartLights"),
+        new SmartDevice(DeviceNames.SMART_TV),
+        new SmartDevice(DeviceNames.SMART_LIGHTS),
       ]),
     ];
 
@@ -49,8 +50,8 @@ describe('GameService', () => {
     const result = gameService.getAllRooms();
     expect(result).toEqual([
       new Room(RoomNames.LIVINGROOM, [
-        new SmartDevice('SmartTv'),
-        new SmartDevice('SmartLights'),
+        new SmartDevice(DeviceNames.SMART_TV),
+        new SmartDevice(DeviceNames.SMART_LIGHTS),
       ]),
     ]);
   });

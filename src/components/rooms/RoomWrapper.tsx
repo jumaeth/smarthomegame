@@ -13,7 +13,7 @@ import {RoomNames} from "@/objects/RoomNames";
 import {MapKey} from "@/types/maps";
 import {SmartDevice} from "@/objects/SmartDevice";
 import {InteractiveType} from "@/types/InteractiveType.ts";
-import {DeviceNames} from "@/objects/DeviceNames.ts";
+import {DeviceNames, deviceNameToEnum} from "@/objects/DeviceNames.ts";
 
 interface RoomWrapperProps {
   roomName: RoomNames;
@@ -73,7 +73,11 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
 
   const processedElements = interactiveElements.map((el) => {
     if (el.type === InteractiveType.SMART_DEVICE) {
-      return { ...el, onInteract: () => handleDeviceOpen(el.name) };
+      const smartDevice = deviceNameToEnum(el.name);
+      if(!smartDevice){
+        throw new Error(`Smart device with name ${el.name} not found`);
+      }
+      return { ...el, onInteract: () => handleDeviceOpen(smartDevice) };
     }
     return el;
   });

@@ -84,7 +84,7 @@ export class GameService {
   }
 
   private findRoomByName(roomName: RoomNames): Room | undefined {
-    return allRoomStore.getRoom(roomName);
+    return this.game.getRooms().find(r => r.name === roomName);
   }
 
   completeRoom(roomName: RoomNames): void {
@@ -211,7 +211,7 @@ export class GameService {
   }
 
   getScore(): GameScore {
-    return this.game.getScore();
+    return this.game.calculateScore();
   }
 
   completeDevice(name: string): void {
@@ -270,6 +270,11 @@ export class GameService {
   }
 
   getDeviceByName(name : DeviceNames):SmartDevice{
-    return  allRoomStore.getAllDevices().find(c => c.name == name);
+    const device= this.game.getRooms()
+            .flatMap(room => room.devices).find(c => c.name == name);
+    if(!device){
+      throw new Error(`Device with name ${name} not found`);
+    }
+    return device;
   }
 }

@@ -6,9 +6,9 @@ export class PointsLevel {
           public readonly max: number
   ) {}
 
-  static readonly LOW = new PointsLevel('LOW', 0, 40);
-  static readonly MEDIUM = new PointsLevel('MEDIUM', 40, 80);
-  static readonly HIGH = new PointsLevel('HIGH', 80, 100);
+  static readonly LOW = new PointsLevel('LOW', 0, 60);
+  static readonly MEDIUM = new PointsLevel('MEDIUM', 60, 120);
+  static readonly HIGH = new PointsLevel('HIGH', 120, 180);
 
   static values(): PointsLevel[] {
     return [PointsLevel.LOW, PointsLevel.MEDIUM, PointsLevel.HIGH];
