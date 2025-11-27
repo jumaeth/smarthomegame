@@ -23,6 +23,7 @@ class PositionStore {
   set(next: Position) {
     if (next.x === this.pos.x && next.y === this.pos.y) return;
     this.pos = next;
+    CookieService.set("save_player_position", this.pos)
     this.listeners.forEach((l) => l());
   }
 
@@ -35,8 +36,8 @@ class PositionStore {
 
 
   teleport(next: Position, dir?: Direction) {
-    this.set(next);
     if (dir) this.facing = dir;
+    this.set(next);
     const payload: TeleportPayload = { pos: this.pos, dir };
     this.tpListeners.forEach(l => l(payload));
   }
@@ -47,8 +48,16 @@ class PositionStore {
   }
 
   getFacing(): Direction { return this.facing; }
-  setFacing(d: Direction) { this.facing = d; }
+  setFacing(d: Direction) {
+    this.facing = d;
+    CookieService.set("save_player_facing", this.facing)
+  }
 
+  reset(){
+    this.pos.x = DEFAULT_POS_X;
+    this.pos.y = DEFAULT_POS_Y;
+    this.facing = "DOWN"
+  }
 }
 
 export const characterPositionStore = new PositionStore({
@@ -57,6 +66,10 @@ export const characterPositionStore = new PositionStore({
 });
 
 import { useSyncExternalStore, useMemo } from "react";
+import {CookieService} from "@/services/CookieService.ts";
+import {allRoomStore} from "@/utils/roomStore.ts";
+import {getDefaultSpawnForMap, getSpawnForMap} from "@/utils/mapTransition.ts";
+import {Room} from "@/objects/Room.ts";
 
 export function useCharacterPosition() {
   const pos = useSyncExternalStore(

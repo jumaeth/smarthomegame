@@ -36,17 +36,15 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
 
   const handleDeviceOpen = (deviceName: string): void => {
     if (gameService.getDeviceByName(deviceName).getIsCompleted()) return;
-    if (tutorialActive.enabled && (deviceName !== "SmartTv")) return;
-    console.log("deviceOpen");
+    if (!tutorialActive.done && (deviceName !== "SmartTv")) return;
     setActiveDevice(deviceName);
     const smartDevice: SmartDevice = gameService.getDeviceByName(deviceName);
     smartDevice.getStatBlock().startTimer();
-    gameService.pauseGame(`device:${deviceName}`);
+    gameService.pauseGame();
   };
 
   const handleDeviceClose = (): void => {
-    console.log("close");
-    gameService.resumeGame(`device:${activeDevice}`);
+    gameService.resumeGame();
     setActiveDevice(null);
   };
 
@@ -95,7 +93,7 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
   }, [updateCanvasSize]);
 
   const handleMapChange = (): boolean => {
-    if (tutorialActive.enabled) return false;
+    if (!tutorialActive.done) return false;
     return gameService.leaveRoom(roomName);
   };
 

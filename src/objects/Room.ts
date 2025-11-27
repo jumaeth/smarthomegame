@@ -39,4 +39,10 @@ export class Room {
   toggleIsLocked(): void {
     this.isLocked = !this.isLocked;
   }
+
+  reset() {
+    this.isLocked = false;
+    this.isCompleted = false;
+    this.devices.forEach(device => device.reset())
+  }
 }

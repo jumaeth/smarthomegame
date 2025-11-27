@@ -9,7 +9,7 @@ interface CameraProps {
   canvasSize: { width: number; height: number }
   shouldSnap: boolean;
   onSnapComplete: () => void;
-  tutorialEnabled: boolean;
+  tutorialDone: boolean;
 }
 
 export const Camera = ({
@@ -18,7 +18,7 @@ export const Camera = ({
                          shouldSnap,
                          onSnapComplete,
                          children,
-                         tutorialEnabled
+                         tutorialDone
                        }: PropsWithChildren<CameraProps>) => {
   const containerRef = useRef<PIXIGraphics>(null)
 
@@ -34,7 +34,7 @@ export const Camera = ({
   }
 
   useEffect(() => {
-    if (!containerRef.current || !tutorialEnabled) return
+    if (!containerRef.current || !tutorialDone) return
     const { x, y } = computeTarget()
     cameraPosition.current.x = x
     cameraPosition.current.y = y

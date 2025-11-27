@@ -236,8 +236,9 @@ export const Score_Changes: React.FC<PageProps> = ({
     if (!initedRef.current) {
       initedRef.current = true;
       gameService?.pauseGame();
-      // delay one frame so refs are definitely set before we draw
-      const id = requestAnimationFrame(() => setAnimation(Animations.INTRO));
+      const id = requestAnimationFrame(() => {
+        setAnimation(Animations.INTRO)
+      });
       return () => cancelAnimationFrame(id);
     }
   }, [gameService, Animations.INTRO]);
@@ -309,7 +310,7 @@ export const Score_Changes: React.FC<PageProps> = ({
                     pointertap={continueTutorial}
             >
               {background()}
-              {textureRobot && <Sprite texture={textureRobot} ref={robotRef} />}
+              {<Sprite texture={textureRobot} ref={robotRef} />}
               {graphics()}
               {texts()}
             </Container>

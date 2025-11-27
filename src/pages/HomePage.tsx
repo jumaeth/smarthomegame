@@ -6,7 +6,7 @@ import {CookieService} from "@/services/CookieService.ts";
 import {Trans} from "@lingui/react/macro";
 import LanguageSwitcher from "@/components/LanguageSwitcher.tsx";
 import bgImage from "@/assets/intro/page/welcomepage_logo.jpeg";
-import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive.ts";
+import {tutorialDoneStore} from "@/hooks/gameService/useTutorialActive.ts";
 import CharacterSelector from "@/components/character/CharacterSelector.tsx";
 import BrowserBanner from "@/components/general-ui/BrowserBanner.tsx";
 import {isSupportedBrowser} from "@/utils/checkBrowser.tsx";
@@ -19,7 +19,6 @@ export default function HomePage() {
 
   useEffect(() => {
     const consent = CookieService.get("cookieConsent");
-    console.log("Consent: " + consent);
     if (consent === null) {
       setShowCookieBanner(true);
     }
@@ -76,7 +75,7 @@ export default function HomePage() {
                 </Button>
                 <Button
                         onClick={() => {
-                          tutorialActiveStore.set(false);
+                          tutorialDoneStore.set(true)
                           navigate("/game/livingroom");
                         }}
                         className="px-6 py-3 bg-gray-400 text-gray-800 rounded-lg shadow-md hover:bg-gray-500 transition"
