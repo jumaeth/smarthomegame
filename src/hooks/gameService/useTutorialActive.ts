@@ -1,4 +1,4 @@
-import {CookieService} from "@/services/CookieService.ts";
+import {CookieService} from "@/services/CookieService"
 
 type Listener = () => void;
 
