@@ -10,8 +10,8 @@ import {tutorialDoneStore} from "@/hooks/gameService/useTutorialActive";
 import {t} from "@lingui/core/macro";
 import {MapKey} from "@/types/maps";
 import {DoorState} from "@/types/door";
-import {characterPositionStore} from "@/utils/character/characterPosition.ts";
-import {Direction, Position} from "@/types/movement.ts";
+import {characterPositionStore} from "@/utils/character/characterPosition";
+import {Direction, Position} from "@/types/movement";
 
 
 type DeviceListener = (device: SmartDevice) => void;
