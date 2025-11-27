@@ -5,7 +5,13 @@ import arrowKeys from "@/assets/tutorial/characterPage/cp_arrow_keys.png";
 import eKey from "@/assets/tutorial/characterPage/cp_e_key.png";
 import highlighting from "@/assets/tutorial/characterPage/cp_highlight.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
-import {Container as PixiContainer, Graphics as PixiGraphics, Sprite as PixiSprite, TextStyle} from "pixi.js";
+import {
+  Container as PixiContainer,
+  Graphics as PixiGraphics,
+  Rectangle,
+  Sprite as PixiSprite,
+  TextStyle
+} from "pixi.js";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {ImageProps, TextProps} from "@/pixi/components/Tutorial/util/Types.ts";
@@ -78,6 +84,12 @@ export const CharacterPage: React.FC<PageProps> = ({
     toggleExplanations([text, image, graphic], false);
   }, []);
 
+  const continueTutorial = useCallback( () => {
+    if (animating || pressedRef.current) return
+    pressedRef.current = true;
+    setAnimation(Animations.SHRINK);
+  },[Animations.SHRINK, animating])
+
   //keyControls
   useEffect(() => {
     if(keyControl != Pages.CHARACTER || animating)return;
@@ -85,8 +97,7 @@ export const CharacterPage: React.FC<PageProps> = ({
     const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
       switch (e.code) {
         case "Space":
-          pressedRef.current = true;
-          setAnimation(Animations.SHRINK);
+          continueTutorial()
       }
     }
 
@@ -96,7 +107,7 @@ export const CharacterPage: React.FC<PageProps> = ({
     return () => {
       events.forEach(func => window.removeEventListener("keydown", func));
     };
-  }, [keyControl, animating, Animations.SHRINK]);
+  }, [keyControl, animating, Animations.SHRINK, continueTutorial]);
 
   const growChar= useMemo<GrowProps>(() =>  {
     return {
@@ -170,12 +181,19 @@ export const CharacterPage: React.FC<PageProps> = ({
     setKeyControl, setNextPage, introRun, growChar, shrinkChar]);
 
   useEffect(() => {
-    const sprite = charRef.current
-    if(!sprite || animating)return;
-    sprite.x = growChar.endX
-    sprite.y = growChar.endY
-    sprite.scale.set(growChar.endS)
-  }, [windowWidth, windowHeight, animating, growChar.endS, growChar.endX, growChar.endY]);
+    const sprite = charRef.current;
+    if (!sprite || animating) return;
+
+    if (!introRun) {
+      sprite.x = growChar.startX;
+      sprite.y = growChar.startY;
+      sprite.scale.set(growChar.startS);
+    } else {
+      sprite.x = growChar.endX;
+      sprite.y = growChar.endY;
+      sprite.scale.set(growChar.endS);
+    }
+  }, [windowWidth, windowHeight, animating, growChar, introRun]);
 
   //setup graphics
   const setupLines =  useCallback( (g: PixiGraphics) => {
@@ -267,14 +285,20 @@ export const CharacterPage: React.FC<PageProps> = ({
 
   return (
       <>
-        {showChar && texture && <Sprite
-          texture={texture}
-          ref={charRef}
-          x={charRef.current?.x as number}
-        />}
-        {lines()}
-        {texts()}
-        {images()}
+        <Container
+          eventMode="static"
+          hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
+          pointertap={continueTutorial}
+        >
+            {showChar && texture && <Sprite
+                    texture={texture}
+                    ref={charRef}
+                    x={charRef.current?.x as number}
+            />}
+            {lines()}
+            {texts()}
+            {images()}
+        </Container>
       </>
   )
 };

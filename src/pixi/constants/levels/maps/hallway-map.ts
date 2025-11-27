@@ -32,10 +32,10 @@ export const HALLWAY_TO_BATHROOM_DOOR_POS = {x: 19, y: 15} as Position;
 export const HALLWAY_TO_BEDROOM_DOOR_POS = {x: 12, y: 15} as Position;
 
 export const HALLWAY_TRANSITIONS: Transition[] = [
-  {pos: SPAWN_FROM_LIVINGROOM, to: 'livingroom'},
-  {pos: SPAWN_FROM_KITCHEN, to: 'kitchen'},
-  {pos: SPAWN_FROM_BATHROOM, to: 'bathroom'},
-  {pos: SPAWN_FROM_BEDROOM, to: 'bedroom'},
+  {pos: SPAWN_FROM_LIVINGROOM, to: 'livingroom', faceToEnter: "UP"},
+  {pos: SPAWN_FROM_KITCHEN, to: 'kitchen', faceToEnter: "UP"},
+  {pos: SPAWN_FROM_BATHROOM, to: 'bathroom', faceToEnter: "DOWN"},
+  {pos: SPAWN_FROM_BEDROOM, to: 'bedroom', faceToEnter: "DOWN"},
 ];
 
 export const HALLWAY_OVERLAYS: Overlay[] = [

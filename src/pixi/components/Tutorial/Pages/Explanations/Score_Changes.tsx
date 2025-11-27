@@ -4,7 +4,7 @@ import pointing from "@/assets/tutorial/finalExpl/pointing.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
-  Graphics as PixiGraphics,
+  Graphics as PixiGraphics, Rectangle,
   Sprite as PixiSprite,
   Text as PixiText,
   TextStyle,
@@ -137,23 +137,35 @@ export const Score_Changes: React.FC<PageProps> = ({
   ]);
 
   useEffect(() => {
-    const sprite = robotRef.current
-    if(!sprite || animating)return;
-    sprite.x = anim1.endX
-    sprite.y = anim1.endY
-    sprite.scale.set(anim1.endS)
-  }, [windowWidth, windowHeight, anim1.endS, anim1.endY, anim1.endX, animating]);
+    const sprite = robotRef.current;
+    if (!sprite || animating) return;
+
+    if (!introRun) {
+      sprite.x = anim1.startX;
+      sprite.y = anim1.startY;
+      sprite.scale.set(anim1.startS);
+    } else {
+      sprite.x = anim1.endX;
+      sprite.y = anim1.endY;
+      sprite.scale.set(anim1.endS);
+    }
+  }, [windowWidth, windowHeight, anim1.endS, anim1.endY, anim1.endX, animating, introRun, anim1.startS, anim1.startX, anim1.startY]);
+
+  const continueTutorial = useCallback( () => {
+    if (animating) return
+    setAnimation(Animations.OUTRO)
+  },[Animations.OUTRO, animating])
 
   useEffect(() => {
     if (keyControl != Pages.SCORE_CHANGES || animating) return;
 
     const onSpecialPressed = (e: KeyboardEvent) => {
-      if (e.code === "Space") setAnimation(Animations.OUTRO);
+      if (e.code === "Space") continueTutorial();
     };
 
     window.addEventListener("keydown", onSpecialPressed);
     return () => window.removeEventListener("keydown", onSpecialPressed);
-  }, [keyControl, animating, Animations.OUTRO]);
+  }, [keyControl, animating, Animations.OUTRO, continueTutorial]);
 
 
   const setupTexts = useCallback(() => {
@@ -174,6 +186,9 @@ export const Score_Changes: React.FC<PageProps> = ({
     const parent = backgroundRef.current;
     if (!parent) return;
 
+    const base = Math.min(windowWidth, windowHeight);
+
+
     const b = new PixiGraphics();
     b.clear();
     b.beginFill("#000000", 0.7);
@@ -181,9 +196,9 @@ export const Score_Changes: React.FC<PageProps> = ({
     b.beginHole();
     b.drawRoundedRect(
             0.855*windowWidth,
-            0.01*windowHeight,
+            0.01*base,
             windowWidth * 0.14,
-            windowHeight * 0.155,
+            base * 0.125,
             10
     );
     b.endHole();
@@ -288,10 +303,16 @@ export const Score_Changes: React.FC<PageProps> = ({
 
   return (
           <>
-            {background()}
-            {textureRobot && <Sprite texture={textureRobot} ref={robotRef} />}
-            {graphics()}
-            {texts()}
+            <Container
+                    eventMode="static"
+                    hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
+                    pointertap={continueTutorial}
+            >
+              {background()}
+              {textureRobot && <Sprite texture={textureRobot} ref={robotRef} />}
+              {graphics()}
+              {texts()}
+            </Container>
           </>
   );
 };

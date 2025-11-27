@@ -10,6 +10,8 @@ export const Hallway = () => {
 
   const interactiveElements = [
     new InteractivePixiElement(16.25, 9.5, 0.5, 1, "HallwayFrog", InteractiveType.DUMMY),
+    new InteractivePixiElement(2, 11.5, 1, 2, "HallwayPets", InteractiveType.DUMMY),
+    new InteractivePixiElement(4, 2, 1, 1, "HallwayEntryDoor", InteractiveType.DUMMY),
   ];
 
   const handleMapChange = (newMap: MapKey) => {

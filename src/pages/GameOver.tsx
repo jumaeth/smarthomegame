@@ -19,7 +19,7 @@ export function GameOver() {
   const [showStatsOnRight, setShowStatsOnRight] = useState(false);
 
   function downloadStats(): void {
-    FileService.downloadFile("smart_home_escape_stats", csvString, "csv");
+    FileService.downloadFile("smart_home_challenge_stats", csvString, "csv");
   }
 
   return (

@@ -15,9 +15,9 @@ import { loadTexture } from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
   Sprite as PixiSprite,
-        Graphics as PixiGraphics,
+  Graphics as PixiGraphics,
   TextStyle,
-  Texture,
+  Texture, Rectangle,
 } from "pixi.js";
 import { Pages } from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import { growAnimation, GrowProps } from "@/pixi/components/Tutorial/anim/growAnimation.ts";
@@ -369,6 +369,12 @@ export const Decision: React.FC<PageProps> = ({
     setKeyControl, setNextPage, introRun
   ]);
 
+  const continueTutorial = useCallback( () => {
+    if (lessExplReady && !animating) {
+      setAnimation(Anims.OUTRO_LESS);
+    }
+  },[Anims.OUTRO_LESS, lessExplReady, animating])
+
   useEffect(() => {
     if (keyControl !== Pages.DECISION || animating) return;
 
@@ -389,23 +395,26 @@ export const Decision: React.FC<PageProps> = ({
           }
           return;
         case "Space":
-          if (lessExplReady) {
-            setAnimation(Anims.OUTRO_LESS);
-          }
+          continueTutorial()
           return;
       }
     };
 
     window.addEventListener("keydown", onSpecialPressed);
     return () => window.removeEventListener("keydown", onSpecialPressed);
-  }, [keyControl, animating, showExpl, decisionReady, lessExplReady, leftOnClick, rightOnClick, Anims.OUTRO_LESS]);
+  }, [keyControl, animating, showExpl, decisionReady, lessExplReady, leftOnClick, rightOnClick, Anims.OUTRO_LESS, continueTutorial]);
 
   const showDecisionUI = showExpl && !lessExplReady && animation !== Anims.SWITCH;
 
 
   return (
           <>
-            <Container sortableChildren>
+            <Container
+                    sortableChildren
+                    eventMode="static"
+                    hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
+                    pointertap={continueTutorial}
+            >
               {showExpl && (
                       <Container ref={midContRef} zIndex={0}>
                         <Graphics draw={drawMidPanel} />
@@ -544,8 +553,24 @@ export const Decision: React.FC<PageProps> = ({
               <Container ref={spriteContainerRef} zIndex={2}>
                 <Sprite texture={textureHandsUp} ref={charRef} />
               </Container>
-              {showExpl && textureLeftArr && <Sprite ref={leftArrRef} texture={textureLeftArr} zIndex={2} />}
-              {showExpl && textureRightArr && <Sprite ref={rightArrRef} texture={textureRightArr} zIndex={2} />}
+              {showExpl && textureLeftArr &&
+                      <Sprite
+                         ref={leftArrRef}
+                         texture={textureLeftArr}
+                         zIndex={2}
+                         eventMode="static"
+                         pointertap={leftOnClick}
+                         pointerover={(e) => (e.currentTarget.cursor = "pointer")}
+                      />}
+              {showExpl && textureRightArr &&
+                      <Sprite
+                         ref={rightArrRef}
+                         texture={textureRightArr}
+                         zIndex={2}
+                         eventMode="static"
+                         pointertap={rightOnClick}
+                         pointerover={(e) => (e.currentTarget.cursor = "pointer")}
+                      />}
             </Container>
           </>
   );

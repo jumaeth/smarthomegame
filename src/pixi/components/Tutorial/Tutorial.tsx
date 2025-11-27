@@ -47,10 +47,9 @@ export const Tutorial: React.FC<TutorialProps> = ({
     if (keyControl == Pages.PROGRESS_BAR)return;
     wRef.current = windowWidth;
     hRef.current = windowHeight;
-    if (backgroundRef.current && (keyControl == Pages.MAIN || keyControl == Pages.MORE_EXPL
-    )) {
-      drawBackground(backgroundRef, windowWidth, windowHeight);
-    }
+    if (backgroundRef.current && (keyControl != Pages.MAIN && keyControl != Pages.SCORE_CHANGES && keyControl != Pages.FINAL_MESSAGE && keyControl != Pages.More_Expl_SD))
+     {
+       drawBackground(backgroundRef, windowWidth, windowHeight);}
   }, [windowWidth, windowHeight, keyControl]);
 
   useEffect(() => {
