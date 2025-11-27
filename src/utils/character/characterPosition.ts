@@ -1,7 +1,7 @@
-import {Direction, Position} from "@/types/movement.ts";
-import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings.ts";
+import {Direction, Position} from "@/types/movement";
+import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings";
 import {useMemo, useSyncExternalStore} from "react";
-import {CookieService} from "@/services/CookieService.ts";
+import {CookieService} from "@/services/CookieService";
 
 type Listener = () => void;
 type TeleportListener = (p: TeleportPayload) => void;
