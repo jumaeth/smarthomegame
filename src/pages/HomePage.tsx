@@ -51,12 +51,12 @@ export default function HomePage() {
             <div className="z-10 flex flex-col items-center px-4">
               <h1 className="text-5xl font-bold mb-6 text-center">
                 <Trans>
-                  Hello and welcome to the Smart Home Escape Game
+                  Hello and welcome to the Smart Home Challenge
                 </Trans>
               </h1>
               <p className="text-xl text-center mb-10">
                 <Trans>
-                  You are on the start page. To start a new adventure, click on the
+                  Find the smart gadgets, unlock your home!
                 </Trans>
                 <span className="font-semibold">
                 <Trans>

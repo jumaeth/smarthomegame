@@ -43,14 +43,14 @@ msgstr ""
 msgid " privacy"
 msgstr " privacy"
 
-#. placeholder {0}: showStatsOnRight ? "Hide Statistics" : "Show Statistics"
 #. placeholder {0}: selectedObject.name
+#. placeholder {0}: showStatsOnRight ? "Hide Statistics" : "Show Statistics"
 #: src/components/smart-devices/SmartShower.tsx:227
 #: src/pages/GameOver.tsx:66
 msgid "{0}"
 msgstr "{0}"
 
-#: src/pixi/components/SpeechBubble.tsx:35
+#: src/pixi/components/SpeechBubble.tsx:36
 msgid "*blub*"
 msgstr "*blub*"
 
@@ -74,7 +74,8 @@ msgstr "A real Picasso!"
 msgid "A smarthome does a great deal to make your life more comfortable. It can automate routines or know your preferences even better than yourself. A high comfort score makes your life easier!"
 msgstr "A smarthome does a great deal to make your life more comfortable. It can automate routines or know your preferences even better than yourself. A high comfort score makes your life easier!"
 
-#: src/components/general-ui/CookieBanner.tsx:63
+#: src/components/general-ui/BrowserBanner.tsx:34
+#: src/components/general-ui/CookieBanner.tsx:57
 msgid "accept"
 msgstr "accept"
 
@@ -186,11 +187,15 @@ msgstr "Bluetooth brings great functionality"
 msgid "Bluetooth isn't dangerous for your device"
 msgstr "Bluetooth isn't dangerous for your device"
 
+#: src/components/general-ui/BrowserBanner.tsx:31
+msgid "Browser choice"
+msgstr "Browser choice"
+
 #: src/components/dataSortingGame/DataSortingGame.tsx:190
 msgid "Bus line 10 timetable"
 msgstr "Bus line 10 timetable"
 
-#: src/pages/HomePage.tsx:51
+#: src/pages/HomePage.tsx:66
 msgid "Button."
 msgstr "Button."
 
@@ -210,7 +215,7 @@ msgstr "buy spices"
 msgid "buy tomatoes"
 msgstr "buy tomatoes"
 
-#: src/components/general-ui/CookieBanner.tsx:21
+#: src/components/general-ui/CookieBanner.tsx:20
 msgid "by using our website, you agree to the use of cookies in accordance with our "
 msgstr "by using our website, you agree to the use of cookies in accordance with our "
 
@@ -230,7 +235,7 @@ msgstr "Camera On"
 msgid "Can be an access point for intruders"
 msgstr "Can be an access point for intruders"
 
-#: src/pixi/components/SpeechBubble.tsx:33
+#: src/pixi/components/SpeechBubble.tsx:34
 msgid "Can I pet that dog?"
 msgstr "Can I pet that dog?"
 
@@ -337,7 +342,7 @@ msgstr "Continue anyway"
 msgid "Continue saved game"
 msgstr "Continue saved game"
 
-#: src/components/general-ui/CookieBanner.tsx:48
+#: src/components/general-ui/CookieBanner.tsx:47
 msgid "Cookie banner"
 msgstr "Cookie banner"
 
@@ -458,7 +463,7 @@ msgstr "Data that is intended for the general public and does not contain any pe
 msgid "Data that requires a higher level of protection under the GDPR"
 msgstr "Data that requires a higher level of protection under the GDPR"
 
-#: src/components/general-ui/CookieBanner.tsx:64
+#: src/components/general-ui/CookieBanner.tsx:58
 msgid "decline"
 msgstr "decline"
 
@@ -559,6 +564,10 @@ msgstr "Export only"
 msgid "Face ID activated"
 msgstr "Face ID activated"
 
+#: src/pixi/components/SpeechBubble.tsx:38
+msgid "Fancy some new Clothing?"
+msgstr "Fancy some new Clothing?"
+
 #: src/components/smart-devices/SmartMirror.tsx:77
 msgid "FashionHelper+"
 msgstr "FashionHelper+"
@@ -578,6 +587,10 @@ msgstr "Features"
 #: src/components/smart-devices/SmartShower.tsx:220
 msgid "Find the relevant objects for the smart shower. Think carefully about which features you want to enable or disable."
 msgstr "Find the relevant objects for the smart shower. Think carefully about which features you want to enable or disable."
+
+#: src/pages/HomePage.tsx:58
+msgid "Find the smart gadgets, unlock your home!"
+msgstr "Find the smart gadgets, unlock your home!"
 
 #: src/components/cookingGame/IngredientsStage.tsx:28
 msgid ""
@@ -599,6 +612,10 @@ msgstr ""
 msgid "FitPulse"
 msgstr "FitPulse"
 
+#: src/components/general-ui/BrowserBanner.tsx:13
+msgid "For the best experience, please use Chrome or Safari."
+msgstr "For the best experience, please use Chrome or Safari."
+
 #: src/components/cookingGame/IngredientsStage.tsx:37
 msgid "from \"parmesan.com"
 msgstr "from \"parmesan.com"
@@ -606,6 +623,10 @@ msgstr "from \"parmesan.com"
 #: src/components/smart-devices/SmartMirror.tsx:76
 msgid "Full styling assistant with AI-powered fashion recommendations and calendar integration."
 msgstr "Full styling assistant with AI-powered fashion recommendations and calendar integration."
+
+#: src/pixi/components/SpeechBubble.tsx:39
+msgid "FuzZy s1gNaL..."
+msgstr "FuzZy s1gNaL..."
 
 #: src/pages/GameOver.tsx:36
 msgid "Game Results:"
@@ -671,9 +692,13 @@ msgstr "Health Monitor"
 msgid "Heart rate"
 msgstr "Heart rate"
 
+#: src/pages/HomePage.tsx:53
+msgid "Hello and welcome to the Smart Home Challenge"
+msgstr "Hello and welcome to the Smart Home Challenge"
+
 #: src/pages/HomePage.tsx:38
-msgid "Hello and welcome to the Smart Home Escape Game"
-msgstr "Hello and welcome to the Smart Home Escape Game"
+#~ msgid "Hello and welcome to the Smart Home Escape Game"
+#~ msgstr "Hello and welcome to the Smart Home Escape Game"
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:77
 msgid "Hey, you should rearrange your surveillance cameras. The smart home has already made a preselection. Do you agree with this? Select all the camera placements you want to keep."
@@ -779,7 +804,7 @@ msgstr "IP addresses are personal data that can be used to identify a device and
 msgid "It indicates the safety of your data. Evil attackers always try to steal your data and use it to attack you and your personal space. A high privacy score makes it harder for them!"
 msgstr "It indicates the safety of your data. Evil attackers always try to steal your data and use it to attack you and your personal space. A high privacy score makes it harder for them!"
 
-#: src/pixi/components/SpeechBubble.tsx:34
+#: src/pixi/components/SpeechBubble.tsx:35
 msgid "It's locked!"
 msgstr "It's locked!"
 
@@ -1060,6 +1085,10 @@ msgstr "Operation"
 msgid "Orders retained per legal requirements (up to 10 years)."
 msgstr "Orders retained per legal requirements (up to 10 years)."
 
+#: src/components/general-ui/BrowserBanner.tsx:18
+msgid "Our game is optimized for these browsers. If you’re using another browser, some features may not work correctly. Make sure your Browser is up-to-date."
+msgstr "Our game is optimized for these browsers. If you’re using another browser, some features may not work correctly. Make sure your Browser is up-to-date."
+
 #: src/components/smart-devices/SmartMirror.tsx:76
 msgid "Outfit suggestions"
 msgstr "Outfit suggestions"
@@ -1132,7 +1161,7 @@ msgstr "Price alerts"
 msgid "Privacy First, Comfort Second: You’ve managed to block third-party access to your personal data, but comfort took a hit. The Smart Heater now requires a fingerprint scan every hour, the lights are stuck in “eco mode” dimness."
 msgstr "Privacy First, Comfort Second: You’ve managed to block third-party access to your personal data, but comfort took a hit. The Smart Heater now requires a fingerprint scan every hour, the lights are stuck in “eco mode” dimness."
 
-#: src/components/general-ui/CookieBanner.tsx:23
+#: src/components/general-ui/CookieBanner.tsx:22
 msgid "privacy policy"
 msgstr "privacy policy"
 
@@ -1234,8 +1263,8 @@ msgid "Runs offline; no external connections."
 msgstr "Runs offline; no external connections."
 
 #: src/components/general-ui/CookieBanner.tsx:58
-msgid "Save my game progress"
-msgstr "Save my game progress"
+#~ msgid "Save my game progress"
+#~ msgstr "Save my game progress"
 
 #: src/components/cookingGame/CookingStage.tsx:54
 msgid "Saves preferences and cooked dishes"
@@ -1284,7 +1313,7 @@ msgstr "Sensor-only"
 msgid "Shower Head"
 msgstr "Shower Head"
 
-#: src/pages/HomePage.tsx:69
+#: src/pages/HomePage.tsx:84
 msgid "Skip the intro and jump straight into the game"
 msgstr "Skip the intro and jump straight into the game"
 
@@ -1394,8 +1423,8 @@ msgstr "Solve all 4 apps"
 msgid "Start a new game"
 msgstr "Start a new game"
 
-#: src/pages/HomePage.tsx:47
-#: src/pages/HomePage.tsx:58
+#: src/pages/HomePage.tsx:62
+#: src/pages/HomePage.tsx:73
 msgid "Start game"
 msgstr "Start game"
 
@@ -1683,6 +1712,10 @@ msgstr "Trip to Italy"
 msgid "Try again"
 msgstr "Try again"
 
+#: src/pixi/components/SpeechBubble.tsx:33
+msgid "Urgh that stinks"
+msgstr "Urgh that stinks"
+
 #: src/components/smart-devices/SmartTv.tsx:105
 msgid "Usage Analytics"
 msgstr "Usage Analytics"
@@ -1737,7 +1770,7 @@ msgstr ""
 "\n"
 "The last thing we have to do is set the table and serve our dish"
 
-#: src/components/general-ui/CookieBanner.tsx:16
+#: src/components/general-ui/CookieBanner.tsx:15
 msgid "We use functional cookies to enable your later access to our web game and to improve the user experience. Cookies are small files stored on your device."
 msgstr "We use functional cookies to enable your later access to our web game and to improve the user experience. Cookies are small files stored on your device."
 
@@ -1867,8 +1900,8 @@ msgid "You are here"
 msgstr "You are here"
 
 #: src/pages/HomePage.tsx:43
-msgid "You are on the start page. To start a new adventure, click on the"
-msgstr "You are on the start page. To start a new adventure, click on the"
+#~ msgid "You are on the start page. To start a new adventure, click on the"
+#~ msgstr "You are on the start page. To start a new adventure, click on the"
 
 #: src/components/smart-devices/SmartShower.tsx:276
 msgid "You are privacy focused! Your choices prioritize protecting your personal data and maintaining privacy."
@@ -1878,7 +1911,7 @@ msgstr "You are privacy focused! Your choices prioritize protecting your persona
 msgid "You are sustainability focused! Your choices prioritize environmental benefits and resource conservation."
 msgstr "You are sustainability focused! Your choices prioritize environmental benefits and resource conservation."
 
-#: src/components/general-ui/CookieBanner.tsx:61
+#: src/components/general-ui/CookieBanner.tsx:55
 msgid "You can withdraw your consent at any time or adjust your cookie settings. Further information can be found in our privacy policy."
 msgstr "You can withdraw your consent at any time or adjust your cookie settings. Further information can be found in our privacy policy."
 
@@ -1933,8 +1966,8 @@ msgid "Your privacy score"
 msgstr "Your privacy score"
 
 #: src/components/general-ui/CookieBanner.tsx:56
-msgid "your settings"
-msgstr "your settings"
+#~ msgid "your settings"
+#~ msgstr "your settings"
 
 #: src/components/smart-devices/SmartShower.tsx:194
 msgid "Your Smart Shower is designed to optimize water usage and help you consume wisely. It’s highly sustainable—but it may collect more data than necessary. Identify the smart gadgets within the Smart Shower and deactivate their data permissions if you believe they compromise your privacy."
@@ -1955,3 +1988,7 @@ msgstr "Your Smart TV was reset to its default settings. Uncheck settings if you
 #: src/pixi/components/SpeechBubble.tsx:29
 msgid "Yummy!!"
 msgstr "Yummy!!"
+
+#: src/pixi/components/SpeechBubble.tsx:37
+msgid "Zzzzz"
+msgstr "Zzzzz"
