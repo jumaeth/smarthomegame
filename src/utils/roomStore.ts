@@ -2,7 +2,6 @@ import {SmartDevice} from "@/objects/SmartDevice";
 import {useMemo, useSyncExternalStore} from "react";
 import {Room} from "@/objects/Room";
 import {RoomNames} from "@/objects/RoomNames";
-import {MapKey} from "@/types/maps.ts";
 
 type Listener = () => void;
 

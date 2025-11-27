@@ -31,7 +31,6 @@ import {DoorFrame} from "@/pixi/levels/DoorFrame.tsx";
 import {getTexture} from "@/components/character/CharacterSelector.tsx";
 import {SpeechBubble, SpeechBubbleProps} from "@/pixi/components/SpeechBubble.tsx";
 import {InteractiveType} from "@/types/InteractiveType.ts";
-import {allRoomStore} from "@/utils/roomStore.ts";
 
 interface MainContainerProps {
   canvasSize: {

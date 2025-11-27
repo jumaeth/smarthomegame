@@ -1,5 +1,7 @@
 import {Direction, Position} from "@/types/movement.ts";
 import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings.ts";
+import {useMemo, useSyncExternalStore} from "react";
+import {CookieService} from "@/services/CookieService.ts";
 
 type Listener = () => void;
 type TeleportListener = (p: TeleportPayload) => void;
@@ -64,12 +66,6 @@ export const characterPositionStore = new PositionStore({
   x: DEFAULT_POS_X,
   y: DEFAULT_POS_Y,
 });
-
-import { useSyncExternalStore, useMemo } from "react";
-import {CookieService} from "@/services/CookieService.ts";
-import {allRoomStore} from "@/utils/roomStore.ts";
-import {getDefaultSpawnForMap, getSpawnForMap} from "@/utils/mapTransition.ts";
-import {Room} from "@/objects/Room.ts";
 
 export function useCharacterPosition() {
   const pos = useSyncExternalStore(

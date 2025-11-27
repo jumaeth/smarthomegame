@@ -56,7 +56,7 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
     device.getStatBlock().stopTimer();
 
     if (completed) gameService.completeDevice(device.name);
-    gameService.resumeGame(`device:${device.name}`);
+    gameService.resumeGame();
     setActiveDevice(null);
     checkForRoomCompletion();
   };
