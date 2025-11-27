@@ -1,28 +1,22 @@
-import React, {
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Container, Sprite, Text } from "@pixi/react";
+import React, {PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState,} from "react";
+import {Container, Sprite, Text} from "@pixi/react";
 import waving from "@/assets/tutorial/finalExpl/waving.png";
-import { loadTexture } from "@/utils/loadTexture";
+import {loadTexture} from "@/utils/loadTexture";
 import {
   Container as PixiContainer,
   Graphics as PixiGraphics,
+  Rectangle,
   Sprite as PixiSprite,
   Text as PixiText,
   TextStyle,
 } from "pixi.js";
-import { Pages } from "@/pixi/components/Tutorial/Pages/Pages";
-import { AnimationManager } from "@/pixi/components/Tutorial/anim/AnimationManager";
-import { PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry";
-import { fadeAnimation, FadeProps } from "@/pixi/components/Tutorial/anim/fadeAnimation";
-import { PageOrder } from "@/pixi/components/Tutorial/util/PageOrder";
-import { FADE_IN, FADE_OUT } from "@/pixi/components/Tutorial/util/AnimProps";
-import { t } from "@lingui/core/macro";
+import {Pages} from "@/pixi/components/Tutorial/Pages/Pages";
+import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager";
+import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry";
+import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation";
+import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder";
+import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps";
+import {t} from "@lingui/core/macro";
 import {fill, stroke} from "@/pixi/components/Tutorial/util/TutorialColors.ts";
 
 export const Final_Message: React.FC<PageProps> = ({
@@ -103,15 +97,20 @@ export const Final_Message: React.FC<PageProps> = ({
   }, [animation, setKeyControl, setNextPage, Animations.IDLE, Animations.INTRO,
   Animations.OUTRO, introRun]);
 
+  const continueTutorial = useCallback( () => {
+    if (animating) return
+      setAnimation(Animations.OUTRO)
+  },[Animations.OUTRO, animating])
+
   // Input
   useEffect(() => {
     if (keyControl !== Pages.FINAL_MESSAGE || animating) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.code === "Space") setAnimation(Animations.OUTRO);
+      if (e.code === "Space") continueTutorial();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [keyControl, animating, Animations.OUTRO]);
+  }, [keyControl, animating, Animations.OUTRO, continueTutorial]);
 
   // Utilities
   const replaceChildren = useCallback((parent: PixiContainer, nodes: PixiContainer[]) => {
@@ -219,10 +218,16 @@ export const Final_Message: React.FC<PageProps> = ({
 
   return (
           <>
-            {background()}
-            {textureRobot && <Sprite texture={textureRobot} ref={robotRef} />}
-            {graphics()}
-            {texts()}
+            <Container
+                    eventMode="static"
+                    hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
+                    pointertap={continueTutorial}
+            >
+              {background()}
+              {textureRobot && <Sprite texture={textureRobot} ref={robotRef} />}
+              {graphics()}
+              {texts()}
+            </Container>
           </>
   );
 };

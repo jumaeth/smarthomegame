@@ -9,6 +9,8 @@ import hallwayImg from '@/assets/levels/hallway/hallway.png';
 import hallwayOverlayImg from '@/assets/levels/hallway/hallway_overlay.png';
 import bathroomImg from '@/assets/levels/bathroom/bathroom.png';
 import bathroomOverlayImg from '@/assets/levels/bathroom/bathroom_overlay.png';
+import bedroomImg from '@/assets/levels/bedroom/bedroom.png';
+import bedroomOverlayImg from '@/assets/levels/bedroom/bedroom_overlay.png';
 
 import hallwayLivingRoomDoorClosedImg
   from '@/assets/levels/hallway/doors/to_livingroom/frame/hallway_to_living_room_frame_closed.png';
@@ -31,9 +33,17 @@ import hallwayBathroomDoorHalfOpenImg
 import hallwayBathroomDoorOpenImg
   from '@/assets/levels/hallway/doors/to_bathroom/frame/hallway_to_bathroom_frame_open.png';
 
+import hallwayBedroomDoorClosedImg
+  from '@/assets/levels/hallway/doors/to_bedroom/frame/hallway_to_bedroom_frame_closed.png';
+import hallwayBedroomDoorHalfOpenImg
+  from '@/assets/levels/hallway/doors/to_bedroom/frame/hallway_to_bedroom_frame_half_open.png';
+import hallwayBedroomDoorOpenImg
+  from '@/assets/levels/hallway/doors/to_bedroom/frame/hallway_to_bedroom_frame_open.png';
+
 import livingRoomFloorImg from '@/assets/levels/hallway/doors/to_livingroom/floor/hallway_to_living_room_floor.png';
 import kitchenFloorImg from '@/assets/levels/hallway/doors/to_kitchen/floor/hallway_to_kitchen_floor.png';
 import bathroomFloorImg from '@/assets/levels/hallway/doors/to_bathroom/floor/hallway_to_bathroom_floor.png';
+import bedroomFloorImg from '@/assets/levels/hallway/doors/to_bedroom/floor/hallway_to_bedroom_floor.png';
 
 interface RoomTextures {
   level: string;
@@ -59,15 +69,22 @@ export const LEVEL_TEXTURES = {
   hallway: {
     level: hallwayImg as string,
     overlay: hallwayOverlayImg as string,
-    doorFloor: [livingRoomFloorImg, kitchenFloorImg, bathroomFloorImg] as string[],
+    doorFloor: [livingRoomFloorImg, kitchenFloorImg, bathroomFloorImg, bedroomFloorImg] as string[],
     doorFrameFront: [hallwayLivingRoomDoorClosedImg, hallwayLivingRoomDoorHalfOpenImg, hallwayLivingRoomDoorOpenImg,
               hallwayKitchenDoorClosedImg, hallwayKitchenDoorHalfOpenImg, hallwayKitchenDoorOpenImg] as string[],
-    doorFrameBack: [hallwayBathroomDoorClosedImg, hallwayBathroomDoorHalfOpenImg, hallwayBathroomDoorOpenImg] as string[]
+    doorFrameBack: [hallwayBathroomDoorClosedImg, hallwayBathroomDoorHalfOpenImg, hallwayBathroomDoorOpenImg,
+              hallwayBedroomDoorClosedImg, hallwayBedroomDoorHalfOpenImg, hallwayBedroomDoorOpenImg] as string[]
   } as RoomTextures,
 
   bathroom: {
     level: bathroomImg as string,
     overlay: bathroomOverlayImg as string,
+    doorFrameFront: [defaultDoorClosedImg, defaultDoorHalfOpenImg, defaultDoorOpenImg] as string[],
+  } as RoomTextures,
+
+  bedroom: {
+    level: bedroomImg as string,
+    overlay: bedroomOverlayImg as string,
     doorFrameFront: [defaultDoorClosedImg, defaultDoorHalfOpenImg, defaultDoorOpenImg] as string[],
   } as RoomTextures,
 

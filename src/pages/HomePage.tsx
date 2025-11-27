@@ -8,23 +8,38 @@ import LanguageSwitcher from "@/components/LanguageSwitcher.tsx";
 import bgImage from "@/assets/intro/page/welcomepage_logo.jpeg";
 import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive.ts";
 import CharacterSelector from "@/components/character/CharacterSelector.tsx";
+import BrowserBanner from "@/components/general-ui/BrowserBanner.tsx";
+import {isSupportedBrowser} from "@/utils/checkBrowser.tsx";
 
 export default function HomePage() {
   const navigate = useNavigate();
 
-  const [showBanner, setShowBanner] = useState<boolean>(false);
+  const [showCookieBanner, setShowCookieBanner] = useState<boolean>(false);
+  const [showBrowserBanner, setShowBrowserBanner] = useState<boolean>(false);
 
   useEffect(() => {
     const consent = CookieService.get("cookieConsent");
     console.log("Consent: " + consent);
     if (consent === null) {
-      setShowBanner(true);
+      setShowCookieBanner(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const consent = CookieService.get("browserAccepted");
+    if (consent === null) {
+      setShowBrowserBanner(!isSupportedBrowser());
     }
   }, []);
 
   const saveCookieChoice = (isAccepted: boolean) => {
     CookieService.set("cookieConsent", isAccepted);
-    setShowBanner(false);
+    setShowCookieBanner(false);
+  }
+
+  const saveBrowserChoice = (isAccepted: boolean) => {
+    CookieService.set("browserAccepted", isAccepted);
+    setShowBrowserBanner(false);
   }
 
   return (
@@ -36,12 +51,12 @@ export default function HomePage() {
             <div className="z-10 flex flex-col items-center px-4">
               <h1 className="text-5xl font-bold mb-6 text-center">
                 <Trans>
-                  Hello and welcome to the Smart Home Escape Game
+                  Hello and welcome to the Smart Home Challenge
                 </Trans>
               </h1>
               <p className="text-xl text-center mb-10">
                 <Trans>
-                  You are on the start page. To start a new adventure, click on the
+                  Find the smart gadgets, unlock your home!
                 </Trans>
                 <span className="font-semibold">
                 <Trans>
@@ -75,7 +90,15 @@ export default function HomePage() {
               <CharacterSelector/>
             </div>
 
-            {showBanner && (
+            {showBrowserBanner  && (
+                    <div className="absolute inset-0 bg-white/50 z-50 flex items-center justify-center">
+                      <div className="p-6 bg-white/90 rounded-2xl shadow-xl backdrop-blur-md w-[min(90vw,36rem)] max-w-full">
+                        <BrowserBanner onComplete={saveBrowserChoice}/>
+                      </div>
+                    </div>
+            )}
+
+            {showCookieBanner && !showBrowserBanner && (
                     <div className="absolute inset-0 bg-white/50 z-50 flex items-center justify-center">
                       <div className="p-6 bg-white/90 rounded-2xl shadow-xl backdrop-blur-md w-[min(90vw,36rem)] max-w-full">
                         <CookieBanner onComplete={saveCookieChoice}/>

@@ -1,14 +1,16 @@
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Sprite} from "@pixi/react";
 import {useLoadTextures} from "@/hooks/useLoadTextures.tsx";
 import {ProgressBarIcons} from "@/pixi/components/ProgressBar/ProgressBarIcons.tsx";
 import {GameService} from "@/services/GameService.ts";
 import trophyUrl from "@/assets/progressBar/trophy.png";
+import {ProgressBarStatusStore} from "@/utils/progressBarStatus.ts";
 
 interface ProgressBarProps {
   x: number;
   y: number;
   windowWidth: number;
+  windowHeight: number;
   gameService: GameService;
 }
 
@@ -16,6 +18,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                                                           x,
                                                           y,
                                                           windowWidth,
+                                                          windowHeight,
                                                           gameService
                                                         }: ProgressBarProps) => {
 
@@ -24,16 +27,24 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
           []
   );
   const {textures, loaded} = useLoadTextures(texturePaths);
-  const [showIcons, setShowIcons] = useState<boolean>(false);
+  const [shown, setShown] = useState(ProgressBarStatusStore.get());
   const [hovered, setHovered] = useState<boolean>(false);
 
+  useEffect(() => {
+    const unsubscribe = ProgressBarStatusStore.subscribe(() => {
+      setShown(ProgressBarStatusStore.get());
+    });
+    return unsubscribe;
+  }, []);
+
   const action = () => {
-    setShowIcons(!showIcons);
+    ProgressBarStatusStore.set(!ProgressBarStatusStore.get())
   }
 
-  const trophyHeight: number = windowWidth * 0.1;
-  const trophyWidth: number = windowWidth * 0.075;
-  const spacing: number = 4;
+  const trophyHeight: number = windowHeight * 0.09325;
+  const trophyWidth: number = windowWidth * 0.04375;
+
+  const spacingX: number = windowWidth * 0.01;
 
   return (
           <>
@@ -51,9 +62,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                     anchor={0}
             >
             </Sprite>)}
-            {showIcons && <ProgressBarIcons
-                    x={x + trophyWidth + spacing}
-                    y={y + spacing}
+            {shown && <ProgressBarIcons
+                    x={x + trophyWidth + spacingX}
+                    y={y}
                     trophyHeight={trophyHeight}
                     gameService={gameService}
             />}

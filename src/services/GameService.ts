@@ -69,10 +69,13 @@ export class GameService {
 
     const bathroom = new Room(RoomNames.BATHROOM, [
       new SmartDevice("SmartShower", t`Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable.`),
+    ]);
+
+    const bedroom = new Room(RoomNames.BEDROOM, [
       new SmartDevice("SmartMirror", t`You need to configure your smart mirror by choosing a provider for each app. Compare the permissions, features, data retention, and security details of each provider. Expand each provider to see all the details, then make your choice. Remember to explore all providers for each app before making your selection.`),
     ]);
 
-    return [hallway, livingRoom, kitchen, bathroom];
+    return [hallway, livingRoom, kitchen, bathroom, bedroom];
   }
 
   getAllRooms(): Room[] {

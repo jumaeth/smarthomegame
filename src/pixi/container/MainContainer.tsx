@@ -134,7 +134,7 @@ export const MainContainer = ({
     const tileY = Math.floor(pos.y / TILE_SIZE);
     const transition = getMapTransition(map, tileX, tileY);
 
-    if (!transition || tutorialActive) {
+    if (!transition || tutorialActive || characterPositionStore.getFacing() != transition.faceToEnter) {
       setBlockedDoorTo(null);
       return;
     }
@@ -181,10 +181,13 @@ export const MainContainer = ({
           return []
       }
     } else {
-      if (room === RoomNames.BATHROOM) {
-        return [back[0], back[1], back[2]]
-      } else {
-        return []
+      switch (room) {
+        case RoomNames.BATHROOM:
+          return [back[0], back[1], back[2]];
+        case RoomNames.BEDROOM:
+          return [back[3], back[4], back[5]];
+        default:
+          return [];
       }
     }
   }
@@ -266,7 +269,7 @@ export const MainContainer = ({
                                   texture={characterTexture}
                                   onMove={handleCharacterMove}
                                   collisionMap={collisionMap}
-                                  isPaused={isPaused as boolean}
+                                  isPaused={isPaused as boolean || inTransition}
                                   onInteractCheck={handleInteraction}
                           />
                           <LevelOverlay pixelSize={pixelSize} texture={overlayTexture}/>

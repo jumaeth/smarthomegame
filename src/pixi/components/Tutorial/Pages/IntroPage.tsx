@@ -1,5 +1,5 @@
-import React, {PropsWithChildren, useEffect, useRef, useState} from "react";
-import {Container as PixiContainer, Text, TextStyle} from "pixi.js";
+import React, {PropsWithChildren, useCallback, useEffect, useRef, useState} from "react";
+import {Container as PixiContainer, Rectangle, Text, TextStyle} from "pixi.js";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
@@ -28,7 +28,7 @@ export const IntroPage: React.FC<PageProps> = ({
   const instrRef = useRef<Text | null>(null);
 
   const welcomeMsg = t`Welcome to the tutorial`
-  const instrMsg = t`Press space to advance`
+  const instrMsg = t`Press space or touch to advance`
 
   //hooks
   const mgrRef = useAnimationManager();
@@ -98,19 +98,22 @@ export const IntroPage: React.FC<PageProps> = ({
 
   }, [instrBlinking, showInstruction, mgrRef]);
 
+  const continueTutorial = useCallback(() => {
+    setInstrBlinking(false);
+    setShowInstruction(false);
+    pressedRef.current = true;
+    setNextPage(PageOrder.CHARACTER);
+    setKeyControl(Pages.MAIN);
+  },[setKeyControl, setNextPage])
+
   //key controls
   useEffect(() => {
     if(keyControl != Pages.INTRO)return;
     const onSpacePressed = (e: KeyboardEvent) => {
       if(e.code == "Space"){
-        setInstrBlinking(false);
-        setShowInstruction(false);
-        pressedRef.current = true;
-        setNextPage(PageOrder.CHARACTER);
-        setKeyControl(Pages.MAIN);
+        continueTutorial()
       }
     }
-
 
     const events = [onSpacePressed];
 
@@ -119,11 +122,19 @@ export const IntroPage: React.FC<PageProps> = ({
     return () => {
       events.forEach(func => window.removeEventListener("keydown", func));
     };
-  }, [keyControl, windowWidth, windowHeight, setKeyControl, setNextPage]);
+  }, [keyControl, windowWidth, windowHeight, setKeyControl, setNextPage, continueTutorial]);
 
   return (
       <>
-        <Container ref={rootRef}/>
+        <Container
+         eventMode="static"
+         hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
+         pointertap={continueTutorial}
+        >
+          <Container
+                  ref={rootRef}
+          />
+        </Container>
       </>
   )
 };

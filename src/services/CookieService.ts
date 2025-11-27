@@ -5,7 +5,7 @@ export class CookieService {
   }
 
   static set<T>(name: string, value: T, days: number = 365): void {
-    if (this.areCookiesAllowed() || name === "cookieConsent"){
+    if (this.areCookiesAllowed() || name === "cookieConsent" || name === "browserAccepted") {
       const encodedValue = encodeURIComponent(JSON.stringify(value));
       const expires = new Date(Date.now() + days * 864e5).toUTCString();
       document.cookie = `${name}=${encodedValue}; expires=${expires}; path=/`;
