@@ -17,9 +17,9 @@ import logo2 from "@/assets/intro/page/logo-big-blue.svg";
 export default function HomePage() {
   const navigate = useNavigate();
 
-  const [isFooterOpen, setIsFooterOpen] = useState<boolean>(false);
   const [showCookieBanner, setShowCookieBanner] = useState<boolean>(false);
   const [showBrowserBanner, setShowBrowserBanner] = useState<boolean>(false);
+  const [isFooterOpen, setIsFooterOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const consent = CookieService.get("cookieConsent");
@@ -93,6 +93,14 @@ export default function HomePage() {
               </div>
               <CharacterSelector/>
             </div>
+
+            {showBrowserBanner  && (
+                    <div className="absolute inset-0 bg-white/50 z-50 flex items-center justify-center">
+                      <div className="p-6 bg-white/90 rounded-2xl shadow-xl backdrop-blur-md w-[min(90vw,36rem)] max-w-full">
+                        <BrowserBanner onComplete={saveBrowserChoice}/>
+                      </div>
+                    </div>
+            )}
 
             {/* Slide-up footer */}
             <div
