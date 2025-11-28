@@ -40,8 +40,8 @@ msgstr ""
 msgid " privacy"
 msgstr ""
 
-#. placeholder {0}: showStatsOnRight ? "Hide Statistics" : "Show Statistics"
 #. placeholder {0}: selectedObject.name
+#. placeholder {0}: showStatsOnRight ? "Hide Statistics" : "Show Statistics"
 #: src/components/smart-devices/SmartShower.tsx:227
 #: src/pages/GameOver.tsx:66
 msgid "{0}"
@@ -585,6 +585,10 @@ msgstr ""
 msgid "Find the relevant objects for the smart shower. Think carefully about which features you want to enable or disable."
 msgstr ""
 
+#: src/pages/HomePage.tsx:58
+msgid "Find the smart gadgets, unlock your home!"
+msgstr ""
+
 #: src/components/cookingGame/IngredientsStage.tsx:28
 msgid ""
 "First, let's buy the ingredients we need. For good pasta we need: \n"
@@ -679,9 +683,13 @@ msgstr ""
 msgid "Heart rate"
 msgstr ""
 
-#: src/pages/HomePage.tsx:52
-msgid "Hello and welcome to the Smart Home Escape Game"
-msgstr "Hallo und herzlich willkommen zur Smart Home Challenge"
+#: src/pages/HomePage.tsx:53
+msgid "Hello and welcome to the Smart Home Challenge"
+msgstr ""
+
+#: src/pages/HomePage.tsx:38
+#~ msgid "Hello and welcome to the Smart Home Escape Game"
+#~ msgstr "Hallo und herzlich willkommen zur Smart Home Challenge"
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:77
 msgid "Hey, you should rearrange your surveillance cameras. The smart home has already made a preselection. Do you agree with this? Select all the camera placements you want to keep."
@@ -1296,7 +1304,7 @@ msgstr ""
 msgid "Shower Head"
 msgstr ""
 
-#: src/pages/HomePage.tsx:83
+#: src/pages/HomePage.tsx:84
 msgid "Skip the intro and jump straight into the game"
 msgstr "Überspringe die Einleitung und steige direkt ins Spiel ein."
 
@@ -1406,8 +1414,8 @@ msgstr ""
 msgid "Start a new game"
 msgstr ""
 
-#: src/pages/HomePage.tsx:61
-#: src/pages/HomePage.tsx:72
+#: src/pages/HomePage.tsx:62
+#: src/pages/HomePage.tsx:73
 msgid "Start game"
 msgstr "Spiel starten"
 
@@ -1869,9 +1877,9 @@ msgstr ""
 msgid "You are here"
 msgstr ""
 
-#: src/pages/HomePage.tsx:57
-msgid "You are on the start page. To start a new adventure, click on the"
-msgstr "Das ist die Startseite. Um eine neue Challenge zu beginnen, klicke auf"
+#: src/pages/HomePage.tsx:43
+#~ msgid "You are on the start page. To start a new adventure, click on the"
+#~ msgstr "Das ist die Startseite. Um eine neue Challenge zu beginnen, klicke auf"
 
 #: src/components/smart-devices/SmartShower.tsx:276
 msgid "You are privacy focused! Your choices prioritize protecting your personal data and maintaining privacy."

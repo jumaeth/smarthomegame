@@ -43,8 +43,8 @@ msgstr ""
 msgid " privacy"
 msgstr " privacy"
 
-#. placeholder {0}: showStatsOnRight ? "Hide Statistics" : "Show Statistics"
 #. placeholder {0}: selectedObject.name
+#. placeholder {0}: showStatsOnRight ? "Hide Statistics" : "Show Statistics"
 #: src/components/smart-devices/SmartShower.tsx:227
 #: src/pages/GameOver.tsx:66
 msgid "{0}"
@@ -195,7 +195,7 @@ msgstr "Browser choice"
 msgid "Bus line 10 timetable"
 msgstr "Bus line 10 timetable"
 
-#: src/pages/HomePage.tsx:65
+#: src/pages/HomePage.tsx:66
 msgid "Button."
 msgstr "Button."
 
@@ -588,6 +588,10 @@ msgstr "Features"
 msgid "Find the relevant objects for the smart shower. Think carefully about which features you want to enable or disable."
 msgstr "Find the relevant objects for the smart shower. Think carefully about which features you want to enable or disable."
 
+#: src/pages/HomePage.tsx:58
+msgid "Find the smart gadgets, unlock your home!"
+msgstr "Find the smart gadgets, unlock your home!"
+
 #: src/components/cookingGame/IngredientsStage.tsx:28
 msgid ""
 "First, let's buy the ingredients we need. For good pasta we need: \n"
@@ -688,9 +692,13 @@ msgstr "Health Monitor"
 msgid "Heart rate"
 msgstr "Heart rate"
 
-#: src/pages/HomePage.tsx:52
-msgid "Hello and welcome to the Smart Home Escape Game"
-msgstr "Hello and welcome to the Smart Home Escape Game"
+#: src/pages/HomePage.tsx:53
+msgid "Hello and welcome to the Smart Home Challenge"
+msgstr "Hello and welcome to the Smart Home Challenge"
+
+#: src/pages/HomePage.tsx:38
+#~ msgid "Hello and welcome to the Smart Home Escape Game"
+#~ msgstr "Hello and welcome to the Smart Home Escape Game"
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:77
 msgid "Hey, you should rearrange your surveillance cameras. The smart home has already made a preselection. Do you agree with this? Select all the camera placements you want to keep."
@@ -1309,7 +1317,7 @@ msgstr "Sensor-only"
 msgid "Shower Head"
 msgstr "Shower Head"
 
-#: src/pages/HomePage.tsx:83
+#: src/pages/HomePage.tsx:84
 msgid "Skip the intro and jump straight into the game"
 msgstr "Skip the intro and jump straight into the game"
 
@@ -1419,8 +1427,8 @@ msgstr "Solve all 4 apps"
 msgid "Start a new game"
 msgstr "Start a new game"
 
-#: src/pages/HomePage.tsx:61
-#: src/pages/HomePage.tsx:72
+#: src/pages/HomePage.tsx:62
+#: src/pages/HomePage.tsx:73
 msgid "Start game"
 msgstr "Start game"
 
@@ -1895,9 +1903,9 @@ msgstr "Yes"
 msgid "You are here"
 msgstr "You are here"
 
-#: src/pages/HomePage.tsx:57
-msgid "You are on the start page. To start a new adventure, click on the"
-msgstr "You are on the start page. To start a new adventure, click on the"
+#: src/pages/HomePage.tsx:43
+#~ msgid "You are on the start page. To start a new adventure, click on the"
+#~ msgstr "You are on the start page. To start a new adventure, click on the"
 
 #: src/components/smart-devices/SmartShower.tsx:276
 msgid "You are privacy focused! Your choices prioritize protecting your personal data and maintaining privacy."
