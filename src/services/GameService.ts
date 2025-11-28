@@ -54,7 +54,6 @@ export class GameService {
       if (allRoomStore.getAll().length === 0) allRoomStore.set(newRooms);
       CookieService.set("save_player_position", null);
       CookieService.set("save_player_facing", null);
-      CookieService.set("tutorialState", null);
       characterPositionStore.reset()
       allRoomStore.reset()
     }

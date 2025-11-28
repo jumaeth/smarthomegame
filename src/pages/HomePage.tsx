@@ -13,6 +13,7 @@ import {isSupportedBrowser} from "@/utils/checkBrowser.tsx";
 
 import logo1 from "@/assets/intro/page/datapro_logo_lungo_linea.png";
 import logo2 from "@/assets/intro/page/logo-big-blue.svg";
+import {characterPositionStore} from "@/utils/character/characterPosition.ts";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const consent = CookieService.get("cookieConsent");
+    console.log("Consent: " + consent);
     if (consent === null) {
       setShowCookieBanner(true);
     }
@@ -79,7 +81,8 @@ export default function HomePage() {
                 </Button>
                 <Button
                         onClick={() => {
-                          tutorialDoneStore.set(true)
+                          tutorialDoneStore.set(true);
+                          characterPositionStore.reset()
                           navigate("/game/livingroom");
                         }}
                         className="px-6 py-3 bg-gray-400 text-gray-800 rounded-lg shadow-md hover:bg-gray-500 transition"
