@@ -31,6 +31,7 @@ import {DoorFrame} from "@/pixi/levels/DoorFrame.tsx";
 import {getTexture} from "@/components/character/CharacterSelector.tsx";
 import {SpeechBubble, SpeechBubbleProps} from "@/pixi/components/SpeechBubble.tsx";
 import {InteractiveType} from "@/types/InteractiveType.ts";
+import {DeviceNames, deviceNameToEnum} from "@/objects/DeviceNames.ts";
 
 interface MainContainerProps {
   canvasSize: {
@@ -45,7 +46,7 @@ interface MainContainerProps {
   interactiveElements?: InteractivePixiElement[];
   gameService: GameService;
   room: RoomNames;
-  onDeviceOpen?: (deviceName: string) => void;
+  onDeviceOpen?: (deviceName: DeviceNames) => void;
 }
 
 export const MainContainer = ({
@@ -210,7 +211,11 @@ export const MainContainer = ({
     if (!nearby) return;
 
     if (nearby.type === InteractiveType.SMART_DEVICE && onDeviceOpen) {
-      onDeviceOpen(nearby.name);
+      const smartDevice = deviceNameToEnum(nearby.name);
+      if(!smartDevice){
+        throw new Error(`Smart device with name ${nearby.name} not found`);
+      }
+      onDeviceOpen(smartDevice);
     } else if (nearby.type === InteractiveType.DUMMY) {
       showDummy({x: nearby.x, y: nearby.y, element: nearby.name});
     }

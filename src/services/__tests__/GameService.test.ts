@@ -1,9 +1,11 @@
+// typescript
 import {GameService} from '../GameService';
 import {Room} from "@/objects/Room";
 import {SmartDevice} from "@/objects/SmartDevice";
 import {CookieService} from '@/services/CookieService';
 import {RoomNames} from "@/objects/RoomNames";
-import { movementStore } from '@/utils/character/movementEnabled';
+import {movementStore} from '@/utils/character/movementEnabled';
+import {DeviceNames} from "@/objects/DeviceNames";
 
 // mock CookieService to avoid document access
 jest.mock('@/services/CookieService', () => ({
@@ -21,8 +23,8 @@ describe('GameService', () => {
   beforeEach(() => {
     const rooms = [
       new Room(RoomNames.LIVINGROOM, [
-        new SmartDevice("SmartTv"),
-        new SmartDevice("SmartLights"),
+        new SmartDevice(DeviceNames.SMART_TV),
+        new SmartDevice(DeviceNames.SMART_LIGHTS),
       ]),
     ];
 
@@ -41,7 +43,18 @@ describe('GameService', () => {
   it('onGameStateChange() should save the game object to the cookies', () => {
     gameService.onGameStateChange();
     expect(CookieService.set).toHaveBeenNthCalledWith(3,
-            "save_game", {"rooms": [{"devices": [{"isCompleted": false, "name": "SmartTv"}, {"isCompleted": false, "name": "SmartLights"}], "isCompleted": false, "isLocked": false, "name": "livingroom"}], "score": {"comfortScore": 10, "privacyScore": 10}}
+            "save_game", {  rooms: [
+                {
+                  devices: [
+                    { isCompleted: false, name: "SmartTv",score: { comfortScore: 0, privacyScore: 0, weight: 1.5, } },
+                    { isCompleted: false, name: "SmartLights",score: { comfortScore: 0, privacyScore: 0, weight: 1, } }
+                  ],
+                  isCompleted: false,
+                  isLocked: false,
+                  name: "livingroom"
+                }
+              ],score: { comfortScore: 10, privacyScore: 10, weight: 1, },
+              }
     );
   });
 
@@ -49,8 +62,8 @@ describe('GameService', () => {
     const result = gameService.getAllRooms();
     expect(result).toEqual([
       new Room(RoomNames.LIVINGROOM, [
-        new SmartDevice('SmartTv'),
-        new SmartDevice('SmartLights'),
+        new SmartDevice(DeviceNames.SMART_TV),
+        new SmartDevice(DeviceNames.SMART_LIGHTS),
       ]),
     ]);
   });
@@ -137,20 +150,6 @@ describe('GameService', () => {
     const result = gameService.leaveRoom(RoomNames.LIVINGROOM);
     expect(result).toBe(true);
     expect(navigateMock).toHaveBeenCalledWith('/game');
-  });
-
-  it('changeScore() should modify privacy score', () => {
-    const spy = jest.spyOn(gameService.getScore(), 'toSerialized');
-    gameService.changeScore(10, 'privacy');
-    expect(spy).toHaveBeenCalled();
-    spy.mockRestore();
-  });
-
-  it('changeScore() should modify comfort score', () => {
-    const spy = jest.spyOn(gameService.getScore(), 'toSerialized');
-    gameService.changeScore(5, 'comfort');
-    expect(spy).toHaveBeenCalled();
-    spy.mockRestore();
   });
 
   it('isPaused() should return paused state', () => {

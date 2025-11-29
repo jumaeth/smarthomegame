@@ -13,6 +13,7 @@ import {RoomNames} from "@/objects/RoomNames";
 import {MapKey} from "@/types/maps";
 import {SmartDevice} from "@/objects/SmartDevice";
 import {InteractiveType} from "@/types/InteractiveType.ts";
+import {DeviceNames, deviceNameToEnum} from "@/objects/DeviceNames.ts";
 
 interface RoomWrapperProps {
   roomName: RoomNames;
@@ -34,9 +35,9 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
   const collisionMap = LEVEL_COLLISION_MAPS[roomName];
 
-  const handleDeviceOpen = (deviceName: string): void => {
+  const handleDeviceOpen = (deviceName: DeviceNames): void => {
     if (gameService.getDeviceByName(deviceName).getIsCompleted()) return;
-    if (!tutorialActive.done && (deviceName !== "SmartTv")) return;
+    if (!tutorialActive.done && (deviceName !== DeviceNames.SMART_TV)) return;
     setActiveDevice(deviceName);
     const smartDevice: SmartDevice = gameService.getDeviceByName(deviceName);
     smartDevice.getStatBlock().startTimer();
@@ -70,7 +71,11 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
 
   const processedElements = interactiveElements.map((el) => {
     if (el.type === InteractiveType.SMART_DEVICE) {
-      return { ...el, onInteract: () => handleDeviceOpen(el.name) };
+      const smartDevice = deviceNameToEnum(el.name);
+      if(!smartDevice){
+        throw new Error(`Smart device with name ${el.name} not found`);
+      }
+      return { ...el, onInteract: () => handleDeviceOpen(smartDevice) };
     }
     return el;
   });

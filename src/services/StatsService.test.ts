@@ -4,15 +4,16 @@ import {Game} from "../objects/Game";
 import {Room} from "../objects/Room";
 import {SmartDevice} from "../objects/SmartDevice";
 import {StatsKeys} from "../objects/StatsKeys";
+import {DeviceNames} from "@/objects/DeviceNames";
 
 describe.skip("StatsService", () => {
   it("should generate a CSV string", () => {
     // Dummy-Objekte erstellen
-    const device1 = new SmartDevice("Device1");
-    const device2 = new SmartDevice("Device2");
-    const device3 = new SmartDevice("Device3");
-    const device4 = new SmartDevice("Device4");
-    const device5 = new SmartDevice("Device5");
+    const device1 = new SmartDevice(DeviceNames.SMART_TV);
+    const device2 = new SmartDevice(DeviceNames.SMART_TV);
+    const device3 = new SmartDevice(DeviceNames.SMART_TV);
+    const device4 = new SmartDevice(DeviceNames.SMART_TV);
+    const device5 = new SmartDevice(DeviceNames.SMART_TV);
     const room1 = new Room(RoomNames.LIVINGROOM, [device1, device3]);
     const room2 = new Room(RoomNames.KITCHEN, [device2, device4, device5]);
     const game = new Game([room1, room2]);
