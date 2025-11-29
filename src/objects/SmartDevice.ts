@@ -23,13 +23,17 @@ export class SmartDevice {
   toSerialized(): object {
     return {
       name: this.name,
-      helpText: this.helpText,
       isCompleted: this.isCompleted,
     };
   }
 
   complete(): void {
     this.isCompleted = true;
+    this.emit();
+  }
+
+  reset(): void {
+    this.isCompleted = false;
     this.emit();
   }
 

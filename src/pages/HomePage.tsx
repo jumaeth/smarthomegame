@@ -5,14 +5,15 @@ import Button from "@/components/general-ui/Button.tsx";
 import {CookieService} from "@/services/CookieService.ts";
 import {Trans} from "@lingui/react/macro";
 import LanguageSwitcher from "@/components/LanguageSwitcher.tsx";
+import {tutorialDoneStore} from "@/hooks/gameService/useTutorialActive.ts";
 import bgImage from "@/assets/intro/page/welcomepage.png";
-import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive.ts";
 import CharacterSelector from "@/components/character/CharacterSelector.tsx";
 import BrowserBanner from "@/components/general-ui/BrowserBanner.tsx";
 import {isSupportedBrowser} from "@/utils/checkBrowser.tsx";
 
 import logo1 from "@/assets/intro/page/datapro_logo_lungo_linea.png";
 import logo2 from "@/assets/intro/page/logo-big-blue.svg";
+import {characterPositionStore} from "@/utils/character/characterPosition.ts";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -80,7 +81,8 @@ export default function HomePage() {
                 </Button>
                 <Button
                         onClick={() => {
-                          tutorialActiveStore.set(false);
+                          tutorialDoneStore.set(true);
+                          characterPositionStore.reset()
                           navigate("/game/livingroom");
                         }}
                         className="px-6 py-3 bg-gray-400 text-gray-800 rounded-lg shadow-md hover:bg-gray-500 transition"

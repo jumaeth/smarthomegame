@@ -8,7 +8,6 @@ type Listener = () => void;
 class roomStore {
   private rooms: Room[];
   private listeners = new Set<Listener>();
-
   constructor(initial: Room[]) {
     this.rooms = initial ? initial : [];
   }
@@ -36,6 +35,10 @@ class roomStore {
   set(rs: Room[]) {
     this.rooms = rs;
     this.listeners.forEach((l) => l());
+  }
+
+  reset(){
+    this.rooms.forEach(room => room.reset())
   }
 
   subscribe(fn: Listener) {

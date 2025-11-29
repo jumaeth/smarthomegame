@@ -67,7 +67,7 @@ msgstr ""
 msgid "A real Picasso!"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:50
+#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:56
 msgid "A smarthome does a great deal to make your life more comfortable. It can automate routines or know your preferences even better than yourself. A high comfort score makes your life easier!"
 msgstr ""
 
@@ -192,7 +192,7 @@ msgstr ""
 msgid "Bus line 10 timetable"
 msgstr ""
 
-#: src/pages/HomePage.tsx:66
+#: src/pages/HomePage.tsx:65
 msgid "Button."
 msgstr "Taste."
 
@@ -248,7 +248,7 @@ msgstr ""
 msgid "City festival schedule on the flyer"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:46
+#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:52
 msgid "Clicking on the phone opens the blueprint of the house. Here you can check where the different rooms are located."
 msgstr ""
 
@@ -295,7 +295,7 @@ msgstr ""
 msgid "Comprehensive metrics with cloud syncing and insights."
 msgstr ""
 
-#: src/services/GameService.ts:71
+#: src/services/GameService.ts:95
 msgid "Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable."
 msgstr ""
 
@@ -335,7 +335,7 @@ msgstr "Fahre fort"
 msgid "Continue anyway"
 msgstr ""
 
-#: src/pages/ContinueGame.tsx:34
+#: src/pages/ContinueGame.tsx:43
 msgid "Continue saved game"
 msgstr ""
 
@@ -476,7 +476,7 @@ msgstr ""
 msgid "Device Configured ✅ "
 msgstr ""
 
-#: src/services/GameService.ts:65
+#: src/services/GameService.ts:89
 msgid "Did you know personal data of members of the European Union are protected by the General Data Protection Regulation GDPR? The GDPR protects your personal information by law, and you may request its protection even if the data processor is not located in the EU. The GDPR even grants higher protection to especially sensitive data, that means data which might be abused against you are sorted into special categories. For example, this could be private information on your religion, or political views. Have you understood what the GDPR protects? Decide if provided information is public, personal, or personal and sensitive by dragging and dropping."
 msgstr ""
 
@@ -484,7 +484,7 @@ msgstr ""
 msgid "Discounter, with card"
 msgstr "Discounter, mit Karte zahlen"
 
-#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:47
+#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:53
 msgid "Discovery"
 msgstr ""
 
@@ -651,7 +651,7 @@ msgstr "Omas Garten "
 msgid "Grant / Enable"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/Explanations/ProgressBar.tsx:60
+#: src/pixi/components/Tutorial/Pages/Explanations/ProgressBar.tsx:53
 msgid "Great, you finished your first device! You can check your progress at anytime by clicking on the trophy symbol"
 msgstr ""
 
@@ -761,7 +761,7 @@ msgstr ""
 msgid "If you opt out of voice recognition, the TV won't be able to learn your voice patterns for better accuracy."
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:48
+#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:54
 msgid "In every room, you’ll find some items – some of them are Smart Devices. Adjust their privacy settings and solve the mini-games to unlock your Smart Home! "
 msgstr ""
 
@@ -773,11 +773,11 @@ msgstr "(wieder) im Supermarkt"
 msgid "Integrated into the energy monitoring system"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:46
+#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:52
 msgid "Interaction"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:47
+#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:53
 msgid "Interactive objects light up if you walk next to them"
 msgstr ""
 
@@ -789,7 +789,7 @@ msgstr ""
 msgid "IP addresses are personal data that can be used to identify a device and thus indirectly a person."
 msgstr "IP-Adressen sind personenbezogene Daten, mit denen ein Gerät und damit indirekt auch eine Person identifiziert werden kann."
 
-#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:48
+#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:54
 msgid "It indicates the safety of your data. Evil attackers always try to steal your data and use it to attack you and your personal space. A high privacy score makes it harder for them!"
 msgstr ""
 
@@ -805,7 +805,7 @@ msgstr "Italienischer Einzelhändler"
 msgid "Kitchen"
 msgstr ""
 
-#: src/services/GameService.ts:67
+#: src/services/GameService.ts:91
 msgid "Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them."
 msgstr ""
 
@@ -910,7 +910,7 @@ msgstr ""
 msgid "Motion"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:46
+#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:52
 msgid "Movement"
 msgstr ""
 
@@ -1132,8 +1132,12 @@ msgid "Popular weather feed with hyperlocal nowcasts."
 msgstr ""
 
 #: src/pixi/components/Tutorial/Pages/IntroPage.tsx:31
-msgid "Press space to advance"
+msgid "Press space or touch to advance"
 msgstr ""
+
+#: src/pixi/components/Tutorial/Pages/IntroPage.tsx:31
+#~ msgid "Press space to advance"
+#~ msgstr ""
 
 #: src/components/smart-devices/SmartMirror.tsx:99
 msgid "Price alerts"
@@ -1406,7 +1410,7 @@ msgstr ""
 msgid "Solve all 4 apps"
 msgstr ""
 
-#: src/pages/ContinueGame.tsx:35
+#: src/pages/ContinueGame.tsx:44
 msgid "Start a new game"
 msgstr ""
 
@@ -1498,7 +1502,7 @@ msgstr ""
 msgid "That's all you need to know! Time for a quick practice. Your task is to find and solve the first smart device. Now it's your decision"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/Explanations/Final_Message.tsx:50
+#: src/pixi/components/Tutorial/Pages/Explanations/Final_Message.tsx:44
 msgid "That's it, now you are ready to save the smart home and make that movie night possible!"
 msgstr ""
 
@@ -1534,11 +1538,11 @@ msgstr ""
 #~ msgid "The help app"
 #~ msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:45
+#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:51
 msgid "The layout"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:51
+#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:57
 msgid "The Map"
 msgstr ""
 
@@ -1554,7 +1558,7 @@ msgstr ""
 msgid "The phone number of my family member"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:47
+#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:53
 msgid "The Player"
 msgstr ""
 
@@ -1562,11 +1566,11 @@ msgstr ""
 msgid "The Privacy Paradise: Congrats - your Smart Home does not know any personal information about you. No data is leaking anywhere—but also, nothing works. Your Smart Locks locked down the home tighter than a government black site. Your friends have to enter through the window, the Smart TV is disconnected from all streaming services, and the Pizza delivery service cannot find your house. Nevertheless: you have fun while cooking your home-made pizza from scratch, and spend the evening discussing GDPR case studies by candlelight."
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:47
+#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:53
 msgid "The rooms"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:51
+#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:57
 msgid "The scores"
 msgstr ""
 
@@ -1608,11 +1612,11 @@ msgstr ""
 #~ msgid "This is a bad place for a camera, it is not recommended to place a camera pointing at your pool for privacy reasons"
 #~ msgstr ""
 
-#: src/services/GameService.ts:61
+#: src/services/GameService.ts:85
 msgid "This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Modify your settings by clicking on the sliders. When you are satisfied with your choices continue by pressing the continue button"
 msgstr ""
 
-#: src/services/GameService.ts:60
+#: src/services/GameService.ts:84
 msgid "This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Uncheck the permissions which you think are not necessary by clicking directly on the checkbox."
 msgstr ""
 
@@ -1629,7 +1633,7 @@ msgstr ""
 #~ msgid "This is not necessary and a risk to your privacy"
 #~ msgstr "Dies ist nicht notwendig und stellt ein Risiko für Deine Privatsphäre dar."
 
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:50
+#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:56
 msgid "This is where you start the game. Try not to get lost!"
 msgstr ""
 
@@ -1701,11 +1705,11 @@ msgstr ""
 msgid "Usage Analytics"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:46
+#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:52
 msgid "Use the “E” key to interact with objects"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:46
+#: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:52
 msgid "Use the arrow keys or WASD to move around"
 msgstr ""
 
@@ -1772,7 +1776,7 @@ msgstr ""
 msgid "Weather-based styling"
 msgstr ""
 
-#: src/pages/ContinueGame.tsx:31
+#: src/pages/ContinueGame.tsx:40
 msgid "Welcome back, it looks like you ended the game early."
 msgstr ""
 
@@ -1796,7 +1800,7 @@ msgstr ""
 msgid "WellTrack"
 msgstr ""
 
-#: src/pages/ContinueGame.tsx:33
+#: src/pages/ContinueGame.tsx:42
 msgid "What do you want to do?"
 msgstr ""
 
@@ -1869,7 +1873,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:49
+#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:55
 msgid "You are here"
 msgstr ""
 
@@ -1897,7 +1901,7 @@ msgstr ""
 msgid "You don't wan't someone watching you sleep"
 msgstr ""
 
-#: src/services/GameService.ts:75
+#: src/services/GameService.ts:99
 msgid "You need to configure your smart mirror by choosing a provider for each app. Compare the permissions, features, data retention, and security details of each provider. Expand each provider to see all the details, then make your choice. Remember to explore all providers for each app before making your selection."
 msgstr ""
 
@@ -1912,7 +1916,7 @@ msgstr ""
 "Sei vorsichtig bei der Verwendung deiner Daten, um \n"
 ""
 
-#: src/services/GameService.ts:66
+#: src/services/GameService.ts:90
 msgid "You need to cook a meal. lets try to focus on privacy friendly but still practical choices. The minigame will let you know what the next steps are to complet the game."
 msgstr ""
 
@@ -1920,7 +1924,7 @@ msgstr ""
 msgid "You want to look at yourself in the mirror, but the mirror is frosted because it isn't configured yet. You need to set up each app by choosing a provider. Compare the different options - your choices will affect both your privacy and comfort. Once you've configured all the apps, you can use the mirror."
 msgstr ""
 
-#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:49
+#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:55
 msgid "Your comfort score"
 msgstr ""
 
@@ -1936,7 +1940,7 @@ msgstr ""
 msgid "your decisions."
 msgstr "Deine Entscheidungen."
 
-#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:47
+#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:53
 msgid "Your privacy score"
 msgstr ""
 

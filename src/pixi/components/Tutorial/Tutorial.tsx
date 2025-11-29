@@ -15,6 +15,7 @@ import {SPOTLIGHT_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
 import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
 import {RoomNames} from "@/objects/RoomNames.ts";
 import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
+import {tutorialDoneStore} from "@/hooks/gameService/useTutorialActive.ts";
 
 interface TutorialProps {
   windowWidth: number;
@@ -53,8 +54,13 @@ export const Tutorial: React.FC<TutorialProps> = ({
   }, [windowWidth, windowHeight, keyControl]);
 
   useEffect(() => {
-    characterPositionStore.teleport({ x: 8 * TILE_SIZE, y: 5 * TILE_SIZE });
-    gameService.pauseGame();
+    if (!tutorialDoneStore.get()) {
+      characterPositionStore.teleport({x: 8 * TILE_SIZE, y: 5 * TILE_SIZE});
+      gameService.pauseGame();
+    }
+    return () => {
+      gameService.resumeGame();
+    };
   }, [gameService]);
 
   const runClearBGAnim = useCallback(async () => {
@@ -180,8 +186,9 @@ export const Tutorial: React.FC<TutorialProps> = ({
 
 
         case PageOrder.END: {
-          gameService.resumeGame();
           onClose();
+          gameService.onGameStateChange();
+          gameService.resumeGame();
           return;
         }
       }
