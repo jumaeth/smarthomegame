@@ -37,7 +37,7 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
 
   const handleDeviceOpen = (deviceName: DeviceNames): void => {
     if (gameService.getDeviceByName(deviceName).getIsCompleted()) return;
-    if (tutorialActive.done && (deviceName !== DeviceNames.SMART_TV)) return;
+    if (!tutorialActive.done && (deviceName !== DeviceNames.SMART_TV)) return;
     setActiveDevice(deviceName);
     const smartDevice: SmartDevice = gameService.getDeviceByName(deviceName);
     smartDevice.getStatBlock().startTimer();

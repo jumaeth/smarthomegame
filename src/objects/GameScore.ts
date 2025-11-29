@@ -12,7 +12,7 @@ export class GameScore {
   }
 
   static fromSerialized(data: GameScore): GameScore {
-    return new GameScore(data.privacyScore, data.comfortScore, data.getPointsWeight());
+    return new GameScore(data.privacyScore, data.comfortScore, data.weight);
   }
 
   toSerialized(): object {
