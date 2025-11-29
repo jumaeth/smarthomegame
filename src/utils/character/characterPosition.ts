@@ -1,5 +1,7 @@
-import {Direction, Position} from "@/types/movement.ts";
-import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings.ts";
+import {Direction, Position} from "@/types/movement";
+import {DEFAULT_POS_X, DEFAULT_POS_Y, TILE_SIZE} from "@/pixi/constants/world-settings";
+import {useMemo, useSyncExternalStore} from "react";
+import {CookieService} from "@/services/CookieService";
 
 type Listener = () => void;
 type TeleportListener = (p: TeleportPayload) => void;
@@ -23,6 +25,7 @@ class PositionStore {
   set(next: Position) {
     if (next.x === this.pos.x && next.y === this.pos.y) return;
     this.pos = next;
+    CookieService.set("save_player_position", this.pos)
     this.listeners.forEach((l) => l());
   }
 
@@ -35,8 +38,8 @@ class PositionStore {
 
 
   teleport(next: Position, dir?: Direction) {
-    this.set(next);
     if (dir) this.facing = dir;
+    this.set(next);
     const payload: TeleportPayload = { pos: this.pos, dir };
     this.tpListeners.forEach(l => l(payload));
   }
@@ -47,16 +50,22 @@ class PositionStore {
   }
 
   getFacing(): Direction { return this.facing; }
-  setFacing(d: Direction) { this.facing = d; }
+  setFacing(d: Direction) {
+    this.facing = d;
+    CookieService.set("save_player_facing", this.facing)
+  }
 
+  reset(){
+    this.pos.x = DEFAULT_POS_X;
+    this.pos.y = DEFAULT_POS_Y;
+    this.facing = "DOWN"
+  }
 }
 
 export const characterPositionStore = new PositionStore({
   x: DEFAULT_POS_X,
   y: DEFAULT_POS_Y,
 });
-
-import { useSyncExternalStore, useMemo } from "react";
 
 export function useCharacterPosition() {
   const pos = useSyncExternalStore(

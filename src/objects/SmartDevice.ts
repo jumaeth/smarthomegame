@@ -29,7 +29,6 @@ export class SmartDevice {
   toSerialized(): object {
     return {
       name: this.name,
-      helpText: this.helpText,
       isCompleted: this.isCompleted,
       score: this.score.toSerialized(),
     };
@@ -37,6 +36,11 @@ export class SmartDevice {
 
   complete(): void {
     this.isCompleted = true;
+    this.emit();
+  }
+
+  reset(): void {
+    this.isCompleted = false;
     this.emit();
   }
 

@@ -1,12 +1,15 @@
+import {CookieService} from "@/services/CookieService"
+
 type Listener = () => void;
 
 class BoolStore {
-  private value = true;
+  private value = false;
   private listeners = new Set<Listener>();
   get() { return this.value; }
   set(v: boolean) {
     if (v === this.value) return;
     this.value = v;
+    CookieService.set("tutorialState", this.value)
     this.listeners.forEach(l => l());
   }
   subscribe(fn: Listener) {
@@ -14,18 +17,18 @@ class BoolStore {
     return () => { this.listeners.delete(fn); };
   }
 }
-export const tutorialActiveStore = new BoolStore();
+export const tutorialDoneStore = new BoolStore();
 
 // Hook
 import { useSyncExternalStore } from "react";
 export function useTutorialActive() {
-  const enabled = useSyncExternalStore(
-          cb => tutorialActiveStore.subscribe(cb),
-          () => tutorialActiveStore.get()
+  const done = useSyncExternalStore(
+          cb => tutorialDoneStore.subscribe(cb),
+          () => tutorialDoneStore.get()
   );
   return {
-    enabled,
-    close: () => tutorialActiveStore.set(false),
-    open:  () => tutorialActiveStore.set(true),
+    done: done,
+    end: () => tutorialDoneStore.set(true),
+    start:  () => tutorialDoneStore.set(false),
   };
 }

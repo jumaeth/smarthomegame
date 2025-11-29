@@ -13,6 +13,7 @@ export type MapSettings = {
 export type Transition = {
   pos: Position;
   to: MapKey;
+  faceToEnter: Direction;
 }
 
 export type Overlay = {

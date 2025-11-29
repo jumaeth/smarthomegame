@@ -5,11 +5,13 @@ import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore";
 import {CookieService} from "@/services/CookieService";
 import {movementStore} from "@/utils/character/movementEnabled";
-import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive";
+import {tutorialDoneStore} from "@/hooks/gameService/useTutorialActive";
 import {t} from "@lingui/core/macro";
 import {MapKey} from "@/types/maps";
 import {DoorState} from "@/types/door";
 import {DeviceNames} from "@/objects/DeviceNames";
+import {characterPositionStore} from "@/utils/character/characterPosition";
+import {Direction, Position} from "@/types/movement";
 
 
 type DeviceListener = (device: SmartDevice) => void;
@@ -28,14 +30,35 @@ export class GameService {
   constructor(navigate: (path: string) => void) {
     const saveGame: Game | null = CookieService.get<Game>('save_game');
     const tutorialCookie: boolean | null = CookieService.get<boolean>('tutorialState');
+    const characterPositionCookie: Position | null = CookieService.get<Position>('save_player_position');
+    const characterFacingCookie: Direction | null = CookieService.get<Direction>('save_player_facing');
 
     if (saveGame) {
       this.game = Game.fromSerialized(saveGame);
-      if (tutorialCookie != null) tutorialActiveStore.set(tutorialCookie);
+
+      if (characterPositionCookie != null) {
+        characterPositionStore.set(characterPositionCookie);
+      }else{
+        characterPositionStore.reset();
+      }
+
+      if (characterFacingCookie != null){
+        characterPositionStore.setFacing(characterFacingCookie);
+      }
+
     } else {
       const newRooms = this.setUpRooms();
       this.game = new Game(newRooms);
+      CookieService.set("save_player_position", null);
+      CookieService.set("save_player_facing", null);
+      characterPositionStore.reset()
     }
+
+    if (tutorialCookie != null) {
+      tutorialDoneStore.set(tutorialCookie);
+    }
+
+
     this.navigate = navigate;
   }
 
@@ -44,7 +67,6 @@ export class GameService {
       rooms: this.game.getRooms().map(r => r.toSerialized()),
       score: this.game.getScore().toSerialized(),
     });
-    CookieService.set("tutorialState", tutorialActiveStore.get());
   }
 
   setUpRooms(): Room[] {
@@ -119,21 +141,19 @@ export class GameService {
     this.navigate('/game');
   }
 
-  pauseGame(source?: string): void {
+  pauseGame(): void {
     this.paused = true;
     if (movementStore.getSnapshot().movementEnabled) {
       movementStore.disable();
     }
-    console.log(`[GameService] pauseGame from: ${source ?? "unknown"}`);
     this.emitPause();
   }
 
-  resumeGame(source?: string): void {
+  resumeGame(): void {
     this.paused = false;
     if (!movementStore.getSnapshot().movementEnabled) {
       movementStore.enable();
     }
-    console.log(`[GameService] resumeGame from: ${source ?? "unknown"}`);
     this.emitPause();
   }
 

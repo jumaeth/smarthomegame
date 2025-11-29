@@ -42,35 +42,20 @@ describe('GameService', () => {
 
   it('onGameStateChange() should save the game object to the cookies', () => {
     gameService.onGameStateChange();
-
-    // Basic call check
-    expect(CookieService.set).toHaveBeenCalledWith("save_game", expect.any(Object));
-
-    // Inspect saved payload more flexibly to tolerate added score fields
-    const saved = (CookieService.set as jest.Mock).mock.calls[0][1];
-
-    expect(saved).toEqual(expect.objectContaining({
-      rooms: expect.any(Array),
-      score: expect.objectContaining({
-        comfortScore: expect.any(Number),
-        privacyScore: expect.any(Number),
-      }),
-    }));
-
-    // Check devices inside the first room contain the expected devices (fields tolerant)
-    const devices = saved.rooms[0].devices;
-    expect(devices).toEqual(expect.arrayContaining([
-      expect.objectContaining({
-        name: "SmartTv",
-        helpText: "sorry, I cant help you with this",
-        isCompleted: false,
-      }),
-      expect.objectContaining({
-        name: "SmartLights",
-        helpText: "sorry, I cant help you with this",
-        isCompleted: false,
-      }),
-    ]));
+    expect(CookieService.set).toHaveBeenNthCalledWith(3,
+            "save_game", {  rooms: [
+                {
+                  devices: [
+                    { isCompleted: false, name: "SmartTv",score: { comfortScore: 0, privacyScore: 0, weight: 1.5, } },
+                    { isCompleted: false, name: "SmartLights",score: { comfortScore: 0, privacyScore: 0, weight: 1, } }
+                  ],
+                  isCompleted: false,
+                  isLocked: false,
+                  name: "livingroom"
+                }
+              ],score: { comfortScore: 10, privacyScore: 10, weight: 1, },
+              }
+    );
   });
 
   it('getAllRooms() should return all rooms', () => {

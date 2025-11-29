@@ -18,7 +18,7 @@ const LIVINGROOM_SPAWN_POS = {x: 9, y: 9} as Position;
 export const LIVINGROOM_DOOR_POS = {x: 9, y: 10} as Position;
 
 export const LIVINGROOM_TRANSITIONS: Transition[] = [
-  {pos: LIVINGROOM_SPAWN_POS, to: 'hallway'},
+  {pos: LIVINGROOM_SPAWN_POS, to: 'hallway', faceToEnter: "DOWN"},
 ];
 
 export const LIVINGROOM_OVERLAYS: Overlay[] = [

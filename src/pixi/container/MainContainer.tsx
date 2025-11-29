@@ -77,7 +77,7 @@ export const MainContainer = ({
     doorFrameFrontTexture, doorFrameBackTexture
   } = useLevelTextures(map);
   const {tile: characterTile} = useCharacterPosition();
-  const {enabled: tutorialActive, close: closeTutorial} = useTutorialActive();
+  const {done: tutorialDone, end: endTutorial} = useTutorialActive();
 
   const pixelSize = {
     width: TILE_SIZE * collisionMap[0].length,
@@ -135,7 +135,7 @@ export const MainContainer = ({
     const tileY = Math.floor(pos.y / TILE_SIZE);
     const transition = getMapTransition(map, tileX, tileY);
 
-    if (!transition || tutorialActive) {
+    if (!transition || !tutorialDone || characterPositionStore.getFacing() != transition.faceToEnter) {
       setBlockedDoorTo(null);
       return;
     }
@@ -257,7 +257,7 @@ export const MainContainer = ({
                         setShouldSnapCamera(false);
                         setCameraSettled(true);
                       }}
-                      tutorialEnabled={tutorialActive}
+                      tutorialDone={!tutorialDone}
               >
                 {(assetsReady && cameraSettled) && (
                         <>
@@ -274,7 +274,7 @@ export const MainContainer = ({
                                   texture={characterTexture}
                                   onMove={handleCharacterMove}
                                   collisionMap={collisionMap}
-                                  isPaused={isPaused as boolean}
+                                  isPaused={isPaused as boolean || inTransition}
                                   onInteractCheck={handleInteraction}
                           />
                           <LevelOverlay pixelSize={pixelSize} texture={overlayTexture}/>
@@ -292,7 +292,7 @@ export const MainContainer = ({
                         </>
                 )}
               </Camera>
-              {!tutorialActive && (
+              {tutorialDone && (
                       <TransitionOverlay
                               width={canvasSize.width}
                               height={canvasSize.height}
@@ -322,11 +322,11 @@ export const MainContainer = ({
                       windowHeight={canvasSize.height}
                       gameService={gameService}
               />
-              {tutorialActive && <Tutorial
+              {!tutorialDone && <Tutorial
                       windowWidth={canvasSize.width}
                       windowHeight={canvasSize.height}
                       gameService={gameService}
-                      onClose={closeTutorial}
+                      onClose={endTutorial}
                       interactiveElements={interactiveElements as InteractivePixiElement[]}
               />}
             </Container>
