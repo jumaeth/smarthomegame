@@ -1,6 +1,6 @@
 export type Ease = (t: number) => number;
 export const linear: Ease = t => t;
-export const easeInOutQuad: Ease = t => (t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2);
+export const easeInOutQuad: Ease = t => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
 
 type InternalAnim = {
   id: number;
@@ -33,7 +33,10 @@ export class AnimationManager {
 
     let resolve!: () => void;
     let reject!: (err?: unknown) => void;
-    const promise = new Promise<void>((res, rej) => { resolve = res; reject = rej; });
+    const promise = new Promise<void>((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
 
     this.anims.set(id, {
       id, start, duration, ease,
@@ -97,12 +100,7 @@ export class AnimationManager {
         }
         if (p >= 1) {
           this.anims.delete(a.id);
-          try { a.onComplete?.(); } catch (e){
-            if (e instanceof Error) {
-              console.log(e.stack);
-            } else {
-              console.log("Unknown error", e);
-            }}
+          a.onComplete?.();
           a.resolve();
         }
       }
@@ -152,10 +150,11 @@ export class AnimationManager {
 
       if (signal) {
         if (signal.aborted) onAbort();
-        else signal.addEventListener("abort", onAbort, { once: true });
+        else signal.addEventListener("abort", onAbort, {once: true});
       }
     });
   }
+
   runUntil(
           factory: () => Array<() => { promise: Promise<void> }>,
           opts: {
@@ -178,7 +177,7 @@ export class AnimationManager {
 
     // Create our own AbortController; respect an external signal if provided
     const controller = new AbortController();
-    const { signal } = controller;
+    const {signal} = controller;
 
     const cancel = () => controller.abort();
 
@@ -187,7 +186,7 @@ export class AnimationManager {
       if (externalSignal.aborted) controller.abort();
       else {
         const onAbort = () => controller.abort();
-        externalSignal.addEventListener("abort", onAbort, { once: true });
+        externalSignal.addEventListener("abort", onAbort, {once: true});
         signal.addEventListener("abort", () =>
                 externalSignal.removeEventListener("abort", onAbort)
         );
@@ -226,6 +225,6 @@ export class AnimationManager {
       throw new Error("loop aborted");
     })();
 
-    return { promise, cancel, signal };
+    return {promise, cancel, signal};
   }
 }

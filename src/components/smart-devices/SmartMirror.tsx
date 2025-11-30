@@ -141,15 +141,11 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
     if (allSolved) {
       const privacyScore = totalPoints.current.privacy || 0;
       const comfortScore = totalPoints.current.comfort || 0;
+            
+      smartDevice.getStatBlock().setValue(t`Smart Mirror Privacy Score`, privacyScore);
+      smartDevice.getStatBlock().setValue(t`Smart Mirror Comfort Score`, comfortScore);
+      smartDevice.modifyScore(privacyScore, comfortScore);
 
-      if (privacyScore) {
-        gameService.changeScore(privacyScore, 'privacy');
-      }
-      if (comfortScore) {
-        gameService.changeScore(comfortScore, 'comfort');
-      }
-
-      smartDevice.getStatBlock().setValue(t`Smart Mirror Points`, privacyScore);
       gameService.completeDevice(DeviceNames.SMART_MIRROR);
       completeDevice?.(true);
     }
@@ -161,8 +157,8 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
     setSelectedAppId(null);
 
     const privacyDelta = provider.permissions.length <= 1 ? 5 : provider.permissions.length === 2 ? 0 : -5;
-    const comfortDelta = provider.features.length >= 2 ? 3 : provider.features.length === 1 ? 1 : 0;
-
+    const comfortDelta = provider.features.length >= 2 ? 5 : provider.features.length === 1 ? 2.5 : 0;
+    
     const currentPrivacy = totalPoints.current.privacy || 0;
     const currentComfort = totalPoints.current.comfort || 0;
 

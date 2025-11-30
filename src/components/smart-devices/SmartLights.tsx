@@ -17,23 +17,24 @@ export const SmartLights: React.FC<SmartLightsProps> = ({ onCompletion }) => {
   const [showDialogue, setShowDialogue] = useState(true);
 
 
-  const handleQuizCompletion = (isCompleted: boolean) => {
+  const handleQuizCompletion = (isCompleted: boolean, privacyScore: number, comfortScore: number) => {
+    const adjustedPrivacyScore: number = (20+ privacyScore)/2;
+    const adjustedComfortScore: number =  (20+ comfortScore)/2;
+
+    smartLightsDevice.getStatBlock().setValue(t`Smart Lights Privacy Score`, adjustedPrivacyScore);
+    smartLightsDevice.getStatBlock().setValue(t`Smart Lights Comfort Score`, adjustedComfortScore);
+    smartLightsDevice.modifyScore(adjustedPrivacyScore, adjustedComfortScore)
+
     if (isCompleted) {
       onCompletion?.(isCompleted);
     }
-    const calculatedScores = {
-      privacy: gameService.getScore().getPrivacyScore(),
-      comfort: gameService.getScore().getComfortScore()
-    };
-    smartLightsDevice.getStatBlock().setValue(t`Smart Lights Privacy Score`, calculatedScores.privacy);
-    smartLightsDevice.getStatBlock().setValue(t`Smart Lights Comfort Score`, calculatedScores.comfort);
   };
 
   const solutions: Solution[] = [
-    newSolution(true, t`Bluetooth brings great functionality`, t`Bluetooth isn't dangerous for your device`, 5, 0, 1, -5),
-    newSolution(true, t`Wifi is needed to control the lamp`, t`No Wifi, fancy coloured lamp`, 5, 0, 1, -5),
-    newSolution(false, t`Correct, adds to much permissions`, t`Not needed to switch the light on and of`, 10, -2, -10, +2),
-    newSolution(false, t`Correct, this isn't a must`, t`Can be an access point for intruders`, 10, -6, +10, +6),
+    newSolution(true, t`Bluetooth brings great functionality`, t`Bluetooth isn't dangerous for your device`, 3, 7, -3, -7),
+    newSolution(true, t`Wifi is needed to control the lamp`,  t`No Wifi, fancy coloured lamp`, 3, 7, -3, -7),
+    newSolution(false, t`Correct, adds to much permissions`, t`Not needed to switch the light on and of`, 7, 3, -7, -3),
+    newSolution(false, t`Correct, this isn't a must`, t`Can be an access point for intruders`, 7, 3, -7, -3),
   ];
 
   const questions: string[] = [

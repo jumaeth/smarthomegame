@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useNavigate, useLocation} from "react-router-dom";
 
 const ReloadHandler = () => {
   const navigate = useNavigate();
@@ -36,7 +36,6 @@ const ReloadHandler = () => {
 
     const wasReloaded = sessionStorage.getItem("wasReloaded");
     const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
-    const lastVisitedTime = sessionStorage.getItem("lastVisitedTime");
 
     // Check if this is actually a reload
     const detectReload = (): boolean => {
@@ -47,44 +46,34 @@ const ReloadHandler = () => {
         }
       } catch (e) {
         // Fallback detection
-        console.log(e);
-        return wasReloaded === "true";
+        if (e || !e) {
+          return wasReloaded === "true";
+        }
       }
 
       return wasReloaded === "true";
     };
 
     const isReload = detectReload();
-    const timeSinceLastVisit = lastVisitedTime ?
-            Date.now() - parseInt(lastVisitedTime) : Infinity;
-
-    console.log("Reload detection:", {
-      isReload,
-      lastVisitedPage,
-      timeSinceLastVisit,
-      currentPath: location.pathname
-    });
-
     if (
             isReload &&
             lastVisitedPage &&
             lastVisitedPage == location.pathname &&
             !hasHandledReload
     ) {
-        console.log("if entered")
-        setHasHandledReload(true);
+      setHasHandledReload(true);
 
-        // Clear the reload flag
-        sessionStorage.removeItem("wasReloaded");
+      // Clear the reload flag
+      sessionStorage.removeItem("wasReloaded");
 
-        navigate("/game/continue-game", {
-          replace: true,
-          state: {
-            lastPath: lastVisitedPage,
-            reloadDetected: true
-          }
-        });
-      }
+      navigate("/game/continue-game", {
+        replace: true,
+        state: {
+          lastPath: lastVisitedPage,
+          reloadDetected: true
+        }
+      });
+    }
   }, [navigate, location.pathname, hasHandledReload]);
 
   return null;

@@ -41,7 +41,6 @@ export class StatsService {
     let deviceNamesLine: string = "";
     devices.forEach(device => {
       const deviceEnum = deviceNameToEnum(device.name);
-      console.log("deviceName", deviceEnum);
       if (!deviceEnum) {
         return;
       }
@@ -83,9 +82,9 @@ export class StatsService {
 
   generateDeviceSpecificValuesLines(devices: SmartDevice[]): string {
     const deviceSpecificValuesLines: string[] = [];
-    const ammountOfLines: number = devices.reduce((max, device) => {
+    const amountOfLines: number = devices.reduce((max, device) => {
       const statCount = device.getStatBlock().getValuesReadOnly().size;
-      return Math.max(max, statCount);
+      return Math.max(max, statCount-1);
     }, 0);
 
     devices.forEach(device => {
@@ -100,8 +99,10 @@ export class StatsService {
           i++;
         }
       })
-
-      while (i < ammountOfLines - 1) {
+      while (i < amountOfLines - 1) {
+        if (deviceSpecificValuesLines[i] === undefined) {
+          deviceSpecificValuesLines[i] = "";
+        }
         deviceSpecificValuesLines[i] += this.CSV_SEPARATOR + this.CSV_SEPARATOR;
         i++;
       }

@@ -2,8 +2,6 @@ import {useState} from "react";
 import {Trans} from "@lingui/react/macro";
 import Toggle from "@/components/general-ui/Toggle.tsx";
 import Button from "@/components/general-ui/Button.tsx";
-import {useGameService} from "@/hooks/gameService/useGameService.tsx";
-import {GameService} from "@/services/GameService.ts";
 import privacyIcon from "@/assets/coins/privacy_coin.png";
 import comfortIcon from "@/assets/coins/comfort_coin.png";
 import {Solution} from "@/types/solution.ts";
@@ -11,7 +9,7 @@ import {Solution} from "@/types/solution.ts";
 type MultipleChoiceProps = {
   questions: string[];
   solutions: Solution[];
-  onComplete: (isCompleted: boolean) => void;
+  onComplete: (isCompleted: boolean, privacyScore: number, comfortScore: number) => void;
 };
 
 export const MultipleChoiceComponent = ({
@@ -19,7 +17,6 @@ export const MultipleChoiceComponent = ({
                                           solutions,
                                           onComplete,
                                         }: MultipleChoiceProps) => {
-  const gameService: GameService = useGameService();
   const [answers, setAnswers] = useState<boolean[]>(new Array(questions.length).fill(true));
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [fadeOut, setFadeOut] = useState<boolean>();
@@ -51,9 +48,8 @@ export const MultipleChoiceComponent = ({
         comfortScore += solutions[i].privacyScorePenalty
       }
     });
-    gameService.changeScore(privacyScore, 'privacy');
-    gameService.changeScore(comfortScore, 'comfort');
-    onComplete(true);
+
+    onComplete(true, privacyScore, comfortScore);
   }
 
   const formatWithSign = new Intl.NumberFormat('en-US', {

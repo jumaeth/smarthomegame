@@ -52,7 +52,7 @@ export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, a
   const smartDeviceCallback = (completed: boolean): void => {
     if (!activeDevice) return;
     const device = smartDevices.find((d) => d.name === activeDevice);
-    console.log(device)
+
     if (!device) return;
     device.getStatBlock().stopTimer();
 

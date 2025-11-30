@@ -42,7 +42,6 @@ const HelpButton = ({ newMessage, smartDevice }: HelpButtonProps) => {
   const [wasRead, setWasRead] = useState(!newMessage);
 
   const [buttons, setButtons] = useState(<div>{yes}{no}</div>)
-  console.log(newMessage)
 
   return (
     <div className="fixed top-5 left-20 h-20 w-100 flex items-start space-x-4 z-[101]">
