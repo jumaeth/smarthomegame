@@ -13,12 +13,6 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. js-lingui-explicit-id
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:51
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:52
-#~ msgid "/+Z5u4"
-#~ msgstr "/+Z5u4"
-
 #: src/components/cookingGame/IngredientsStage.tsx:46
 msgid ""
 "\n"
@@ -28,30 +22,18 @@ msgstr ""
 "- Your wallet was "
 
 #: src/components/cookingGame/CookingStage.tsx:35
-#~ msgid ""
-#~ "\n"
-#~ "Okay, let's make a dish out of it. \n"
-#~ "\n"
-#~ "Our Smartkitchen can prepare all the ingredients but we have to choose the right machine to cook the dish"
-#~ msgstr ""
-#~ "\n"
-#~ "Okay, let's make a dish out of it. \n"
-#~ "\n"
-#~ "Our Smartkitchen can prepare all the ingredients but we have to choose the right machine to cook the dish"
-
-#: src/components/cookingGame/CookingStage.tsx:35
 msgid ""
 "\n"
-"Okay, let's turn this into a dish. \n"
+"Great, let’s get on and cook the dish! \n"
 "\n"
 "Our smart kitchen can almost prepare the dish on its own, but we still need to pick the right machine to cook it"
 msgstr ""
 "\n"
-"Okay, let's turn this into a dish. \n"
+"Great, let’s get on and cook the dish! \n"
 "\n"
 "Our smart kitchen can almost prepare the dish on its own, but we still need to pick the right machine to cook it"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:366
+#: src/components/dataSortingGame/DataSortingGame.tsx:361
 msgid " privacy"
 msgstr " privacy"
 
@@ -67,33 +49,36 @@ msgid "*blub*"
 msgstr "*blub*"
 
 #: src/pixi/components/AssistantPhone.tsx:45
-#~ msgid "< Back to game"
-#~ msgstr "< Back to game"
-
-#: src/pixi/components/AssistantPhone.tsx:45
 msgid "< Go back to game"
 msgstr "< Go back to game"
 
-#: src/components/smart-devices/SmartTv.tsx:253
+#: src/components/smart-devices/SmartTv.tsx:250
 msgid "❗️ Privacy Warning ❗️"
 msgstr "❗️ Privacy Warning ❗️"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:342
+#: src/components/dataSortingGame/DataSortingGame.tsx:337
 msgid "🎉 Congratulations! 🎉"
 msgstr "🎉 Congratulations! 🎉"
+
+#: src/components/dataSortingGame/DataSortingGame.tsx:313
+msgid "🚫 Not quite... Try again."
+msgstr "🚫 Not quite... Try again."
+
+#: src/components/smart-devices/SmartMirror.tsx:78
+msgid "A contextual styling assistant that adapts to local trends and your personal wardrobe"
+msgstr "A contextual styling assistant that adapts to local trends and your personal wardrobe"
 
 #: src/pixi/components/SpeechBubble.tsx:30
 msgid "A real Picasso!"
 msgstr "A real Picasso!"
 
-#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:56
-#~ msgid "A smarthome does a great deal to make your life more comfortable. It can automate routines or know your preferences even better than yourself. A high comfort score makes your life easier!"
-#~ msgstr "A smarthome does a great deal to make your life more comfortable. It can automate routines or know your preferences even better than yourself. A high comfort score makes your life easier!"
-
 #: src/components/general-ui/BrowserBanner.tsx:34
-#: src/components/general-ui/CookieBanner.tsx:57
 msgid "accept"
 msgstr "accept"
+
+#: src/components/general-ui/CookieBanner.tsx:57
+msgid "Accept"
+msgstr "Accept"
 
 #: src/components/smart-devices/SmartMirror.tsx:77
 msgid "Account-level encryption, shared with fashion partners."
@@ -112,12 +97,12 @@ msgid "Activate WiFi"
 msgstr "Activate WiFi"
 
 #: src/components/smart-devices/SmartMirror.tsx:111
-msgid "Aggregated request stats kept 30 days."
-msgstr "Aggregated request stats kept 30 days."
+msgid "Aggregated request stats: kept for 30 days."
+msgstr "Aggregated request stats: kept for 30 days."
 
 #: src/components/smart-devices/SmartMirror.tsx:89
-msgid "Aggregated usage retained 90 days."
-msgstr "Aggregated usage retained 90 days."
+msgid "Aggregated usage: retained 90 days."
+msgstr "Aggregated usage: retained 90 days."
 
 #: src/components/smart-devices/SmartMirror.tsx:89
 msgid "Aggregates before upload; opt-out analytics."
@@ -135,35 +120,39 @@ msgstr "Alerts"
 msgid "All apps configured!"
 msgstr "All apps configured!"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:348
+#: src/components/dataSortingGame/DataSortingGame.tsx:343
 msgid "All items were sorted!"
 msgstr "All items were sorted!"
 
 #: src/components/smart-devices/SmartShower.tsx:266
-msgid "All Objects Processed!"
-msgstr "All Objects Processed!"
+msgid "All objects processed!"
+msgstr "All objects processed!"
+
+#: src/pixi/components/Tutorial/Pages/Explanations/Decision.tsx:80
+msgid "Alright, try to walk to the Smart TV and solve the mini-game by using the controls you've just learned. I’ll meet you there!"
+msgstr "Alright, try to walk to the Smart TV and solve the mini-game by using the controls you've just learned. I’ll meet you there!"
 
 #: src/pixi/components/SpeechBubble.tsx:31
 msgid "Am I an easter egg?"
 msgstr "Am I an easter egg?"
 
 #: src/components/smart-devices/SmartMirror.tsx:100
-msgid "Anonymized telemetry; private browsing mode."
-msgstr "Anonymized telemetry; private browsing mode."
+msgid "Anonymized telemetry data; private browsing mode."
+msgstr "Anonymized telemetry data; private browsing mode."
 
 #: src/components/smart-devices/SmartMirror.tsx:100
-msgid "Anonymous analytics kept 60 days."
-msgstr "Anonymous analytics kept 60 days."
+msgid "Anonymous analytics: kept 60 days."
+msgstr "Anonymous analytics: kept 60 days."
 
 #: src/components/smart-devices/SmartMirror.tsx:90
-msgid "Anonymous stats"
-msgstr "Anonymous stats"
+msgid "Anonymous statistics"
+msgstr "Anonymous statistics"
 
 #: src/components/smart-devices/SmartMirror.tsx:100
-msgid "Anonymous usage"
-msgstr "Anonymous usage"
+msgid "Anonymous usage data"
+msgstr "Anonymous usage data"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:355
+#: src/components/dataSortingGame/DataSortingGame.tsx:350
 msgid "Answered correctly on the first attempt:"
 msgstr "Answered correctly on the first attempt:"
 
@@ -172,16 +161,16 @@ msgid "Authorization"
 msgstr "Authorization"
 
 #: src/components/smart-devices/SmartMirror.tsx:99
-msgid "Auto-order"
-msgstr "Auto-order"
+msgid "Auto-ordering"
+msgstr "Auto-ordering"
 
 #: src/components/cookingGame/IngredientsStage.tsx:50
 msgid "bad"
 msgstr "bad"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:188
-msgid "Bank details are personal data that require special protection as they are used for financial transactions."
-msgstr "Bank details are personal data that require special protection as they are used for financial transactions."
+#: src/components/dataSortingGame/DataSortingGame.tsx:183
+msgid "Bank details are personal data that need special protection, as they are used for financial transactions and could be easily misused if stolen."
+msgstr "Bank details are personal data that need special protection, as they are used for financial transactions and could be easily misused if stolen."
 
 #: src/objects/RoomNames.ts:24
 msgid "Bathroom"
@@ -191,9 +180,9 @@ msgstr "Bathroom"
 msgid "Bedroom"
 msgstr "Bedroom"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:108
-msgid "Biometric data like fingerprints are unique characteristics of a person and cannot be changed, so they require special protection."
-msgstr "Biometric data like fingerprints are unique characteristics of a person and cannot be changed, so they require special protection."
+#: src/components/dataSortingGame/DataSortingGame.tsx:103
+msgid "Biometric data like fingerprints are unique characteristics of a person and cannot be changed, so they need special protection, as they are closely tied to fundamental rights such as privacy and personal identity."
+msgstr "Biometric data like fingerprints are unique characteristics of a person and cannot be changed, so they need special protection, as they are closely tied to fundamental rights such as privacy and personal identity."
 
 #: src/components/smart-devices/SmartLights.tsx:33
 msgid "Bluetooth brings great functionality"
@@ -206,10 +195,6 @@ msgstr "Bluetooth isn't dangerous for your device"
 #: src/components/general-ui/BrowserBanner.tsx:31
 msgid "Browser choice"
 msgstr "Browser choice"
-
-#: src/components/dataSortingGame/DataSortingGame.tsx:225
-msgid "Bus line 10 timetable"
-msgstr "Bus line 10 timetable"
 
 #: src/pages/HomePage.tsx:71
 msgid "Button."
@@ -259,24 +244,28 @@ msgstr "Can I pet that dog?"
 msgid "Choose"
 msgstr "Choose"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:217
-msgid "City announcement: “Water maintenance works are planned for tomorrow”"
-msgstr "City announcement: “Water maintenance works are planned for tomorrow”"
+#: src/components/smart-devices/SmartMirror.tsx:234
+msgid "Choose an app on the left to view its providers."
+msgstr "Choose an app on the left to view its providers."
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:209
-msgid "City festival schedule on the flyer"
-msgstr "City festival schedule on the flyer"
+#: src/components/dataSortingGame/DataSortingGame.tsx:212
+msgid "City announcement: “Water maintenance works are planned for tomorrow morning.”"
+msgstr "City announcement: “Water maintenance works are planned for tomorrow morning.”"
+
+#: src/components/dataSortingGame/DataSortingGame.tsx:204
+msgid "City festival schedule on a flyer"
+msgstr "City festival schedule on a flyer"
 
 #: src/pixi/components/Tutorial/Pages/PhonePage.tsx:52
-msgid "Clicking on the phone opens the blueprint of the house. Here you can check where the different rooms are located."
-msgstr "Clicking on the phone opens the blueprint of the house. Here you can check where the different rooms are located."
+msgid "Clicking on the phone opens the floor plan of the house. Here you can see where each room is located."
+msgstr "Clicking on the phone opens the floor plan of the house. Here you can see where each room is located."
 
 #: src/components/smart-devices/SmartShower.tsx:48
 msgid "Clock"
 msgstr "Clock"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:381
-#: src/components/dataSortingGame/DataSortingGame.tsx:439
+#: src/components/dataSortingGame/DataSortingGame.tsx:376
+#: src/components/dataSortingGame/DataSortingGame.tsx:433
 #: src/components/general-ui/HelpButton.tsx:41
 #: src/components/mini-game/CaptchaComponent.tsx:153
 msgid "Close"
@@ -290,13 +279,9 @@ msgstr "Cloud backup"
 msgid "Co-op farmers' market"
 msgstr "Co-op farmers' market"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:367
-msgid "comfort"
-msgstr "comfort"
-
-#: src/pages/GameOver.tsx:56
-#~ msgid "Comfort"
-#~ msgstr "Comfort"
+#: src/components/dataSortingGame/DataSortingGame.tsx:362
+msgid "Comfort"
+msgstr "Comfort"
 
 #: src/objects/VictoryType.ts:46
 msgid "Comfort and Chaos: Nice, your Smart Home really works seamlessly! ... But hours later, targeted ads start flooding all of your phones and someone got access to your Smart Camera System, and starts live-streaming the party."
@@ -306,29 +291,25 @@ msgstr "Comfort and Chaos: Nice, your Smart Home really works seamlessly! ... Bu
 msgid "Comfort Score"
 msgstr "Comfort Score"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:365
+#: src/components/dataSortingGame/DataSortingGame.tsx:360
 msgid "Completion bonus:"
 msgstr "Completion bonus:"
 
 #: src/components/smart-devices/SmartMirror.tsx:88
-msgid "Comprehensive metrics with cloud syncing and insights."
-msgstr "Comprehensive metrics with cloud syncing and insights."
+msgid "Comprehensive performance metrics with cloud syncing and actionable insights."
+msgstr "Comprehensive performance metrics with cloud syncing and actionable insights."
 
 #: src/services/GameService.ts:90
-msgid "Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable."
-msgstr "Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable."
+msgid "Configure your smart shower by clicking on objects and choosing which permissions to grant or which services to enable."
+msgstr "Configure your smart shower by clicking on objects and choosing which permissions to grant or which services to enable."
+
+#: src/pages/GameOver.tsx:80
+msgid "Congrats on solving the Smart Home Challenge! Your progress can be reset with the 'Restart' button."
+msgstr "Congrats on solving the Smart Home Challenge! Your progress can be reset with the 'Restart' button."
 
 #: src/components/smart-devices/SmartLights.tsx:43
-msgid "Connect to smart app"
-msgstr "Connect to smart app"
-
-#: src/components/cookingGame/CookingStage.tsx:56
-msgid "Connects regularly to cloud for updates"
-msgstr "Connects regularly to cloud for updates"
-
-#: src/components/smart-devices/SmartMirror.tsx:78
-msgid "Contextual styling assistant that adapts to local trends and your wardrobe."
-msgstr "Contextual styling assistant that adapts to local trends and your wardrobe."
+msgid "Connect to Smart App"
+msgstr "Connect to Smart App"
 
 #: src/components/cookingGame/CookingStage.tsx:26
 #: src/components/cookingGame/IntroStage.tsx:17
@@ -340,27 +321,31 @@ msgstr "continue"
 #: src/components/cookingGame/IngredientsStage.tsx:247
 #: src/components/cookingGame/ServeStage.tsx:326
 #: src/components/mini-game/MultipleChoiceComponent.tsx:114
-#: src/components/smart-devices/SmartHomeHub.tsx:64
+#: src/components/smart-devices/SmartHomeHub.tsx:61
 #: src/components/smart-devices/SmartLights.tsx:64
 #: src/components/smart-devices/SmartMirror.tsx:186
 #: src/components/smart-devices/SmartShower.tsx:202
-#: src/components/smart-devices/SmartTv.tsx:195
-#: src/components/smart-devices/SmartTv.tsx:245
-#: src/components/smart-devices/SmartTv.tsx:292
+#: src/components/smart-devices/SmartTv.tsx:192
+#: src/components/smart-devices/SmartTv.tsx:242
+#: src/components/smart-devices/SmartTv.tsx:288
 msgid "Continue"
 msgstr "Continue"
 
-#: src/components/smart-devices/SmartTv.tsx:271
+#: src/components/smart-devices/SmartTv.tsx:267
 msgid "Continue anyway"
 msgstr "Continue anyway"
 
 #: src/pages/ContinueGame.tsx:41
-msgid "Continue saved game"
-msgstr "Continue saved game"
+msgid "Continue your previously saved game"
+msgstr "Continue your previously saved game"
 
 #: src/components/general-ui/CookieBanner.tsx:47
-msgid "Cookie banner"
-msgstr "Cookie banner"
+msgid "Cookie Banner"
+msgstr "Cookie Banner"
+
+#: src/components/dataSortingGame/DataSortingGame.tsx:100
+msgid "Copy of my fingerprint scan for unlocking my laptop"
+msgstr "Copy of my fingerprint scan for unlocking my laptop"
 
 #: src/components/smart-devices/SmartLights.tsx:35
 msgid "Correct, adds to much permissions"
@@ -410,19 +395,6 @@ msgstr "Correct, this is needed to stream the view"
 msgid "Correct, this isn't a must"
 msgstr "Correct, this isn't a must"
 
-#: src/components/cameraGame/SecurityCameraGame.tsx:39
-#: src/components/cameraGame/SecurityCameraGame.tsx:40
-#: src/components/cameraGame/SecurityCameraGame.tsx:41
-#: src/components/cameraGame/SecurityCameraGame.tsx:43
-#: src/components/cameraGame/SecurityCameraGame.tsx:45
-#: src/components/cameraGame/SecurityCameraGame.tsx:46
-#: src/components/cameraGame/SecurityCameraGame.tsx:47
-#: src/components/cameraGame/SecurityCameraGame.tsx:48
-#: src/components/cameraGame/SecurityCameraGame.tsx:49
-#: src/components/cameraGame/SecurityCameraGame.tsx:50
-#~ msgid "Correct, this placement is acceptable"
-#~ msgstr "Correct, this placement is acceptable"
-
 #: src/components/cameraGame/SecurityCameraGame.tsx:28
 msgid "Correct, this sensible data shouldn't go to the cloud"
 msgstr "Correct, this sensible data shouldn't go to the cloud"
@@ -447,27 +419,23 @@ msgstr "Correct, you don't do private things at your desk"
 msgid "Correct, your TV room isn't a very privacy sensitive place"
 msgstr "Correct, your TV room isn't a very privacy sensitive place"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:318
+#: src/components/dataSortingGame/DataSortingGame.tsx:313
 msgid "Correct! ✅"
 msgstr "Correct! ✅"
 
-#: src/components/smart-devices/SmartMirror.tsx:99
-msgid "Coupons"
-msgstr "Coupons"
-
-#: src/pixi/components/SpeechBubble.tsx:28
-msgid "Cozy, isn't it?"
-msgstr "Cozy, isn't it?"
+#: src/components/dataSortingGame/DataSortingGame.tsx:164
+msgid "Dad's phone nr: 00 12 567 890"
+msgstr "Dad's phone nr: 00 12 567 890"
 
 #: src/components/smart-devices/SmartMirror.tsx:89
 msgid "Daily insights"
 msgstr "Daily insights"
 
 #: src/components/smart-devices/SmartMirror.tsx:275
-msgid "Data retention"
-msgstr "Data retention"
+msgid "Data retention period"
+msgstr "Data retention period"
 
-#: src/components/smart-devices/SmartHomeHub.tsx:75
+#: src/components/smart-devices/SmartHomeHub.tsx:72
 msgid "Data Sorting Challenge"
 msgstr "Data Sorting Challenge"
 
@@ -475,43 +443,47 @@ msgstr "Data Sorting Challenge"
 msgid "Data that is intended for the general public and does not contain any personal information"
 msgstr "Data that is intended for the general public and does not contain any personal information"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:73
-msgid "Data that requires a higher level of protection under the GDPR"
-msgstr "Data that requires a higher level of protection under the GDPR"
+#: src/components/dataSortingGame/DataSortingGame.tsx:71
+msgid "Data that requires enhanced protection under European data-protection law (GDPR)"
+msgstr "Data that requires enhanced protection under European data-protection law (GDPR)"
 
 #: src/pages/HomePage.tsx:197
 msgid "Datenschutzerklärung"
 msgstr "Datenschutzerklärung"
 
 #: src/components/general-ui/CookieBanner.tsx:58
-msgid "decline"
-msgstr "decline"
+msgid "Decline"
+msgstr "Decline"
 
 #: src/components/smart-devices/SmartShower.tsx:252
 msgid "Deny / Disable"
 msgstr "Deny / Disable"
 
 #: src/pixi/components/Tutorial/Pages/Explanations/More_Expl_SD.tsx:42
-msgid "Deselect the right options to restore a balance between privacy and comfort. Different decisions will have different affects on your scores."
-msgstr "Deselect the right options to restore a balance between privacy and comfort. Different decisions will have different affects on your scores."
+msgid "Deselect data permissions that are not necessary for your device to function. This way, you restore the balance between privacy and comfort. Different decisions will have different effects on your scores."
+msgstr "Deselect data permissions that are not necessary for your device to function. This way, you restore the balance between privacy and comfort. Different decisions will have different effects on your scores."
 
-#: src/components/smart-devices/SmartTv.tsx:280
-msgid "Device Configured ✅ "
-msgstr "Device Configured ✅ "
+#: src/objects/StatsKeys.ts:10
+msgid "Device open count"
+msgstr "Device open count"
 
 #: src/services/GameService.ts:84
-msgid "Did you know personal data of members of the European Union are protected by the General Data Protection Regulation GDPR? The GDPR protects your personal information by law, and you may request its protection even if the data processor is not located in the EU. The GDPR even grants higher protection to especially sensitive data, that means data which might be abused against you are sorted into special categories. For example, this could be private information on your religion, or political views. Have you understood what the GDPR protects? Decide if provided information is public, personal, or personal and sensitive by dragging and dropping."
-msgstr "Did you know personal data of members of the European Union are protected by the General Data Protection Regulation GDPR? The GDPR protects your personal information by law, and you may request its protection even if the data processor is not located in the EU. The GDPR even grants higher protection to especially sensitive data, that means data which might be abused against you are sorted into special categories. For example, this could be private information on your religion, or political views. Have you understood what the GDPR protects? Decide if provided information is public, personal, or personal and sensitive by dragging and dropping."
+msgid "Did you know that personal data processed within the European Union is protected by the General Data Protection Regulation (GDPR)? The GDPR protects your personal information by law, and you may request its protection even if the data processor is not located in the EU. The GDPR also grants enhanced protection to particularly sensitive data, meaning data which might be abused against you is sorted into special categories. For example, this could be private information about your religion or political views. Have you understood what the GDPR protects? Decide whether provided information is public, personal, or personal and sensitive by dragging and dropping."
+msgstr "Did you know that personal data processed within the European Union is protected by the General Data Protection Regulation (GDPR)? The GDPR protects your personal information by law, and you may request its protection even if the data processor is not located in the EU. The GDPR also grants enhanced protection to particularly sensitive data, meaning data which might be abused against you is sorted into special categories. For example, this could be private information about your religion or political views. Have you understood what the GDPR protects? Decide whether provided information is public, personal, or personal and sensitive by dragging and dropping."
+
+#: src/pixi/components/Tutorial/Pages/Explanations/Score_Changes.tsx:52
+msgid "Did you see that? Your choices affected your privacy and comfort scores. Be careful to always keep a good balance!"
+msgstr "Did you see that? Your choices affected your privacy and comfort scores. Be careful to always keep a good balance!"
 
 #: src/components/cookingGame/IngredientsStage.tsx:34
-msgid "Discounter, with card"
-msgstr "Discounter, with card"
+msgid "Discounter, pay by card"
+msgstr "Discounter, pay by card"
 
 #: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:53
 msgid "Discovery"
 msgstr "Discovery"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:113
+#: src/components/dataSortingGame/DataSortingGame.tsx:108
 msgid "DNA test results \"genetics.zip\""
 msgstr "DNA test results \"genetics.zip\""
 
@@ -523,33 +495,33 @@ msgstr "do not agree with"
 msgid "Download CSV"
 msgstr "Download CSV"
 
-#: src/components/smart-devices/SmartHomeHub.tsx:79
-msgid "Drag and drop the datapoints to the correct category"
-msgstr "Drag and drop the datapoints to the correct category"
+#: src/components/smart-devices/SmartHomeHub.tsx:76
+msgid "Drag and drop the data points into the correct category"
+msgstr "Drag and drop the data points into the correct category"
 
 #: src/components/smart-devices/SmartMirror.tsx:100
 msgid "EcoStore"
 msgstr "EcoStore"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:164
-msgid "Email addresses are personal data that can be used for identification and contact purposes."
-msgstr "Email addresses are personal data that can be used for identification and contact purposes."
+#: src/components/dataSortingGame/DataSortingGame.tsx:159
+msgid "Email addresses are personal data that can be used to contact you. However, they might be abused to send you spam or scams"
+msgstr "Email addresses are personal data that can be used to contact you. However, they might be abused to send you spam or scams"
 
 #: src/components/smart-devices/SmartShower.tsx:27
-msgid "Enable automatic shut-off after inactivity to prevent water waste and save money. The system detects when you're not using water and shuts off automatically. This requires monitoring your presence and activity patterns. Will you enable this water-saving feature despite the privacy trade-off?"
-msgstr "Enable automatic shut-off after inactivity to prevent water waste and save money. The system detects when you're not using water and shuts off automatically. This requires monitoring your presence and activity patterns. Will you enable this water-saving feature despite the privacy trade-off?"
+msgid "Enable automatic shut-off after a period of inactivity to prevent water waste and save money. The system detects when you're not using water and shuts off automatically. This requires monitoring of your presence and activity patterns. Will you enable this water-saving feature despite the privacy trade-off?"
+msgstr "Enable automatic shut-off after a period of inactivity to prevent water waste and save money. The system detects when you're not using water and shuts off automatically. This requires monitoring of your presence and activity patterns. Will you enable this water-saving feature despite the privacy trade-off?"
 
 #: src/components/smart-devices/SmartShower.tsx:38
-msgid "Enable energy-efficient temperature control to cut heating costs by up to 40% while maintaining comfort. The system learns your preferences and pre-heats water only when needed, reducing energy consumption. This requires monitoring your temperature preferences and usage times. Will you enable this cost-saving feature?"
-msgstr "Enable energy-efficient temperature control to cut heating costs by up to 40% while maintaining comfort. The system learns your preferences and pre-heats water only when needed, reducing energy consumption. This requires monitoring your temperature preferences and usage times. Will you enable this cost-saving feature?"
+msgid "Enable energy-efficient temperature control to cut heating costs by up to 40% while maintaining comfort. The system learns your preferences and pre-heats water only when needed, reducing energy consumption. This requires monitoring of your temperature preferences and usage times. Will you enable this cost-saving feature?"
+msgstr "Enable energy-efficient temperature control to cut heating costs by up to 40% while maintaining comfort. The system learns your preferences and pre-heats water only when needed, reducing energy consumption. This requires monitoring of your temperature preferences and usage times. Will you enable this cost-saving feature?"
 
 #: src/components/smart-devices/SmartShower.tsx:49
 msgid "Enable shower time tracking to help you develop better water conservation habits. The system records when you shower and how long you spend, providing insights to reduce water waste. Your usage data is anonymized and used to improve global conservation strategies. Will you allow tracking for environmental benefits?"
 msgstr "Enable shower time tracking to help you develop better water conservation habits. The system records when you shower and how long you spend, providing insights to reduce water waste. Your usage data is anonymized and used to improve global conservation strategies. Will you allow tracking for environmental benefits?"
 
 #: src/components/smart-devices/SmartShower.tsx:16
-msgid "Enable water usage tracking to save up to 30% on your water bill and reduce environmental waste. This AI-powered system monitors your shower patterns in real-time to optimize consumption. However, your water usage data will be shared with sustainability partners for global conservation efforts. Will you prioritize environmental savings over complete privacy?"
-msgstr "Enable water usage tracking to save up to 30% on your water bill and reduce environmental waste. This AI-powered system monitors your shower patterns in real-time to optimize consumption. However, your water usage data will be shared with sustainability partners for global conservation efforts. Will you prioritize environmental savings over complete privacy?"
+msgid "Enable water usage tracking to save up to 30% on your water bill and reduce environmental waste. This AI-powered system monitors your shower patterns in real-time to optimize consumption. However, your water usage data will be shared with sustainability partners for global conservation efforts. Will you prioritize environmental savings over maximum privacy?"
+msgstr "Enable water usage tracking to save up to 30% on your water bill and reduce environmental waste. This AI-powered system monitors your shower patterns in real-time to optimize consumption. However, your water usage data will be shared with sustainability partners for global conservation efforts. Will you prioritize environmental savings over maximum privacy?"
 
 #: src/components/cookingGame/IntroStage.tsx:39
 #: src/components/cookingGame/RecipeStage.tsx:39
@@ -572,13 +544,13 @@ msgstr "Expand"
 msgid "Explore yourself"
 msgstr "Explore yourself"
 
-#: src/components/smart-devices/SmartMirror.tsx:101
-msgid "Export cart"
-msgstr "Export cart"
-
 #: src/components/smart-devices/SmartMirror.tsx:90
 msgid "Export only"
 msgstr "Export only"
+
+#: src/components/smart-devices/SmartMirror.tsx:101
+msgid "Exports the cart"
+msgstr "Exports the cart"
 
 #: src/components/smart-devices/SmartTv.tsx:33
 msgid "Face ID activated"
@@ -587,6 +559,14 @@ msgstr "Face ID activated"
 #: src/pixi/components/SpeechBubble.tsx:38
 msgid "Fancy some new Clothing?"
 msgstr "Fancy some new Clothing?"
+
+#: src/components/cookingGame/IngredientsStage.tsx:35
+msgid "Farm shop"
+msgstr "Farm shop"
+
+#: src/components/cookingGame/IngredientsStage.tsx:37
+msgid "Farm workshop"
+msgstr "Farm workshop"
 
 #: src/components/smart-devices/SmartMirror.tsx:78
 msgid "FashionHelper+"
@@ -605,8 +585,8 @@ msgid "Features"
 msgstr "Features"
 
 #: src/components/smart-devices/SmartShower.tsx:216
-msgid "Find the relevant objects for the smart shower. Think carefully about which features you want to enable or disable."
-msgstr "Find the relevant objects for the smart shower. Think carefully about which features you want to enable or disable."
+msgid "Find the relevant objects for your Smart Shower. Think carefully about which features you want to enable or disable."
+msgstr "Find the relevant objects for your Smart Shower. Think carefully about which features you want to enable or disable."
 
 #: src/pages/HomePage.tsx:63
 msgid "Find the smart gadgets, unlock your home!"
@@ -614,14 +594,14 @@ msgstr "Find the smart gadgets, unlock your home!"
 
 #: src/components/cookingGame/IngredientsStage.tsx:28
 msgid ""
-"First, let's buy the ingredients we need. For good pasta we need: \n"
+"First, let's buy the ingredients we'll use. For good pasta we need: \n"
 "\n"
 "\t1. Spaghetti\n"
 "\t2. Tomatoes\n"
 "\t3. Spices\n"
 "\t4. Cheese"
 msgstr ""
-"First, let's buy the ingredients we need. For good pasta we need: \n"
+"First, let's buy the ingredients we'll use. For good pasta we need: \n"
 "\n"
 "\t1. Spaghetti\n"
 "\t2. Tomatoes\n"
@@ -640,10 +620,6 @@ msgstr "For the best experience, please use Chrome or Safari."
 msgid "from \"parmesan.com"
 msgstr "from \"parmesan.com"
 
-#: src/components/smart-devices/SmartMirror.tsx:77
-msgid "Full styling assistant with AI-powered fashion recommendations and calendar integration."
-msgstr "Full styling assistant with AI-powered fashion recommendations and calendar integration."
-
 #: src/pixi/components/SpeechBubble.tsx:39
 msgid "FuzZy s1gNaL..."
 msgstr "FuzZy s1gNaL..."
@@ -652,9 +628,9 @@ msgstr "FuzZy s1gNaL..."
 msgid "Game Results:"
 msgstr "Game Results:"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:116
-msgid "Genetic data is particularly sensitive as it can affect not only the person concerned but also their relatives."
-msgstr "Genetic data is particularly sensitive as it can affect not only the person concerned but also their relatives."
+#: src/components/dataSortingGame/DataSortingGame.tsx:111
+msgid "Genetic data is particularly sensitive, as it is a unique identifier. It can hold information on your health status and may not only affect the person concerned but also their relatives."
+msgstr "Genetic data is particularly sensitive, as it is a unique identifier. It can hold information on your health status and may not only affect the person concerned but also their relatives."
 
 #: src/pages/NotFoundPage.tsx:13
 msgid "Go Home"
@@ -664,13 +640,9 @@ msgstr "Go Home"
 msgid "Good to check your home on the go"
 msgstr "Good to check your home on the go"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:249
+#: src/components/dataSortingGame/DataSortingGame.tsx:244
 msgid "Google Maps"
 msgstr "Google Maps"
-
-#: src/components/dataSortingGame/DataSortingGame.tsx:201
-msgid "GPS location: 12.3456, 23.4567"
-msgstr "GPS location: 12.3456, 23.4567"
 
 #: src/components/cookingGame/IngredientsStage.tsx:36
 msgid "Grandma's garden "
@@ -681,8 +653,8 @@ msgid "Grant / Enable"
 msgstr "Grant / Enable"
 
 #: src/pixi/components/Tutorial/Pages/Explanations/ProgressBar.tsx:53
-msgid "Great, you finished your first device! You can check your progress at anytime by clicking on the trophy symbol"
-msgstr "Great, you finished your first device! You can check your progress at anytime by clicking on the trophy symbol"
+msgid "Great, you have finished setting up your first Smart Device! You can check your game progress at any time by clicking on the trophy symbol."
+msgstr "Great, you have finished setting up your first Smart Device! You can check your game progress at any time by clicking on the trophy symbol."
 
 #: src/pixi/components/Tutorial/Pages/Explanations/Decision.tsx:78
 msgid "Guided introduction"
@@ -696,9 +668,9 @@ msgstr "Hallway"
 msgid "happy about"
 msgstr "happy about"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:100
-msgid "Health data is particularly worthy of protection under the GDPR, as it contains very personal information and could be misused."
-msgstr "Health data is particularly worthy of protection under the GDPR, as it contains very personal information and could be misused."
+#: src/components/dataSortingGame/DataSortingGame.tsx:95
+msgid "Health data is particularly worthy of protection under the GDPR, as it contains very personal information and could be misused or used against you."
+msgstr "Health data is particularly worthy of protection under the GDPR, as it contains very personal information and could be misused or used against you."
 
 #: src/components/smart-devices/SmartMirror.tsx:88
 msgid "Health metrics retained 12 months for comparisons."
@@ -712,17 +684,9 @@ msgstr "Health Monitor"
 msgid "Heart rate"
 msgstr "Heart rate"
 
-#: src/pages/HomePage.tsx:58
-msgid "Hello and welcome to the Smart Home Challenge"
-msgstr "Hello and welcome to the Smart Home Challenge"
-
-#: src/pages/HomePage.tsx:38
-#~ msgid "Hello and welcome to the Smart Home Escape Game"
-#~ msgstr "Hello and welcome to the Smart Home Escape Game"
-
 #: src/components/cameraGame/SecurityCameraGame.tsx:77
-msgid "Hey, you should rearrange your surveillance cameras. The smart home has already made a preselection. Do you agree with this? Select all the camera placements you want to keep."
-msgstr "Hey, you should rearrange your surveillance cameras. The smart home has already made a preselection. Do you agree with this? Select all the camera placements you want to keep."
+msgid "Hey, you should reposition your surveillance cameras. The Smart Home has already made a preliminary selection. Do you agree with this? Select the camera placements you think are suitable."
+msgstr "Hey, you should reposition your surveillance cameras. The Smart Home has already made a preliminary selection. Do you agree with this? Select the camera placements you think are suitable."
 
 #: src/components/smart-devices/SmartMirror.tsx:250
 msgid "Hide"
@@ -735,30 +699,26 @@ msgstr "Hide info"
 #: src/components/cookingGame/IntroStage.tsx:25
 msgid ""
 "Hm, still no pizza in sight...\n"
-"But isn't it hard to work if you're hungry? Let's make a simple dish before we continue to save our smart home"
+"You cannot focus on an empty stomach... Let's make a simple dish before we continue to set up our Smart Home!"
 msgstr ""
 "Hm, still no pizza in sight...\n"
-"But isn't it hard to work if you're hungry? Let's make a simple dish before we continue to save our smart home"
+"You cannot focus on an empty stomach... Let's make a simple dish before we continue to set up our Smart Home!"
 
 #: src/components/smart-devices/SmartMirror.tsx:111
 msgid "Hourly charts"
 msgstr "Hourly charts"
 
-#: src/components/cookingGame/IngredientsStage.tsx:36
-msgid "Hyped spice startup"
-msgstr "Hyped spice startup"
-
 #: src/components/smart-devices/SmartMirror.tsx:110
 msgid "Hyperlocal forecast"
 msgstr "Hyperlocal forecast"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:185
-msgid "IBAN: DE00 0000 0000 0000"
-msgstr "IBAN: DE00 0000 0000 0000"
+#: src/components/smart-devices/SmartMirror.tsx:110
+msgid "Hyperlocal weather feed with real-time data."
+msgstr "Hyperlocal weather feed with real-time data."
 
 #: src/components/smart-devices/SmartTv.tsx:91
-msgid "If you opt out of camera access, gesture controls and video calling features will not work."
-msgstr "If you opt out of camera access, gesture controls and video calling features will not work."
+msgid "If you opt out of camera access, gesture controls and video calling features will not function."
+msgstr "If you opt out of camera access, gesture controls and video calling features will not function."
 
 #: src/components/smart-devices/SmartTv.tsx:35
 msgid "If you opt out of Face ID, you'll need to use a PIN or password to verify purchases or access TV settings, which may be less convenient."
@@ -769,8 +729,8 @@ msgid "If you opt out of Google Account sync, you won't be able to access your p
 msgstr "If you opt out of Google Account sync, you won't be able to access your personalized content, recommendations, and purchased apps."
 
 #: src/components/smart-devices/SmartTv.tsx:99
-msgid "If you opt out of location services, local content and weather information may not be accurate."
-msgstr "If you opt out of location services, local content and weather information may not be accurate."
+msgid "If you opt out of location services, local content like weather information may not be accurate."
+msgstr "If you opt out of location services, local content like weather information may not be accurate."
 
 #: src/components/smart-devices/SmartTv.tsx:75
 msgid "If you opt out of microphone access, voice commands and voice search will not work."
@@ -781,12 +741,12 @@ msgid "If you opt out of Smart Home App sync, you won't be able to control your 
 msgstr "If you opt out of Smart Home App sync, you won't be able to control your TV remotely or receive notifications."
 
 #: src/components/smart-devices/SmartTv.tsx:59
-msgid "If you opt out of Smart Home Hub sync, your TV won't be able to control other smart devices or respond to home automation."
-msgstr "If you opt out of Smart Home Hub sync, your TV won't be able to control other smart devices or respond to home automation."
+msgid "If you opt out of Smart Home Hub sync, your TV won't be able to control other smart devices like your Smart Light, or respond to home automation."
+msgstr "If you opt out of Smart Home Hub sync, your TV won't be able to control other smart devices like your Smart Light, or respond to home automation."
 
 #: src/components/smart-devices/SmartTv.tsx:51
-msgid "If you opt out of the Health App, Smart TV cannot track your screen time anymore and send Health Alerts."
-msgstr "If you opt out of the Health App, Smart TV cannot track your screen time anymore and send Health Alerts."
+msgid "If you opt out of the Health App, Smart TV cannot track your screen time anymore and send health alerts."
+msgstr "If you opt out of the Health App, Smart TV cannot track your screen time anymore and send health alerts."
 
 #: src/components/smart-devices/SmartTv.tsx:107
 msgid "If you opt out of usage analytics, the TV won't be able to provide personalized recommendations."
@@ -801,8 +761,8 @@ msgid "Impressum"
 msgstr "Impressum"
 
 #: src/pixi/components/Tutorial/Pages/PhonePage.tsx:54
-msgid "In every room, you’ll find some items – some of them are Smart Devices. Adjust their privacy settings and solve the mini-games to unlock your Smart Home! "
-msgstr "In every room, you’ll find some items – some of them are Smart Devices. Adjust their privacy settings and solve the mini-games to unlock your Smart Home! "
+msgid "In every room, you’ll find some items – some of them are simple furnishings, some smart devices. Adjust their privacy settings and solve the mini-games to unlock your Smart Home! "
+msgstr "In every room, you’ll find some items – some of them are simple furnishings, some smart devices. Adjust their privacy settings and solve the mini-games to unlock your Smart Home! "
 
 #: src/components/cookingGame/IngredientsStage.tsx:37
 msgid "in the supermarket (again)"
@@ -817,28 +777,28 @@ msgid "Interaction"
 msgstr "Interaction"
 
 #: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:53
-msgid "Interactive objects light up if you walk next to them"
-msgstr "Interactive objects light up if you walk next to them"
+msgid "Interactive objects light up when you approach them"
+msgstr "Interactive objects light up when you approach them"
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:20
 msgid "Internet connection"
 msgstr "Internet connection"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:196
+#: src/components/dataSortingGame/DataSortingGame.tsx:191
 msgid "IP addresses are personal data that can be used to identify a device and thus indirectly a person."
 msgstr "IP addresses are personal data that can be used to identify a device and thus indirectly a person."
-
-#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:54
-msgid "It indicates the safety of your data. Evil attackers always try to steal your data and use it to attack you and your personal space. A high privacy score makes it harder for them!"
-msgstr "It indicates the safety of your data. Evil attackers always try to steal your data and use it to attack you and your personal space. A high privacy score makes it harder for them!"
 
 #: src/pixi/components/SpeechBubble.tsx:35
 msgid "It's locked!"
 msgstr "It's locked!"
 
 #: src/components/cookingGame/IngredientsStage.tsx:34
-msgid "Italy Retailer"
-msgstr "Italy Retailer"
+msgid "Italian Retailer"
+msgstr "Italian Retailer"
+
+#: src/components/dataSortingGame/DataSortingGame.tsx:148
+msgid "James Smart , Best Avenue 1, 12345 San Smartico"
+msgstr "James Smart , Best Avenue 1, 12345 San Smartico"
 
 #: src/objects/RoomNames.ts:23
 msgid "Kitchen"
@@ -853,8 +813,8 @@ msgid "Legal Notice"
 msgstr "Legal Notice"
 
 #: src/services/GameService.ts:86
-msgid "Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them."
-msgstr "Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them."
+msgid "Let’s first adjust our privacy settings by untoggling unnecessary permissions. Then, we need to choose which camera placements are acceptable. Check whether the camera angles compromise your privacy or the privacy of others. Your Smart Camera might be activated in spaces where you would otherwise not want video or photo recording."
+msgstr "Let’s first adjust our privacy settings by untoggling unnecessary permissions. Then, we need to choose which camera placements are acceptable. Check whether the camera angles compromise your privacy or the privacy of others. Your Smart Camera might be activated in spaces where you would otherwise not want video or photo recording."
 
 #: src/components/smart-devices/SmartMirror.tsx:89
 msgid "Lifestyle-focused with habit reminders and gentle nudges."
@@ -873,12 +833,12 @@ msgid "Local storage only"
 msgstr "Local storage only"
 
 #: src/components/cookingGame/IngredientsStage.tsx:34
-msgid "Local supermarket, cash"
-msgstr "Local supermarket, cash"
+msgid "Local supermarket, paid in cash"
+msgstr "Local supermarket, paid in cash"
 
 #: src/components/smart-devices/SmartMirror.tsx:112
-msgid "Local-only readings from your home sensors."
-msgstr "Local-only readings from your home sensors."
+msgid "Local-only processing of data from your home sensors."
+msgstr "Local-only processing of data from your home sensors."
 
 #: src/components/smart-devices/SmartMirror.tsx:90
 msgid "Local-only, sandboxed."
@@ -897,7 +857,7 @@ msgstr "LocalStylist"
 msgid "Location"
 msgstr "Location"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:204
+#: src/components/dataSortingGame/DataSortingGame.tsx:199
 msgid "Location data is personal information that can provide information about movement patterns and whereabouts."
 msgstr "Location data is personal information that can provide information about movement patterns and whereabouts."
 
@@ -914,8 +874,8 @@ msgid "Logged in with Google Account"
 msgstr "Logged in with Google Account"
 
 #: src/pixi/components/SpeechBubble.tsx:32
-msgid "Looking pretty today"
-msgstr "Looking pretty today"
+msgid "Looking good today!"
+msgstr "Looking good today!"
 
 #: src/components/smart-devices/SmartLights.tsx:77
 msgid "Manage permissions:"
@@ -937,10 +897,6 @@ msgstr "Market"
 msgid "Marketplace highlighting eco alternatives and best prices."
 msgstr "Marketplace highlighting eco alternatives and best prices."
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:153
-msgid "Max Mustermann, Musterstraße 1, 12345 Musterstadt"
-msgstr "Max Mustermann, Musterstraße 1, 12345 Musterstadt"
-
 #: src/components/smart-devices/SmartTv.tsx:73
 msgid "Microphone On"
 msgstr "Microphone On"
@@ -961,38 +917,46 @@ msgstr "Motion"
 msgid "Movement"
 msgstr "Movement"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:177
-msgid "My date of birth"
-msgstr "My date of birth"
+#: src/components/dataSortingGame/DataSortingGame.tsx:172
+msgid "My birthday! 01.01.2012"
+msgstr "My birthday! 01.01.2012"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:105
-msgid "My fingerprint used to unlock my laptop"
-msgstr "My fingerprint used to unlock my laptop"
-
-#: src/components/dataSortingGame/DataSortingGame.tsx:193
+#: src/components/dataSortingGame/DataSortingGame.tsx:188
 msgid "My IP address: 203.0.113.45"
 msgstr "My IP address: 203.0.113.45"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:97
-msgid "My last blood test"
-msgstr "My last blood test"
+#: src/components/dataSortingGame/DataSortingGame.tsx:196
+msgid "My Smart Home's location: 12.3456, 23.4567"
+msgstr "My Smart Home's location: 12.3456, 23.4567"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:156
-msgid "Name and address are personal data that can lead to the identification of a person."
-msgstr "Name and address are personal data that can lead to the identification of a person."
+#: src/components/dataSortingGame/DataSortingGame.tsx:180
+msgid "MyCreditCard Number 0123 045 078 099"
+msgstr "MyCreditCard Number 0123 045 078 099"
+
+#: src/components/dataSortingGame/DataSortingGame.tsx:151
+msgid "Name and address are personal data that can lead to the identification of a natural person."
+msgstr "Name and address are personal data that can lead to the identification of a natural person."
 
 #: src/components/smart-devices/SmartMirror.tsx:100
 #: src/components/smart-devices/SmartMirror.tsx:111
 msgid "Network"
 msgstr "Network"
 
+#: src/components/cookingGame/IngredientsStage.tsx:36
+msgid "New spice start-up"
+msgstr "New spice start-up"
+
+#: src/pixi/components/SpeechBubble.tsx:28
+msgid "Nice and cosy, isn’t it?"
+msgstr "Nice and cosy, isn’t it?"
+
 #: src/components/general-ui/HelpButton.tsx:40
 msgid "No"
 msgstr "No"
 
 #: src/components/smart-devices/SmartMirror.tsx:111
-msgid "No account needed; telemetry opt-out."
-msgstr "No account needed; telemetry opt-out."
+msgid "No account needed; no transmission of usage data."
+msgstr "No account needed; no transmission of usage data."
 
 #: src/components/smart-devices/SmartMirror.tsx:79
 msgid "No cloud"
@@ -1007,8 +971,8 @@ msgid "No cloud storage. Exports only when you trigger it."
 msgstr "No cloud storage. Exports only when you trigger it."
 
 #: src/components/smart-devices/SmartMirror.tsx:112
-msgid "No cloud. Local logs rotate 14 days."
-msgstr "No cloud. Local logs rotate 14 days."
+msgid "No cloud storage. Local logs rotate 14 days."
+msgstr "No cloud storage. Local logs rotate 14 days."
 
 #: src/components/smart-devices/SmartMirror.tsx:101
 msgid "No external connections."
@@ -1051,13 +1015,13 @@ msgstr "not angry with"
 msgid "Not needed to switch the light on and of"
 msgstr "Not needed to switch the light on and of"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:357
+#: src/components/dataSortingGame/DataSortingGame.tsx:352
 msgid "of"
 msgstr "of"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:220
-msgid "Official announcements are public information that is accessible to all citizens."
-msgstr "Official announcements are public information that is accessible to all citizens."
+#: src/components/dataSortingGame/DataSortingGame.tsx:215
+msgid "Official announcements are public information that is accessible to everyone."
+msgstr "Official announcements are public information that is accessible to everyone."
 
 #: src/components/smart-devices/SmartMirror.tsx:112
 msgid "Offline cache"
@@ -1067,19 +1031,19 @@ msgstr "Offline cache"
 msgid "Offline suggestions"
 msgstr "Offline suggestions"
 
-#: src/components/cameraGame/SecurityCameraGame.tsx:66
-msgid "Oh no! All your settings have been reset. <0/>Time to set them again:"
-msgstr "Oh no! All your settings have been reset. <0/>Time to set them again:"
-
 #: src/pixi/components/Tutorial/Pages/Explanations/More_Expl.tsx:50
 msgid ""
-"Oh no! See the smartTV? It is controlled by the attacker and shows only red images.\n"
+"Oh no, look at your Smart TV! It has been taken over by the hacker and is only displaying blurry red noise...\n"
 "\n"
-"Let’s use the learned to navigate to the smart device and solve the challenge to regain control."
+"Let’s put what we’ve learned into practice! Move the avatar towards the Smart TV, adjust the settings and regain control of your Smart Home."
 msgstr ""
-"Oh no! See the smartTV? It is controlled by the attacker and shows only red images.\n"
+"Oh no, look at your Smart TV! It has been taken over by the hacker and is only displaying blurry red noise...\n"
 "\n"
-"Let’s use the learned to navigate to the smart device and solve the challenge to regain control."
+"Let’s put what we’ve learned into practice! Move the avatar towards the Smart TV, adjust the settings and regain control of your Smart Home."
+
+#: src/components/cameraGame/SecurityCameraGame.tsx:66
+msgid "Oh no! All your settings have been deleted. <0/>Time to set them up again:"
+msgstr "Oh no! All your settings have been deleted. <0/>Time to set them up again:"
 
 #: src/components/smart-devices/SmartLights.tsx:54
 msgid "Oh no! Your smart lamp is corrupted as well. Even though it is nice to change colours, you surely don't want to have a disco lamp running all day long. Luckily, there is an easy solution: toggle the right permissions to regain control. But think carefully! Restrictive settings might lose you a lot of comfort. Try to figure out the right balance between comfort and privacy."
@@ -1089,25 +1053,17 @@ msgstr "Oh no! Your smart lamp is corrupted as well. Even though it is nice to c
 msgid "OK"
 msgstr "OK"
 
-#: src/pixi/components/Tutorial/Pages/Explanations/Decision.tsx:80
-msgid "Okay, try to walk to the smartTV and solve the challenge using the controls you just learned. I’ll meet you there"
-msgstr "Okay, try to walk to the smartTV and solve the challenge using the controls you just learned. I’ll meet you there"
-
 #: src/components/smart-devices/SmartMirror.tsx:99
-msgid "One-tap restocks with vendor integrations."
-msgstr "One-tap restocks with vendor integrations."
-
-#: src/components/dataSortingGame/DataSortingGame.tsx:241
-msgid "Open data set: “Population by district 2024”"
-msgstr "Open data set: “Population by district 2024”"
+msgid "One-tap restocks with vendor integration."
+msgstr "One-tap restocks with vendor integration."
 
 #: src/components/smart-devices/SmartMirror.tsx:111
 msgid "Open data sources"
 msgstr "Open data sources"
 
 #: src/components/smart-devices/SmartMirror.tsx:111
-msgid "Open-data-centric weather with transparent models."
-msgstr "Open-data-centric weather with transparent models."
+msgid "Open-data weather forecast with transparent models."
+msgstr "Open-data weather forecast with transparent models."
 
 #: src/components/smart-devices/SmartMirror.tsx:111
 msgid "OpenWeather+"
@@ -1122,8 +1078,8 @@ msgid "Orders retained per legal requirements (up to 10 years)."
 msgstr "Orders retained per legal requirements (up to 10 years)."
 
 #: src/components/general-ui/BrowserBanner.tsx:18
-msgid "Our game is optimized for these browsers. If you’re using another browser, some features may not work correctly. Make sure your Browser is up-to-date."
-msgstr "Our game is optimized for these browsers. If you’re using another browser, some features may not work correctly. Make sure your Browser is up-to-date."
+msgid "Our game is optimized for these browsers. If you’'re using another browser, some features may not work correctly. Make sure your Browser is up-to-date."
+msgstr "Our game is optimized for these browsers. If you’'re using another browser, some features may not work correctly. Make sure your Browser is up-to-date."
 
 #: src/components/smart-devices/SmartMirror.tsx:77
 msgid "Outfit suggestions"
@@ -1146,60 +1102,64 @@ msgid "PCI-DSS compliant; tokenized payments."
 msgstr "PCI-DSS compliant; tokenized payments."
 
 #: src/objects/VictoryType.ts:30
-msgid "Perfect Balance: Yippie! You striked the perfect balance. Your Smart Home unlocks smoothly, you ordered your pizza through a secure app, and your friends will arrive soon for a chill night with encrypted Wi-Fi, biometric locks, and good movies. Even your Smart TV compliments you on your data ethics!"
-msgstr "Perfect Balance: Yippie! You striked the perfect balance. Your Smart Home unlocks smoothly, you ordered your pizza through a secure app, and your friends will arrive soon for a chill night with encrypted Wi-Fi, biometric locks, and good movies. Even your Smart TV compliments you on your data ethics!"
+msgid "Perfect Balance: Yippie! You struck the perfect balance. Your Smart Home unlocks smoothly, you ordered your pizza through a secure app, and your friends will arrive soon for a chill night with encrypted Wi-Fi, biometric locks, and good movies. Even your smart TV compliments you on your data ethics."
+msgstr "Perfect Balance: Yippie! You struck the perfect balance. Your Smart Home unlocks smoothly, you ordered your pizza through a secure app, and your friends will arrive soon for a chill night with encrypted Wi-Fi, biometric locks, and good movies. Even your smart TV compliments you on your data ethics."
 
 #: src/components/smart-devices/SmartMirror.tsx:257
 msgid "Permissions"
 msgstr "Permissions"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:64
+#: src/components/dataSortingGame/DataSortingGame.tsx:63
 msgid "Personal data"
 msgstr "Personal data"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:71
+#: src/components/dataSortingGame/DataSortingGame.tsx:66
+msgid "Personal data belongs to this orange section here. It can be used to identify you, especially when combined with other information, and should therefore be protected."
+msgstr "Personal data belongs to this orange section here. It can be used to identify you, especially when combined with other information, and should therefore be protected."
+
+#: src/components/dataSortingGame/DataSortingGame.tsx:69
 msgid "Personal data of special categories"
 msgstr "Personal data of special categories"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:66
-msgid "Personal information that can become sensitive when combined with other data"
-msgstr "Personal information that can become sensitive when combined with other data"
+#: src/components/dataSortingGame/DataSortingGame.tsx:65
+msgid "Personal information that may become sensitive when combined with other data"
+msgstr "Personal information that may become sensitive when combined with other data"
+
+#: src/components/smart-devices/SmartMirror.tsx:77
+msgid "Personal styling assistant with AI-powered fashion recommendations and calendar integration."
+msgstr "Personal styling assistant with AI-powered fashion recommendations and calendar integration."
 
 #: src/components/smart-devices/SmartMirror.tsx:88
 msgid "PHI safeguards, regional data centers."
 msgstr "PHI safeguards, regional data centers."
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:172
+#: src/components/dataSortingGame/DataSortingGame.tsx:167
 msgid "Phone numbers are personal data that can be used for identification and contact purposes."
 msgstr "Phone numbers are personal data that can be used for identification and contact purposes."
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:132
-msgid "Political opinions are particularly worthy of protection as they could lead to discrimination or influence."
-msgstr "Political opinions are particularly worthy of protection as they could lead to discrimination or influence."
+#: src/components/smart-devices/SmartMirror.tsx:306
+msgid "Pick a provider for all four apps"
+msgstr "Pick a provider for all four apps"
 
-#: src/components/smart-devices/SmartMirror.tsx:110
-msgid "Popular weather feed with hyperlocal nowcasts."
-msgstr "Popular weather feed with hyperlocal nowcasts."
+#: src/components/dataSortingGame/DataSortingGame.tsx:127
+msgid "Political opinions are particularly worthy of protection, as they may lead to discrimination or undue influence."
+msgstr "Political opinions are particularly worthy of protection, as they may lead to discrimination or undue influence."
+
+#: src/components/dataSortingGame/DataSortingGame.tsx:236
+msgid "Population of San Smartico by district 2024"
+msgstr "Population of San Smartico by district 2024"
 
 #: src/pixi/components/Tutorial/Pages/IntroPage.tsx:31
-msgid "Press space or touch to advance"
-msgstr "Press space or touch to advance"
-
-#: src/pixi/components/Tutorial/Pages/IntroPage.tsx:31
-#~ msgid "Press space to advance"
-#~ msgstr "Press space to advance"
+msgid "Press space to advance"
+msgstr "Press space to advance"
 
 #: src/components/smart-devices/SmartMirror.tsx:100
 msgid "Price alerts"
 msgstr "Price alerts"
 
-#: src/pages/GameOver.tsx:53
-#~ msgid "Privacy"
-#~ msgstr "Privacy"
-
 #: src/objects/VictoryType.ts:86
-msgid "Privacy First, Comfort Second: You’ve managed to block third-party access to your personal data, but comfort took a hit. The Smart Heater now requires a fingerprint scan every hour, the lights are stuck in “eco mode” dimness."
-msgstr "Privacy First, Comfort Second: You’ve managed to block third-party access to your personal data, but comfort took a hit. The Smart Heater now requires a fingerprint scan every hour, the lights are stuck in “eco mode” dimness."
+msgid "Privacy First, Comfort Second: You’ve managed to block third-party access to your personal data, but comfort has taken a hit. The smart heater now requires a fingerprint scan every hour, the lights are stuck in “eco mode” dimness, and the oven refuses to preheat via the app — it seems you have to handle all the “smart” tasks yourself. At least your friends offered to bring pizza after you couldn’t store your location in the delivery app, and you open the door for them manually once they knock. Your privacy preferences are at a good level, but your Smart Home lacks the data access it needs to function properly. Next time, try to consider the consequences of specific data-access permissions for your Smart Home."
+msgstr "Privacy First, Comfort Second: You’ve managed to block third-party access to your personal data, but comfort has taken a hit. The smart heater now requires a fingerprint scan every hour, the lights are stuck in “eco mode” dimness, and the oven refuses to preheat via the app — it seems you have to handle all the “smart” tasks yourself. At least your friends offered to bring pizza after you couldn’t store your location in the delivery app, and you open the door for them manually once they knock. Your privacy preferences are at a good level, but your Smart Home lacks the data access it needs to function properly. Next time, try to consider the consequences of specific data-access permissions for your Smart Home."
 
 #: src/components/general-ui/CookieBanner.tsx:22
 msgid "privacy policy"
@@ -1217,19 +1177,19 @@ msgstr "Privacy Score"
 msgid "Private-by-design styling assistant without cloud dependencies."
 msgstr "Private-by-design styling assistant without cloud dependencies."
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:212
-msgid "Public event announcements are accessible to everyone and do not contain any personal information."
-msgstr "Public event announcements are accessible to everyone and do not contain any personal information."
+#: src/components/dataSortingGame/DataSortingGame.tsx:207
+msgid "Public event announcements are accessible to everyone and should not contain any personal information."
+msgstr "Public event announcements are accessible to everyone and should not contain any personal information."
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:252
+#: src/components/dataSortingGame/DataSortingGame.tsx:247
 msgid "Public maps do not contain any personal information and are accessible to everyone."
 msgstr "Public maps do not contain any personal information and are accessible to everyone."
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:244
+#: src/components/dataSortingGame/DataSortingGame.tsx:239
 msgid "Public statistics are aggregated data without personal reference."
 msgstr "Public statistics are aggregated data without personal reference."
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:228
+#: src/components/dataSortingGame/DataSortingGame.tsx:223
 msgid "Public transport information is accessible to everyone and does not contain any personal data."
 msgstr "Public transport information is accessible to everyone and does not contain any personal data."
 
@@ -1237,32 +1197,36 @@ msgstr "Public transport information is accessible to everyone and does not cont
 msgid "Publicly accessible data"
 msgstr "Publicly accessible data"
 
-#: src/components/smart-devices/SmartMirror.tsx:78
-msgid "Purchase data stored 6 months for recommendations."
-msgstr "Purchase data stored 6 months for recommendations."
+#: src/components/dataSortingGame/DataSortingGame.tsx:60
+msgid "Publicly accessible data belongs to the green field. This data is visible to anyone and usually does not contain any personal information. It can be shared freely, as it does not raise any privacy concerns."
+msgstr "Publicly accessible data belongs to the green field. This data is visible to anyone and usually does not contain any personal information. It can be shared freely, as it does not raise any privacy concerns."
 
 #: src/components/smart-devices/SmartMirror.tsx:78
 #: src/components/smart-devices/SmartMirror.tsx:99
 msgid "Purchase history"
 msgstr "Purchase history"
 
+#: src/components/smart-devices/SmartMirror.tsx:78
+msgid "Purchase history stored 6 months for personal recommendations."
+msgstr "Purchase history stored 6 months for personal recommendations."
+
 #: src/pixi/components/SpeechBubble.tsx:27
-msgid "Quaaak"
-msgstr "Quaaak"
+msgid "Quaaack!"
+msgstr "Quaaack!"
 
 #: src/components/cookingGame/IngredientsStage.tsx:46
 msgid ""
 "quality.\n"
-"- The purchase was"
+"- In summary, the purchase was"
 msgstr ""
 "quality.\n"
-"- The purchase was"
+"- In summary, the purchase was"
 
 #: src/components/smart-devices/SmartMirror.tsx:99
 msgid "QuickBuy"
 msgstr "QuickBuy"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:145
+#: src/components/dataSortingGame/DataSortingGame.tsx:140
 msgid "Racial and ethnic origin"
 msgstr "Racial and ethnic origin"
 
@@ -1270,7 +1234,7 @@ msgstr "Racial and ethnic origin"
 msgid "Rain alerts"
 msgstr "Rain alerts"
 
-#: src/components/smart-devices/SmartTv.tsx:264
+#: src/components/smart-devices/SmartTv.tsx:260
 msgid "Reconfigure"
 msgstr "Reconfigure"
 
@@ -1278,11 +1242,19 @@ msgstr "Reconfigure"
 msgid "Record energy consumption"
 msgstr "Record energy consumption"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:124
-msgid "Religious beliefs are particularly worthy of protection as they could lead to discrimination."
-msgstr "Religious beliefs are particularly worthy of protection as they could lead to discrimination."
+#: src/components/cookingGame/CookingStage.tsx:55
+msgid "Records data on time and energy usage"
+msgstr "Records data on time and energy usage"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:121
+#: src/components/cookingGame/CookingStage.tsx:56
+msgid "Regularly connects to the provider’s cloud for updates"
+msgstr "Regularly connects to the provider’s cloud for updates"
+
+#: src/components/dataSortingGame/DataSortingGame.tsx:119
+msgid "Religious beliefs are particularly worthy of protection as they may lead to discrimination."
+msgstr "Religious beliefs are particularly worthy of protection as they may lead to discrimination."
+
+#: src/components/dataSortingGame/DataSortingGame.tsx:116
 msgid "Religious denomination: Buddhism"
 msgstr "Religious denomination: Buddhism"
 
@@ -1298,25 +1270,25 @@ msgstr "Requests via HTTPS; IP anonymization enabled."
 msgid "Restart"
 msgstr "Restart"
 
+#: src/components/dataSortingGame/DataSortingGame.tsx:92
+msgid "Results of my last blood test"
+msgstr "Results of my last blood test"
+
 #: src/components/smart-devices/SmartShower.tsx:71
 msgid "Rubber Ducky"
 msgstr "Rubber Ducky"
+
+#: src/components/smart-devices/SmartShower.tsx:72
+msgid "Rubber ducky *squeak*"
+msgstr "Rubber ducky *squeak*"
 
 #: src/components/smart-devices/SmartMirror.tsx:79
 msgid "Runs offline; no external connections."
 msgstr "Runs offline; no external connections."
 
-#: src/components/general-ui/CookieBanner.tsx:58
-#~ msgid "Save my game progress"
-#~ msgstr "Save my game progress"
-
 #: src/components/cookingGame/CookingStage.tsx:54
-msgid "Saves preferences and cooked dishes"
-msgstr "Saves preferences and cooked dishes"
-
-#: src/pixi/components/Tutorial/Pages/Explanations/Score_Changes.tsx:52
-msgid "Saw that? Your solution increased the scores. But be careful, bad decisions decrease them! Make sure you always keep a good balance."
-msgstr "Saw that? Your solution increased the scores. But be careful, bad decisions decrease them! Make sure you always keep a good balance."
+msgid "Saves your preferences and prepared dishes"
+msgstr "Saves your preferences and prepared dishes"
 
 #: src/components/smart-devices/SmartMirror.tsx:78
 msgid "Scopes limited; location data anonymized."
@@ -1331,17 +1303,13 @@ msgstr "Security"
 msgid "Security Camera"
 msgstr "Security Camera"
 
-#: src/components/smart-devices/SmartMirror.tsx:234
-msgid "Select an app on the left to see providers."
-msgstr "Select an app on the left to see providers."
-
-#: src/components/smart-devices/SmartTv.tsx:208
-msgid "Select which features you want to enable for your Smart TV:"
-msgstr "Select which features you want to enable for your Smart TV:"
+#: src/components/smart-devices/SmartTv.tsx:205
+msgid "Select the features you want to enable on your Smart TV:"
+msgstr "Select the features you want to enable on your Smart TV:"
 
 #: src/components/mini-game/CaptchaComponent.tsx:148
 #: src/components/mini-game/MultipleChoiceComponent.tsx:109
-#: src/components/smart-devices/SmartTv.tsx:232
+#: src/components/smart-devices/SmartTv.tsx:229
 msgid "Send answer"
 msgstr "Send answer"
 
@@ -1354,8 +1322,8 @@ msgid "Sensor-only"
 msgstr "Sensor-only"
 
 #: src/components/smart-devices/SmartShower.tsx:15
-msgid "Shower Head"
-msgstr "Shower Head"
+msgid "Showerhead"
+msgstr "Showerhead"
 
 #: src/pages/HomePage.tsx:90
 msgid "Skip the intro and jump straight into the game"
@@ -1443,7 +1411,7 @@ msgstr "Smart TV Comfort Score"
 msgid "Smart TV Privacy Score"
 msgstr "Smart TV Privacy Score"
 
-#: src/components/smart-devices/SmartTv.tsx:204
+#: src/components/smart-devices/SmartTv.tsx:201
 msgid "Smart TV Settings"
 msgstr "Smart TV Settings"
 
@@ -1455,13 +1423,13 @@ msgstr "Smart TV Setup"
 msgid "Smartphone connection"
 msgstr "Smartphone connection"
 
+#: src/components/smart-devices/SmartTv.tsx:276
+msgid "SmartTV setup complete ✅ "
+msgstr "SmartTV setup complete ✅ "
+
 #: src/components/smart-devices/SmartShower.tsx:59
 msgid "Soap"
 msgstr "Soap"
-
-#: src/components/smart-devices/SmartMirror.tsx:306
-msgid "Solve all 4 apps"
-msgstr "Solve all 4 apps"
 
 #: src/pages/ContinueGame.tsx:42
 msgid "Start a new game"
@@ -1472,17 +1440,9 @@ msgstr "Start a new game"
 msgid "Start game"
 msgstr "Start game"
 
-#: src/components/cookingGame/IngredientsStage.tsx:35
-msgid "Store on the farm"
-msgstr "Store on the farm"
-
-#: src/components/cookingGame/CookingStage.tsx:55
-msgid "Stores time and consumed energy"
-msgstr "Stores time and consumed energy"
-
 #: src/components/smart-devices/SmartMirror.tsx:77
-msgid "Style preferences and photos retained 18 months for learning."
-msgstr "Style preferences and photos retained 18 months for learning."
+msgid "Style preferences and photos are saved for 18 months to support app development."
+msgstr "Style preferences and photos are saved for 18 months to support app development."
 
 #: src/components/smart-devices/SmartMirror.tsx:77
 msgid "StyleAI"
@@ -1491,6 +1451,10 @@ msgstr "StyleAI"
 #: src/components/smart-devices/SmartMirror.tsx:73
 msgid "Styling Assistant"
 msgstr "Styling Assistant"
+
+#: src/components/dataSortingGame/DataSortingGame.tsx:368
+msgid "Success! Your Smart Home Hub is now unlocked."
+msgstr "Success! Your Smart Home Hub is now unlocked."
 
 #: src/components/cookingGame/IngredientsStage.tsx:50
 msgid "Super"
@@ -1524,6 +1488,10 @@ msgstr "Synced with Smart Home App"
 msgid "Synced with Smart Home Hub"
 msgstr "Synced with Smart Home Hub"
 
+#: src/components/smart-devices/SmartMirror.tsx:78
+msgid "Syncs with Smart Wardrobe"
+msgstr "Syncs with Smart Wardrobe"
+
 #: src/components/smart-devices/SmartMirror.tsx:88
 msgid "Temperature"
 msgstr "Temperature"
@@ -1532,91 +1500,64 @@ msgstr "Temperature"
 msgid "Temperature Sensor"
 msgstr "Temperature Sensor"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:129
+#: src/components/dataSortingGame/DataSortingGame.tsx:124
 msgid "Test result from political opinion calculator"
 msgstr "Test result from political opinion calculator"
 
-#: src/pages/GameOver.tsx:80
-msgid "Thanks for playing — your progress can be restarted with the Restart button."
-msgstr "Thanks for playing — your progress can be restarted with the Restart button."
-
 #: src/components/cookingGame/IngredientsStage.tsx:45
 msgid ""
-"Thanks for your help, let's see:\n"
+"Thanks for your help! Let's take a look on your selection:\n"
 "\n"
 "- The ingredients have a"
 msgstr ""
-"Thanks for your help, let's see:\n"
+"Thanks for your help! Let's take a look on your selection:\n"
 "\n"
 "- The ingredients have a"
 
 #: src/pixi/components/Tutorial/Pages/Explanations/Decision.tsx:77
-msgid "That's all you need to know! Time for a quick practice. Your task is to find and solve the first smart device. Now it's your decision"
-msgstr "That's all you need to know! Time for a quick practice. Your task is to find and solve the first smart device. Now it's your decision"
+msgid "That’s all you need to know! Time for the Smart Home Challenge: find and adjust the first smart device. Now it’s your call."
+msgstr "That’s all you need to know! Time for the Smart Home Challenge: find and adjust the first smart device. Now it’s your call."
+
+#: src/components/general-ui/HelpButton.tsx:17
+#: src/components/general-ui/HelpButton.tsx:30
+msgid "That’s an interesting task! Do you need any help?"
+msgstr "That’s an interesting task! Do you need any help?"
 
 #: src/pixi/components/Tutorial/Pages/Explanations/Final_Message.tsx:44
-msgid "That's it, now you are ready to save the smart home and make that movie night possible!"
-msgstr "That's it, now you are ready to save the smart home and make that movie night possible!"
+msgid "That’s it — now you’re ready to unlock your Smart Home and make that movie night happen!"
+msgstr "That’s it — now you’re ready to unlock your Smart Home and make that movie night happen!"
 
 #: src/components/cookingGame/OutroStage.tsx:22
-msgid "That's it, you've done a great job. Enjoy your pasta! But don't rest too long, there are still plenty of smart devices waiting for you."
-msgstr "That's it, you've done a great job. Enjoy your pasta! But don't rest too long, there are still plenty of smart devices waiting for you."
-
-#: src/components/smart-devices/SmartShower.tsx:72
-msgid "That's just a rubber ducky *squeak*"
-msgstr "That's just a rubber ducky *squeak*"
+msgid "That’s it, you’ve done a great job. Enjoy your pasta! But don’t rest too long — there are still plenty of smart devices waiting for you."
+msgstr "That’s it, you’ve done a great job. Enjoy your pasta! But don’t rest too long — there are still plenty of smart devices waiting for you."
 
 #: src/components/smart-devices/SmartShower.tsx:60
-msgid "That's just soap"
-msgstr "That's just soap"
-
-#: src/components/dataSortingGame/DataSortingGame.tsx:137
-msgid "The Best Worker's Union member number"
-msgstr "The Best Worker's Union member number"
+msgid "That's just soap!"
+msgstr "That's just soap!"
 
 #: src/objects/VictoryType.ts:62
-msgid "The Careful Smart Residency: You’ve found a safe but slightly awkward spot. Most systems work — the heating adjusts perfectly, lights respond on cue — but every time you speak, your voice assistant insists on anonymizing your request before acting."
-msgstr "The Careful Smart Residency: You’ve found a safe but slightly awkward spot. Most systems work — the heating adjusts perfectly, lights respond on cue — but every time you speak, your voice assistant insists on anonymizing your request before acting."
-
-#: src/components/dataSortingGame/DataSortingGame.tsx:180
-msgid "The date of birth is personal information that can contribute to identification."
-msgstr "The date of birth is personal information that can contribute to identification."
+msgid "The Careful Smart Residency: You’ve found a safe but slightly awkward spot. Most systems work — the heating adjusts perfectly, the lights respond on cue — but every time you speak, your voice assistant insists on anonymizing your request before acting. There’s a slight delay before the pizza order goes through (via a triple VPN), but it eventually works. Your friends arrive to find you proudly explaining your homemade firewall over pizza, and you all browse the smart TV together in search of the perfect movie."
+msgstr "The Careful Smart Residency: You’ve found a safe but slightly awkward spot. Most systems work — the heating adjusts perfectly, the lights respond on cue — but every time you speak, your voice assistant insists on anonymizing your request before acting. There’s a slight delay before the pizza order goes through (via a triple VPN), but it eventually works. Your friends arrive to find you proudly explaining your homemade firewall over pizza, and you all browse the smart TV together in search of the perfect movie."
 
 #: src/objects/VictoryType.ts:70
-msgid "The Easy Life: Everything feels smooth — the entrance door glides open once the camera detects your friends, playlists anticipate your mood, and your smart oven preheats before you even think of pizza. Some privacy quirks remain."
-msgstr "The Easy Life: Everything feels smooth — the entrance door glides open once the camera detects your friends, playlists anticipate your mood, and your smart oven preheats before you even think of pizza. Some privacy quirks remain."
-
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:45
-#~ msgid "The help app"
-#~ msgstr "The help app"
-
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:51
-msgid "The layout"
-msgstr "The layout"
+msgid "The Easy Life: Everything feels smooth — the entrance door glides open once the camera detects your friends, playlists anticipate your mood, and your smart oven preheats before you even think of pizza. However, since your group discussed squid on pizza, the smart TV now only suggests movies about octopuses, and your social media feed is flooded with videos about sea animals. You shrug, because at least the lighting is perfect for movie night."
+msgstr "The Easy Life: Everything feels smooth — the entrance door glides open once the camera detects your friends, playlists anticipate your mood, and your smart oven preheats before you even think of pizza. However, since your group discussed squid on pizza, the smart TV now only suggests movies about octopuses, and your social media feed is flooded with videos about sea animals. You shrug, because at least the lighting is perfect for movie night."
 
 #: src/pixi/components/Tutorial/Pages/PhonePage.tsx:57
 msgid "The Map"
 msgstr "The Map"
 
 #: src/objects/VictoryType.ts:94
-msgid "The Mindful Home: You’ve found a comfortable middle ground — your Smart Home mostly behaves, and your data stays fairly private. The lights adjust after you accept on the Smart App, and the Smart TV only tracks which movies you've watched."
-msgstr "The Mindful Home: You’ve found a comfortable middle ground — your Smart Home mostly behaves, and your data stays fairly private. The lights adjust after you accept on the Smart App, and the Smart TV only tracks which movies you've watched."
-
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:53
-#~ msgid "The Phone"
-#~ msgstr "The Phone"
-
-#: src/components/dataSortingGame/DataSortingGame.tsx:169
-msgid "The phone number of my family member"
-msgstr "The phone number of my family member"
+msgid "The Mindful Home: You’ve found a comfortable middle ground — your smart home mostly behaves, and your data stays fairly private. The lights adjust after you approve the change in the app, and the smart TV only tracks which movies you’ve watched but not your viewing patterns. When your friends arrive, the door unlocks after you manually approve their entry, and your smart speaker politely asks before playing music. Even though your home could be functioning more intelligently, your pizza has arrived, the smart TV is ready, and your friends are all excited to watch a movie."
+msgstr "The Mindful Home: You’ve found a comfortable middle ground — your smart home mostly behaves, and your data stays fairly private. The lights adjust after you approve the change in the app, and the smart TV only tracks which movies you’ve watched but not your viewing patterns. When your friends arrive, the door unlocks after you manually approve their entry, and your smart speaker politely asks before playing music. Even though your home could be functioning more intelligently, your pizza has arrived, the smart TV is ready, and your friends are all excited to watch a movie."
 
 #: src/pixi/components/Tutorial/Pages/CharacterPage.tsx:53
 msgid "The Player"
 msgstr "The Player"
 
 #: src/objects/VictoryType.ts:38
-msgid "The Privacy Paradise: Congrats - your Smart Home does not know any personal information about you. No data is leaking anywhere—but also, nothing works. Your Smart Locks locked down the home tighter than a government black site. Your friends have to enter through the window, the Smart TV is disconnected from all streaming services, and the Pizza delivery service cannot find your house. Nevertheless: you have fun while cooking your home-made pizza from scratch, and spend the evening discussing GDPR case studies by candlelight."
-msgstr "The Privacy Paradise: Congrats - your Smart Home does not know any personal information about you. No data is leaking anywhere—but also, nothing works. Your Smart Locks locked down the home tighter than a government black site. Your friends have to enter through the window, the Smart TV is disconnected from all streaming services, and the Pizza delivery service cannot find your house. Nevertheless: you have fun while cooking your home-made pizza from scratch, and spend the evening discussing GDPR case studies by candlelight."
+msgid "The Privacy Paradise: Congrats — your smart home does not know any personal information about you. No data is leaking anywhere — but also, nothing actually works. Your smart locks have shut the home down tighter than a government black site. Your friends have to climb in through the window, the smart TV is disconnected from all streaming services, and the pizza delivery service cannot find your house. Nevertheless, you have fun making your homemade pizza from scratch and spend the evening discussing GDPR case studies by candlelight. Maybe it’s time to reconsider whether a smart home is really for you — you barely use any of its features."
+msgstr "The Privacy Paradise: Congrats — your smart home does not know any personal information about you. No data is leaking anywhere — but also, nothing actually works. Your smart locks have shut the home down tighter than a government black site. Your friends have to climb in through the window, the smart TV is disconnected from all streaming services, and the pizza delivery service cannot find your house. Nevertheless, you have fun making your homemade pizza from scratch and spend the evening discussing GDPR case studies by candlelight. Maybe it’s time to reconsider whether a smart home is really for you — you barely use any of its features."
 
 #: src/pixi/components/Tutorial/Pages/PhonePage.tsx:53
 msgid "The rooms"
@@ -1626,119 +1567,65 @@ msgstr "The rooms"
 msgid "The scores"
 msgstr "The scores"
 
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:49
-#~ msgid "The settings"
-#~ msgstr "The settings"
-
 #: src/objects/VictoryType.ts:54
-msgid "The Smart Dungeon: Oof - Your Smart Home has gone full rogue! Comfort is non-existent, privacy is compromised— the fridge posts your snack habits online while the thermostat randomly locks at 12°C “for efficiency.”"
-msgstr "The Smart Dungeon: Oof - Your Smart Home has gone full rogue! Comfort is non-existent, privacy is compromised— the fridge posts your snack habits online while the thermostat randomly locks at 12°C “for efficiency.”"
+msgid "The Smart Dungeon: Oof — your smart home has gone fully rogue! Your doors are still tightly locked, and privacy is compromised. The fridge shares your snack habits online while the thermostat randomly locks at 12°C “for efficiency.” Your friends cannot find your smart home because your messenger service blocks location data, while the pizza delivery bot forwards your coordinates to ad agencies. You unplug the main power and spend the night with a candle and your favorite book. Maybe try to prioritize robust privacy settings next time and consider the permissions your smart home needs to function."
+msgstr "The Smart Dungeon: Oof — your smart home has gone fully rogue! Your doors are still tightly locked, and privacy is compromised. The fridge shares your snack habits online while the thermostat randomly locks at 12°C “for efficiency.” Your friends cannot find your smart home because your messenger service blocks location data, while the pizza delivery bot forwards your coordinates to ad agencies. You unplug the main power and spend the night with a candle and your favorite book. Maybe try to prioritize robust privacy settings next time and consider the permissions your smart home needs to function."
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:373
-msgid "The Smart Home Hub is now unlocked, but you can try again if you want!"
-msgstr "The Smart Home Hub is now unlocked, but you can try again if you want!"
+#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:51
+msgid "The Smart Home floor plan"
+msgstr "The Smart Home floor plan"
 
 #: src/objects/VictoryType.ts:78
-msgid "The Watched Party: You’ve managed to regain partial control — lights, doors, and pizza ordering all function, but everything you do seems to be broadcast somewhere. The Smart Mirror recommends new skincare products based on live footage of your face."
-msgstr "The Watched Party: You’ve managed to regain partial control — lights, doors, and pizza ordering all function, but everything you do seems to be broadcast somewhere. The Smart Mirror recommends new skincare products based on live footage of your face."
+msgid "The Watched Party: You’ve managed to regain partial control — lights, doors, and pizza ordering all function, but everything you do seems to be shared somewhere. Your smart mirror recommends new skincare products based on live footage of your face, and your conversations suddenly become the theme of all yourSsmart TV ads: new video games, special discounts on instant soups, or painkillers — perfectly timed for your friend’s recent wisdom-tooth removal, which had just been the topic. The pizza is hot and tasty, but you spend a lot of time scrolling through endless smart movie recommendations and ads. You might want to minimize the amount of data you share next time."
+msgstr "The Watched Party: You’ve managed to regain partial control — lights, doors, and pizza ordering all function, but everything you do seems to be shared somewhere. Your smart mirror recommends new skincare products based on live footage of your face, and your conversations suddenly become the theme of all yourSsmart TV ads: new video games, special discounts on instant soups, or painkillers — perfectly timed for your friend’s recent wisdom-tooth removal, which had just been the topic. The pizza is hot and tasty, but you spend a lot of time scrolling through endless smart movie recommendations and ads. You might want to minimize the amount of data you share next time."
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:148
-msgid "This data is particularly worthy of protection as it could lead to discrimination."
-msgstr "This data is particularly worthy of protection as it could lead to discrimination."
+#: src/components/dataSortingGame/DataSortingGame.tsx:143
+msgid "This data is especially sensitive, as it could be misused for discrimination."
+msgstr "This data is especially sensitive, as it could be misused for discrimination."
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:60
-msgid ""
-"This green section is publicly accessible data and does not contain any personal information. \n"
-"                     It can be shared freely as it does not raise any privacy concerns."
-msgstr ""
-"This green section is publicly accessible data and does not contain any personal information. \n"
-"                     It can be shared freely as it does not raise any privacy concerns."
-
-#: src/components/cameraGame/SecurityCameraGame.tsx:44
-#~ msgid "This is a bad place for a camera, it is not recommended to place a camera in your bathroom for privacy reasons"
-#~ msgstr "This is a bad place for a camera, it is not recommended to place a camera in your bathroom for privacy reasons"
-
-#: src/components/cameraGame/SecurityCameraGame.tsx:42
-#~ msgid "This is a bad place for a camera, it is not recommended to place a camera in your bedroom for privacy reasons."
-#~ msgstr "This is a bad place for a camera, it is not recommended to place a camera in your bedroom for privacy reasons."
-
-#: src/components/cameraGame/SecurityCameraGame.tsx:51
-#~ msgid "This is a bad place for a camera, it is not recommended to place a camera pointing at your pool for privacy reasons"
-#~ msgstr "This is a bad place for a camera, it is not recommended to place a camera pointing at your pool for privacy reasons"
-
-#: src/services/GameService.ts:80
-msgid "This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Modify your settings by clicking on the sliders. When you are satisfied with your choices continue by pressing the continue button"
-msgstr "This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Modify your settings by clicking on the sliders. When you are satisfied with your choices continue by pressing the continue button"
+#: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:54
+msgid "This indicates the safety of your data. Malicious attackers might try to steal your data and use it against you. A high privacy score makes data breaches less likely."
+msgstr "This indicates the safety of your data. Malicious attackers might try to steal your data and use it against you. A high privacy score makes data breaches less likely."
 
 #: src/services/GameService.ts:79
-msgid "This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Uncheck the permissions which you think are not necessary by clicking directly on the checkbox."
-msgstr "This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Uncheck the permissions which you think are not necessary by clicking directly on the checkbox."
+msgid "This is about giving permission only where necessary, without disabling so much that basic functionality is no longer available. Uncheck the permissions you think are not necessary by clicking the checkbox directly."
+msgstr "This is about giving permission only where necessary, without disabling so much that basic functionality is no longer available. Uncheck the permissions you think are not necessary by clicking the checkbox directly."
+
+#: src/services/GameService.ts:80
+msgid "This is about giving permission only where necessary, without turning off so much that basic functionality stops working. Modify your settings by clicking the sliders. When you’re satisfied with your choices, press the 'Continue' button."
+msgstr "This is about giving permission only where necessary, without turning off so much that basic functionality stops working. Modify your settings by clicking the sliders. When you’re satisfied with your choices, press the 'Continue' button."
 
 #: src/components/general-ui/HelpButton.tsx:20
-msgid "This is more difficult than i thought, unfortunately I cannot support you with this."
-msgstr "This is more difficult than i thought, unfortunately I cannot support you with this."
+msgid "This is more difficult than I thought — best check with the DataPro Assistant!"
+msgstr "This is more difficult than I thought — best check with the DataPro Assistant!"
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:27
 msgid "This is needed to check your camera on the go"
 msgstr "This is needed to check your camera on the go"
 
-#: src/components/cameraGame/SecurityCameraGame.tsx:28
-#: src/components/cameraGame/SecurityCameraGame.tsx:29
-#~ msgid "This is not necessary and a risk to your privacy"
-#~ msgstr "This is not necessary and a risk to your privacy"
-
 #: src/pixi/components/Tutorial/Pages/PhonePage.tsx:56
-msgid "This is where you start the game. Try not to get lost!"
-msgstr "This is where you start the game. Try not to get lost!"
+msgid "This is where you start the game. Try checking the floor plan if you get lost!"
+msgstr "This is where you start the game. Try checking the floor plan if you get lost!"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:67
-msgid ""
-"This orange section is personal data and is not highly sensitive. It can lead to identification and should be protected, \n"
-"                     especially if it is combined with other information."
-msgstr ""
-"This orange section is personal data and is not highly sensitive. It can lead to identification and should be protected, \n"
-"                     especially if it is combined with other information."
-
-#: src/components/dataSortingGame/DataSortingGame.tsx:74
-msgid ""
-"This red section is particularly sensitive data and requires the highest level of protection under the GDPR. \n"
-"                     It includes genetic, biometric and health data as well as information on racial and ethnic origin, \n"
-"                     political opinions, religious beliefs or trade union membership."
-msgstr ""
-"This red section is particularly sensitive data and requires the highest level of protection under the GDPR. \n"
-"                     It includes genetic, biometric and health data as well as information on racial and ethnic origin, \n"
-"                     political opinions, religious beliefs or trade union membership."
-
-#: src/components/smart-devices/SmartLights.tsx:30
-#: src/components/smart-devices/SmartLights.tsx:31
-#~ msgid "This setting is acceptable"
-#~ msgstr "This setting is acceptable"
-
-#: src/components/smart-devices/SmartLights.tsx:32
-#: src/components/smart-devices/SmartLights.tsx:33
-#~ msgid "This setting is not acceptable"
-#~ msgstr "This setting is not acceptable"
-
-#: src/components/cameraGame/SecurityCameraGame.tsx:26
-#: src/components/cameraGame/SecurityCameraGame.tsx:27
-#~ msgid "This setting is ok"
-#~ msgstr "This setting is ok"
+#: src/components/dataSortingGame/DataSortingGame.tsx:72
+msgid "This red section covers particularly sensitive data and requires the highest level of protection under the GDPR. Particularly sensitive data may tell us somethings about your biometrics, health status, ethnic origin, or political opinions."
+msgstr "This red section covers particularly sensitive data and requires the highest level of protection under the GDPR. Particularly sensitive data may tell us somethings about your biometrics, health status, ethnic origin, or political opinions."
 
 #: src/components/cookingGame/CookingStage.tsx:49
 msgid "Time"
 msgstr "Time"
 
 #: src/objects/StatsKeys.ts:9
-msgid "Time in Device (s)"
-msgstr "Time in Device (s)"
+msgid "Time spent on device (s)"
+msgstr "Time spent on device (s)"
 
-#: src/objects/StatsKeys.ts:10
-msgid "Times opened"
-msgstr "Times opened"
+#: src/components/dataSortingGame/DataSortingGame.tsx:220
+msgid "Timetable for bus route 10"
+msgstr "Timetable for bus route 10"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:140
-msgid "Trade union membership is particularly worthy of protection as it could lead to workplace discrimination."
-msgstr "Trade union membership is particularly worthy of protection as it could lead to workplace discrimination."
+#: src/components/dataSortingGame/DataSortingGame.tsx:135
+msgid "Trade union membership is particularly worthy of protection as it can reveal your political or ideological alignment. Such information may be misused for retaliation, profiling or discrimination."
+msgstr "Trade union membership is particularly worthy of protection as it can reveal your political or ideological alignment. Such information may be misused for retaliation, profiling or discrimination."
 
 #: src/components/smart-devices/SmartMirror.tsx:78
 msgid "Trend alerts"
@@ -1753,8 +1640,8 @@ msgid "Trip to Italy"
 msgstr "Trip to Italy"
 
 #: src/components/cookingGame/IngredientsStage.tsx:56
-msgid "Try again"
-msgstr "Try again"
+msgid "Try again!"
+msgstr "Try again!"
 
 #: src/pixi/components/SpeechBubble.tsx:33
 msgid "Urgh that stinks"
@@ -1772,17 +1659,13 @@ msgstr "Use the “E” key to interact with objects"
 msgid "Use the arrow keys or WASD to move around"
 msgstr "Use the arrow keys or WASD to move around"
 
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:50
-#~ msgid "Use this app to change the settings, including language, sound or touch controls"
-#~ msgstr "Use this app to change the settings, including language, sound or touch controls"
-
-#: src/components/dataSortingGame/DataSortingGame.tsx:161
-msgid "user@example.com"
-msgstr "user@example.com"
+#: src/components/dataSortingGame/DataSortingGame.tsx:156
+msgid "user123@best-email.com"
+msgstr "user123@best-email.com"
 
 #: src/components/cookingGame/IngredientsStage.tsx:34
-msgid "Vegetable delivery service"
-msgstr "Vegetable delivery service"
+msgid "Vegetable box delivery service"
+msgstr "Vegetable box delivery service"
 
 #: src/components/cookingGame/IngredientsStage.tsx:35
 msgid "Vegetarian box"
@@ -1792,71 +1675,71 @@ msgstr "Vegetarian box"
 msgid "Voice recognition on"
 msgstr "Voice recognition on"
 
-#: src/pixi/components/Tutorial/Pages/PhonePage.tsx:46
-#~ msgid "Want to see this tutorial again or find out how to control the game? - Use the help app!"
-#~ msgstr "Want to see this tutorial again or find out how to control the game? - Use the help app!"
+#: src/components/smart-devices/SmartMirror.tsx:99
+msgid "Vouchers"
+msgstr "Vouchers"
 
-#: src/components/smart-devices/SmartMirror.tsx:78
-msgid "Wardrobe sync"
-msgstr "Wardrobe sync"
-
-#: src/components/smart-devices/SmartTv.tsx:239
+#: src/components/smart-devices/SmartTv.tsx:236
 msgid "Warning ⚠️"
 msgstr "Warning ⚠️"
 
+#: src/components/general-ui/CookieBanner.tsx:15
+msgid "We use functional cookies to enable your future access to our web game and to improve your overall experience. Cookies are small files that are stored on your device. The cookies we use store only fully anonymised technical data and cannot identify you directly."
+msgstr "We use functional cookies to enable your future access to our web game and to improve your overall experience. Cookies are small files that are stored on your device. The cookies we use store only fully anonymised technical data and cannot identify you directly."
+
 #: src/components/cookingGame/ServeStage.tsx:40
 msgid ""
-"We are almost finished! \n"
+"We're almost done! \n"
 "\n"
-"The last thing we have to do is set the table and serve our dish"
+"The last thing we need to do is set the table and serve our dish"
 msgstr ""
-"We are almost finished! \n"
+"We're almost done! \n"
 "\n"
-"The last thing we have to do is set the table and serve our dish"
-
-#: src/components/general-ui/CookieBanner.tsx:15
-msgid "We use functional cookies to enable your later access to our web game and to improve the user experience. Cookies are small files stored on your device."
-msgstr "We use functional cookies to enable your later access to our web game and to improve the user experience. Cookies are small files stored on your device."
+"The last thing we need to do is set the table and serve our dish"
 
 #: src/components/smart-devices/SmartMirror.tsx:106
 msgid "Weather"
 msgstr "Weather"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:236
+#: src/components/dataSortingGame/DataSortingGame.tsx:231
 msgid "Weather data is public information that does not contain any personal references."
 msgstr "Weather data is public information that does not contain any personal references."
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:233
-msgid "Weather forecast: 18’C, rain"
-msgstr "Weather forecast: 18’C, rain"
+#: src/components/dataSortingGame/DataSortingGame.tsx:228
+msgid "Weather forecast for San Smartico: 18’C, rain"
+msgstr "Weather forecast for San Smartico: 18’C, rain"
 
 #: src/components/smart-devices/SmartMirror.tsx:77
 msgid "Weather-based styling"
 msgstr "Weather-based styling"
 
 #: src/pages/ContinueGame.tsx:38
-msgid "Welcome back, it looks like you ended the game early."
-msgstr "Welcome back, it looks like you ended the game early."
+msgid "Welcome back — it looks like you quit the game early."
+msgstr "Welcome back — it looks like you quit the game early."
 
 #: src/components/cookingGame/RecipeStage.tsx:25
 msgid ""
-"Welcome boss! \n"
-"Today we are cooking pasta!\n"
+"Welcome chef! \n"
+"Today we're making pasta!\n"
 "\n"
-"Fortunately, our Smartkitchen can be equipped with the right settings do most of the work. We must follow the following steps: \n"
+"Fortunately, our Smart Kitchen can be set up with the right settings to do most of the work. We just need to follow these steps: \n"
 "\n"
-" 1. Buying ingredients \n"
+" 1. Buy the ingredients \n"
 " 2. Prepare and cook the dish \n"
 " 3. Serve the dish"
 msgstr ""
-"Welcome boss! \n"
-"Today we are cooking pasta!\n"
+"Welcome chef! \n"
+"Today we're making pasta!\n"
 "\n"
-"Fortunately, our Smartkitchen can be equipped with the right settings do most of the work. We must follow the following steps: \n"
+"Fortunately, our Smart Kitchen can be set up with the right settings to do most of the work. We just need to follow these steps: \n"
 "\n"
-" 1. Buying ingredients \n"
+" 1. Buy the ingredients \n"
 " 2. Prepare and cook the dish \n"
 " 3. Serve the dish"
+
+#: src/pages/HomePage.tsx:58
+msgid "Welcome to the Smart Home Challenge!"
+msgstr "Welcome to the Smart Home Challenge!"
 
 #: src/pixi/components/Tutorial/Pages/IntroPage.tsx:30
 msgid "Welcome to the tutorial"
@@ -1877,15 +1760,6 @@ msgstr "Wifi is needed to control the lamp"
 #: src/components/cameraGame/SecurityCameraGame.tsx:26
 msgid "Without internet the images can't be observed live"
 msgstr "Without internet the images can't be observed live"
-
-#: src/components/cookingGame/IngredientsStage.tsx:37
-msgid "Workshop on a farm"
-msgstr "Workshop on a farm"
-
-#: src/components/general-ui/HelpButton.tsx:17
-#: src/components/general-ui/HelpButton.tsx:30
-msgid "wow interesting task you got there, do you need help with anything?"
-msgstr "wow interesting task you got there, do you need help with anything?"
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:45
 msgid "Wrong, camera could provide valuable data about your child"
@@ -1931,10 +1805,6 @@ msgstr "Wrong, your kitchen table is not a privacy risk"
 msgid "Wrong, your living room is not a very private room in your house"
 msgstr "Wrong, your living room is not a very private room in your house"
 
-#: src/components/dataSortingGame/DataSortingGame.tsx:318
-msgid "Wrong! Try again 🚫"
-msgstr "Wrong! Try again 🚫"
-
 #: src/components/general-ui/HelpButton.tsx:39
 msgid "Yes"
 msgstr "Yes"
@@ -1943,21 +1813,9 @@ msgstr "Yes"
 msgid "You are here"
 msgstr "You are here"
 
-#: src/pages/HomePage.tsx:43
-#~ msgid "You are on the start page. To start a new adventure, click on the"
-#~ msgstr "You are on the start page. To start a new adventure, click on the"
-
-#: src/components/smart-devices/SmartShower.tsx:272
-msgid "You are privacy focused! Your choices prioritize protecting your personal data and maintaining privacy."
-msgstr "You are privacy focused! Your choices prioritize protecting your personal data and maintaining privacy."
-
-#: src/components/smart-devices/SmartShower.tsx:270
-msgid "You are sustainability focused! Your choices prioritize environmental benefits and resource conservation."
-msgstr "You are sustainability focused! Your choices prioritize environmental benefits and resource conservation."
-
 #: src/components/general-ui/CookieBanner.tsx:55
-msgid "You can withdraw your consent at any time or adjust your cookie settings. Further information can be found in our privacy policy."
-msgstr "You can withdraw your consent at any time or adjust your cookie settings. Further information can be found in our privacy policy."
+msgid "You can withdraw your consent at any time or adjust your cookie settings. Further details can be found in our privacy policy."
+msgstr "You can withdraw your consent at any time or adjust your cookie settings. Further details can be found in our privacy policy."
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:28
 msgid "You don't have much control over the cloud and its security"
@@ -1967,71 +1825,83 @@ msgstr "You don't have much control over the cloud and its security"
 msgid "You don't wan't someone watching you sleep"
 msgstr "You don't wan't someone watching you sleep"
 
-#: src/services/GameService.ts:94
-msgid "You need to configure your smart mirror by choosing a provider for each app. Compare the permissions, features, data retention, and security details of each provider. Expand each provider to see all the details, then make your choice. Remember to explore all providers for each app before making your selection."
-msgstr "You need to configure your smart mirror by choosing a provider for each app. Compare the permissions, features, data retention, and security details of each provider. Expand each provider to see all the details, then make your choice. Remember to explore all providers for each app before making your selection."
-
 #: src/components/cookingGame/IngredientsStage.tsx:29
 msgid ""
-"You need to consider various criteria such as cost, time and quality. \n"
+"You need to consider various factors such as cost, time and quality. \n"
 "\n"
 "Be careful about using your data to "
 msgstr ""
-"You need to consider various criteria such as cost, time and quality. \n"
+"You need to consider various factors such as cost, time and quality. \n"
 "\n"
 "Be careful about using your data to "
 
-#: src/services/GameService.ts:85
-msgid "You need to cook a meal. lets try to focus on privacy friendly but still practical choices. The minigame will let you know what the next steps are to complet the game."
-msgstr "You need to cook a meal. lets try to focus on privacy friendly but still practical choices. The minigame will let you know what the next steps are to complet the game."
-
 #: src/components/smart-devices/SmartMirror.tsx:180
-msgid "You want to look at yourself in the mirror, but the mirror is frosted because it isn't configured yet. You need to set up each app by choosing a provider. Compare the different options - your choices will affect both your privacy and comfort. Once you've configured all the apps, you can use the mirror."
-msgstr "You want to look at yourself in the mirror, but the mirror is frosted because it isn't configured yet. You need to set up each app by choosing a provider. Compare the different options - your choices will affect both your privacy and comfort. Once you've configured all the apps, you can use the mirror."
+msgid "You want to check yourself in the mirror, but it’s still frosted — it won’t work until you set it up. Choose a provider for each app, compare the options, and decide what matters more to you: privacy, or sustainability and comfort. Once all apps are set up, the mirror will clear and you can use it."
+msgstr "You want to check yourself in the mirror, but it’s still frosted — it won’t work until you set it up. Choose a provider for each app, compare the options, and decide what matters more to you: privacy, or sustainability and comfort. Once all apps are set up, the mirror will clear and you can use it."
+
+#: src/components/smart-devices/SmartShower.tsx:272
+msgid "You're privacy-focused! Your choices show that you prioritise protecting your personal data and maintaining your privacy."
+msgstr "You're privacy-focused! Your choices show that you prioritise protecting your personal data and maintaining your privacy."
+
+#: src/components/smart-devices/SmartShower.tsx:270
+msgid "You're sustainability-focused! Your choices show that you prioritise environmental benefits and the conservation of resources."
+msgstr "You're sustainability-focused! Your choices show that you prioritise environmental benefits and the conservation of resources."
+
+#: src/components/dataSortingGame/DataSortingGame.tsx:132
+msgid "Your \"Best Worker's Union\" member number: BEST 33 444 789 00"
+msgstr "Your \"Best Worker's Union\" member number: BEST 33 444 789 00"
 
 #: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:55
 msgid "Your comfort score"
 msgstr "Your comfort score"
 
-#: src/components/smart-devices/SmartTv.tsx:255
-msgid "Your current settings result in a higher privacy loss than comfort gain. This may not be the optimal balance for your privacy."
-msgstr "Your current settings result in a higher privacy loss than comfort gain. This may not be the optimal balance for your privacy."
+#: src/components/smart-devices/SmartTv.tsx:252
+msgid "Your current settings cause more privacy loss than comfort gain, which may not be the best balance for you."
+msgstr "Your current settings cause more privacy loss than comfort gain, which may not be the best balance for you."
 
 #: src/components/smart-devices/SmartHomeHub.tsx:49
-msgid "Your data permissions are all mixed up! Your Smart Home App has access to all data files in your personal cloud. Decide which information about you is too private, and unnecessary for your Smart Home to function."
-msgstr "Your data permissions are all mixed up! Your Smart Home App has access to all data files in your personal cloud. Decide which information about you is too private, and unnecessary for your Smart Home to function."
+msgid "Your data permissions are all mixed up! Your Smart Home app currently has access to every file in your personal cloud. Decide which information is too private and unnecessary for your Smart Home to function."
+msgstr "Your data permissions are all mixed up! Your Smart Home app currently has access to every file in your personal cloud. Decide which information is too private and unnecessary for your Smart Home to function."
+
+#: src/components/dataSortingGame/DataSortingGame.tsx:175
+msgid "Your date of birth not only shows others how old you are, but is also used by your doctor, bank, or insurance to verify your identity alongside your name."
+msgstr "Your date of birth not only shows others how old you are, but is also used by your doctor, bank, or insurance to verify your identity alongside your name."
 
 #: src/components/cookingGame/IngredientsStage.tsx:46
-msgid "your decisions."
-msgstr "your decisions."
+msgid "Your decisions."
+msgstr "Your decisions."
 
 #: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:53
 msgid "Your privacy score"
 msgstr "Your privacy score"
-
-#: src/components/general-ui/CookieBanner.tsx:56
-#~ msgid "your settings"
-#~ msgstr "your settings"
 
 #: src/pixi/components/Tutorial/Pages/ScoresPage.tsx:56
 msgid "Your Smart Home does a great deal to make your life more comfortable. It can automate routines or anticipate your preferences. A high comfort score makes things easier for you."
 msgstr "Your Smart Home does a great deal to make your life more comfortable. It can automate routines or anticipate your preferences. A high comfort score makes things easier for you."
 
 #: src/components/smart-devices/SmartShower.tsx:190
-msgid "Your Smart Shower is designed to optimize water usage and help you consume wisely. It’s highly sustainable—but it may collect more data than necessary. Identify the smart gadgets within the Smart Shower and deactivate their data permissions if you believe they compromise your privacy."
-msgstr "Your Smart Shower is designed to optimize water usage and help you consume wisely. It’s highly sustainable—but it may collect more data than necessary. Identify the smart gadgets within the Smart Shower and deactivate their data permissions if you believe they compromise your privacy."
+msgid "Your Smart Shower is designed to optimise water use and help you consume wisely. It’s highly sustainable — but it may collect more data than necessary. Identify the smart gadgets in the shower and turn off their data permissions if you think they compromise your privacy."
+msgstr "Your Smart Shower is designed to optimise water use and help you consume wisely. It’s highly sustainable — but it may collect more data than necessary. Identify the smart gadgets in the shower and turn off their data permissions if you think they compromise your privacy."
 
-#: src/components/smart-devices/SmartTv.tsx:284
+#: src/components/smart-devices/SmartTv.tsx:280
 msgid "Your Smart TV has been configured with a good balance of privacy and comfort!"
 msgstr "Your Smart TV has been configured with a good balance of privacy and comfort!"
 
-#: src/components/smart-devices/SmartTv.tsx:283
+#: src/components/smart-devices/SmartTv.tsx:279
 msgid "Your Smart TV has been configured with your chosen settings."
 msgstr "Your Smart TV has been configured with your chosen settings."
 
 #: src/components/smart-devices/SmartTv.tsx:186
-msgid "Your Smart TV was reset to its default settings. Uncheck settings if you think you do not need them for your Smart TV to be working smart, and leave the permissions if they are needed for your TV experience. Choose wisely - your decisions impact your privacy status!"
-msgstr "Your Smart TV was reset to its default settings. Uncheck settings if you think you do not need them for your Smart TV to be working smart, and leave the permissions if they are needed for your TV experience. Choose wisely - your decisions impact your privacy status!"
+msgid "Your Smart TV was reset to its default settings. Turn off any settings you don’t need for it to work smartly, and keep the ones that are essential for your viewing experience. Choose wisely — your decisions affect your privacy status."
+msgstr "Your Smart TV was reset to its default settings. Turn off any settings you don’t need for it to work smartly, and keep the ones that are essential for your viewing experience. Choose wisely — your decisions affect your privacy status."
+
+#: src/services/GameService.ts:94
+msgid "Your task is to configure your Smart Mirror by choosing a provider for each app. Compare each provider’s permissions, features, data-retention and security details. Expand a provider to view the full details, then make your selection. Be sure to review all providers for every app before deciding."
+msgstr "Your task is to configure your Smart Mirror by choosing a provider for each app. Compare each provider’s permissions, features, data-retention and security details. Expand a provider to view the full details, then make your selection. Be sure to review all providers for every app before deciding."
+
+#: src/services/GameService.ts:85
+msgid "Your task is to cook a meal. Let’s try to focus on privacy-friendly yet practical choices. The minigame will show you the next steps you need to take to complete the game."
+msgstr "Your task is to cook a meal. Let’s try to focus on privacy-friendly yet practical choices. The minigame will show you the next steps you need to take to complete the game."
 
 #: src/pixi/components/SpeechBubble.tsx:29
 msgid "Yummy!!"
