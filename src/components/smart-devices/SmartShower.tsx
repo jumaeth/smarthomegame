@@ -18,8 +18,8 @@ function getShowerObjects(): ShowerObject[] {
       y: 20,
       width: 120,
       height: 80,
-      privacyScore: -3,
-      comfortScore: 3
+      privacyScore: -7,
+      comfortScore: 5
     },
     {
       id: "faucet",
@@ -29,8 +29,8 @@ function getShowerObjects(): ShowerObject[] {
       y: 200,
       width: 100,
       height: 80,
-      privacyScore: -2,
-      comfortScore: 4
+      privacyScore: -4,
+      comfortScore: 6.5
     },
     {
       id: "temperature",
@@ -40,8 +40,8 @@ function getShowerObjects(): ShowerObject[] {
       y: 180,
       width: 120,
       height: 100,
-      privacyScore: -3,
-      comfortScore: 3
+      privacyScore: -7,
+      comfortScore: 5
     },
     {
       id: "clock",
@@ -51,8 +51,8 @@ function getShowerObjects(): ShowerObject[] {
       y: 30,
       width: 100,
       height: 90,
-      privacyScore: -1,
-      comfortScore: 2
+      privacyScore: -2,
+      comfortScore: 3.5
     },
     {
       id: "soap",
@@ -105,7 +105,7 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
   const [frame, setFrame] = useState(0);
   const [selectedObject, setSelectedObject] = useState<ShowerObject | null>(null);
   const [completedObjects, setCompletedObjects] = useState<Set<string>>(new Set());
-  const totalPoints = useRef({ privacy: 0, comfort: 0 });
+  const totalPoints = useRef({ privacy: 20, comfort: 0 });
   const pointsApplied = useRef(false);
   const shouldCompleteOnUnmount = useRef(false);
 
@@ -127,8 +127,8 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
       return;
     }
 
-    const privacyDelta = granted ? selectedObject.privacyScore : -selectedObject.privacyScore;
-    const comfortDelta = granted ? selectedObject.comfortScore : -selectedObject.comfortScore;
+    const privacyDelta = granted ? selectedObject.privacyScore : 0;
+    const comfortDelta = granted ? selectedObject.comfortScore : 0;
 
     setCompletedObjects(prev => new Set([...prev, selectedObject.id]));
     totalPoints.current.privacy = (totalPoints.current.privacy || 0) + (privacyDelta || 0);
@@ -144,15 +144,10 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
     if (allCompleted && !pointsApplied.current) {
       pointsApplied.current = true;
 
-      const privacyScore = totalPoints.current.privacy || 0;
+      const privacyScore = totalPoints.current.privacy < 0? 0 : totalPoints.current.privacy ;
       const comfortScore = totalPoints.current.comfort || 0;
 
-      if (privacyScore) {
-        gameService.changeScore(privacyScore, 'privacy');
-      }
-      if (comfortScore) {
-        gameService.changeScore(comfortScore, 'comfort');
-      }
+      smartDevice.modifyScore(privacyScore,comfortScore);
 
       smartDevice.getStatBlock().setValue(t`Smart Shower Points`, privacyScore);
       shouldCompleteOnUnmount.current = true;
