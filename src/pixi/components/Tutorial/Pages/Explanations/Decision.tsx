@@ -30,12 +30,12 @@ import { useAnimationManager } from "@/hooks/tutorial/useAnimationManager.tsx";
 import { t } from "@lingui/core/macro";
 
 export const Decision: React.FC<PageProps> = ({
-                                                windowWidth,
-                                                windowHeight,
-                                                keyControl,
-                                                setKeyControl,
-                                                setNextPage,
-                                              }: PropsWithChildren<PageProps>) => {
+  windowWidth,
+  windowHeight,
+  keyControl,
+  setKeyControl,
+  setNextPage,
+}: PropsWithChildren<PageProps>) => {
   enum Anims {
     IDLE,
     INTRO,
@@ -73,13 +73,13 @@ export const Decision: React.FC<PageProps> = ({
   const mgrRef = useAnimationManager();
 
   const textsTemp = useMemo(
-          () => [
-            t`That's all you need to know! Time for a quick practice. Your task is to find and solve the first smart device. Now it's your decision`,
-            t`Guided introduction`,
-            t`Explore yourself`,
-            t`Okay, try to walk to the smartTV and solve the challenge using the controls you just learned. I’ll meet you there`,
-          ],
-          []
+    () => [
+      t`That’s all you need to know! Time for the Smart Home Challenge: find and adjust the first smart device. Now it’s your call.`,
+      t`Guided introduction`,
+      t`Explore yourself`,
+      t`Alright, try to walk to the Smart TV and solve the mini-game by using the controls you've just learned. I’ll meet you there!`,
+    ],
+    []
   );
 
   const layout = useMemo(() => {
@@ -103,21 +103,21 @@ export const Decision: React.FC<PageProps> = ({
   }, [windowWidth, windowHeight]);
 
   const drawMidPanel = useCallback(
-          (g: PixiGraphics) => {
-            g.clear();
-            const { fill, stroke } = layout.colors;
-            g.lineStyle(3, stroke, 1);
-            g.beginFill(fill, 1);
-            g.drawRoundedRect(
-                    layout.panel.mid.x,
-                    layout.panel.mid.y,
-                    layout.panel.mid.w,
-                    layout.panel.mid.h,
-                    layout.panel.mid.r
-            );
-            g.endFill();
-          },
-          [layout]
+    (g: PixiGraphics) => {
+      g.clear();
+      const { fill, stroke } = layout.colors;
+      g.lineStyle(3, stroke, 1);
+      g.beginFill(fill, 1);
+      g.drawRoundedRect(
+        layout.panel.mid.x,
+        layout.panel.mid.y,
+        layout.panel.mid.w,
+        layout.panel.mid.h,
+        layout.panel.mid.r
+      );
+      g.endFill();
+    },
+    [layout]
   );
 
   const whenTextureValid = (tex: Texture | undefined, cb: () => void) => {
@@ -130,34 +130,34 @@ export const Decision: React.FC<PageProps> = ({
   };
 
   const placeArrowsFromSprite = useCallback(
-          (sprite: PixiSprite, targetScale: number) => {
-            const l = leftArrRef.current;
-            const r = rightArrRef.current;
-            if (!l || !r) return;
+    (sprite: PixiSprite, targetScale: number) => {
+      const l = leftArrRef.current;
+      const r = rightArrRef.current;
+      if (!l || !r) return;
 
-            const texW = sprite.texture?.width ?? 0;
-            const texH = sprite.texture?.height ?? 0;
+      const texW = sprite.texture?.width ?? 0;
+      const texH = sprite.texture?.height ?? 0;
 
-            if (texW === 0 || texH === 0) {
-              requestAnimationFrame(() => placeArrowsFromSprite(sprite, targetScale));
-              return;
-            }
+      if (texW === 0 || texH === 0) {
+        requestAnimationFrame(() => placeArrowsFromSprite(sprite, targetScale));
+        return;
+      }
 
-            const w = texW * targetScale;
-            const h = texH * targetScale;
+      const w = texW * targetScale;
+      const h = texH * targetScale;
 
-            l.texture = textureLeftArr;
-            r.texture = textureRightArr;
-            l.scale.set(layout.arrows.s);
-            r.scale.set(layout.arrows.s);
+      l.texture = textureLeftArr;
+      r.texture = textureRightArr;
+      l.scale.set(layout.arrows.s);
+      r.scale.set(layout.arrows.s);
 
-            l.x = layout.robot.pos.x - w * 0.375;
-            l.y = layout.robot.pos.y - h * 0.25;
+      l.x = layout.robot.pos.x - w * 0.375;
+      l.y = layout.robot.pos.y - h * 0.25;
 
-            r.x = layout.robot.pos.x + w * 0.375;
-            r.y = layout.robot.pos.y - h * 0.25;
-          },
-          [layout.arrows.s, layout.robot.pos.x, layout.robot.pos.y, textureLeftArr, textureRightArr]
+      r.x = layout.robot.pos.x + w * 0.375;
+      r.y = layout.robot.pos.y - h * 0.25;
+    },
+    [layout.arrows.s, layout.robot.pos.x, layout.robot.pos.y, textureLeftArr, textureRightArr]
   );
 
   useEffect(() => {
@@ -256,7 +256,7 @@ export const Decision: React.FC<PageProps> = ({
 
     const targets = {
       left: { x: layout.robot.pos.x - w * 0.375, y: layout.robot.pos.y - h * 0.25 },
-      right:{ x: layout.robot.pos.x + w * 0.375, y: layout.robot.pos.y - h * 0.25 },
+      right: { x: layout.robot.pos.x + w * 0.375, y: layout.robot.pos.y - h * 0.25 },
     };
 
     const startS = Math.min(windowWidth, windowHeight) / 3000;
@@ -271,7 +271,7 @@ export const Decision: React.FC<PageProps> = ({
       () => fadeAnimation(mgr, [midT, midC, leftT, leftC, rightT, rightC], FADE_IN),
       () => growAnimation(mgr, leftArrC, growLeft),
       () => growAnimation(mgr, rightArrC, growRight),
-      () => growAnimation(mgr, sprite,   growMid),
+      () => growAnimation(mgr, sprite, growMid),
     ]);
   }, [mgrRef, layout.robot.pos.x, layout.robot.pos.y, layout.robot.s, layout.arrows.s, windowHeight, windowWidth]);
 
@@ -294,19 +294,19 @@ export const Decision: React.FC<PageProps> = ({
   }, [mgrRef]);
 
   const runFadeAnim = useCallback(
-          async (fadeProps: FadeProps) => {
-            const mgr = mgrRef.current!;
-            const midC = midContRef.current;
-            const midT = midTextRef.current;
-            const spriteC = spriteContainerRef.current;
-            if (!midC || !midT || !spriteC) return;
-            await mgr.parallel([
-              () => fadeAnimation(mgr, midT, fadeProps),
-              () => fadeAnimation(mgr, midC, fadeProps),
-              () => fadeAnimation(mgr, spriteC, fadeProps),
-            ]);
-          },
-          [mgrRef]
+    async (fadeProps: FadeProps) => {
+      const mgr = mgrRef.current!;
+      const midC = midContRef.current;
+      const midT = midTextRef.current;
+      const spriteC = spriteContainerRef.current;
+      if (!midC || !midT || !spriteC) return;
+      await mgr.parallel([
+        () => fadeAnimation(mgr, midT, fadeProps),
+        () => fadeAnimation(mgr, midC, fadeProps),
+        () => fadeAnimation(mgr, spriteC, fadeProps),
+      ]);
+    },
+    [mgrRef]
   );
 
   useEffect(() => {
@@ -325,7 +325,7 @@ export const Decision: React.FC<PageProps> = ({
 
       switch (animation) {
         case Anims.INTRO:
-          if (introRun)return
+          if (introRun) return
           await runIntroAnim(sprite);
           setDecisionReady(true);
           setAnimation(Anims.IDLE);
@@ -369,11 +369,11 @@ export const Decision: React.FC<PageProps> = ({
     setKeyControl, setNextPage, introRun
   ]);
 
-  const continueTutorial = useCallback( () => {
+  const continueTutorial = useCallback(() => {
     if (lessExplReady && !animating) {
       setAnimation(Anims.OUTRO_LESS);
     }
-  },[Anims.OUTRO_LESS, lessExplReady, animating])
+  }, [Anims.OUTRO_LESS, lessExplReady, animating])
 
   useEffect(() => {
     if (keyControl !== Pages.DECISION || animating) return;
@@ -408,170 +408,170 @@ export const Decision: React.FC<PageProps> = ({
 
 
   return (
+    <>
+      <Container
+        sortableChildren
+        eventMode="static"
+        hitArea={new Rectangle(0, 0, windowWidth, windowHeight)}
+        pointertap={continueTutorial}
+      >
+        {showExpl && (
+          <Container ref={midContRef} zIndex={0}>
+            <Graphics draw={drawMidPanel} />
+          </Container>
+        )}
+
+        {showDecisionUI && (
           <>
             <Container
-                    sortableChildren
-                    eventMode="static"
-                    hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
-                    pointertap={continueTutorial}
+              ref={leftContRef}
+              eventMode="static"
+              pointerover={(e) => (e.currentTarget.cursor = "pointer")}
+              pointertap={leftOnClick}
+              zIndex={0}
             >
-              {showExpl && (
-                      <Container ref={midContRef} zIndex={0}>
-                        <Graphics draw={drawMidPanel} />
-                      </Container>
-              )}
+              <Graphics
+                draw={(g) => {
+                  g.clear();
+                  g.lineStyle(3, layout.colors.stroke, 1);
+                  g.beginFill(layout.colors.fill, 1);
+                  g.drawRoundedRect(
+                    layout.panel.left.x,
+                    layout.panel.left.y,
+                    layout.panel.left.w,
+                    layout.panel.left.h,
+                    layout.panel.left.r
+                  );
+                  g.endFill();
+                }}
+              />
+            </Container>
 
-              {showDecisionUI && (
-                      <>
-                        <Container
-                                ref={leftContRef}
-                                eventMode="static"
-                                pointerover={(e) => (e.currentTarget.cursor = "pointer")}
-                                pointertap={leftOnClick}
-                                zIndex={0}
-                        >
-                          <Graphics
-                                  draw={(g) => {
-                                    g.clear();
-                                    g.lineStyle(3, layout.colors.stroke, 1);
-                                    g.beginFill(layout.colors.fill, 1);
-                                    g.drawRoundedRect(
-                                            layout.panel.left.x,
-                                            layout.panel.left.y,
-                                            layout.panel.left.w,
-                                            layout.panel.left.h,
-                                            layout.panel.left.r
-                                    );
-                                    g.endFill();
-                                  }}
-                          />
-                        </Container>
+            <Container
+              ref={rightContRef}
+              eventMode="static"
+              pointerover={(e) => (e.currentTarget.cursor = "pointer")}
+              pointertap={rightOnClick}
+              zIndex={0}
+            >
+              <Graphics
+                draw={(g) => {
+                  g.clear();
+                  g.lineStyle(3, layout.colors.stroke, 1);
+                  g.beginFill(layout.colors.fill, 1);
+                  g.drawRoundedRect(
+                    layout.panel.right.x,
+                    layout.panel.right.y,
+                    layout.panel.right.w,
+                    layout.panel.right.h,
+                    layout.panel.right.r
+                  );
+                  g.endFill();
+                }}
+              />
+            </Container>
 
-                        <Container
-                                ref={rightContRef}
-                                eventMode="static"
-                                pointerover={(e) => (e.currentTarget.cursor = "pointer")}
-                                pointertap={rightOnClick}
-                                zIndex={0}
-                        >
-                          <Graphics
-                                  draw={(g) => {
-                                    g.clear();
-                                    g.lineStyle(3, layout.colors.stroke, 1);
-                                    g.beginFill(layout.colors.fill, 1);
-                                    g.drawRoundedRect(
-                                            layout.panel.right.x,
-                                            layout.panel.right.y,
-                                            layout.panel.right.w,
-                                            layout.panel.right.h,
-                                            layout.panel.right.r
-                                    );
-                                    g.endFill();
-                                  }}
-                          />
-                        </Container>
+            <Container ref={midTextRef} zIndex={1}>
+              <Text
+                text={textsTemp[0]}
+                x={layout.text.mid.x}
+                y={layout.text.mid.y}
+                style={
+                  new TextStyle({
+                    fontFamily: "LoResRegular",
+                    fontSize: layout.text.mid.fs,
+                    wordWrap: true,
+                    wordWrapWidth: layout.text.mid.wrap,
+                    fill: "#FFFFFF",
+                    align: "center",
+                  })
+                }
+              />
+            </Container>
 
-                        <Container ref={midTextRef} zIndex={1}>
-                          <Text
-                                  text={textsTemp[0]}
-                                  x={layout.text.mid.x}
-                                  y={layout.text.mid.y}
-                                  style={
-                                    new TextStyle({
-                                      fontFamily: "LoResRegular",
-                                      fontSize: layout.text.mid.fs,
-                                      wordWrap: true,
-                                      wordWrapWidth: layout.text.mid.wrap,
-                                      fill: "#FFFFFF",
-                                      align: "center",
-                                    })
-                                  }
-                          />
-                        </Container>
+            <Container ref={leftTextRef} zIndex={1}>
+              <Text
+                text={textsTemp[1]}
+                x={layout.text.left.x}
+                y={layout.text.left.y}
+                style={
+                  new TextStyle({
+                    fontFamily: "LoResRegular",
+                    fontSize: layout.text.left.fs,
+                    fontWeight: "bold",
+                    wordWrap: true,
+                    wordWrapWidth: layout.text.left.wrap,
+                    fill: "#FFFFFF",
+                    align: "center",
+                  })
+                }
+              />
+            </Container>
 
-                        <Container ref={leftTextRef} zIndex={1}>
-                          <Text
-                                  text={textsTemp[1]}
-                                  x={layout.text.left.x}
-                                  y={layout.text.left.y}
-                                  style={
-                                    new TextStyle({
-                                      fontFamily: "LoResRegular",
-                                      fontSize: layout.text.left.fs,
-                                      fontWeight: "bold",
-                                      wordWrap: true,
-                                      wordWrapWidth: layout.text.left.wrap,
-                                      fill: "#FFFFFF",
-                                      align: "center",
-                                    })
-                                  }
-                          />
-                        </Container>
-
-                        <Container ref={rightTextRef} zIndex={1}>
-                          <Text
-                                  text={textsTemp[2]}
-                                  x={layout.text.right.x}
-                                  y={layout.text.right.y}
-                                  style={
-                                    new TextStyle({
-                                      fontFamily: "LoResRegular",
-                                      fontSize: layout.text.right.fs,
-                                      fontWeight: "bold",
-                                      wordWrap: true,
-                                      wordWrapWidth: layout.text.right.wrap,
-                                      fill: "#FFFFFF",
-                                      align: "center",
-                                    })
-                                  }
-                          />
-                        </Container>
-                      </>
-              )}
-
-              {showExpl && !showDecisionUI && (
-                      <Container ref={midTextRef} zIndex={1}>
-                        <Text
-                                text={textsTemp[textsTemp.length - 1]}
-                                x={layout.text.outro.x}
-                                y={layout.text.outro.y}
-                                anchor={0.5}
-                                style={
-                                  new TextStyle({
-                                    fontFamily: "LoResRegular",
-                                    fontSize: layout.text.outro.fs,
-                                    wordWrap: true,
-                                    wordWrapWidth: layout.text.outro.wrap,
-                                    fill: "#FFFFFF",
-                                    align: "center",
-                                  })
-                                }
-                        />
-                      </Container>
-              )}
-
-              <Container ref={spriteContainerRef} zIndex={2}>
-                <Sprite texture={textureHandsUp} ref={charRef} />
-              </Container>
-              {showExpl && textureLeftArr &&
-                      <Sprite
-                         ref={leftArrRef}
-                         texture={textureLeftArr}
-                         zIndex={2}
-                         eventMode="static"
-                         pointertap={leftOnClick}
-                         pointerover={(e) => (e.currentTarget.cursor = "pointer")}
-                      />}
-              {showExpl && textureRightArr &&
-                      <Sprite
-                         ref={rightArrRef}
-                         texture={textureRightArr}
-                         zIndex={2}
-                         eventMode="static"
-                         pointertap={rightOnClick}
-                         pointerover={(e) => (e.currentTarget.cursor = "pointer")}
-                      />}
+            <Container ref={rightTextRef} zIndex={1}>
+              <Text
+                text={textsTemp[2]}
+                x={layout.text.right.x}
+                y={layout.text.right.y}
+                style={
+                  new TextStyle({
+                    fontFamily: "LoResRegular",
+                    fontSize: layout.text.right.fs,
+                    fontWeight: "bold",
+                    wordWrap: true,
+                    wordWrapWidth: layout.text.right.wrap,
+                    fill: "#FFFFFF",
+                    align: "center",
+                  })
+                }
+              />
             </Container>
           </>
+        )}
+
+        {showExpl && !showDecisionUI && (
+          <Container ref={midTextRef} zIndex={1}>
+            <Text
+              text={textsTemp[textsTemp.length - 1]}
+              x={layout.text.outro.x}
+              y={layout.text.outro.y}
+              anchor={0.5}
+              style={
+                new TextStyle({
+                  fontFamily: "LoResRegular",
+                  fontSize: layout.text.outro.fs,
+                  wordWrap: true,
+                  wordWrapWidth: layout.text.outro.wrap,
+                  fill: "#FFFFFF",
+                  align: "center",
+                })
+              }
+            />
+          </Container>
+        )}
+
+        <Container ref={spriteContainerRef} zIndex={2}>
+          <Sprite texture={textureHandsUp} ref={charRef} />
+        </Container>
+        {showExpl && textureLeftArr &&
+          <Sprite
+            ref={leftArrRef}
+            texture={textureLeftArr}
+            zIndex={2}
+            eventMode="static"
+            pointertap={leftOnClick}
+            pointerover={(e) => (e.currentTarget.cursor = "pointer")}
+          />}
+        {showExpl && textureRightArr &&
+          <Sprite
+            ref={rightArrRef}
+            texture={textureRightArr}
+            zIndex={2}
+            eventMode="static"
+            pointertap={rightOnClick}
+            pointerover={(e) => (e.currentTarget.cursor = "pointer")}
+          />}
+      </Container>
+    </>
   );
 };

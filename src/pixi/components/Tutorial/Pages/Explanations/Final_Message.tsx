@@ -1,7 +1,7 @@
-import React, {PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState,} from "react";
-import {Container, Sprite, Text} from "@pixi/react";
+import React, { PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState, } from "react";
+import { Container, Sprite, Text } from "@pixi/react";
 import waving from "@/assets/tutorial/finalExpl/waving.png";
-import {loadTexture} from "@/utils/loadTexture";
+import { loadTexture } from "@/utils/loadTexture";
 import {
   Container as PixiContainer,
   Graphics as PixiGraphics,
@@ -10,22 +10,22 @@ import {
   Text as PixiText,
   TextStyle,
 } from "pixi.js";
-import {Pages} from "@/pixi/components/Tutorial/Pages/Pages";
-import {AnimationManager} from "@/pixi/components/Tutorial/anim/AnimationManager";
-import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry";
-import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation";
-import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder";
-import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps";
-import {t} from "@lingui/core/macro";
-import {fill, stroke} from "@/pixi/components/Tutorial/util/TutorialColors.ts";
+import { Pages } from "@/pixi/components/Tutorial/Pages/Pages";
+import { AnimationManager } from "@/pixi/components/Tutorial/anim/AnimationManager";
+import { PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry";
+import { fadeAnimation, FadeProps } from "@/pixi/components/Tutorial/anim/fadeAnimation";
+import { PageOrder } from "@/pixi/components/Tutorial/util/PageOrder";
+import { FADE_IN, FADE_OUT } from "@/pixi/components/Tutorial/util/AnimProps";
+import { t } from "@lingui/core/macro";
+import { fill, stroke } from "@/pixi/components/Tutorial/util/TutorialColors.ts";
 
 export const Final_Message: React.FC<PageProps> = ({
-                                                     windowWidth,
-                                                     windowHeight,
-                                                     keyControl,
-                                                     setKeyControl,
-                                                     setNextPage,
-                                                   }: PropsWithChildren<PageProps>) => {
+  windowWidth,
+  windowHeight,
+  keyControl,
+  setKeyControl,
+  setNextPage,
+}: PropsWithChildren<PageProps>) => {
   const enum Animations { IDLE, INTRO, OUTRO }
 
   const textureRobot = useMemo(() => loadTexture(waving), []);
@@ -41,8 +41,8 @@ export const Final_Message: React.FC<PageProps> = ({
   const [introRun, setIntroRun] = useState(false);
 
   const textsTemp = useMemo(
-          () => [t`That's it, now you are ready to save the smart home and make that movie night possible!`],
-          []
+    () => [t`That’s it — now you’re ready to unlock your Smart Home and make that movie night happen!`],
+    []
   );
 
   // Animations
@@ -76,7 +76,7 @@ export const Final_Message: React.FC<PageProps> = ({
     (async () => {
       switch (animation) {
         case Animations.INTRO:
-          if(introRun)return
+          if (introRun) return
           setAnimating(true);
           await runIntroAnim(robot, FADE_IN);
           setAnimating(false);
@@ -95,12 +95,12 @@ export const Final_Message: React.FC<PageProps> = ({
       }
     })();
   }, [animation, setKeyControl, setNextPage, Animations.IDLE, Animations.INTRO,
-  Animations.OUTRO, introRun]);
+    Animations.OUTRO, introRun]);
 
-  const continueTutorial = useCallback( () => {
+  const continueTutorial = useCallback(() => {
     if (animating) return
-      setAnimation(Animations.OUTRO)
-  },[Animations.OUTRO, animating])
+    setAnimation(Animations.OUTRO)
+  }, [Animations.OUTRO, animating])
 
   // Input
   useEffect(() => {
@@ -180,54 +180,54 @@ export const Final_Message: React.FC<PageProps> = ({
 
   // Render
   const graphics = () => (
-          <Container>
-            <Container ref={graphicRef} />
-          </Container>
+    <Container>
+      <Container ref={graphicRef} />
+    </Container>
   );
 
   const background = () => (
-          <Container>
-            <Container ref={backgroundRef} />
-          </Container>
+    <Container>
+      <Container ref={backgroundRef} />
+    </Container>
   );
 
   const texts = () => (
-          <Container ref={textRef}>
-            {pixiTexts.map((msg, i) => (
-                    <Text
-                            key={i}
-                            text={msg.text}
-                            x={msg.x}
-                            y={msg.y}
-                            anchor={0.5}
-                            style={
-                              new TextStyle({
-                                fontFamily: "LoResRegular",
-                                fontSize: msg.style.fontSize,
-                                fontWeight: msg.style.fontWeight,
-                                fill: "#FFFFFF",
-                                align: "left",
-                                wordWrap: true,
-                                wordWrapWidth: msg.style.wordWrapWidth,
-                              })
-                            }
-                    />
-            ))}
-          </Container>
+    <Container ref={textRef}>
+      {pixiTexts.map((msg, i) => (
+        <Text
+          key={i}
+          text={msg.text}
+          x={msg.x}
+          y={msg.y}
+          anchor={0.5}
+          style={
+            new TextStyle({
+              fontFamily: "LoResRegular",
+              fontSize: msg.style.fontSize,
+              fontWeight: msg.style.fontWeight,
+              fill: "#FFFFFF",
+              align: "left",
+              wordWrap: true,
+              wordWrapWidth: msg.style.wordWrapWidth,
+            })
+          }
+        />
+      ))}
+    </Container>
   );
 
   return (
-          <>
-            <Container
-                    eventMode="static"
-                    hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
-                    pointertap={continueTutorial}
-            >
-              {background()}
-              {textureRobot && <Sprite texture={textureRobot} ref={robotRef} />}
-              {graphics()}
-              {texts()}
-            </Container>
-          </>
+    <>
+      <Container
+        eventMode="static"
+        hitArea={new Rectangle(0, 0, windowWidth, windowHeight)}
+        pointertap={continueTutorial}
+      >
+        {background()}
+        {textureRobot && <Sprite texture={textureRobot} ref={robotRef} />}
+        {graphics()}
+        {texts()}
+      </Container>
+    </>
   );
 };

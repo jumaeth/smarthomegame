@@ -1,10 +1,10 @@
-import {AlphaFilter, Graphics as PIXIGraphics, TextStyle} from 'pixi.js'
-import React, {RefObject, useCallback, useEffect, useMemo, useState} from "react";
-import {Button} from "./Button.tsx";
-import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
-import {Graphics, Sprite, Text} from '@pixi/react';
-import {Devices} from "@/components/cookingGame/Devices.ts";
-import {Stages} from "../cookingGame/Stages.ts";
+import { AlphaFilter, Graphics as PIXIGraphics, TextStyle } from 'pixi.js'
+import React, { RefObject, useCallback, useEffect, useMemo, useState } from "react";
+import { Button } from "./Button.tsx";
+import { useLoadTextures } from "../../hooks/useLoadTextures.tsx";
+import { Graphics, Sprite, Text } from '@pixi/react';
+import { Devices } from "@/components/cookingGame/Devices.ts";
+import { Stages } from "../cookingGame/Stages.ts";
 import recipeOpenImg from '@/assets/cooking-sprites/recipeopen.png';
 import shelfImg from '@/assets/cooking-sprites/shelf.png';
 import wallImg from '@/assets/cooking-sprites/wall.png';
@@ -12,15 +12,15 @@ import cookingFieldImg from '@/assets/cooking-sprites/cookingfield.png';
 import foodProcessorImg from '@/assets/cooking-sprites/foodprocessor.png';
 import microwaveImg from '@/assets/cooking-sprites/microwave.png';
 import steamerImg from '@/assets/cooking-sprites/steamer.png'
-import {t} from "@lingui/core/macro";
-import {Score} from "@/components/cookingGame/CookingGameComponent.tsx";
+import { t } from "@lingui/core/macro";
+import { Score } from "@/components/cookingGame/CookingGameComponent.tsx";
 
 interface CookingStageProps {
     setStage: (stage: Stages) => void;
     setTotalPoints: RefObject<Map<Score, number>>;
 }
 
-export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoints}) => {
+export const CookingStage: React.FC<CookingStageProps> = ({ setStage, setTotalPoints }) => {
 
     const [page, setPage] = useState(1);
     const [label] = useState(t`continue`);
@@ -32,7 +32,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     const [infoTitles, setInfoTitles] = useState("");
     const [infoComment, setInfoComment] = useState("");
 
-    const instruction = t`\nOkay, let's make a dish out of it. \n\nOur Smartkitchen can prepare all the ingredients but we have to choose the right machine to cook the dish`;
+    const instruction = t`\nOkay, let's turn this into a dish. \n\nOur smart kitchen can almost prepare the dish on its own, but we still need to pick the right machine to cook it`;
 
     const texturePaths = useMemo(() => ({
         recipeOpen: recipeOpenImg,
@@ -51,9 +51,9 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
 
     const dataComments = [
         t`Integrated into the energy monitoring system`, // Cookingfield
-        t`Saves preferences and cooked dishes`, // Food Processor
-        t`Stores time and consumed energy`,// Microwave
-        t`Connects regularly to cloud for updates` //Steamer
+        t`Saves your preferences and prepared dishes`, // Food Processor
+        t`Records data on time and energy usage`,// Microwave
+        t`Regularly connects to the provider’s cloud for updates` //Steamer
     ];
 
     const stars = [
@@ -64,17 +64,17 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     ];
 
 
-    const {textures, loaded} = useLoadTextures(texturePaths);
+    const { textures, loaded } = useLoadTextures(texturePaths);
 
     const pageUP = () => {
         setPage(prev => prev + 1);
     }
 
 
-    const cookingfield = {id: Devices.COOKINGFIELD, scale: 0.11, x: 185, y: 105, texture: textures.cookingField, action: null};
-    const foodprocessor = {id: Devices.FOODPROCESSOR, scale: 0.11, x: 350, y: 105, texture: textures.foodProcessor, action: null};
-    const microwave = {id: Devices.MICROWAVE, scale: 0.11, x: 185, y: 245, texture: textures.microwave, action: null};
-    const steamer = {id: Devices.STEAMER, scale: 0.1, x: 350, y: 240, texture: textures.steamer, action: null};
+    const cookingfield = { id: Devices.COOKINGFIELD, scale: 0.11, x: 185, y: 105, texture: textures.cookingField, action: null };
+    const foodprocessor = { id: Devices.FOODPROCESSOR, scale: 0.11, x: 350, y: 105, texture: textures.foodProcessor, action: null };
+    const microwave = { id: Devices.MICROWAVE, scale: 0.11, x: 185, y: 245, texture: textures.microwave, action: null };
+    const steamer = { id: Devices.STEAMER, scale: 0.1, x: 350, y: 240, texture: textures.steamer, action: null };
     const renderElements = [
         cookingfield, foodprocessor, microwave, steamer
     ];
@@ -187,19 +187,19 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     }, [hoveredId]);
 
     const endGame = () => {
-      const setPoints = setTotalPoints.current;
-      const comfort = ((stars[selected][3]-3) + (stars[selected][2])-3) / 2;
-      const privacy = stars[selected][1]-3
-      if (setPoints) {
-        setPoints.set(Score.Privacy, (setPoints.get(Score.Privacy)??0)+privacy);
-        setPoints.set(Score.Comfort, (setPoints.get(Score.Comfort)??0)+comfort);
-      }
-      setStage(Stages.GAME);
+        const setPoints = setTotalPoints.current;
+        const comfort = ((stars[selected][3] - 3) + (stars[selected][2]) - 3) / 2;
+        const privacy = stars[selected][1] - 3
+        if (setPoints) {
+            setPoints.set(Score.Privacy, (setPoints.get(Score.Privacy) ?? 0) + privacy);
+            setPoints.set(Score.Comfort, (setPoints.get(Score.Comfort) ?? 0) + comfort);
+        }
+        setStage(Stages.GAME);
     };
 
 
     const instructionPage = () => {
-        if (loaded&&page === 1 && textures.recipeOpen) {
+        if (loaded && page === 1 && textures.recipeOpen) {
             return (
                 <>
                     <Sprite
@@ -210,7 +210,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                         x={272}
                         y={220}
                     />
-                    { instruction && <Text
+                    {instruction && <Text
                         text={instruction.toUpperCase()}
                         x={75}
                         y={70}
@@ -221,7 +221,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                                 wordWrap: true,
                                 wordWrapWidth: 400,
                             })}
-                        anchor={{x: 0, y: 0}}
+                        anchor={{ x: 0, y: 0 }}
                     />}
 
                     <Button
@@ -240,7 +240,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     }
 
     const selectionPage = () => {
-        if (loaded&&page === 2) {
+        if (loaded && page === 2) {
             return (
                 <>
                     <Sprite
@@ -293,7 +293,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                                     wordWrap: true,
                                     wordWrapWidth: 400,
                                 })}
-                            anchor={{x: 0, y: 0}}
+                            anchor={{ x: 0, y: 0 }}
                         />
                     )}
                     {(showInfo &&
@@ -309,7 +309,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                                     wordWrap: true,
                                     wordWrapWidth: 400,
                                 })}
-                            anchor={{x: 0, y: 0}}
+                            anchor={{ x: 0, y: 0 }}
                         />
                     )}
                     {(showInfo &&
@@ -325,7 +325,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
                                     wordWrap: true,
                                     wordWrapWidth: 250,
                                 })}
-                            anchor={{x: 0, y: 0}}
+                            anchor={{ x: 0, y: 0 }}
                         />
                     )}
                 </>
@@ -334,7 +334,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({setStage, setTotalPoi
     }
 
     const finishButton = () => {
-        if (loaded&&selected !== Devices.NONE) {
+        if (loaded && selected !== Devices.NONE) {
             return (
                 <Button
                     x={230}

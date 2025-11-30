@@ -1,8 +1,8 @@
-import {Container, Graphics, Text} from "@pixi/react";
+import { Container, Graphics, Text } from "@pixi/react";
 import * as PIXI from "pixi.js";
-import {TILE_SIZE} from "@/pixi/constants/world-settings";
-import {t} from "@lingui/core/macro";
-import {getSpeechBubbleProps} from "@/utils/speechBubbleProps";
+import { TILE_SIZE } from "@/pixi/constants/world-settings";
+import { t } from "@lingui/core/macro";
+import { getSpeechBubbleProps } from "@/utils/speechBubbleProps";
 
 export type SpeechBubbleProps = {
   x: number,
@@ -18,18 +18,18 @@ export type SpeechBubbleProps = {
 }
 
 export function SpeechBubble({
-                                    x,
-                                    y,
-                                    element,
-                                  }: SpeechBubbleProps) {
+  x,
+  y,
+  element,
+}: SpeechBubbleProps) {
 
   const textMap: Record<string, string> = {
-    HallwayFrog: t`Quaaak`,
-    LivingRoomCandles: t`Cozy, isn't it?`,
+    HallwayFrog: t`Quaaack!`,
+    LivingRoomCandles: t`Nice and cosy, isn’t it?`,
     LivingRoomFood: t`Yummy!!`,
     KitchenPainting: t`A real Picasso!`,
     BathroomChick: t`Am I an easter egg?`,
-    BathroomDrawer: t`Looking pretty today`,
+    BathroomDrawer: t`Looking good today!`,
     BathroomToilet: t`Urgh that stinks`,
     HallwayPets: t`Can I pet that dog?`,
     HallwayEntryDoor: t`It's locked!`,
@@ -58,25 +58,25 @@ export function SpeechBubble({
   });
 
   return (
-  <Container x={props.x} y={props.y}>
-    <Graphics
-            draw={(g) => {
-      g.clear();
-      g.lineStyle(stroke, props.color ?? 0xffffff, 1);
-      g.beginFill(props.color ?? 0xffffff, 1);
-      g.drawRoundedRect(-w / 2, -h, w, h, radius);
-      g.endFill();
-    }}
-    />
-    <Text
-    text={text}
-    style={style}
-    resolution={Math.ceil(window.devicePixelRatio) * 6}
-    anchor={0.5}
-    x={props.textXOffset ?? 0}
-    y={props.textYOffset ?? -h / 2.25}
-    roundPixels
-    />
-  </Container>
-);
+    <Container x={props.x} y={props.y}>
+      <Graphics
+        draw={(g) => {
+          g.clear();
+          g.lineStyle(stroke, props.color ?? 0xffffff, 1);
+          g.beginFill(props.color ?? 0xffffff, 1);
+          g.drawRoundedRect(-w / 2, -h, w, h, radius);
+          g.endFill();
+        }}
+      />
+      <Text
+        text={text}
+        style={style}
+        resolution={Math.ceil(window.devicePixelRatio) * 6}
+        anchor={0.5}
+        x={props.textXOffset ?? 0}
+        y={props.textYOffset ?? -h / 2.25}
+        roundPixels
+      />
+    </Container>
+  );
 }

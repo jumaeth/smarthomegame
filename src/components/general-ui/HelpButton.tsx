@@ -1,23 +1,23 @@
-import {t} from "@lingui/core/macro";
+import { t } from "@lingui/core/macro";
 import assistantPhone from "@/assets/assistant-phone/assistant_phone_background.png";
-import {useState} from "react";
+import { useState } from "react";
 import AvatarWithSpeach from "@/components/general-ui/AvatarWithSpeach.tsx";
 import Avatar from "@/assets/tutorial/explanationPages/pointLeft.png";
-import {SmartDevice} from "@/objects/SmartDevice.ts";
+import { SmartDevice } from "@/objects/SmartDevice.ts";
 import Button from "@/components/general-ui/Button.tsx";
-import {Trans} from "@lingui/react/macro";
+import { Trans } from "@lingui/react/macro";
 
 type HelpButtonProps = {
   newMessage: boolean;
   smartDevice: SmartDevice;
 };
 
-const HelpButton = ({newMessage, smartDevice}: HelpButtonProps) => {
+const HelpButton = ({ newMessage, smartDevice }: HelpButtonProps) => {
   const [showMessage, setShowMessage] = useState(false);
-  const [message, setMessage] = useState(t`wow interesting task you got there, do you need help with anything?`)
+  const [message, setMessage] = useState(t`That’s an interesting task! Do you need any help?`)
 
   const onYes: () => void = (): void => {
-    setMessage(smartDevice ? smartDevice.getHelpText() : t`This is more difficult than i thought, unfortunately I cannot support you with this.`)
+    setMessage(smartDevice ? smartDevice.getHelpText() : t`This is more difficult than I thought — best check with the DataPro Assistant!`)
     setButtons(<div>{close}</div>)
   }
 
@@ -27,7 +27,7 @@ const HelpButton = ({newMessage, smartDevice}: HelpButtonProps) => {
 
   const openMessage: () => void = (): void => {
     setShowMessage(true);
-    setMessage(t`wow interesting task you got there, do you need help with anything?`)
+    setMessage(t`That’s an interesting task! Do you need any help?`)
     setButtons(<div>{yes}{no}</div>)
   }
 
@@ -44,21 +44,21 @@ const HelpButton = ({newMessage, smartDevice}: HelpButtonProps) => {
   const [buttons, setButtons] = useState(<div>{yes}{no}</div>)
 
   return (
-          <div className="fixed top-5 left-20 h-20 w-100 flex items-start space-x-4 z-[101]">
-            <img className="fixed top-0 left-0 w-[150px] z-[10]" src={assistantPhone} alt="assistant-phone"
-                 onClick={openMessage}/>
-            {!wasRead && (
-                    <b className="z-11 fixed top-16 left-18 h-7 w-7 rounded-full bg-red-600 border-black border-2 text-center align-middle"
-                       onClick={openMessage}>1</b>
-            )}
-            {showMessage && (
-                    <AvatarWithSpeach
-                            src={Avatar}
-                            speech={message}
-                            buttons={buttons}
-                    />
-            )}
-          </div>
+    <div className="fixed top-5 left-20 h-20 w-100 flex items-start space-x-4 z-[101]">
+      <img className="fixed top-0 left-0 w-[150px] z-[10]" src={assistantPhone} alt="assistant-phone"
+        onClick={openMessage} />
+      {!wasRead && (
+        <b className="z-11 fixed top-16 left-18 h-7 w-7 rounded-full bg-red-600 border-black border-2 text-center align-middle"
+          onClick={openMessage}>1</b>
+      )}
+      {showMessage && (
+        <AvatarWithSpeach
+          src={Avatar}
+          speech={message}
+          buttons={buttons}
+        />
+      )}
+    </div>
   );
 };
 

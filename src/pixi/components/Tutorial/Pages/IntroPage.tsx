@@ -1,21 +1,21 @@
-import React, {PropsWithChildren, useCallback, useEffect, useRef, useState} from "react";
-import {Container as PixiContainer, Rectangle, Text, TextStyle} from "pixi.js";
-import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
-import {Container} from "@pixi/react";
-import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
-import {blinkingAnimation} from "@/pixi/components/Tutorial/anim/blinkingAnimation.ts";
-import {t} from "@lingui/core/macro";
+import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from "react";
+import { Container as PixiContainer, Rectangle, Text, TextStyle } from "pixi.js";
+import { Pages } from "@/pixi/components/Tutorial/Pages/Pages.ts";
+import { PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
+import { PageOrder } from "@/pixi/components/Tutorial/util/PageOrder.ts";
+import { Container } from "@pixi/react";
+import { useAnimationManager } from "@/hooks/tutorial/useAnimationManager.tsx";
+import { blinkingAnimation } from "@/pixi/components/Tutorial/anim/blinkingAnimation.ts";
+import { t } from "@lingui/core/macro";
 
 
 export const IntroPage: React.FC<PageProps> = ({
-        windowWidth,
-        windowHeight,
-        keyControl,
-        setKeyControl,
-        setNextPage
-           }: PropsWithChildren<PageProps>) => {
+  windowWidth,
+  windowHeight,
+  keyControl,
+  setKeyControl,
+  setNextPage
+}: PropsWithChildren<PageProps>) => {
 
   //states
   const [showInstruction, setShowInstruction] = useState(true);
@@ -28,7 +28,7 @@ export const IntroPage: React.FC<PageProps> = ({
   const instrRef = useRef<Text | null>(null);
 
   const welcomeMsg = t`Welcome to the tutorial`
-  const instrMsg = t`Press space or touch to advance`
+  const instrMsg = t`Press space to advance`
 
   //hooks
   const mgrRef = useAnimationManager();
@@ -62,12 +62,12 @@ export const IntroPage: React.FC<PageProps> = ({
     if (!root || instrRef.current) return;
 
     const t = new Text(
-            instrMsg,
-            new TextStyle({
-              fontFamily: "LoResRegular",
-              fontSize: Math.min(windowWidth, windowHeight) * 0.0475,
-              fill: "#ffffff",
-            })
+      instrMsg,
+      new TextStyle({
+        fontFamily: "LoResRegular",
+        fontSize: Math.min(windowWidth, windowHeight) * 0.0475,
+        fill: "#ffffff",
+      })
     );
     t.anchor.set(0.5);
     t.alpha = 1;
@@ -87,12 +87,12 @@ export const IntroPage: React.FC<PageProps> = ({
   useEffect(() => {
     const mgr = mgrRef.current;
     const txt = instrRef.current;
-    if (!mgr || !txt || !instrBlinking || !showInstruction)return;
+    if (!mgr || !txt || !instrBlinking || !showInstruction) return;
 
     const speed = 2000;
 
     const run = async () => {
-      await mgr.sequence([ () => blinkingAnimation(mgr, txt, speed, pressedRef)]);
+      await mgr.sequence([() => blinkingAnimation(mgr, txt, speed, pressedRef)]);
     }
     run();
 
@@ -104,13 +104,13 @@ export const IntroPage: React.FC<PageProps> = ({
     pressedRef.current = true;
     setNextPage(PageOrder.CHARACTER);
     setKeyControl(Pages.MAIN);
-  },[setKeyControl, setNextPage])
+  }, [setKeyControl, setNextPage])
 
   //key controls
   useEffect(() => {
-    if(keyControl != Pages.INTRO)return;
+    if (keyControl != Pages.INTRO) return;
     const onSpacePressed = (e: KeyboardEvent) => {
-      if(e.code == "Space"){
+      if (e.code == "Space") {
         continueTutorial()
       }
     }
@@ -125,16 +125,16 @@ export const IntroPage: React.FC<PageProps> = ({
   }, [keyControl, windowWidth, windowHeight, setKeyControl, setNextPage, continueTutorial]);
 
   return (
-      <>
+    <>
+      <Container
+        eventMode="static"
+        hitArea={new Rectangle(0, 0, windowWidth, windowHeight)}
+        pointertap={continueTutorial}
+      >
         <Container
-         eventMode="static"
-         hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
-         pointertap={continueTutorial}
-        >
-          <Container
-                  ref={rootRef}
-          />
-        </Container>
-      </>
+          ref={rootRef}
+        />
+      </Container>
+    </>
   )
 };

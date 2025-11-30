@@ -1,11 +1,11 @@
-import {Trans} from "@lingui/react/macro";
+import { Trans } from "@lingui/react/macro";
 import Button from "@/components/general-ui/Button.tsx";
 
 type BrowserBannerProps = {
   onComplete: (isAccepted: boolean) => void;
 };
 
-export default function BrowserBanner({onComplete}: BrowserBannerProps) {
+export default function BrowserBanner({ onComplete }: BrowserBannerProps) {
 
   const BannerText = () => (
     <>
@@ -15,7 +15,7 @@ export default function BrowserBanner({onComplete}: BrowserBannerProps) {
         </Trans>
       </p>
       <p>
-        <Trans>Our game is optimized for these browsers. If you’re using another browser, some features may not work
+        <Trans>Our game is optimized for these browsers. If you’'re using another browser, some features may not work
           correctly. Make sure your Browser is up-to-date.</Trans>
       </p>
     </>
@@ -30,7 +30,7 @@ export default function BrowserBanner({onComplete}: BrowserBannerProps) {
       <div className="inline-flex items-center whitespace-nowrap">
         <h1 className="text-black font-bold text-3xl"><Trans>Browser choice</Trans></h1>
       </div>
-      <div className={"w-[max(30rem,30vw)]"}><BannerText/></div>
+      <div className={"w-full"}><BannerText /></div>
       <Button onClick={() => onAccept(true)} className={"m-2"}><Trans>accept</Trans></Button>
     </div>
   )
