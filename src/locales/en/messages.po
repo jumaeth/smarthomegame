@@ -24,14 +24,14 @@ msgstr ""
 #: src/components/cookingGame/CookingStage.tsx:35
 msgid ""
 "\n"
-"Great, let’s get on and cook the dish! \n"
+"Okay, let's turn this into a dish. \n"
 "\n"
-"Our smart kitchen can almost prepare the dish on its own, but we still need to pick the right machine to cook it"
+"Our smart kitchen can prep all the ingredients, but we need to pick the right machine to actually cook the dish"
 msgstr ""
 "\n"
-"Great, let’s get on and cook the dish! \n"
+"Okay, let's turn this into a dish. \n"
 "\n"
-"Our smart kitchen can almost prepare the dish on its own, but we still need to pick the right machine to cook it"
+"Our smart kitchen can prep all the ingredients, but we need to pick the right machine to actually cook the dish"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:361
 msgid " privacy"
@@ -284,8 +284,8 @@ msgid "Comfort"
 msgstr "Comfort"
 
 #: src/objects/VictoryType.ts:46
-msgid "Comfort and Chaos: Nice, your Smart Home really works seamlessly! ... But hours later, targeted ads start flooding all of your phones and someone got access to your Smart Camera System, and starts live-streaming the party."
-msgstr "Comfort and Chaos: Nice, your Smart Home really works seamlessly! ... But hours later, targeted ads start flooding all of your phones and someone got access to your Smart Camera System, and starts live-streaming the party."
+msgid "Comfort and Chaos: Nice, your Smart Home really works seamlessly! ... But hours later, targeted ads start flooding all of your phones and someone got access to your Smart Camera System and is now live-streaming the party."
+msgstr "Comfort and Chaos: Nice, your Smart Home really works seamlessly! ... But hours later, targeted ads start flooding all of your phones and someone got access to your Smart Camera System and is now live-streaming the party."
 
 #: src/pages/GameOver.tsx:58
 msgid "Comfort Score"
@@ -431,6 +431,10 @@ msgstr "Dad's phone nr: 00 12 567 890"
 msgid "Daily insights"
 msgstr "Daily insights"
 
+#: src/pages/HomePage.tsx:197
+msgid "Data Privacy Policy"
+msgstr "Data Privacy Policy"
+
 #: src/components/smart-devices/SmartMirror.tsx:275
 msgid "Data retention period"
 msgstr "Data retention period"
@@ -446,10 +450,6 @@ msgstr "Data that is intended for the general public and does not contain any pe
 #: src/components/dataSortingGame/DataSortingGame.tsx:71
 msgid "Data that requires enhanced protection under European data-protection law (GDPR)"
 msgstr "Data that requires enhanced protection under European data-protection law (GDPR)"
-
-#: src/pages/HomePage.tsx:197
-msgid "Datenschutzerklärung"
-msgstr "Datenschutzerklärung"
 
 #: src/components/general-ui/CookieBanner.tsx:58
 msgid "Decline"
@@ -1576,8 +1576,8 @@ msgid "The Smart Home floor plan"
 msgstr "The Smart Home floor plan"
 
 #: src/objects/VictoryType.ts:78
-msgid "The Watched Party: You’ve managed to regain partial control — lights, doors, and pizza ordering all function, but everything you do seems to be shared somewhere. Your smart mirror recommends new skincare products based on live footage of your face, and your conversations suddenly become the theme of all yourSsmart TV ads: new video games, special discounts on instant soups, or painkillers — perfectly timed for your friend’s recent wisdom-tooth removal, which had just been the topic. The pizza is hot and tasty, but you spend a lot of time scrolling through endless smart movie recommendations and ads. You might want to minimize the amount of data you share next time."
-msgstr "The Watched Party: You’ve managed to regain partial control — lights, doors, and pizza ordering all function, but everything you do seems to be shared somewhere. Your smart mirror recommends new skincare products based on live footage of your face, and your conversations suddenly become the theme of all yourSsmart TV ads: new video games, special discounts on instant soups, or painkillers — perfectly timed for your friend’s recent wisdom-tooth removal, which had just been the topic. The pizza is hot and tasty, but you spend a lot of time scrolling through endless smart movie recommendations and ads. You might want to minimize the amount of data you share next time."
+msgid "The Watched Party: You’ve managed to regain partial control — lights, doors, and pizza ordering all function, but everything you do seems to be shared somewhere. Your smart mirror recommends new skincare products based on live footage of your face, and your conversations suddenly become the theme of all your Smart TV ads: new video games, special discounts on instant soups, or painkillers — perfectly timed for your friend’s recent wisdom-tooth removal, which had just been the topic. The pizza is hot and tasty, but you spend a lot of time scrolling through endless smart movie recommendations and ads. You might want to minimize the amount of data you share next time."
+msgstr "The Watched Party: You’ve managed to regain partial control — lights, doors, and pizza ordering all function, but everything you do seems to be shared somewhere. Your smart mirror recommends new skincare products based on live footage of your face, and your conversations suddenly become the theme of all your Smart TV ads: new video games, special discounts on instant soups, or painkillers — perfectly timed for your friend’s recent wisdom-tooth removal, which had just been the topic. The pizza is hot and tasty, but you spend a lot of time scrolling through endless smart movie recommendations and ads. You might want to minimize the amount of data you share next time."
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:143
 msgid "This data is especially sensitive, as it could be misused for discrimination."
@@ -1691,11 +1691,11 @@ msgstr "We use functional cookies to enable your future access to our web game a
 msgid ""
 "We're almost done! \n"
 "\n"
-"The last thing we need to do is set the table and serve our dish"
+"The last thing we need to do is lay the table and serve our dish"
 msgstr ""
 "We're almost done! \n"
 "\n"
-"The last thing we need to do is set the table and serve our dish"
+"The last thing we need to do is lay the table and serve our dish"
 
 #: src/components/smart-devices/SmartMirror.tsx:106
 msgid "Weather"

@@ -194,7 +194,7 @@ export default function HomePage() {
               target="_blank"
               rel="noreferrer"
             >
-              <Trans>Datenschutzerklärung</Trans>
+              <Trans>Data Privacy Policy</Trans>
             </a>
           </div>
 

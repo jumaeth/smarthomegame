@@ -32,7 +32,7 @@ export const CookingStage: React.FC<CookingStageProps> = ({ setStage, setTotalPo
     const [infoTitles, setInfoTitles] = useState("");
     const [infoComment, setInfoComment] = useState("");
 
-    const instruction = t`\nGreat, let’s get on and cook the dish! \n\nOur smart kitchen can almost prepare the dish on its own, but we still need to pick the right machine to cook it`;
+    const instruction = t`\nOkay, let's turn this into a dish. \n\nOur smart kitchen can prep all the ingredients, but we need to pick the right machine to actually cook the dish`;
 
     const texturePaths = useMemo(() => ({
         recipeOpen: recipeOpenImg,

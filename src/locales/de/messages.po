@@ -25,9 +25,9 @@ msgstr ""
 #: src/components/cookingGame/CookingStage.tsx:35
 msgid ""
 "\n"
-"Great, let’s get on and cook the dish! \n"
+"Okay, let's turn this into a dish. \n"
 "\n"
-"Our smart kitchen can almost prepare the dish on its own, but we still need to pick the right machine to cook it"
+"Our smart kitchen can prep all the ingredients, but we need to pick the right machine to actually cook the dish"
 msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:361
@@ -281,7 +281,7 @@ msgid "Comfort"
 msgstr ""
 
 #: src/objects/VictoryType.ts:46
-msgid "Comfort and Chaos: Nice, your Smart Home really works seamlessly! ... But hours later, targeted ads start flooding all of your phones and someone got access to your Smart Camera System, and starts live-streaming the party."
+msgid "Comfort and Chaos: Nice, your Smart Home really works seamlessly! ... But hours later, targeted ads start flooding all of your phones and someone got access to your Smart Camera System and is now live-streaming the party."
 msgstr ""
 
 #: src/pages/GameOver.tsx:58
@@ -428,6 +428,10 @@ msgstr ""
 msgid "Daily insights"
 msgstr ""
 
+#: src/pages/HomePage.tsx:197
+msgid "Data Privacy Policy"
+msgstr ""
+
 #: src/components/smart-devices/SmartMirror.tsx:275
 msgid "Data retention period"
 msgstr ""
@@ -442,10 +446,6 @@ msgstr "Daten, die für die allgemeine Öffentlichkeit bestimmt sind und keine p
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:71
 msgid "Data that requires enhanced protection under European data-protection law (GDPR)"
-msgstr ""
-
-#: src/pages/HomePage.tsx:197
-msgid "Datenschutzerklärung"
 msgstr ""
 
 #: src/components/general-ui/CookieBanner.tsx:58
@@ -1557,7 +1557,7 @@ msgid "The Smart Home floor plan"
 msgstr ""
 
 #: src/objects/VictoryType.ts:78
-msgid "The Watched Party: You’ve managed to regain partial control — lights, doors, and pizza ordering all function, but everything you do seems to be shared somewhere. Your smart mirror recommends new skincare products based on live footage of your face, and your conversations suddenly become the theme of all yourSsmart TV ads: new video games, special discounts on instant soups, or painkillers — perfectly timed for your friend’s recent wisdom-tooth removal, which had just been the topic. The pizza is hot and tasty, but you spend a lot of time scrolling through endless smart movie recommendations and ads. You might want to minimize the amount of data you share next time."
+msgid "The Watched Party: You’ve managed to regain partial control — lights, doors, and pizza ordering all function, but everything you do seems to be shared somewhere. Your smart mirror recommends new skincare products based on live footage of your face, and your conversations suddenly become the theme of all your Smart TV ads: new video games, special discounts on instant soups, or painkillers — perfectly timed for your friend’s recent wisdom-tooth removal, which had just been the topic. The pizza is hot and tasty, but you spend a lot of time scrolling through endless smart movie recommendations and ads. You might want to minimize the amount of data you share next time."
 msgstr ""
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:143
@@ -1672,7 +1672,7 @@ msgstr ""
 msgid ""
 "We're almost done! \n"
 "\n"
-"The last thing we need to do is set the table and serve our dish"
+"The last thing we need to do is lay the table and serve our dish"
 msgstr ""
 
 #: src/components/smart-devices/SmartMirror.tsx:106

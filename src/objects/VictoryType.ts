@@ -43,7 +43,7 @@ export class VictoryType {
                 'COMFORT_AND_CHAOS',
                 PointsLevel.LOW,
                 PointsLevel.HIGH,
-                () => t`Comfort and Chaos: Nice, your Smart Home really works seamlessly! ... But hours later, targeted ads start flooding all of your phones and someone got access to your Smart Camera System, and starts live-streaming the party.`,
+                () => t`Comfort and Chaos: Nice, your Smart Home really works seamlessly! ... But hours later, targeted ads start flooding all of your phones and someone got access to your Smart Camera System and is now live-streaming the party.`,
                 result_p_low_c_high
         );
 
@@ -75,7 +75,7 @@ export class VictoryType {
                 'WATCHED_PARTY',
                 PointsLevel.LOW,
                 PointsLevel.MEDIUM,
-                () => t`The Watched Party: You’ve managed to regain partial control — lights, doors, and pizza ordering all function, but everything you do seems to be shared somewhere. Your smart mirror recommends new skincare products based on live footage of your face, and your conversations suddenly become the theme of all yourSsmart TV ads: new video games, special discounts on instant soups, or painkillers — perfectly timed for your friend’s recent wisdom-tooth removal, which had just been the topic. The pizza is hot and tasty, but you spend a lot of time scrolling through endless smart movie recommendations and ads. You might want to minimize the amount of data you share next time.`,
+                () => t`The Watched Party: You’ve managed to regain partial control — lights, doors, and pizza ordering all function, but everything you do seems to be shared somewhere. Your smart mirror recommends new skincare products based on live footage of your face, and your conversations suddenly become the theme of all your Smart TV ads: new video games, special discounts on instant soups, or painkillers — perfectly timed for your friend’s recent wisdom-tooth removal, which had just been the topic. The pizza is hot and tasty, but you spend a lot of time scrolling through endless smart movie recommendations and ads. You might want to minimize the amount of data you share next time.`,
                 result_p_low_c_mid
         );
 
