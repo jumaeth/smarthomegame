@@ -1,11 +1,11 @@
-import {Graphics, Sprite, Text, TilingSprite} from '@pixi/react';
-import React, {RefObject, useEffect, useMemo, useRef, useState} from "react";
-import {useLoadTextures} from "../../hooks/useLoadTextures.tsx";
-import {Button} from "./Button.tsx";
-import {EventMode, FederatedPointerEvent, Graphics as PIXIGraphics, Sprite as PIXISprite, TextStyle} from 'pixi.js';
-import {Stages} from "@/components/cookingGame/Stages.ts";
-import {t} from "@lingui/core/macro";
-import {Score} from "@/components/cookingGame/CookingGameComponent.tsx";
+import { Graphics, Sprite, Text, TilingSprite } from '@pixi/react';
+import React, { RefObject, useEffect, useMemo, useRef, useState } from "react";
+import { useLoadTextures } from "../../hooks/useLoadTextures.tsx";
+import { Button } from "./Button.tsx";
+import { EventMode, FederatedPointerEvent, Graphics as PIXIGraphics, Sprite as PIXISprite, TextStyle } from 'pixi.js';
+import { Stages } from "@/components/cookingGame/Stages.ts";
+import { t } from "@lingui/core/macro";
+import { Score } from "@/components/cookingGame/CookingGameComponent.tsx";
 import recipeOpenImg from "@/assets/cooking-sprites/recipeopen.png";
 import plateImg from "@/assets/cooking-sprites/plate_with_food.png"
 import placeMatImg from "@/assets/cooking-sprites/placemat.png"
@@ -17,7 +17,7 @@ import spoonImg from "@/assets/cooking-sprites/spoon.png"
 
 interface ServeStageProps {
   setStage: (stage: Stages) => void;
-  dimensions: {width: number, height: number}
+  dimensions: { width: number, height: number }
   setTotalPoints: RefObject<Map<Score, number>>;
 }
 
@@ -26,7 +26,7 @@ type InteractiveSprite = PIXISprite & {
   id: string;
 };
 
-export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setTotalPoints}) => {
+export const ServeStage: React.FC<ServeStageProps> = ({ setStage, dimensions, setTotalPoints }) => {
   const [hovered, setHovered] = useState("");
   const [dragged, setDragged] = useState("");
   const [spriteToMarkerMap, setSpriteToMarkerMap] = useState<Record<string, string>>({});
@@ -37,7 +37,7 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
 
   const draggingRef = useRef(false);
 
-  const instruction = t`We are almost finished! \n\nThe last thing we have to do is set the table and serve our dish`;
+  const instruction = t`We're almost done! \n\nThe last thing we need to do is set the table and serve our dish`;
 
   const texturePaths = useMemo(() => ({
     recipeOpen: recipeOpenImg,
@@ -50,12 +50,12 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
     spoon: spoonImg,
   }), []);
 
-  const  initialPositions = useRef<Record<string, { x: number; y: number }>>({
+  const initialPositions = useRef<Record<string, { x: number; y: number }>>({
     plate: { x: 60, y: 50 },
     cutlery: { x: 160, y: 50 },
     glas: { x: 260, y: 50 },
-    napkin: {x: 360, y: 50},
-    spoon: {x: 460, y: 50}
+    napkin: { x: 360, y: 50 },
+    spoon: { x: 460, y: 50 }
   });
 
   type Marker = {
@@ -80,7 +80,7 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
     { x: 270, y: 170, expecting: "spoon", alpha: 1, id: "spoon", filled: false },
   ]);
 
-  const setMarkerAlpha = (id : string, alpha: number) => {
+  const setMarkerAlpha = (id: string, alpha: number) => {
     setMarkerPositions(prev => prev.map(m => m.id === id ? { ...m, alpha } : m));
   };
 
@@ -96,11 +96,11 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
     spoon: "5"
   });
 
-  const {textures} = useLoadTextures(texturePaths);
+  const { textures } = useLoadTextures(texturePaths);
 
-  const drawMarker = (g : PIXIGraphics, marker : Marker) => {
+  const drawMarker = (g: PIXIGraphics, marker: Marker) => {
     g.clear();
-    g.beginFill( 0xeeeeee, marker.alpha);
+    g.beginFill(0xeeeeee, marker.alpha);
     g.lineStyle(marker.alpha === 0 ? 0 : 1, 0x000000);
     g.drawRoundedRect(0, 0, 20, 20, 2);
     g.endFill();
@@ -114,11 +114,11 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
     spoon: { x: initialPositions.current.spoon.x, y: initialPositions.current.spoon.y },
   }));
 
-  const plate = { id: "plate", scale: 0.1,  texture: textures.plate, x: spritePositions.plate.x, y: spritePositions.plate.y, anchor: {x: 0.4, y: 0.4} };
-  const cutlery = { id: "cutlery", scale: 0.08,  texture: textures.cutlery, x: spritePositions.cutlery.x, y: spritePositions.cutlery.y, anchor: {x: 0.4, y: 0.4} };
-  const glas = { id: "glas", scale: 0.09, texture: textures.glas, x: spritePositions.glas.x, y: spritePositions.glas.y, anchor: {x: 0.4, y: 0.4} };
-  const napkin = { id: "napkin", scale: 0.08,  texture: textures.napkin, x: spritePositions.napkin.x, y: spritePositions.napkin.y, anchor: {x: 0.5, y: 0.45} };
-  const spoon = { id: "spoon", scale: 0.07,  texture: textures.spoon, x: spritePositions.spoon.x, y: spritePositions.spoon.y, anchor: {x: 0.45, y: 0.38} };
+  const plate = { id: "plate", scale: 0.1, texture: textures.plate, x: spritePositions.plate.x, y: spritePositions.plate.y, anchor: { x: 0.4, y: 0.4 } };
+  const cutlery = { id: "cutlery", scale: 0.08, texture: textures.cutlery, x: spritePositions.cutlery.x, y: spritePositions.cutlery.y, anchor: { x: 0.4, y: 0.4 } };
+  const glas = { id: "glas", scale: 0.09, texture: textures.glas, x: spritePositions.glas.x, y: spritePositions.glas.y, anchor: { x: 0.4, y: 0.4 } };
+  const napkin = { id: "napkin", scale: 0.08, texture: textures.napkin, x: spritePositions.napkin.x, y: spritePositions.napkin.y, anchor: { x: 0.5, y: 0.45 } };
+  const spoon = { id: "spoon", scale: 0.07, texture: textures.spoon, x: spritePositions.spoon.x, y: spritePositions.spoon.y, anchor: { x: 0.45, y: 0.38 } };
 
 
   const renderElements = [plate, cutlery, glas, napkin, spoon];
@@ -278,7 +278,7 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
         const setPoints = setTotalPoints.current;
         if (setPoints) {
           setPoints.set(Score.Privacy, (setPoints.get(Score.Privacy) ?? 0));
-          setPoints.set(Score.Comfort, (setPoints.get(Score.Comfort) ?? 0)-points);
+          setPoints.set(Score.Comfort, (setPoints.get(Score.Comfort) ?? 0) - points);
         }
         setStage(Stages.OUTRO);
       }, 1300);
@@ -286,131 +286,133 @@ export const ServeStage:React.FC<ServeStageProps> = ({setStage, dimensions, setT
   }, [lockedSprites]);
 
   const pageUP = () => {
-    setPage(prev => prev +1);
+    setPage(prev => prev + 1);
   };
 
-  const instructionPage =  () => {
-    if(page === 1 && textures.recipeOpen){
+  const instructionPage = () => {
+    if (page === 1 && textures.recipeOpen) {
       return (
-              <>
-                <Sprite
-                        anchor={0.5}
-                        eventMode={'static'}
-                        scale={0.6}
-                        texture={textures.recipeOpen}
-                        x={272}
-                        y={220}
-                />
-                <Text
-                        text={instruction.toUpperCase()}
-                        x={75}
-                        y={70}
-                        style={
-                          new TextStyle({
-                            fontFamily:'LoResRegular',
-                            fontSize:24,
-                            wordWrap:true,
-                            wordWrapWidth:400,
-                          })}
-                        anchor={{ x: 0, y: 0 }}
-                />
+        <>
+          <Sprite
+            anchor={0.5}
+            eventMode={'static'}
+            scale={0.6}
+            texture={textures.recipeOpen}
+            x={272}
+            y={220}
+          />
+          <Text
+            text={instruction.toUpperCase()}
+            x={75}
+            y={70}
+            style={
+              new TextStyle({
+                fontFamily: 'LoResRegular',
+                fontSize: 24,
+                wordWrap: true,
+                wordWrapWidth: 400,
+              })}
+            anchor={{ x: 0, y: 0 }}
+          />
 
 
-                <Button
-                   x={370}
-                   y={275}
-                   color={0xdcc08e}
-                   lineColor={0x5d3c1a}
-                   width={90}
-                   height={35}
-                   label={t`Continue`}
-                   action={pageUP}
-                />
-              </>
+          <Button
+            x={370}
+            y={275}
+            color={0xdcc08e}
+            lineColor={0x5d3c1a}
+            width={90}
+            height={35}
+            label={t`Continue`}
+            action={pageUP}
+          />
+        </>
       )
     }
   };
 
   const background = () => (
-          <>
-            <TilingSprite
-                    texture={textures.tableBackground}
-                    eventMode={'none'}
-                    width={544}
-                    height={325}
-                    tilePosition={{x:0, y:0}}
-                    tileScale={0.2}
-            />
-            <Sprite
-                    anchor={0.5}
-                    eventMode={'none'}
-                    scale={0.325}
-                    texture={textures.placeMat}
-                    x={272}
-                    y={210}
-            />
-          </>
+    <>
+      <TilingSprite
+        texture={textures.tableBackground}
+        eventMode={'none'}
+        width={544}
+        height={325}
+        tilePosition={{ x: 0, y: 0 }}
+        tileScale={0.2}
+      />
+      <Sprite
+        anchor={0.5}
+        eventMode={'none'}
+        scale={0.325}
+        texture={textures.placeMat}
+        x={272}
+        y={210}
+      />
+    </>
   );
 
   const markers = () => markerPositions.map(marker => (
-          <Graphics
-                  key={marker.id}
-                  x={marker.x}
-                  y={marker.y}
-                  anchor={0.5}
-                  draw={(g) => drawMarker(g, marker)}
-                  eventMode={'none'}
-          />
+    <Graphics
+      key={marker.id}
+      x={marker.x}
+      y={marker.y}
+      anchor={0.5}
+      draw={(g) => drawMarker(g, marker)}
+      eventMode={'none'}
+    />
   ));
 
   const sprites = () => renderElements.map(object => (
-          <Sprite
-                  key={object.id}
-                  ref={(el: InteractiveSprite) => {   if (el) {
-                    (el as InteractiveSprite).id = object.id;
-                    spriteRefs.current[object.id] = el as InteractiveSprite;
-                  }}}
-                  anchor={object.anchor}
-                  eventMode={'static'}
-                  scale={object.scale}
-                  texture={object.texture}
-                  x={object.x}
-                  y={object.y}
-                  pointerover={() => setHovered(object.id)}
-                  pointerout={() => setHovered("")}
-                  cursor={selectCursor(object.id)}
-                  pointerdown={(e) => onDragStart(e, object.id)}
-                  pointerup={onDragEnd}
-                  pointermove={onDragMove}
-          />
+    <Sprite
+      key={object.id}
+      ref={(el: InteractiveSprite) => {
+        if (el) {
+          (el as InteractiveSprite).id = object.id;
+          spriteRefs.current[object.id] = el as InteractiveSprite;
+        }
+      }}
+      anchor={object.anchor}
+      eventMode={'static'}
+      scale={object.scale}
+      texture={object.texture}
+      x={object.x}
+      y={object.y}
+      pointerover={() => setHovered(object.id)}
+      pointerout={() => setHovered("")}
+      cursor={selectCursor(object.id)}
+      pointerdown={(e) => onDragStart(e, object.id)}
+      pointerup={onDragEnd}
+      pointermove={onDragMove}
+    />
   ));
 
   const minigame = () => {
-    if(page === 2){
+    if (page === 2) {
       return (
-              <>
-        {background()}
-        <Graphics
-                draw={(g) => {
-                  g.clear();
-                  g.beginFill(0xffffff, 0);
-                  g.drawRect(0, 0, dimensions.width, 325);
-                  g.endFill();
-                }}
-                eventMode="static"
-                pointermove={handlePointerMove}
-        />
-        {markers()}
-        {sprites()}
-      </>
+        <>
+          {background()}
+          <Graphics
+            draw={(g) => {
+              g.clear();
+              g.beginFill(0xffffff, 0);
+              g.drawRect(0, 0, dimensions.width, 325);
+              g.endFill();
+            }}
+            eventMode="static"
+            pointermove={handlePointerMove}
+          />
+          {markers()}
+          {sprites()}
+        </>
       )
     }
   };
 
   return (
-          <>
-            {instructionPage()}
-            {minigame()}
-          </>
+    <>
+      {instructionPage()}
+      {minigame()}
+    </>
   );
 };

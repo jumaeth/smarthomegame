@@ -1,7 +1,7 @@
-import React, {PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState,} from "react";
-import {Container, Sprite, Text} from "@pixi/react";
+import React, { PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, } from "react";
+import { Container, Sprite, Text } from "@pixi/react";
 import pointing from "@/assets/tutorial/finalExpl/pointing.png";
-import {loadTexture} from "@/utils/loadTexture.ts";
+import { loadTexture } from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
   Graphics as PixiGraphics, Rectangle,
@@ -9,21 +9,21 @@ import {
   Text as PixiText,
   TextStyle,
 } from "pixi.js";
-import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
-import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import {fadeAnimation, FadeProps} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
-import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
-import {t} from "@lingui/core/macro";
-import {fill, stroke} from "@/pixi/components/Tutorial/util/TutorialColors.ts";
+import { Pages } from "@/pixi/components/Tutorial/Pages/Pages.ts";
+import { growAnimation, GrowProps } from "@/pixi/components/Tutorial/anim/growAnimation.ts";
+import { PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
+import { fadeAnimation, FadeProps } from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import { useAnimationManager } from "@/hooks/tutorial/useAnimationManager.tsx";
+import { t } from "@lingui/core/macro";
+import { fill, stroke } from "@/pixi/components/Tutorial/util/TutorialColors.ts";
 
 export const Score_Changes: React.FC<PageProps> = ({
-                                                     windowWidth,
-                                                     windowHeight,
-                                                     keyControl,
-                                                     setKeyControl,
-                                                     gameService,
-                                                   }: PropsWithChildren<PageProps>) => {
+  windowWidth,
+  windowHeight,
+  keyControl,
+  setKeyControl,
+  gameService,
+}: PropsWithChildren<PageProps>) => {
   const enum Animations {
     IDLE,
     INTRO,
@@ -48,10 +48,10 @@ export const Score_Changes: React.FC<PageProps> = ({
   const initedRef = useRef(false);
 
   const textsTemp = useMemo(
-          () => [
-            t`Saw that? Your solution increased the scores. But be careful, bad decisions decrease them! Make sure you always keep a good balance.`,
-          ],
-          []
+    () => [
+      t`Did you see that? Your choices affected your privacy and comfort scores. Be careful to always keep a good balance!`,
+    ],
+    []
   );
 
   const replaceChildren = useCallback((parent: PixiContainer, nodes: PixiContainer[]) => {
@@ -61,41 +61,41 @@ export const Score_Changes: React.FC<PageProps> = ({
   }, []);
 
   const runIntroAnim = useCallback(
-          async (robot: PixiSprite, growProps: GrowProps, fadeIn: FadeProps) => {
-            const mgr = mgrRef.current!;
-            const graphic = graphicRef.current;
-            const text = textRef.current;
-            if (!graphic || !text) return;
+    async (robot: PixiSprite, growProps: GrowProps, fadeIn: FadeProps) => {
+      const mgr = mgrRef.current!;
+      const graphic = graphicRef.current;
+      const text = textRef.current;
+      if (!graphic || !text) return;
 
-            await mgr.parallel([
-              () => growAnimation(mgr, robot, growProps),
-              () => fadeAnimation(mgr, [graphic, text], fadeIn),
-            ]);
-          },
-          [mgrRef]
+      await mgr.parallel([
+        () => growAnimation(mgr, robot, growProps),
+        () => fadeAnimation(mgr, [graphic, text], fadeIn),
+      ]);
+    },
+    [mgrRef]
   );
 
   const runOutroAnim = useCallback(
-          async (robot: PixiSprite, fadeOut: FadeProps) => {
-            const mgr = mgrRef.current!;
-            const graphic = graphicRef.current;
-            const text = textRef.current;
-            if (!graphic || !text) return;
+    async (robot: PixiSprite, fadeOut: FadeProps) => {
+      const mgr = mgrRef.current!;
+      const graphic = graphicRef.current;
+      const text = textRef.current;
+      if (!graphic || !text) return;
 
-            await mgr.parallel([() => fadeAnimation(mgr, [robot, graphic, text], fadeOut)]);
-          },
-          [mgrRef]
+      await mgr.parallel([() => fadeAnimation(mgr, [robot, graphic, text], fadeOut)]);
+    },
+    [mgrRef]
   );
 
-  const anim1 =useMemo<GrowProps>(() =>  {
+  const anim1 = useMemo<GrowProps>(() => {
     return {
-    startX: windowWidth * 0.7,
-    startY: windowHeight * 0.4,
-    endX: windowWidth * 0.7,
-    endY: windowHeight * 0.4,
-    startS: Math.min(windowWidth, windowHeight) / 4000,
-    endS: Math.min(windowWidth, windowHeight) / 2000,
-    duration: 750,
+      startX: windowWidth * 0.7,
+      startY: windowHeight * 0.4,
+      endX: windowWidth * 0.7,
+      endY: windowHeight * 0.4,
+      startS: Math.min(windowWidth, windowHeight) / 4000,
+      endS: Math.min(windowWidth, windowHeight) / 2000,
+      duration: 750,
     }
   }, [windowWidth, windowHeight])
 
@@ -108,7 +108,7 @@ export const Score_Changes: React.FC<PageProps> = ({
     const run = async () => {
       switch (animation) {
         case Animations.INTRO: {
-          if (introRun)return
+          if (introRun) return
           const fadeIn: FadeProps = { duration: 500, startA: 0, endA: 1 };
 
           setAnimating(true);
@@ -151,10 +151,10 @@ export const Score_Changes: React.FC<PageProps> = ({
     }
   }, [windowWidth, windowHeight, anim1.endS, anim1.endY, anim1.endX, animating, introRun, anim1.startS, anim1.startX, anim1.startY]);
 
-  const continueTutorial = useCallback( () => {
+  const continueTutorial = useCallback(() => {
     if (animating) return
     setAnimation(Animations.OUTRO)
-  },[Animations.OUTRO, animating])
+  }, [Animations.OUTRO, animating])
 
   useEffect(() => {
     if (keyControl != Pages.SCORE_CHANGES || animating) return;
@@ -195,11 +195,11 @@ export const Score_Changes: React.FC<PageProps> = ({
     b.drawRect(0, 0, windowWidth, windowHeight);
     b.beginHole();
     b.drawRoundedRect(
-            0.855*windowWidth,
-            0.01*base,
-            windowWidth * 0.14,
-            base * 0.125,
-            10
+      0.855 * windowWidth,
+      0.01 * base,
+      windowWidth * 0.14,
+      base * 0.125,
+      10
     );
     b.endHole();
     b.endFill();
@@ -266,54 +266,54 @@ export const Score_Changes: React.FC<PageProps> = ({
   ]);
 
   const graphics = () => (
-          <Container>
-            <Container ref={graphicRef} />
-          </Container>
+    <Container>
+      <Container ref={graphicRef} />
+    </Container>
   );
 
   const background = () => (
-          <Container>
-            <Container ref={backgroundRef} />
-          </Container>
+    <Container>
+      <Container ref={backgroundRef} />
+    </Container>
   );
 
   const texts = () => (
-          <Container ref={textRef}>
-            {pixiTexts.map((msg, i) => (
-                    <Text
-                            key={i}
-                            text={msg.text}
-                            x={msg.x}
-                            y={msg.y}
-                            anchor={0.5}
-                            style={
-                              new TextStyle({
-                                fontFamily: "LoResRegular",
-                                fontSize: msg.style.fontSize,
-                                fontWeight: msg.style.fontWeight,
-                                fill: "#FFFFFF",
-                                align: "left",
-                                wordWrap: true,
-                                wordWrapWidth: msg.style.wordWrapWidth,
-                              })
-                            }
-                    />
-            ))}
-          </Container>
+    <Container ref={textRef}>
+      {pixiTexts.map((msg, i) => (
+        <Text
+          key={i}
+          text={msg.text}
+          x={msg.x}
+          y={msg.y}
+          anchor={0.5}
+          style={
+            new TextStyle({
+              fontFamily: "LoResRegular",
+              fontSize: msg.style.fontSize,
+              fontWeight: msg.style.fontWeight,
+              fill: "#FFFFFF",
+              align: "left",
+              wordWrap: true,
+              wordWrapWidth: msg.style.wordWrapWidth,
+            })
+          }
+        />
+      ))}
+    </Container>
   );
 
   return (
-          <>
-            <Container
-                    eventMode="static"
-                    hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
-                    pointertap={continueTutorial}
-            >
-              {background()}
-              {<Sprite texture={textureRobot} ref={robotRef} />}
-              {graphics()}
-              {texts()}
-            </Container>
-          </>
+    <>
+      <Container
+        eventMode="static"
+        hitArea={new Rectangle(0, 0, windowWidth, windowHeight)}
+        pointertap={continueTutorial}
+      >
+        {background()}
+        {<Sprite texture={textureRobot} ref={robotRef} />}
+        {graphics()}
+        {texts()}
+      </Container>
+    </>
   );
 };

@@ -1,7 +1,7 @@
-import React, {PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
-import {Container, Graphics, Sprite, Text} from "@pixi/react";
+import React, { PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Container, Graphics, Sprite, Text } from "@pixi/react";
 import scoresImage from "@/assets/tutorial/scoresPage/scores.png";
-import {loadTexture} from "@/utils/loadTexture.ts";
+import { loadTexture } from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
   Graphics as PixiGraphics,
@@ -9,28 +9,28 @@ import {
   Sprite as PixiSprite,
   TextStyle
 } from "pixi.js";
-import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
-import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import {TextProps} from "@/pixi/components/Tutorial/util/Types.ts";
-import {GROW_DURATION} from "@/pixi/components/Tutorial/util/Constants.ts";
-import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
-import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
-import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
-import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
-import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
-import {t} from "@lingui/core/macro";
+import { Pages } from "@/pixi/components/Tutorial/Pages/Pages.ts";
+import { growAnimation, GrowProps } from "@/pixi/components/Tutorial/anim/growAnimation.ts";
+import { PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
+import { TextProps } from "@/pixi/components/Tutorial/util/Types.ts";
+import { GROW_DURATION } from "@/pixi/components/Tutorial/util/Constants.ts";
+import { toggleExplanations } from "@/pixi/components/Tutorial/util/drawings.tsx";
+import { fadeAnimation } from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import { FADE_IN, FADE_OUT } from "@/pixi/components/Tutorial/util/AnimProps.ts";
+import { PageOrder } from "@/pixi/components/Tutorial/util/PageOrder.ts";
+import { useAnimationManager } from "@/hooks/tutorial/useAnimationManager.tsx";
+import { t } from "@lingui/core/macro";
 
 
 export const ScoresPage: React.FC<PageProps> = ({
-       windowWidth,
-       windowHeight,
-       keyControl,
-       setKeyControl,
-       setNextPage
-           }: PropsWithChildren<PageProps>) => {
+  windowWidth,
+  windowHeight,
+  keyControl,
+  setKeyControl,
+  setNextPage
+}: PropsWithChildren<PageProps>) => {
 
-  const enum Animations { GROW, SHRINK, END}
+  const enum Animations { GROW, SHRINK, END }
 
   //memo
   const texture = useMemo(() => loadTexture(scoresImage), []);
@@ -42,24 +42,24 @@ export const ScoresPage: React.FC<PageProps> = ({
   const [introRun, setIntroRun] = useState(false);
 
   //refs
-  const graphicRef = useRef<PixiContainer|null>(null);
+  const graphicRef = useRef<PixiContainer | null>(null);
   const mgrRef = useAnimationManager();
-  const textRef = useRef<PixiContainer|null>(null);
-  const charRef = useRef<PixiSprite | null >(null);
+  const textRef = useRef<PixiContainer | null>(null);
+  const charRef = useRef<PixiSprite | null>(null);
 
 
   //others
-  const textArr  = useMemo( () => [
+  const textArr = useMemo(() => [
     t`Your privacy score`,
-    t`It indicates the safety of your data. Evil attackers always try to steal your data and use it to attack you and your personal space. A high privacy score makes it harder for them!`,
+    t`This indicates the safety of your data. Malicious attackers might try to steal your data and use it against you. A high privacy score makes data breaches less likely.`,
     t`Your comfort score`,
-    t`A smarthome does a great deal to make your life more comfortable. It can automate routines or know your preferences even better than yourself. A high comfort score makes your life easier!`,
+    t`Your Smart Home does a great deal to make your life more comfortable. It can automate routines or anticipate your preferences. A high comfort score makes things easier for you.`,
     t`The scores`
   ], [])
 
   //hide explanations  on init
   useLayoutEffect(() => {
-    if (!textRef.current || !graphicRef.current)return;
+    if (!textRef.current || !graphicRef.current) return;
     toggleExplanations([textRef.current, graphicRef.current], false);
   }, []);
 
@@ -72,11 +72,11 @@ export const ScoresPage: React.FC<PageProps> = ({
     };
   }, [windowWidth, windowHeight]);
 
-  const shrinkChar = useMemo<GrowProps>(() =>  {
+  const shrinkChar = useMemo<GrowProps>(() => {
     return {
       startX: windowWidth * 0.55, startY: windowHeight * 0.3,
       endX: 0.9275 * windowWidth, endY: windowHeight * 0.063,
-      startS:  Math.min(windowWidth, windowHeight) / 1000, endS: Math.min(windowWidth, windowHeight) / 3600,
+      startS: Math.min(windowWidth, windowHeight) / 1000, endS: Math.min(windowWidth, windowHeight) / 3600,
       duration: GROW_DURATION
     };
   }, [windowWidth, windowHeight])
@@ -89,13 +89,13 @@ export const ScoresPage: React.FC<PageProps> = ({
     const sprite = charRef.current;
     const texts = textRef.current;
     const graphics = graphicRef.current;
-    if (!sprite || !mgr || !texts ||  !graphics) return;
+    if (!sprite || !mgr || !texts || !graphics) return;
 
     const run = async () => {
       switch (animation) {
 
         case Animations.GROW: {
-          if (introRun)return
+          if (introRun) return
           setAnimating(true);
           await mgr.sequence([() => growAnimation(mgr, sprite, growChar)]);
           toggleExplanations([texts, graphics], true);
@@ -152,11 +152,11 @@ export const ScoresPage: React.FC<PageProps> = ({
   const continueTutorial = useCallback(() => {
     if (animating) return
     setAnimation(Animations.SHRINK);
-  },[Animations.SHRINK, animating])
+  }, [Animations.SHRINK, animating])
 
   //keyControls
   useEffect(() => {
-    if(keyControl != Pages.SCORES || animating)return;
+    if (keyControl != Pages.SCORES || animating) return;
 
     const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
       switch (e.code) {
@@ -176,18 +176,18 @@ export const ScoresPage: React.FC<PageProps> = ({
 
   //setup graphics
   const textsData = useMemo<TextProps[]>(() => [
-      { text: textArr[0], x: windowWidth*0.1,   y: windowHeight*0.6,  fontSize: 0.04, fontWeight: "bold" },
-      { text: textArr[2], x: windowWidth*0.575, y: windowHeight*0.625,  fontSize: 0.04, fontWeight: "bold" },
-      { text: textArr[1], x: windowWidth*0.1025,   y: windowHeight*0.65,  fontSize: 0.03, fontWeight: "lighter"},
-      { text: textArr[3], x: windowWidth*0.5775, y: windowHeight*0.675,  fontSize: 0.03, fontWeight: "lighter", wrap: 0.36},
-      { text: textArr[4], x: windowWidth * 0.5, y: windowHeight * 0.05, fontSize: 0.07, fontWeight: "bold" },
-    ],[windowWidth, windowHeight, textArr]);
+    { text: textArr[0], x: windowWidth * 0.1, y: windowHeight * 0.6, fontSize: 0.04, fontWeight: "bold" },
+    { text: textArr[2], x: windowWidth * 0.575, y: windowHeight * 0.625, fontSize: 0.04, fontWeight: "bold" },
+    { text: textArr[1], x: windowWidth * 0.1025, y: windowHeight * 0.65, fontSize: 0.03, fontWeight: "lighter" },
+    { text: textArr[3], x: windowWidth * 0.5775, y: windowHeight * 0.675, fontSize: 0.03, fontWeight: "lighter", wrap: 0.36 },
+    { text: textArr[4], x: windowWidth * 0.5, y: windowHeight * 0.05, fontSize: 0.07, fontWeight: "bold" },
+  ], [windowWidth, windowHeight, textArr]);
 
-  const drawLines =  useCallback( (g: PixiGraphics) => {
+  const drawLines = useCallback((g: PixiGraphics) => {
     g.clear();
 
     const img = {
-      width: texture.width <= 1 ? 868 * growChar.endS: texture.width * growChar.endS,
+      width: texture.width <= 1 ? 868 * growChar.endS : texture.width * growChar.endS,
       height: texture.height <= 1 ? 374 * growChar.endS : texture.height * growChar.endS
     };
 
@@ -195,69 +195,69 @@ export const ScoresPage: React.FC<PageProps> = ({
     g.lineStyle(Math.min(windowWidth, windowHeight) / 90, "#f0b100", 1);
     g.moveTo(textsData[0].x + windowWidth * 0.05, textsData[0].y - windowHeight * 0.05);
     g.bezierCurveTo(
-            growChar.endX - img.width * 0.85,growChar.endY  + img.height * 0.2,
-            growChar.endX - img.width * 0.65,growChar.endY  - img.height * 0.2,
-            growChar.endX - img.width * 0.55,growChar.endY  - img.height * 0.25
+      growChar.endX - img.width * 0.85, growChar.endY + img.height * 0.2,
+      growChar.endX - img.width * 0.65, growChar.endY - img.height * 0.2,
+      growChar.endX - img.width * 0.55, growChar.endY - img.height * 0.25
     )
 
     //right
     g.lineStyle(Math.min(windowWidth, windowHeight) / 90, "#f0b100", 1);
     g.moveTo(textsData[1].x - windowWidth * 0.025, textsData[1].y + windowHeight * 0.1);
     g.bezierCurveTo(
-            growChar.endX - img.width * 0.1,growChar.endY  + img.height * 1.1,
-            growChar.endX - img.width * 0.25,growChar.endY  + img.height * 0.9,
-            growChar.endX - img.width * 0.325,growChar.endY  + img.height * 0.6
+      growChar.endX - img.width * 0.1, growChar.endY + img.height * 1.1,
+      growChar.endX - img.width * 0.25, growChar.endY + img.height * 0.9,
+      growChar.endX - img.width * 0.325, growChar.endY + img.height * 0.6
     )
 
   }, [windowWidth, windowHeight, growChar.endS, growChar.endX, growChar.endY, textsData, texture.height, texture.width])
 
   const lines = () => {
     return (
-            <Container ref={graphicRef}>
-              <Graphics draw={drawLines}/>
-            </Container>
+      <Container ref={graphicRef}>
+        <Graphics draw={drawLines} />
+      </Container>
     )
   }
 
   const texts = () => {
     return (
-            <Container ref={textRef}>
-              {textsData.map((text, i) => (
-                      <Text
-                              key={i}
-                              text={text.text}
-                              x={text.x}
-                              y={text.y}
-                              style={new TextStyle({
-                                fontFamily: "LoResRegular",
-                                fontSize: Math.min(windowWidth, windowHeight) * text.fontSize,
-                                fontWeight: text.fontWeight,
-                                fill: "#FFFFFF",
-                                align: "left",
-                                wordWrap: true,
-                                wordWrapWidth: text.wrap ? windowWidth * text.wrap : windowWidth * 0.3
-                              })
-                              }
-                      />
-              ))}
-            </Container>
+      <Container ref={textRef}>
+        {textsData.map((text, i) => (
+          <Text
+            key={i}
+            text={text.text}
+            x={text.x}
+            y={text.y}
+            style={new TextStyle({
+              fontFamily: "LoResRegular",
+              fontSize: Math.min(windowWidth, windowHeight) * text.fontSize,
+              fontWeight: text.fontWeight,
+              fill: "#FFFFFF",
+              align: "left",
+              wordWrap: true,
+              wordWrapWidth: text.wrap ? windowWidth * text.wrap : windowWidth * 0.3
+            })
+            }
+          />
+        ))}
+      </Container>
     )
   }
 
   return (
-      <>
-        <Container
-                eventMode="static"
-                hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
-                pointertap={continueTutorial}
-        >
-          {showChar && texture && <Sprite
-                  texture={texture}
-                  ref={charRef}
-          />}
-          {lines()}
-          {texts()}
-        </Container>
-      </>
+    <>
+      <Container
+        eventMode="static"
+        hitArea={new Rectangle(0, 0, windowWidth, windowHeight)}
+        pointertap={continueTutorial}
+      >
+        {showChar && texture && <Sprite
+          texture={texture}
+          ref={charRef}
+        />}
+        {lines()}
+        {texts()}
+      </Container>
+    </>
   )
 };

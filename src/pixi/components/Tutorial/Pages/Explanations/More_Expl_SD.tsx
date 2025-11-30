@@ -1,6 +1,6 @@
-import React, {PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
-import {Container, Sprite, Text} from "@pixi/react";
-import {loadTexture} from "@/utils/loadTexture.ts";
+import React, { PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Container, Sprite, Text } from "@pixi/react";
+import { loadTexture } from "@/utils/loadTexture.ts";
 import {
   Container as PixiContainer,
   Graphics as PixiGraphics,
@@ -8,38 +8,38 @@ import {
   Text as PixiText,
   TextStyle
 } from "pixi.js";
-import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
-import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
-import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
-import {useCharacterControls} from "@/hooks/character/useCharacterControls.ts";
-import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
-import {useCharacterPosition} from "@/hooks/character/useCharacterPosition.ts";
-import {fadeAnimation} from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
+import { Pages } from "@/pixi/components/Tutorial/Pages/Pages.ts";
+import { growAnimation, GrowProps } from "@/pixi/components/Tutorial/anim/growAnimation.ts";
+import { PageProps } from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
+import { useCharacterControls } from "@/hooks/character/useCharacterControls.ts";
+import { TILE_SIZE } from "@/pixi/constants/world-settings.ts";
+import { useCharacterPosition } from "@/hooks/character/useCharacterPosition.ts";
+import { fadeAnimation } from "@/pixi/components/Tutorial/anim/fadeAnimation.ts";
 import robot from "@/assets/tutorial/explainTVPage/pointing.png";
-import {toggleExplanations} from "@/pixi/components/Tutorial/util/drawings.tsx";
-import {FADE_IN, FADE_OUT} from "@/pixi/components/Tutorial/util/AnimProps.ts";
-import {useAnimationManager} from "@/hooks/tutorial/useAnimationManager.tsx";
-import {PageOrder} from "@/pixi/components/Tutorial/util/PageOrder.ts";
-import {t} from "@lingui/core/macro";
-import {RoomNames} from "@/objects/RoomNames.ts";
-import {fill, stroke} from "@/pixi/components/Tutorial/util/TutorialColors.ts";
+import { toggleExplanations } from "@/pixi/components/Tutorial/util/drawings.tsx";
+import { FADE_IN, FADE_OUT } from "@/pixi/components/Tutorial/util/AnimProps.ts";
+import { useAnimationManager } from "@/hooks/tutorial/useAnimationManager.tsx";
+import { PageOrder } from "@/pixi/components/Tutorial/util/PageOrder.ts";
+import { t } from "@lingui/core/macro";
+import { RoomNames } from "@/objects/RoomNames.ts";
+import { fill, stroke } from "@/pixi/components/Tutorial/util/TutorialColors.ts";
 
 
 export const More_Expl_SD: React.FC<PageProps> = ({
-        windowWidth,
-        windowHeight,
-        setKeyControl,
-        setNextPage,
-        interactiveElements,
-        gameService,
-        onDeviceOpen
-           }: PropsWithChildren<PageProps>) => {
-  const enum Animations { INTRO, OUTRO, END}
+  windowWidth,
+  windowHeight,
+  setKeyControl,
+  setNextPage,
+  interactiveElements,
+  gameService,
+  onDeviceOpen
+}: PropsWithChildren<PageProps>) => {
+  const enum Animations { INTRO, OUTRO, END }
 
 
   //other
   const textureRobot = useMemo(() => loadTexture(robot), []);
-  const explText = t`Deselect the right options to restore a balance between privacy and comfort. Different decisions will have different affects on your scores.`
+  const explText = t`Deselect data permissions that are not necessary for your device to function. This way, you restore the balance between privacy and comfort. Different decisions will have different effects on your scores.`
 
   //state
   const [animating, setAnimating] = useState(false);
@@ -52,36 +52,36 @@ export const More_Expl_SD: React.FC<PageProps> = ({
   //refs
   const graphicRef = useRef<PixiContainer | null>(null);
   const textRef = useRef<PixiContainer | null>(null);
-  const robotRef = useRef<PixiSprite | null >(null);
+  const robotRef = useRef<PixiSprite | null>(null);
   const backgroundRef = useRef<PixiContainer | null>(null);
 
   //hooks
-  const {ePressed} = useCharacterControls();
+  const { ePressed } = useCharacterControls();
   const pos = useCharacterPosition();
   const mgrRef = useAnimationManager();
 
   const ready =
-          showExpl &&
-          !!mgrRef.current &&
-          !!robotRef.current &&
-          !!textRef.current &&
-          !!graphicRef.current;
+    showExpl &&
+    !!mgrRef.current &&
+    !!robotRef.current &&
+    !!textRef.current &&
+    !!graphicRef.current;
 
 
   //hide explanations  on init
   useLayoutEffect(() => {
     const text = textRef.current;
     const graphic = graphicRef.current;
-    if (!text || !graphic)return;
+    if (!text || !graphic) return;
     toggleExplanations([text, graphic], false);
   }, [])
 
-  const growChar = useMemo<GrowProps>(() =>  {
+  const growChar = useMemo<GrowProps>(() => {
     return {
-    startX: windowWidth * 0.825, startY: windowHeight * 0.725,
-    endX: windowWidth * 0.9, endY: windowHeight * 0.7,
-    startS: Math.min(windowWidth, windowHeight) / 4000, endS: Math.min(windowWidth, windowHeight) / 1000,
-    duration: 750
+      startX: windowWidth * 0.825, startY: windowHeight * 0.725,
+      endX: windowWidth * 0.9, endY: windowHeight * 0.7,
+      startS: Math.min(windowWidth, windowHeight) / 4000, endS: Math.min(windowWidth, windowHeight) / 1000,
+      duration: 750
     }
   }, [windowWidth, windowHeight])
 
@@ -101,17 +101,17 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     const robot = robotRef.current;
     const texts = textRef.current;
     const graphics = graphicRef.current;
-    if (!robot || !mgr || !texts ||  !graphics || !ready) return;
+    if (!robot || !mgr || !texts || !graphics || !ready) return;
 
     const run = async () => {
 
       switch (animation) {
         case Animations.INTRO: {
-          if (introRun)return
+          if (introRun) return
           setAnimating(true);
           toggleExplanations([texts, graphics], true);
           await mgr.parallel([() => growAnimation(mgr, robot, growChar),
-            () => fadeAnimation(mgr, [texts, graphics], FADE_IN)]);
+          () => fadeAnimation(mgr, [texts, graphics], FADE_IN)]);
           setAnimating(false);
           setIntroRun(true)
           break;
@@ -139,14 +139,14 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
   useEffect(() => {
     const sprite = robotRef.current
-    if(!sprite || animating)return;
+    if (!sprite || animating) return;
     sprite.x = growChar.endX
     sprite.y = growChar.endY
     sprite.scale.set(growChar.endS)
   }, [windowWidth, windowHeight, growChar.endS, growChar.endY, growChar.endX, animating]);
 
   //smartDeviceDetection
-  const checkFoundSmartTV = useCallback( (): boolean => {
+  const checkFoundSmartTV = useCallback((): boolean => {
     if (!pos || !interactiveElements?.length) return false;
 
     const targetX = pos.x / TILE_SIZE;
@@ -158,10 +158,10 @@ export const More_Expl_SD: React.FC<PageProps> = ({
       const elementTop = element.y - 1;
       const elementBottom = element.y + element.height;
       return (
-              targetX >= elementLeft &&
-              targetX <= elementRight &&
-              targetY >= elementTop &&
-              targetY <= elementBottom
+        targetX >= elementLeft &&
+        targetX <= elementRight &&
+        targetY >= elementTop &&
+        targetY <= elementBottom
       );
     });
 
@@ -170,10 +170,10 @@ export const More_Expl_SD: React.FC<PageProps> = ({
       return true;
     }
     return false;
-  },[interactiveElements, pos, onDeviceOpen])
+  }, [interactiveElements, pos, onDeviceOpen])
 
   useEffect(() => {
-    if (ePressed && checkFoundSmartTV()){
+    if (ePressed && checkFoundSmartTV()) {
       setShowExpl(true);
       gameService?.disableSmartDevices();
     }
@@ -181,7 +181,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
   //listen for smartTvDone
   useEffect(() => {
-    if (!gameService)return;
+    if (!gameService) return;
     const devices = gameService.getDeviceForRoom(RoomNames.LIVINGROOM);
     const tv = devices.find(d => d.name === "SmartTv");
 
@@ -200,8 +200,8 @@ export const More_Expl_SD: React.FC<PageProps> = ({
   const setupTexts = useCallback(() => {
     const t1 = new PixiText();
     t1.text = explText;
-    t1.x = windowWidth*0.875;
-    t1.y = windowHeight*0.35;
+    t1.x = windowWidth * 0.875;
+    t1.y = windowHeight * 0.35;
     t1.style = new TextStyle({
       fontSize: Math.min(windowWidth, windowHeight) * 0.035,
       fontWeight: "normal",
@@ -210,14 +210,14 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
     setPixiText(t1);
 
-  },[windowWidth, windowHeight, explText])
+  }, [windowWidth, windowHeight, explText])
   const setupGraphics = useCallback(() => {
 
     const g = new PixiGraphics();
     g.clear();
     g.beginFill(fill, 1);
     g.lineStyle(3, stroke);
-    g.drawRoundedRect(windowWidth*0.76, windowHeight*0.2, windowWidth*0.225, windowHeight*0.3, 10);
+    g.drawRoundedRect(windowWidth * 0.76, windowHeight * 0.2, windowWidth * 0.225, windowHeight * 0.3, 10);
     g.endFill();
 
     const parent = graphicRef?.current;
@@ -225,7 +225,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
     parent.children.filter(c => c instanceof PixiGraphics).forEach(c => parent.removeChild(c))
     parent.addChild(g);
-  },[windowWidth, windowHeight])
+  }, [windowWidth, windowHeight])
 
   const setupBg = useCallback(() => {
     const bg = new PixiGraphics();
@@ -237,10 +237,10 @@ export const More_Expl_SD: React.FC<PageProps> = ({
     bg.endFill();
 
     const parent = backgroundRef.current;
-    if (!parent)return;
+    if (!parent) return;
     parent.removeChildren()
     parent.addChild(bg);
-  },[windowWidth, windowHeight])
+  }, [windowWidth, windowHeight])
 
   useEffect(() => {
     if (showExpl) {
@@ -252,53 +252,53 @@ export const More_Expl_SD: React.FC<PageProps> = ({
   }, [showExpl, Animations.INTRO, setupBg, setupGraphics, setupTexts]);
 
   const graphics = () => {
-    if (!showExpl)return null;
-    return (<Container ref={graphicRef} renderable={false} alpha={0}/>)
+    if (!showExpl) return null;
+    return (<Container ref={graphicRef} renderable={false} alpha={0} />)
   }
 
 
   const background = () => {
-    if (!showExpl)return null;
+    if (!showExpl) return null;
 
     return (
-              <Container ref={backgroundRef}/>
+      <Container ref={backgroundRef} />
     )
   }
 
   const texts = () => {
-    if (!showExpl)return null;
+    if (!showExpl) return null;
     return (
-            <Container ref={textRef} renderable={false}>
-              {pixiTexts && <Text
-                      key={pixiTexts?.text}
-                      text={pixiTexts.text}
-                      x={pixiTexts.x}
-                      y={pixiTexts.y}
-                      anchor={0.5}
-                      style={new TextStyle({
-                        fontFamily: "LoResRegular",
-                        fontSize: pixiTexts.style.fontSize,
-                        fontWeight: pixiTexts.style.fontWeight,
-                        fill: "#FFFFFF",
-                        align: "left",
-                        wordWrap: true,
-                        wordWrapWidth: pixiTexts.style.wordWrapWidth
-                      })
-                      }
-              />}
-            </Container>
+      <Container ref={textRef} renderable={false}>
+        {pixiTexts && <Text
+          key={pixiTexts?.text}
+          text={pixiTexts.text}
+          x={pixiTexts.x}
+          y={pixiTexts.y}
+          anchor={0.5}
+          style={new TextStyle({
+            fontFamily: "LoResRegular",
+            fontSize: pixiTexts.style.fontSize,
+            fontWeight: pixiTexts.style.fontWeight,
+            fill: "#FFFFFF",
+            align: "left",
+            wordWrap: true,
+            wordWrapWidth: pixiTexts.style.wordWrapWidth
+          })
+          }
+        />}
+      </Container>
     )
   }
 
   return (
-          <>
-            {background()}
-            {graphics()}
-            {texts()}
-            {showExpl && textureRobot && <Sprite
-                    texture={textureRobot}
-                    ref={robotRef}
-            />}
-          </>
+    <>
+      {background()}
+      {graphics()}
+      {texts()}
+      {showExpl && textureRobot && <Sprite
+        texture={textureRobot}
+        ref={robotRef}
+      />}
+    </>
   )
 };

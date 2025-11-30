@@ -1,23 +1,23 @@
-import {Trans} from "@lingui/react/macro";
-import React, {useState} from 'react';
-import {DataSortingGame} from '../dataSortingGame/DataSortingGame';
+import { Trans } from "@lingui/react/macro";
+import React, { useState } from 'react';
+import { DataSortingGame } from '../dataSortingGame/DataSortingGame';
 import Button from "@/components/general-ui/Button.tsx";
-import {SmartDevice} from "@/objects/SmartDevice.ts";
-import {useGameService} from "@/hooks/gameService/useGameService.tsx";
-import {DeviceNames} from "@/objects/DeviceNames.ts";
+import { SmartDevice } from "@/objects/SmartDevice.ts";
+import { useGameService } from "@/hooks/gameService/useGameService.tsx";
+import { DeviceNames } from "@/objects/DeviceNames.ts";
 
 
 interface SmartHomeHubProps {
   completeDevice?: (isCompleted: boolean) => void;
 }
 
-export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({completeDevice}) => {
+export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({ completeDevice }) => {
   const gameService = useGameService();
   // Use a state to control the view: 0 = Intro, 1 = Game Modal
   const [frame, setFrame] = useState(0);
-  const smartHomeHubDevice:SmartDevice= gameService.getDeviceByName(DeviceNames.SMART_HOME_HUB)
+  const smartHomeHubDevice: SmartDevice = gameService.getDeviceByName(DeviceNames.SMART_HOME_HUB)
 
-  const handleGameComplete = (privacyPoints: number, comfortPoints:number) => {
+  const handleGameComplete = (privacyPoints: number, comfortPoints: number) => {
     smartHomeHubDevice.modifyScore(privacyPoints, comfortPoints);
     completeDevice?.(true);
   };
@@ -36,55 +36,52 @@ export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({completeDevice}) => {
 
 
   return (
-          <div>
-            {frame === 0 && (
-                    <div className="h-full flex flex-col items-center justify-center p-4">
+    <div>
+      {frame === 0 && (
+        <div className="h-full flex flex-col items-center justify-center p-4">
 
-                      <h1 className="text-white text-3xl font-bold mb-8">
-                        <Trans>Smart Home Hub</Trans></h1>
+          <h1 className="text-white text-3xl font-bold mb-8">
+            <Trans>Smart Home Hub</Trans></h1>
 
-                      {/* White Rectangular Info Box */}
-                      <div className="text-xl bg-white p-5 rounded-lg text-gray-700 w-full max-w-3xl mb-6">
-                        <p className="leading-relaxed">
-                          <Trans>Your data permissions are all mixed up! Your Smart Home App has access to all data
-                            files in your personal cloud.
-                            Decide which information about you is too private, and unnecessary for your Smart Home to
-                            function.</Trans>
-                        </p>
-                      </div>
-
-                      <div className={"grid justify-center"}>
-                        <Button
-                                onClick={() => {
-                                  setFrame(1)
-                                }}
-                                className={"px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700 " +
-                                        "rounded-[30px] shadow-md transition-colors cursor-pointer"}
-                        >
-                          <Trans>Continue</Trans>
-                        </Button>
-                      </div>
-                    </div>
-            )}
-
-            {/* Game Modal (Frame 1) */}
-            {isGameModalOpen && (
-                    <div className="h-150 text-white h-full px-[30px] py-[12px] flex flex-col">
-
-                      <h1 className="text-3xl text-center font-['LoResBold',sans-serif]">
-                        <Trans>Data Sorting Challenge</Trans>
-                      </h1>
-
-                      <p className="text-base text-center text-gray-300 mb-4 mt-2">
-                        <Trans>Drag and drop the datapoints to the correct category</Trans>
-                      </p>
-
-                      <div className="p-[14px] px-[28px] mb-4">
-                        <DataSortingGame onCompletion={handleGameComplete}/>
-                      </div>
-
-                    </div>
-            )}
+          {/* White Rectangular Info Box */}
+          <div className="text-xl bg-white p-5 rounded-lg text-gray-700 w-full max-w-3xl mb-6">
+            <p className="leading-relaxed">
+              <Trans>Your data permissions are all mixed up! Your Smart Home app currently has access to every file in your personal cloud. Decide which information is too private and unnecessary for your Smart Home to function.</Trans>
+            </p>
           </div>
+
+          <div className={"grid justify-center"}>
+            <Button
+              onClick={() => {
+                setFrame(1)
+              }}
+              className={"px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700 " +
+                "rounded-[30px] shadow-md transition-colors cursor-pointer"}
+            >
+              <Trans>Continue</Trans>
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Game Modal (Frame 1) */}
+      {isGameModalOpen && (
+        <div className="h-150 text-white h-full px-[30px] py-[12px] flex flex-col">
+
+          <h1 className="text-3xl text-center font-['LoResBold',sans-serif]">
+            <Trans>Data Sorting Challenge</Trans>
+          </h1>
+
+          <p className="text-base text-center text-gray-300 mb-4 mt-2">
+            <Trans>Drag and drop the data points into the correct category</Trans>
+          </p>
+
+          <div className="p-[14px] px-[28px] mb-4">
+            <DataSortingGame onCompletion={handleGameComplete} />
+          </div>
+
+        </div>
+      )}
+    </div>
   );
 };
