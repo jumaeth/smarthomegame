@@ -1,33 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import { Trans } from "@lingui/react/macro";
-import { t } from "@lingui/core/macro";
-import { useGameService } from "@/hooks/gameService/useGameService.tsx";
+import React, {useEffect, useState} from 'react';
+import {Trans} from "@lingui/react/macro";
+import {t} from "@lingui/core/macro";
 import {Icons} from "@/components/icons.tsx";
 
 interface DataSortingGameProps {
-  onCompletion: () => void;
+  onCompletion: (privacyPoints: number, comfortPoints:number) => void;
 }
 
-export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }) => {
-  const gameService = useGameService();
+export const DataSortingGame: React.FC<DataSortingGameProps> = ({onCompletion}) => {
 
   // Scoring knobs (tune to taste)
   const SCORE = {
+    amountOfWrongAnswersAllowed: 2,
     baseComfortOnCorrect: 1,
     privacyOnCorrect: {
-      public: 1,
-      personal: 2,
-      sensitive: 3,
+      public: 0.25,
+      personal: 1,
+      sensitive: 1.5,
     } as const,
-    firstTryBonusPrivacy: 1,
+    perfectRunPrivacyBonus: 1,
     // Completion bonus scales with performance
-    completionBonus: (firstTryCount: number, total: number) => {
-      const accuracy = firstTryCount / total; // 0..1
-      const privacy = Math.round(4 * accuracy * total / 10);  // ~ up to +4 for perfect run
-      const comfort = Math.round(3 * accuracy * total / 10);  // ~ up to +3 for perfect run
-      return { privacy, comfort };
+    completionBonus: () => {
+      const firstTryCount = calculateFirstTrySuccesses();
+      const total = dataItemsState.length;
+      let privacy: number = 0;
+      let comfort: number = 0;
+
+      dataItemsState.forEach(item => {
+        let attemptsModifier = 1;
+        if (item.wrongAnswersRemaining === 1) {
+          attemptsModifier = 0.5;
+        } else if (item.wrongAnswersRemaining < 1) {
+          attemptsModifier = 0;
+        }
+
+        comfort = comfort + attemptsModifier;
+
+        privacy = privacy + SCORE.privacyOnCorrect[item.type] * attemptsModifier;
+      })
+      if (firstTryCount === total) {
+        privacy = privacy + SCORE.perfectRunPrivacyBonus;
+      }
+
+
+      return {privacy, comfort};
     },
   };
+
+  function calculateFirstTrySuccesses(): number {
+    return dataItemsState.filter(item => item.wrongAnswersRemaining === SCORE.amountOfWrongAnswersAllowed).length;
+  }
 
   // Define the data types and their corresponding colors and explanations
   const DATA_TYPES = {
@@ -64,6 +86,7 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
     type: keyof typeof DATA_TYPES;
     icon: Icon;
     explanation: string;
+    wrongAnswersRemaining: number;
   };
 
   // Sample data items to sort
@@ -74,159 +97,181 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
       text: t`My last blood test`,
       type: 'sensitive',
       icon: Icons.bltest,
-      explanation: t`Health data is particularly worthy of protection under the GDPR, as it contains very personal information and could be misused.`
+      explanation: t`Health data is particularly worthy of protection under the GDPR, as it contains very personal information and could be misused.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 2,
       text: t`My fingerprint used to unlock my laptop`,
       type: 'sensitive',
       icon: Icons.fingerprint,
-      explanation: t`Biometric data like fingerprints are unique characteristics of a person and cannot be changed, so they require special protection.`
+      explanation: t`Biometric data like fingerprints are unique characteristics of a person and cannot be changed, so they require special protection.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 3,
       text: t`DNA test results "genetics.zip"`,
       type: 'sensitive',
       icon: Icons.dna,
-      explanation: t`Genetic data is particularly sensitive as it can affect not only the person concerned but also their relatives.`
+      explanation: t`Genetic data is particularly sensitive as it can affect not only the person concerned but also their relatives.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 4,
       text: t`Religious denomination: Buddhism`,
       type: 'sensitive',
       icon: Icons.belief,
-      explanation: t`Religious beliefs are particularly worthy of protection as they could lead to discrimination.`
+      explanation: t`Religious beliefs are particularly worthy of protection as they could lead to discrimination.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 5,
       text: t`Test result from political opinion calculator`,
       type: 'sensitive',
       icon: Icons.speech,
-      explanation: t`Political opinions are particularly worthy of protection as they could lead to discrimination or influence.`
+      explanation: t`Political opinions are particularly worthy of protection as they could lead to discrimination or influence.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 6,
       text: t`The Best Worker's Union member number`,
       type: 'sensitive',
       icon: Icons.hand,
-      explanation: t`Trade union membership is particularly worthy of protection as it could lead to workplace discrimination.`
+      explanation: t`Trade union membership is particularly worthy of protection as it could lead to workplace discrimination.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 7,
       text: t`Racial and ethnic origin`,
       type: 'sensitive',
       icon: Icons.house,
-      explanation: t`This data is particularly worthy of protection as it could lead to discrimination.`
+      explanation: t`This data is particularly worthy of protection as it could lead to discrimination.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
-
-    // Personal data examples
     {
       id: 8,
       text: t`Max Mustermann, Musterstraße 1, 12345 Musterstadt`,
       type: 'personal',
       icon: Icons.adr,
-      explanation: t`Name and address are personal data that can lead to the identification of a person.`
+      explanation: t`Name and address are personal data that can lead to the identification of a person.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 9,
       text: t`user@example.com`,
       type: 'personal',
       icon: Icons.mail,
-      explanation: t`Email addresses are personal data that can be used for identification and contact purposes.`
+      explanation: t`Email addresses are personal data that can be used for identification and contact purposes.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 10,
       text: t`The phone number of my family member`,
       type: 'personal',
       icon: Icons.nmbr,
-      explanation: t`Phone numbers are personal data that can be used for identification and contact purposes.`
+      explanation: t`Phone numbers are personal data that can be used for identification and contact purposes.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 11,
       text: t`My date of birth`,
       type: 'personal',
       icon: Icons.birth,
-      explanation: t`The date of birth is personal information that can contribute to identification.`
+      explanation: t`The date of birth is personal information that can contribute to identification.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 12,
       text: t`IBAN: DE00 0000 0000 0000`,
       type: 'personal',
       icon: Icons.card,
-      explanation: t`Bank details are personal data that require special protection as they are used for financial transactions.`
+      explanation: t`Bank details are personal data that require special protection as they are used for financial transactions.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 13,
       text: t`My IP address: 203.0.113.45`,
       type: 'personal',
       icon: Icons.ip,
-      explanation: t`IP addresses are personal data that can be used to identify a device and thus indirectly a person.`
+      explanation: t`IP addresses are personal data that can be used to identify a device and thus indirectly a person.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 14,
       text: t`GPS location: 12.3456, 23.4567`,
       type: 'personal',
       icon: Icons.gps,
-      explanation: t`Location data is personal information that can provide information about movement patterns and whereabouts.`
+      explanation: t`Location data is personal information that can provide information about movement patterns and whereabouts.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
-
-    // Public data examples
     {
       id: 15,
       text: t`City festival schedule on the flyer`,
       type: 'public',
       icon: Icons.event,
-      explanation: t`Public event announcements are accessible to everyone and do not contain any personal information.`
+      explanation: t`Public event announcements are accessible to everyone and do not contain any personal information.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 16,
       text: t`City announcement: “Water maintenance works are planned for tomorrow”`,
       type: 'public',
       icon: Icons.announ,
-      explanation: t`Official announcements are public information that is accessible to all citizens.`
+      explanation: t`Official announcements are public information that is accessible to all citizens.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 17,
       text: t`Bus line 10 timetable`,
       type: 'public',
       icon: Icons.bus,
-      explanation: t`Public transport information is accessible to everyone and does not contain any personal data.`
+      explanation: t`Public transport information is accessible to everyone and does not contain any personal data.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
-     {
+    {
       id: 18,
       text: t`Weather forecast: 18’C, rain`,
       type: 'public',
       icon: Icons.rain,
-      explanation: t`Weather data is public information that does not contain any personal references.`
+      explanation: t`Weather data is public information that does not contain any personal references.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 19,
       text: t`Open data set: “Population by district 2024”`,
       type: 'public',
       icon: Icons.data,
-      explanation: t`Public statistics are aggregated data without personal reference.`
+      explanation: t`Public statistics are aggregated data without personal reference.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     },
     {
       id: 20,
       text: t`Google Maps`,
       type: 'public',
       icon: Icons.map,
-      explanation: t`Public maps do not contain any personal information and are accessible to everyone.`
+      explanation: t`Public maps do not contain any personal information and are accessible to everyone.`,
+      wrongAnswersRemaining: SCORE.amountOfWrongAnswersAllowed
     }
   ];
 
+  const [dataItemsState] = useState<DataItem[]>(
+          () => DATA_ITEMS.map(item => ({...item})) // defensive Kopie
+  );
+
   const [currentItem, setCurrentItem] = useState<DataItem | null>(null);
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string; explanation: string } | null>(null);
+  const [feedback, setFeedback] = useState<{
+    type: 'success' | 'error';
+    message: string;
+    explanation: string
+  } | null>(null);
   const [remainingItems, setRemainingItems] = useState<DataItem[]>([]);
   const [showSummary, setShowSummary] = useState(false);
-  const [firstTrySuccesses, setFirstTrySuccesses] = useState<DataItem[]>([]);
-  const [attemptedItems, setAttemptedItems] = useState<Set<number>>(new Set());
   const [isInitialized, setIsInitialized] = useState(false);
 
   // Initialize game
   useEffect(() => {
     if (!isInitialized) {
-      const shuffled = [...DATA_ITEMS].sort(() => Math.random() - 0.5);
+      const shuffled = [...dataItemsState].sort(() => Math.random() - 0.5);
       setRemainingItems(shuffled);
       setCurrentItem(shuffled[0]);
       setIsInitialized(true);
@@ -243,7 +288,7 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
   }, [remainingItems, isInitialized]);
 
   const handleDragStart = (e: React.DragEvent, item: DataItem) => {
-    e.dataTransfer.setData('text/plain', JSON.stringify(item));
+    e.dataTransfer.setData('text/plain', JSON.stringify(item.id));
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -258,34 +303,20 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
   const handleDrop = (e: React.DragEvent, type: keyof typeof DATA_TYPES) => {
     e.preventDefault();
     e.currentTarget.classList.remove('border-amber-800', 'bg-amber-100');
-
-    const item = JSON.parse(e.dataTransfer.getData('text/plain')) as DataItem;
-    const isCorrect = item.type === type;
-
-    // Track attempts & first-try
-    const isFirstAttempt = !attemptedItems.has(item.id);
-    setAttemptedItems(prev => new Set([...prev, item.id]));
+    const dataItemId = JSON.parse(e.dataTransfer.getData('text/plain')) as number;
+    const currentItem: DataItem = dataItemsState.find(item => item.id === dataItemId)!;
+    const isCorrect = currentItem.type === type;
 
     if (isCorrect) {
-      setRemainingItems(prev => prev.filter(i => i.id !== item.id));
-      if (isFirstAttempt) setFirstTrySuccesses(prev => [...prev, item]);
-
-      // Award per-correct deltas
-      const privacyDelta = SCORE.privacyOnCorrect[item.type] + (isFirstAttempt ? SCORE.firstTryBonusPrivacy : 0);
-      const comfortDelta = SCORE.baseComfortOnCorrect;
-
-      gameService.changeScore(privacyDelta, 'privacy');
-      gameService.changeScore(comfortDelta, 'comfort');
+      setRemainingItems(prev => prev.filter(item => item.id !== currentItem.id));
     } else {
-      // No penalty by default; uncomment to add gentle penalties
-      // gameService.changeScore(0, 'privacy');
-      // gameService.changeScore(0, 'comfort');
+      currentItem.wrongAnswersRemaining = currentItem.wrongAnswersRemaining - 1;
     }
 
     setFeedback({
       type: isCorrect ? 'success' : 'error',
       message: isCorrect ? t`Correct! ✅` : t`Wrong! Try again 🚫`,
-      explanation: isCorrect ? item.explanation : DATA_TYPES[type].explanation
+      explanation: isCorrect ? currentItem.explanation : DATA_TYPES[type].explanation
     });
   };
 
@@ -295,12 +326,10 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
 
   if (showSummary) {
     // Compute completion bonus once (pure calc; apply on click below)
-    const bonus = SCORE.completionBonus(firstTrySuccesses.length, DATA_ITEMS.length);
+    const bonus = SCORE.completionBonus();
 
     const handleFinish = () => {
-      gameService.changeScore(bonus.privacy, 'privacy');
-      gameService.changeScore(bonus.comfort, 'comfort');
-      onCompletion();
+      onCompletion(bonus.privacy, bonus.comfort);
     };
 
     // game result
@@ -320,10 +349,13 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
                     </p>
                   </div>
 
-                  {firstTrySuccesses.length > 0 && (
+                  {calculateFirstTrySuccesses() > 0 && (
                           <div className="border-b border-gray-300 pb-4">
                             <p className="text-xl sm:text-2xl md:text-3xl font-semibold">
-                              <Trans>Answered correctly on the first attempt:</Trans> <span style={{ textShadow: '1px 1px 3px rgba(120, 53, 15, 0.8)' }}>{firstTrySuccesses.length}</span> <Trans>of</Trans> <span style={{ textShadow: '1px 1px 3px rgba(120, 53, 15, 0.8)' }}>{DATA_ITEMS.length}</span>
+                              <Trans>Answered correctly on the first attempt:</Trans> <span
+                                    style={{textShadow: '1px 1px 3px rgba(120, 53, 15, 0.8)'}}>{calculateFirstTrySuccesses()}</span>
+                              <Trans>of</Trans> <span
+                                    style={{textShadow: '1px 1px 3px rgba(120, 53, 15, 0.8)'}}>{DATA_ITEMS.length}</span>
                             </p>
                           </div>
                   )}
@@ -331,7 +363,8 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
                   <div className="border-b border-gray-300 pb-4">
                     <p className="text-xl sm:text-2xl md:text-3xl font-semibold">
                       <Trans>Completion bonus:</Trans><span
-                            style={{textShadow: '1px 1px 3px rgba(120, 53, 15, 0.6)'}}> + {bonus.privacy}<Trans> privacy</Trans>, + {bonus.comfort} <Trans>comfort</Trans></span>
+                            style={{textShadow: '1px 1px 3px rgba(120, 53, 15, 0.6)'}}> + {bonus.privacy}<Trans> privacy</Trans>, + {bonus.comfort}
+                      <Trans>comfort</Trans></span>
                     </p>
                   </div>
                 </div>
@@ -355,7 +388,7 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
 
   // textblocks & blocks
   return (
-         <div
+          <div
                   className="w-full h-full flex flex-col items-center justify-center p-4"
           >
             <div className="flex justify-center w-full mt-4 md:mt-6 lg:mt-8 items-center">
@@ -374,42 +407,42 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
                                   >
                                     {currentItem.text}
                                   </h6>
-                                  <ItemIcon className="h-8 w-8 text-green-900 ml-4 flex-shrink-0" />
+                                  <ItemIcon className="h-8 w-8 text-green-900 ml-4 flex-shrink-0"/>
                                 </div>
                         );
                       })()
               )}
             </div>
 
-           {feedback && (
-                   <div
-                           className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+            {feedback && (
+                    <div
+                            className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
                         p-6 rounded-lg shadow-lg z-[100] text-black text-center max-w-sm ${
-                                   feedback.type === 'success' ? 'bg-green-200' : 'bg-red-100'
-                           }`}
-                   >
-                     <h4
-                             className="font-semibold mb-2 text-2xl"
-                     >
-                       {feedback.message}
-                     </h4>
+                                    feedback.type === 'success' ? 'bg-green-200' : 'bg-red-100'
+                            }`}
+                    >
+                      <h4
+                              className="font-semibold mb-2 text-2xl"
+                      >
+                        {feedback.message}
+                      </h4>
 
-                     <p className="mb-4">
-                       {feedback.explanation}
-                     </p>
+                      <p className="mb-4">
+                        {feedback.explanation}
+                      </p>
 
-                     <button
-                             onClick={handleCloseFeedback}
-                             className="px-3 py-[10px] text-white bg-gray-600 text-lg font-semibold hover:bg-gray-700
+                      <button
+                              onClick={handleCloseFeedback}
+                              className="px-3 py-[10px] text-white bg-gray-600 text-lg font-semibold hover:bg-gray-700
                       rounded-xl shadow-md transition-colors cursor-pointer w-full"
-                     >
-                       <Trans>Close</Trans>
-                     </button>
-                   </div>
-           )}
+                      >
+                        <Trans>Close</Trans>
+                      </button>
+                    </div>
+            )}
 
             <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6 lg:gap-8 mt-4 md:mt-6 lg:mt-8 flex-grow">
-              {Object.entries(DATA_TYPES).map(([type, { label, color, description }]) => (
+              {Object.entries(DATA_TYPES).map(([type, {label, color, description}]) => (
                       <div
                               key={type}
                               onDragOver={handleDragOver}
@@ -422,6 +455,6 @@ export const DataSortingGame: React.FC<DataSortingGameProps> = ({ onCompletion }
                       </div>
               ))}
             </div>
-         </div>
+          </div>
   );
 };
