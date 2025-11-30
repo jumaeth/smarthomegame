@@ -41,7 +41,6 @@ export class StatsService {
     let deviceNamesLine: string = "";
     devices.forEach(device => {
       const deviceEnum = deviceNameToEnum(device.name);
-      console.log("deviceName", deviceEnum);
       if (!deviceEnum) {
         return;
       }
