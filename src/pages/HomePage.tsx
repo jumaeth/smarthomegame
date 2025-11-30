@@ -186,7 +186,7 @@ export default function HomePage() {
               target="_blank"
               rel="noreferrer"
             >
-              <Trans>Impressum</Trans>
+              <Trans>Legal Notice</Trans>
             </a>
             <a
               href="/privacy-policye"

@@ -26,12 +26,12 @@ msgid ""
 "\n"
 "Okay, let's turn this into a dish. \n"
 "\n"
-"Our smart kitchen can prep all the ingredients, but we need to pick the right machine to actually cook the dish"
+"Our smart kitchen can almost prepare the dish on its own, but we still need to pick the right machine to cook it"
 msgstr ""
 "\n"
 "Okay, let's turn this into a dish. \n"
 "\n"
-"Our smart kitchen can prep all the ingredients, but we need to pick the right machine to actually cook the dish"
+"Our smart kitchen can almost prepare the dish on its own, but we still need to pick the right machine to cook it"
 
 #: src/components/dataSortingGame/DataSortingGame.tsx:361
 msgid " privacy"
@@ -756,10 +756,6 @@ msgstr "If you opt out of usage analytics, the TV won't be able to provide perso
 msgid "If you opt out of voice recognition, the TV won't be able to learn your voice patterns for better accuracy."
 msgstr "If you opt out of voice recognition, the TV won't be able to learn your voice patterns for better accuracy."
 
-#: src/pages/HomePage.tsx:189
-msgid "Impressum"
-msgstr "Impressum"
-
 #: src/pixi/components/Tutorial/Pages/PhonePage.tsx:54
 msgid "In every room, you’ll find some items – some of them are simple furnishings, some smart devices. Adjust their privacy settings and solve the mini-games to unlock your Smart Home! "
 msgstr "In every room, you’ll find some items – some of them are simple furnishings, some smart devices. Adjust their privacy settings and solve the mini-games to unlock your Smart Home! "
@@ -809,6 +805,7 @@ msgid "Legal & info"
 msgstr "Legal & info"
 
 #: src/pages/HomePage.tsx:169
+#: src/pages/HomePage.tsx:189
 msgid "Legal Notice"
 msgstr "Legal Notice"
 
