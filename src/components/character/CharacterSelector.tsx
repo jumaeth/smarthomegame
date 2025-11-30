@@ -1,6 +1,6 @@
 import {useState} from "react";
 import Button from "@/components/general-ui/Button.tsx";
-import { characters } from "./CharacterConstants";
+import {characters} from "./CharacterConstants";
 
 export function getTexture() {
   const character = localStorage.getItem("selectedCharacter");
@@ -17,7 +17,6 @@ export default function CharacterSelector() {
   const updateCharacter = (newIndex: number) => {
     setIndex(newIndex);
     localStorage.setItem("selectedCharacter", characters[newIndex]);
-    console.log("Selector set character to: " + characters[newIndex]);
   };
 
   const prevCharacter = () =>

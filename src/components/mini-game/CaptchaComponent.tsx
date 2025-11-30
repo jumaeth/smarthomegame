@@ -72,8 +72,6 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
         comfortScore += solutions[i].comfortScorePenalty;
       }
     });
-    console.log(privacyScore)
-    console.log(comfortScore)
     gameService.changeScore(privacyScore, "privacy");
     gameService.changeScore(comfortScore, "comfort");
     onComplete(true);
