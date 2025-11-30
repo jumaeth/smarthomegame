@@ -8,7 +8,7 @@ type DeviceListener = (device: SmartDevice) => void;
 export class SmartDevice {
 
   private listeners = new Set<DeviceListener>;
-  private readonly score: GameScore
+  private  score: GameScore
 
 
   constructor(
@@ -23,6 +23,7 @@ export class SmartDevice {
   static fromSerialized(data: SmartDevice): SmartDevice {
     const sd = new SmartDevice(data.name, data.helpText);
     sd.isCompleted = data.isCompleted;
+    sd.score = GameScore.fromSerialized(data.score);
     return sd;
   }
 

@@ -18,16 +18,16 @@ export const SmartLights: React.FC<SmartLightsProps> = ({ onCompletion }) => {
 
 
   const handleQuizCompletion = (isCompleted: boolean, privacyScore: number, comfortScore: number) => {
-    if (isCompleted) {
-      onCompletion?.(isCompleted);
-    }
-
     const adjustedPrivacyScore: number = (20+ privacyScore)/2;
     const adjustedComfortScore: number =  (20+ comfortScore)/2;
 
     smartLightsDevice.getStatBlock().setValue(t`Smart Lights Privacy Score`, adjustedPrivacyScore);
     smartLightsDevice.getStatBlock().setValue(t`Smart Lights Comfort Score`, adjustedComfortScore);
     smartLightsDevice.modifyScore(adjustedPrivacyScore, adjustedComfortScore)
+
+    if (isCompleted) {
+      onCompletion?.(isCompleted);
+    }
   };
 
   const solutions: Solution[] = [
