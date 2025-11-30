@@ -74,9 +74,9 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
       iconBW: robotBWImg,
       icon: robotImg,
       providers: [
-        { name: t`StyleAI`, permissions: [t`Camera`, t`Calendar`], features: [t`Outfit suggestions`, t`Weather-based styling`], description: t`Full styling assistant with AI-powered fashion recommendations and calendar integration.`, retention: t`Style preferences and photos retained 18 months for learning.`, security: t`Account-level encryption, shared with fashion partners.`},
-        { name: t`FashionHelper+`, permissions: [t`Location`, t`Purchase history`], features: [t`Trend alerts`, t`Wardrobe sync`], description: t`Contextual styling assistant that adapts to local trends and your wardrobe.`, retention: t`Purchase data stored 6 months for recommendations.`, security: t`Scopes limited; location data anonymized.`},
-        { name: t`LocalStylist`, permissions: [t`Local storage only`], features: [t`No cloud`, t`Offline suggestions`], description: t`Private-by-design styling assistant without cloud dependencies.`, retention: t`No cloud logs. Local preferences rotate weekly.`, security: t`Runs offline; no external connections.`},
+        { name: t`StyleAI`, permissions: [t`Camera`, t`Calendar`, t`Purchase history`], features: [t`Outfit suggestions`, t`Weather-based styling`, t`Trend alerts`], description: t`Full styling assistant with AI-powered fashion recommendations and calendar integration.`, retention: t`Style preferences and photos retained 18 months for learning.`, security: t`Account-level encryption, shared with fashion partners.`},
+        { name: t`FashionHelper+`, permissions: [t`Location`, t`Purchase history`], features: [t`Trend alerts`], description: t`Contextual styling assistant that adapts to local trends and your wardrobe.`, retention: t`Purchase data stored 6 months for recommendations.`, security: t`Scopes limited; location data anonymized.`},
+        { name: t`LocalStylist`, permissions: [t`Local storage only`], features: [], description: t`Private-by-design styling assistant without cloud dependencies.`, retention: t`No cloud logs. Local preferences rotate weekly.`, security: t`Runs offline; no external connections.`},
       ],
     },
     {
@@ -85,9 +85,9 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
       iconBW: heartBWImg,
       icon: heartImg,
       providers: [
-        { name: t`FitPulse`, permissions: [t`Heart rate`, t`Temperature`], features: [t`Trend charts`, t`Alerts`], description: t`Comprehensive metrics with cloud syncing and insights.`, retention: t`Health metrics retained 12 months for comparisons.`, security: t`PHI safeguards, regional data centers.`},
-        { name: t`WellTrack`, permissions: [t`Motion`, t`Sleep data`], features: [t`Daily insights`, t`Reminders`], description: t`Lifestyle-focused with habit reminders and gentle nudges.`, retention: t`Aggregated usage retained 90 days.`, security: t`Aggregates before upload; opt-out analytics.`},
-        { name: t`MinimalCare`, permissions: [t`Anonymous stats`], features: [t`Local processing`, t`Export only`], description: t`Minimal tracking; all metrics processed locally.`, retention: t`No cloud storage. Exports only when you trigger it.`, security: t`Local-only, sandboxed.`}
+        { name: t`FitPulse`, permissions: [t`Heart rate`, t`Temperature`, t`Motion`], features: [t`Trend charts`, t`Alerts`, t`Reminders`], description: t`Comprehensive metrics with cloud syncing and insights.`, retention: t`Health metrics retained 12 months for comparisons.`, security: t`PHI safeguards, regional data centers.`},
+        { name: t`WellTrack`, permissions: [t`Motion`, t`Sleep data`], features: [t`Daily insights`], description: t`Lifestyle-focused with habit reminders and gentle nudges.`, retention: t`Aggregated usage retained 90 days.`, security: t`Aggregates before upload; opt-out analytics.`},
+        { name: t`MinimalCare`, permissions: [t`Anonymous stats`], features: [], description: t`Minimal tracking; all metrics processed locally.`, retention: t`No cloud storage. Exports only when you trigger it.`, security: t`Local-only, sandboxed.`}
       ],
     },
     {
@@ -96,9 +96,9 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
       iconBW: groceriesBWImg,
       icon: groceriesImg,
       providers: [
-        { name: t`QuickBuy`, permissions: [t`Payment`, t`Purchase history`], features: [t`Auto-order`, t`Coupons`], description: t`One-tap restocks with vendor integrations.`, retention: t`Orders retained per legal requirements (up to 10 years).`, security: t`PCI-DSS compliant; tokenized payments.`},
-        { name: t`EcoStore`, permissions: [t`Network`, t`Anonymous usage`], features: [t`Sustainable picks`, t`Price alerts`], description: t`Marketplace highlighting eco alternatives and best prices.`, retention: t`Anonymous analytics kept 60 days.`, security: t`Anonymized telemetry; private browsing mode.`},
-        { name: t`ManualOnly`, permissions: [t`None`], features: [t`Manual checkout`, t`Export cart`], description: t`No vendor link; you confirm orders manually.`, retention: t`No history. Optional local export only.`, security: t`No external connections.`},
+        { name: t`QuickBuy`, permissions: [t`Payment`, t`Purchase history`, t`Location`], features: [t`Auto-order`, t`Coupons`, t`Price alerts`], description: t`One-tap restocks with vendor integrations.`, retention: t`Orders retained per legal requirements (up to 10 years).`, security: t`PCI-DSS compliant; tokenized payments.`},
+        { name: t`EcoStore`, permissions: [t`Network`, t`Anonymous usage`], features: [t`Sustainable picks`], description: t`Marketplace highlighting eco alternatives and best prices.`, retention: t`Anonymous analytics kept 60 days.`, security: t`Anonymized telemetry; private browsing mode.`},
+        { name: t`ManualOnly`, permissions: [], features: [], description: t`No vendor link; you confirm orders manually.`, retention: t`No history. Optional local export only.`, security: t`No external connections.`},
       ],
     },
     {
@@ -107,9 +107,9 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
       iconBW: weatherBWImg,
       icon: weatherImg,
       providers: [
-        { name: t`SkyCast`, permissions: [t`Location`], features: [t`Hyperlocal forecast`, t`Rain alerts`], description: t`Popular weather feed with hyperlocal nowcasts.`, retention: t`Location lookups cached 24h.`, security: t`Requests via HTTPS; IP anonymization enabled.`},
-        { name: t`OpenWeather+`, permissions: [t`Network`], features: [t`Open data sources`, t`Hourly charts`], description: t`Open-data-centric weather with transparent models.`, retention: t`Aggregated request stats kept 30 days.`, security: t`No account needed; telemetry opt-out.`},
-        { name: t`LocalMeteo`, permissions: [t`None`], features: [t`Offline cache`, t`Sensor-only`], description: t`Local-only readings from your home sensors.`, retention: t`No cloud. Local logs rotate 14 days.`, security: t`No network communication.`},
+        { name: t`SkyCast`, permissions: [t`Location`, t`Network`, t`Calendar`], features: [t`Hyperlocal forecast`, t`Rain alerts`, t`Hourly charts`], description: t`Popular weather feed with hyperlocal nowcasts.`, retention: t`Location lookups cached 24h.`, security: t`Requests via HTTPS; IP anonymization enabled.`},
+        { name: t`OpenWeather+`, permissions: [t`Network`, t`Anonymous usage`], features: [t`Hourly charts`], description: t`Open-data-centric weather with transparent models.`, retention: t`Aggregated request stats kept 30 days.`, security: t`No account needed; telemetry opt-out.`},
+        { name: t`LocalMeteo`, permissions: [], features: [t`Sensor-only`], description: t`Local-only readings from your home sensors.`, retention: t`No cloud. Local logs rotate 14 days.`, security: t`No network communication.`},
       ],
     },
   ]), []);
@@ -142,14 +142,10 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
       const privacyScore = totalPoints.current.privacy || 0;
       const comfortScore = totalPoints.current.comfort || 0;
             
-      if (privacyScore) {
-        gameService.changeScore(privacyScore, 'privacy');
-      }
-      if (comfortScore) {
-        gameService.changeScore(comfortScore, 'comfort');
-      }
-      
-      smartDevice.getStatBlock().setValue(t`Smart Mirror Points`, privacyScore);
+      smartDevice.getStatBlock().setValue(t`Smart Mirror Privacy Score`, privacyScore);
+      smartDevice.getStatBlock().setValue(t`Smart Mirror Comfort Score`, comfortScore);
+      smartDevice.modifyScore(privacyScore, comfortScore);
+
       gameService.completeDevice(DeviceNames.SMART_MIRROR);
       completeDevice?.(true);
     }
@@ -159,9 +155,9 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
     if (!hasVisitedAllProviders(appId)) return;
     setSolvedApps(prev => ({ ...prev, [appId]: true }));
     setSelectedAppId(null);
-    
+
     const privacyDelta = provider.permissions.length <= 1 ? 5 : provider.permissions.length === 2 ? 0 : -5;
-    const comfortDelta = provider.features.length >= 2 ? 3 : provider.features.length === 1 ? 1 : 0;
+    const comfortDelta = provider.features.length >= 2 ? 5 : provider.features.length === 1 ? 2.5 : 0;
     
     const currentPrivacy = totalPoints.current.privacy || 0;
     const currentComfort = totalPoints.current.comfort || 0;
