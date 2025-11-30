@@ -9,7 +9,7 @@ const LanguageSwitcher = () => {
   };
 
   return (
-          <select onChange={handleChange} defaultValue={i18n.locale}>
+          <select className="language-switcher" onChange={handleChange} defaultValue={i18n.locale}>
             <option value="en">English</option>
             <option value="de">Deutsch</option>
           </select>

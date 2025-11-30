@@ -19,3 +19,8 @@
   font-weight: normal;
   font-style: normal;
 }
+
+.language-switcher > option {
+  background: #2222aa;
+  color: #fff;
+}
