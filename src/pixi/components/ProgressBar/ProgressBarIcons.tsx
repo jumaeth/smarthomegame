@@ -71,7 +71,7 @@ export const ProgressBarIcons: React.FC<ProgressBarIconsProps> = ({
             spacing
     );
     g.endFill();
-  }, [x, y, containerWidth, trophyHeight]);
+  }, [x, y, containerWidth, trophyHeight, spacing]);
 
   const drawCompletionBars = useCallback((g: PixiGraphics) => {
     const colours = [0x990000, 0xFF0000, 0xFF3300, 0xFF6600, 0xFF9900,
@@ -100,7 +100,7 @@ export const ProgressBarIcons: React.FC<ProgressBarIconsProps> = ({
             10
     );
     g.endFill();
-  }, [x, y, trophyHeight, completedPercentage, containerWidth]);
+  }, [x, y, trophyHeight, completedPercentage, containerWidth, spacing]);
 
   return (
           <>

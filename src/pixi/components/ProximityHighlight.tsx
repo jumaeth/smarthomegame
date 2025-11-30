@@ -5,6 +5,7 @@ import {getNearbyInteractiveElement} from "@/utils/character/proximity.ts";
 import {pixelToTile} from "@/utils/coords";
 import {getHighlightPosition} from "@/utils/highlightPositions.tsx";
 import {GameService} from "@/services/GameService.ts";
+import {deviceNameToEnum} from "@/objects/DeviceNames.ts";
 
 interface ProximityHighlightProps {
   interactiveElements?: InteractivePixiElement[];
@@ -14,7 +15,7 @@ interface ProximityHighlightProps {
 
 export const ProximityHighlight = forwardRef(({
                                                 interactiveElements,
-        gameService
+                                                gameService
                                               }: PropsWithChildren<ProximityHighlightProps>, ref) => {
   const pos = useCharacterPosition();
   const lastPos = useRef<{ x: number; y: number } | null>(null);
@@ -51,9 +52,13 @@ export const ProximityHighlight = forwardRef(({
   const getPosition = () => {
     return interactive ? {x: interactive.x, y: interactive.y} : {x: 0, y: 0}
   }
-
-  const isCompleted: boolean = !gameService.getDeviceByName(interactive?.name as string).getIsCompleted()
-
+  let isCompleted = false;
+  if (interactive?.name) {
+    const deviceName = deviceNameToEnum(interactive.name);
+    if (deviceName) {
+      isCompleted = !gameService.getDeviceByName(deviceName).getIsCompleted()
+    }
+  }
   return (
           <>
             {isCompleted && getPosition().x != 0 && interactive && getHighlightPosition(interactive, getPosition())}

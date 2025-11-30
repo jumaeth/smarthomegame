@@ -3,11 +3,12 @@ import {GameScore} from "./GameScore"
 
 export class Game {
   private readonly rooms: Room[];
-  private score: GameScore;
+  //Deprecated, use calculateScore instead ToDo Remove in #189
+  private readonly score: GameScore;
 
   constructor(rooms: Room[], score?: GameScore) {
     this.rooms = rooms;
-    this.score = score ? score : new GameScore(10, 10)
+    this.score = score ? score : new GameScore(10, 10, 1)
   }
 
   static fromSerialized(data: Game): Game {
@@ -31,9 +32,22 @@ export class Game {
     return this.score;
   }
 
+  //Deprecated, use calculateScore instead ToDo Remove in #189
   modifyScore(privacyScoreDelta: number, comfortScoreDelta: number): void {
     this.score.setPrivacyScore(privacyScoreDelta + this.score.getPrivacyScore());
     this.score.setComfortScore(comfortScoreDelta + this.score.getComfortScore());
   }
 
+  calculateScore():GameScore{
+    const individualSmartDeviceScores: GameScore[]= this.rooms
+            .flatMap(room => room.devices)
+            .map(device => device.getScore());
+
+    return individualSmartDeviceScores.reduce((accumulator: GameScore, currentScore:GameScore) => {
+      accumulator.setPrivacyScore(accumulator.getPrivacyScore() + currentScore.getPrivacyScore()*currentScore.getPointsWeight());
+      accumulator.setComfortScore(accumulator.getComfortScore() + currentScore.getComfortScore()*currentScore.getPointsWeight());
+      return accumulator;
+    }, new GameScore(0, 0, 1));
+
+  }
 }

@@ -1,4 +1,3 @@
-// anim/spotlightTweens.ts
 import { AnimationManager, easeInOutQuad } from "./AnimationManager";
 import {drawSpotlight} from "@/pixi/components/Tutorial/util/drawings.tsx";
 import {RefObject} from "react";

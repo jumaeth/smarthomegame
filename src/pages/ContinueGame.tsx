@@ -3,6 +3,8 @@ import Button from "@/components/general-ui/Button.tsx";
 import {CookieService} from "@/services/CookieService.ts";
 import {useLocation, useNavigate} from "react-router-dom";
 import {Trans} from "@lingui/react/macro";
+import {characterPositionStore} from "@/utils/character/characterPosition.ts";
+import {tutorialDoneStore} from "@/hooks/gameService/useTutorialActive.ts";
 
 export function ContinueGame() {
   const navigate = useNavigate();
@@ -21,6 +23,11 @@ export function ContinueGame() {
 
   const onNewGame = () => {
     CookieService.set("save_game", null);
+    CookieService.set("save_player_position", null);
+    CookieService.set("save_player_facing", null);
+    CookieService.set("tutorialState", null);
+    tutorialDoneStore.set(false)
+    characterPositionStore.reset()
     navigate("/home", {replace: true});
   };
 

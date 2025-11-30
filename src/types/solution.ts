@@ -1,6 +1,7 @@
 export type Solution = {
   booleanSolution: boolean,
-  solutionMessage: string,
+  solutionCorrectMessage: string,
+  solutionWrongMessage: string,
   privacyScoreGain: number,
   comfortScoreGain: number,
   privacyScorePenalty: number,
@@ -9,7 +10,8 @@ export type Solution = {
 
 export function newSolution(
         booleanSolution: boolean,
-        solutionMessage: string,
+        solutionCorrectMessage: string,
+        solutionWrongMessage: string,
         privacyScoreGain: number,
         comfortScoreGain: number,
         privacyScorePenalty: number,
@@ -17,7 +19,8 @@ export function newSolution(
 ): Solution {
   return {
     booleanSolution,
-    solutionMessage,
+    solutionCorrectMessage,
+    solutionWrongMessage,
     privacyScoreGain,
     comfortScoreGain,
     privacyScorePenalty,

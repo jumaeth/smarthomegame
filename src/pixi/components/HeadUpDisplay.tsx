@@ -55,7 +55,6 @@ export const HeadUpDisplay: React.FC<HeadUpDisplayProps> = ({
   const assistantPhoneIconPosX: number = 0;
   const assistantPhoneIconPosY: number = 0;
   const ProgressBarWidth: number = windowWidth * 0.13;
-  const spacing: number = 4;
 
   return (
           <>
@@ -91,23 +90,24 @@ export const HeadUpDisplay: React.FC<HeadUpDisplayProps> = ({
 
             )}
             <PixiScoreBar
-                    x={windowWidth - ProgressBarWidth - 10}
-                    y={10}
+                    x={windowWidth * 0.9925 - ProgressBarWidth}
+                    y={windowHeight * 0.015}
                     width={ProgressBarWidth}
                     progress={privacyScore}
                     texture={textures[1]}
             />
             <PixiScoreBar
-                    x={windowWidth - ProgressBarWidth - 10}
-                    y={10 + ProgressBarWidth / 5 + 10}
+                    x={windowWidth * 0.9925 - ProgressBarWidth}
+                    y={ProgressBarWidth / 5 + windowHeight * 0.025}
                     width={ProgressBarWidth}
                     progress={comfortScore}
                     texture={textures[2]}
             />
             <ProgressBar
-                    x={assistantPhoneIconWidth + spacing}
-                    y={spacing}
+                    x={assistantPhoneIconWidth}
+                    y={windowHeight * 0.05}
                     windowWidth={windowWidth}
+                    windowHeight={windowHeight}
                     gameService={gameService}/>
           </>
   )

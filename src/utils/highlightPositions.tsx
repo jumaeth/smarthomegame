@@ -6,11 +6,18 @@ import hub from "@/assets/highlighting/hub.png";
 import kitchen from "@/assets/highlighting/kitchen.png";
 import mirror from "@/assets/highlighting/mirror.png";
 import hallway_frog from "@/assets/highlighting/extras/hallway_frog.png";
+import hallway_pets from "@/assets/highlighting/extras/hallway_pets.png"
+import hallway_entry_door from "@/assets/highlighting/extras/hallway_entry_door.png"
 import livingroom_candles from "@/assets/highlighting/extras/livingroom_candles.png"
 import livingroom_food from "@/assets/highlighting/extras/livingroom_food.png"
 import kitchen_painting from "@/assets/highlighting/extras/kitchen_painting.png"
 import bathroom_chick from "@/assets/highlighting/extras/bathroom_chick.png"
 import bathroom_drawer from "@/assets/highlighting/extras/bathroom_drawer.png"
+import bathroom_toilet from "@/assets/highlighting/extras/bathroom_toilet.png"
+import bedroom_fish from "@/assets/highlighting/extras/bedroom_fish.png"
+import bedroom_child_bed from "@/assets/highlighting/extras/bedroom_child_bed.png"
+import bedroom_wardrobe from "@/assets/highlighting/extras/bedroom_wardrobe.png"
+import bedroom_radio from "@/assets/highlighting/extras/bedroom_radio.png"
 import smart_shower from "@/assets/highlighting/shower.png"
 import {Container, Graphics, Sprite} from "@pixi/react";
 import {TILE_SIZE} from "@/pixi/constants/world-settings.ts";
@@ -89,8 +96,8 @@ export function getHighlightPosition(device: InteractivePixiElement, position: {
               <>
                 <Sprite
                         key={device.name + "highlight"}
-                        x={position.x + TILE_SIZE * 8.31}
-                        y={position.y + TILE_SIZE * 5.51}
+                        x={position.x + TILE_SIZE * 8.93}
+                        y={position.y + TILE_SIZE * 5.27}
                         texture={loadTexture(mirror as string)}
                         scale={{ x: 1, y: 1 }}
                         anchor={0.5}
@@ -127,6 +134,35 @@ export function getHighlightPosition(device: InteractivePixiElement, position: {
                 />
               </>
       );
+
+    case "HallwayPets":
+      return (
+              <>
+                <Sprite
+                        key={device.name + "highlight"}
+                        x={position.x * TILE_SIZE + TILE_SIZE * 11.5}
+                        y={position.y *TILE_SIZE - TILE_SIZE * 2.85 }
+                        texture={loadTexture(hallway_pets as string)}
+                        scale={{ x: 1, y: 1 }}
+                        anchor={0.5}
+                />
+              </>
+      )
+
+    case "HallwayEntryDoor":
+      return (
+              <>
+                <Sprite
+                        key={device.name + "highlight"}
+                        x={position.x * TILE_SIZE + TILE_SIZE * 9.5}
+                        y={position.y *TILE_SIZE + TILE_SIZE * 6.65 }
+                        texture={loadTexture(hallway_entry_door as string)}
+                        scale={{ x: 1, y: 1 }}
+                        anchor={0.5}
+                />
+              </>
+      )
+
 
     case "LivingRoomCandles":
       return (
@@ -198,6 +234,75 @@ export function getHighlightPosition(device: InteractivePixiElement, position: {
               </>
       )
 
+    case "BathroomToilet":
+      return (
+              <>
+                <Sprite
+                        key={device.name + "highlight"}
+                        x={position.x  * TILE_SIZE - TILE_SIZE * 6.015}
+                        y={position.y + TILE_SIZE * 5.49}
+                        texture={loadTexture(bathroom_toilet as string)}
+                        scale={{ x: 1, y: 1 }}
+                        anchor={0.5}
+                />
+              </>
+      )
+
+    case "BedroomFish":
+      return (
+              <>
+                <Sprite
+                        key={device.name + "highlight"}
+                        x={position.x  + TILE_SIZE * 8.25}
+                        y={position.y + TILE_SIZE * 5.46}
+                        texture={loadTexture(bedroom_fish as string)}
+                        scale={{ x: 1, y: 1 }}
+                        anchor={0.5}
+                />
+              </>
+      )
+
+    case "BedroomChildBed":
+      return (
+              <>
+                <Sprite
+                        key={device.name + "highlight"}
+                        x={position.x  + TILE_SIZE * 8.065}
+                        y={position.y + TILE_SIZE * 5.4}
+                        texture={loadTexture(bedroom_child_bed as string)}
+                        scale={{ x: 1, y: 1 }}
+                        anchor={0.5}
+                />
+              </>
+      )
+
+    case "BedroomWardrobe":
+      return (
+              <>
+                <Sprite
+                        key={device.name + "highlight"}
+                        x={position.x  + TILE_SIZE * 8.625}
+                        y={position.y + TILE_SIZE * 5.525}
+                        texture={loadTexture(bedroom_wardrobe as string)}
+                        scale={{ x: 1, y: 1 }}
+                        anchor={0.5}
+                />
+              </>
+      )
+
+    case "BedroomRadio":
+      return (
+              <>
+                <Sprite
+                        key={device.name + "highlight"}
+                        x={position.x  + TILE_SIZE * 8.93}
+                        y={position.y + TILE_SIZE * 5.505}
+                        texture={loadTexture(bedroom_radio as string)}
+                        scale={{ x: 1, y: 1 }}
+                        anchor={0.5}
+                />
+              </>
+      )
 
     default:
       return (

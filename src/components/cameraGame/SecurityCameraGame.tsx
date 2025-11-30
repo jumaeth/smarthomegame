@@ -23,10 +23,10 @@ export const SecurityCameraGame = ({onCompletion}: { onCompletion: onCompletionC
       t`AI image recognition`
     ],
     solutions: [
-      newSolution(true, t`This setting is ok`, 0, 5, 0, -5),
-      newSolution(true, t`This setting is ok`, 0, 10, 0, -10),
-      newSolution(false, t`This is not necessary and a risk to your privacy`, 10, -2, -10, +2),
-      newSolution(false, t`This is not necessary and a risk to your privacy`, 10, -2, -10, +2),
+      newSolution(true, t`Correct, this is needed to stream the view`,  t`Without internet the images can't be observed live`, 0, 5, 0, -5),
+      newSolution(true, t`Good to check your home on the go`, t`This is needed to check your camera on the go`, 0, 10, 0, -10),
+      newSolution(false, t`You don't have much control over the cloud and its security`, t`Correct, this sensible data shouldn't go to the cloud`,10, -2, -10, +2),
+      newSolution(false, t`Sensible Data shouldn't go to AI and its company`, t`Correct, more privacy would be lost than comfort gained`,10, -2, -10, +2),
     ],
     handleCompletion: (): void => {
       setFrame(1);
@@ -36,19 +36,19 @@ export const SecurityCameraGame = ({onCompletion}: { onCompletion: onCompletionC
   const CaptchaComponentProps = {
     pictureFolder: "camera-placements",
     solutions: [
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(false, t`This is a bad place for a camera, it is not recommended to place a camera in your bedroom for privacy reasons.`, 10, -2, -10, 0),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(false, t`This is a bad place for a camera, it is not recommended to place a camera in your bathroom for privacy reasons`, 10, -2, -10, 0),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(true, t`Correct, this placement is acceptable`, 0, 2, 0, -2),
-      newSolution(false, t`This is a bad place for a camera, it is not recommended to place a camera pointing at your pool for privacy reasons`, 10, -2, -10, 0),
+      newSolution(true, t`Correct, the hallway is not a privacy risk`, t`Wrong, nothing to worry about in the hallway`,0, 2, 0, -2),
+      newSolution(true, t`Correct, your TV room isn't a very privacy sensitive place`, t`Wrong, nothing private to see here`,0, 2, 0, -2),
+      newSolution(true, t`Correct, watching your front door helps to scare intruders away`, t`Wrong, checking your surroundings can increase the security of your house`,0, 2, 0, -2),
+      newSolution(false, t`You don't wan't someone watching you sleep`, t`Correct, nobody see you in this very private room`,10, -2, -10, 0),
+      newSolution(true, t`Correct, seeing you eat is not privacy inflicting`, t`Wrong, your kitchen table is not a privacy risk`,0, 2, 0, -2),
+      newSolution(false, t`Nobody should see you taking a shower. This is a very private space`, t`Correct, not a good place to observe people`,10, -2, -10, 0),
+      newSolution(true, t`Correct, watching your child can help in emergency situations`, t`Wrong, camera could provide valuable data about your child`,0, 2, 0, -2),
+      newSolution(true, t`Correct, you don't do private things at your desk`, t`Wrong, your desk does not contain private information`,0, 2, 0, -2),
+      newSolution(true, t`Correct, check on the mice in your basement doesn't hurt privacy`, t`Wrong, the basement isn't a very private place`,0, 2, 0, -2),
+      newSolution(true, t`Correct, just dust and old furniture here`, t`Wrong, dust and old furniture do not need privacy`,0, 2, 0, -2),
+      newSolution(true, t`Correct, watching your balcony door can stop intruders`, t`Wrong, watching your balcony can provide great security against intruders`,0, 2, 0, -2),
+      newSolution(true, t`Correct, not the most private things happening in your living room`, t`Wrong, your living room is not a very private room in your house`,0, 2, 0, -2),
+      newSolution(false, t`Correct, observing people at the pool is not correct. This is private space`, t`Wrong, nobody should see you enjoying your pool`,10, -2, -10, 0),
     ],
     handleCompletion: handleQuizCompletion,
   };

@@ -4,12 +4,14 @@ import {RoomNames, roomNameToEnum} from "../objects/RoomNames";
 import {SmartDevice} from "../objects/SmartDevice";
 import {GameScore, ScoreType} from "@/objects/GameScore";
 import {CookieService} from "@/services/CookieService";
-import {allRoomStore} from "@/utils/roomStore";
 import {movementStore} from "@/utils/character/movementEnabled";
-import {tutorialActiveStore} from "@/hooks/gameService/useTutorialActive";
+import {tutorialDoneStore} from "@/hooks/gameService/useTutorialActive";
 import {t} from "@lingui/core/macro";
 import {MapKey} from "@/types/maps";
 import {DoorState} from "@/types/door";
+import {DeviceNames} from "@/objects/DeviceNames";
+import {characterPositionStore} from "@/utils/character/characterPosition";
+import {Direction, Position} from "@/types/movement";
 
 
 type DeviceListener = (device: SmartDevice) => void;
@@ -28,26 +30,43 @@ export class GameService {
   constructor(navigate: (path: string) => void) {
     const saveGame: Game | null = CookieService.get<Game>('save_game');
     const tutorialCookie: boolean | null = CookieService.get<boolean>('tutorialState');
+    const characterPositionCookie: Position | null = CookieService.get<Position>('save_player_position');
+    const characterFacingCookie: Direction | null = CookieService.get<Direction>('save_player_facing');
 
     if (saveGame) {
-      const game = Game.fromSerialized(saveGame);
-      this.game = game;
-      allRoomStore.set(game.getRooms());
-      if (tutorialCookie != null) tutorialActiveStore.set(tutorialCookie);
+      this.game = Game.fromSerialized(saveGame);
+
+      if (characterPositionCookie != null) {
+        characterPositionStore.set(characterPositionCookie);
+      }else{
+        characterPositionStore.reset();
+      }
+
+      if (characterFacingCookie != null){
+        characterPositionStore.setFacing(characterFacingCookie);
+      }
+
     } else {
       const newRooms = this.setUpRooms();
       this.game = new Game(newRooms);
-      if (allRoomStore.getAll().length === 0) allRoomStore.set(newRooms);
+      CookieService.set("save_player_position", null);
+      CookieService.set("save_player_facing", null);
+      characterPositionStore.reset()
     }
+
+    if (tutorialCookie != null) {
+      tutorialDoneStore.set(tutorialCookie);
+    }
+
+
     this.navigate = navigate;
   }
 
   onGameStateChange(): void {
     CookieService.set("save_game", {
-      rooms: allRoomStore.getAll().map(r => r.toSerialized()),
+      rooms: this.game.getRooms().map(r => r.toSerialized()),
       score: this.game.getScore().toSerialized(),
     });
-    CookieService.set("tutorialState", tutorialActiveStore.get());
   }
 
   setUpRooms(): Room[] {
@@ -57,30 +76,33 @@ export class GameService {
     hallway.unlockRoom();
 
     const livingRoom = new Room(RoomNames.LIVINGROOM, [
-      new SmartDevice("SmartTv", t`This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Uncheck the permissions which you think are not necessary by clicking directly on the checkbox.`),
-      new SmartDevice("SmartLights", t`This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Modify your settings by clicking on the sliders. When you are satisfied with your choices continue by pressing the continue button`)
+      new SmartDevice(DeviceNames.SMART_TV, t`This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Uncheck the permissions which you think are not necessary by clicking directly on the checkbox.`),
+      new SmartDevice(DeviceNames.SMART_LIGHTS, t`This is about trying to only give permission where necessary, whilst not disabling too much such that basic functionality is not available anymore. Modify your settings by clicking on the sliders. When you are satisfied with your choices continue by pressing the continue button`)
     ]);
 
     const kitchen = new Room(RoomNames.KITCHEN, [
-      new SmartDevice("SmartHomeHub", t`Did you know personal data of members of the European Union are protected by the General Data Protection Regulation GDPR? The GDPR protects your personal information by law, and you may request its protection even if the data processor is not located in the EU. The GDPR even grants higher protection to especially sensitive data, that means data which might be abused against you are sorted into special categories. For example, this could be private information on your religion, or political views. Have you understood what the GDPR protects? Decide if provided information is public, personal, or personal and sensitive by dragging and dropping.`),
-      new SmartDevice("SmartKitchen", t`You need to cook a meal. lets try to focus on privacy friendly but still practical choices. The minigame will let you know what the next steps are to complet the game.`),
-      new SmartDevice("SecurityCamera", t`Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them.`),
+      new SmartDevice(DeviceNames.SMART_HOME_HUB, t`Did you know personal data of members of the European Union are protected by the General Data Protection Regulation GDPR? The GDPR protects your personal information by law, and you may request its protection even if the data processor is not located in the EU. The GDPR even grants higher protection to especially sensitive data, that means data which might be abused against you are sorted into special categories. For example, this could be private information on your religion, or political views. Have you understood what the GDPR protects? Decide if provided information is public, personal, or personal and sensitive by dragging and dropping.`),
+      new SmartDevice(DeviceNames.SMART_KITCHEN, t`You need to cook a meal. lets try to focus on privacy friendly but still practical choices. The minigame will let you know what the next steps are to complet the game.`),
+      new SmartDevice(DeviceNames.SECURITY_CAMERA, t`Let's first set the privacy settings by untoggeling the unnecessary permissions. Then we need to choose which camera placenemts are ok. Keep in mind your privacy and the privacy rights of others, that might be in the security camera frame. Places that are more private and intimat should probably not have a security camera pointing at them.`),
     ]);
 
     const bathroom = new Room(RoomNames.BATHROOM, [
-      new SmartDevice("SmartShower", t`Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable.`),
-      new SmartDevice("SmartMirror", t`You need to configure your smart mirror by choosing a provider for each app. Compare the permissions, features, data retention, and security details of each provider. Expand each provider to see all the details, then make your choice. Remember to explore all providers for each app before making your selection.`),
+      new SmartDevice(DeviceNames.SMART_SHOWER, t`Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable.`),
     ]);
 
-    return [hallway, livingRoom, kitchen, bathroom];
+    const bedroom = new Room(RoomNames.BEDROOM, [
+      new SmartDevice(DeviceNames.SMART_MIRROR, t`You need to configure your smart mirror by choosing a provider for each app. Compare the permissions, features, data retention, and security details of each provider. Expand each provider to see all the details, then make your choice. Remember to explore all providers for each app before making your selection.`),
+    ]);
+
+    return [hallway, livingRoom, kitchen, bathroom, bedroom];
   }
 
   getAllRooms(): Room[] {
-    return allRoomStore.getAll();
+    return this.game.getRooms();
   }
 
   private findRoomByName(roomName: RoomNames): Room | undefined {
-    return allRoomStore.getRoom(roomName);
+    return this.game.getRooms().find(r => r.name === roomName);
   }
 
   completeRoom(roomName: RoomNames): void {
@@ -95,7 +117,7 @@ export class GameService {
   }
 
   checkGameCompletionConditions(): boolean {
-    return allRoomStore.getAll().every((room: Room) => room.isCompleted);
+    return this.game.getRooms().every((room: Room) => room.isCompleted);
   }
 
   getDeviceForRoom(roomName: RoomNames): SmartDevice[] {
@@ -106,7 +128,6 @@ export class GameService {
   reset(): boolean {
     const newRooms = this.setUpRooms();
     this.game = new Game(newRooms);
-    allRoomStore.set(newRooms);
     this.navigate('/');
     this.onGameStateChange();
     return true;
@@ -162,6 +183,7 @@ export class GameService {
     return false;
   }
 
+  //ToDo Depreacated remove later #189
   changeScore(scoreDelta: number, scoreType: ScoreType): void {
     if (scoreType === 'privacy') this.game.modifyScore(scoreDelta, 0);
     if (scoreType === 'comfort') this.game.modifyScore(0, scoreDelta);
@@ -205,24 +227,26 @@ export class GameService {
   }
 
   getScore(): GameScore {
-    return this.game.getScore();
+    return this.game.calculateScore();
   }
 
-  completeDevice(name: string): void {
-    const device = allRoomStore.getDevice(name);
-    const room = allRoomStore.getRoomForDevice(name);
-    if (device) {
+  completeDevice(name: DeviceNames): void {
+    const device = this.getDeviceByName(name);
+    const room = this.getRoomForDevice(name);
+    if (device && room) {
       device.complete();
       this.deviceListeners.forEach(cb => cb(device));
-      if (this.getRoom(room).devices.filter(d => !d.getIsCompleted()).map(d => d.name).length <= 0){
-        this.completeRoom(room);
+      if (this.getRoom(room.name).devices.filter(d => !d.getIsCompleted()).map(d => d.name).length <= 0){
+        this.completeRoom(room.name);
       }
       this.onGameStateChange();
     }
   }
 
   getRoom(name: RoomNames): Room {
-    return allRoomStore.getRoom(name);
+    const room = this.game.getRooms().find(r => r.name === name);
+    if (!room) throw new Error(`Room ${name} not found`);
+    return room;
   }
 
   subscribeExitStates(cb: () => void): () => void {
@@ -250,10 +274,6 @@ export class GameService {
     }
   }
 
-  checkRoomCompleted(name: RoomNames): boolean{
-    return allRoomStore.getRoom(name).devices.every(d => d.getIsCompleted());
-  }
-
   onDeviceStateChanged(listener: DeviceListener): () => void {
     this.deviceListeners.add(listener);
     return () => this.deviceListeners.delete(listener);
@@ -263,7 +283,16 @@ export class GameService {
     return this.game;
   }
 
-  getDeviceByName(name : string){
-    return  allRoomStore.getAllDevices().find(c => c.name == name) ?? new SmartDevice("DEFAULT")
+  getDeviceByName(name : DeviceNames):SmartDevice{
+    const device= this.game.getRooms()
+            .flatMap(room => room.devices).find(c => c.name == name);
+    if(!device){
+      throw new Error(`Device with name ${name} not found`);
+    }
+    return device;
+  }
+
+  getRoomForDevice(name : DeviceNames): Room | undefined {
+    return this.game.getRooms().find(r => r.devices.some(d => d.name === name));
   }
 }

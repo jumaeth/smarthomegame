@@ -14,6 +14,7 @@ import weatherBWImg from "@/assets/smart-mirror/weatherBW.png";
 import weatherImg from "@/assets/smart-mirror/weather.png";
 import {Assets, Texture} from "pixi.js";
 import {Stage, TilingSprite} from "@pixi/react";
+import {DeviceNames} from "@/objects/DeviceNames.ts";
 
 interface SmartMirrorProps {
   completeDevice?: (isCompleted: boolean) => void;
@@ -59,7 +60,7 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
     });
   }, []);
   const gameService = useGameService();
-  const smartDevice: SmartDevice | undefined = gameService.getDeviceByName("SmartMirror");
+  const smartDevice: SmartDevice | undefined = gameService.getDeviceByName(DeviceNames.SMART_MIRROR);
   const [showDialogue, setShowDialogue] = useState(true);
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
   const [solvedApps, setSolvedApps] = useState<Record<string, boolean>>({});
@@ -137,11 +138,6 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
 
   React.useEffect(() => {
     if (!smartDevice) return;
-    smartDevice.getStatBlock().startTimer();
-  }, [smartDevice]);
-
-  React.useEffect(() => {
-    if (!smartDevice) return;
     if (allSolved) {
       const privacyScore = totalPoints.current.privacy || 0;
       const comfortScore = totalPoints.current.comfort || 0;
@@ -153,9 +149,8 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
         gameService.changeScore(comfortScore, 'comfort');
       }
       
-      smartDevice.getStatBlock().setValue("Smart Mirror Points", privacyScore);
-      smartDevice.getStatBlock().stopTimer();
-      gameService.completeDevice("SmartMirror");
+      smartDevice.getStatBlock().setValue(t`Smart Mirror Points`, privacyScore);
+      gameService.completeDevice(DeviceNames.SMART_MIRROR);
       completeDevice?.(true);
     }
   }, [allSolved, completeDevice, gameService, smartDevice]);
@@ -316,4 +311,3 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
 };
 
 export default SmartMirror;
-

@@ -1,8 +1,8 @@
-# SmartHomeEscape: A 2D Educational Game
+# SmartHomeChallenge: A 2D Educational Game
 
-SmartEscape is a **2D web-based game** built with **React**, **TypeScript**, and **Vite**. The game is designed to teach **children aged 14–16** how to use **protective data measures**.
+SmartHomeChallenge is a **2D web-based game** built with **React**, **TypeScript**, and **Vite**. The game is designed to teach **children aged 14–16** how to use **protective data measures**.
 
-Players find themselves trapped inside a smart home filled with connected devices. To escape safely, they must navigate through rooms, interact with smart devices, and complete **minigames**. Each minigame helps the player learn how to set up smart home technology correctly, with a focus on **privacy** and **cybersecurity** best practices.
+Players find themselves trapped inside a smart home filled with connected devices. To complete the challenge safely, they must navigate through rooms, interact with smart devices, and complete **minigames**. Each minigame helps the player learn how to set up smart home technology correctly, with a focus on **privacy** and **cybersecurity** best practices.
 
 ---
 
@@ -11,7 +11,7 @@ Players find themselves trapped inside a smart home filled with connected device
 - 🏡 Explore different rooms of a smart home.
 - 🔒 Learn about privacy settings and security.
 - 🎮 Complete minigames to fix vulnerabilities.
-- 🚪 Escape the house by correctly securing the smart home.
+- 🚪 Win the challenges against the house by correctly securing the smart home.
 
 ---
 
@@ -58,6 +58,9 @@ This will locally preview the production build.
 - **React Context** – Game state management
 
 ---
+
+## Multi Language setup
+  [Documentation Translation File](Documents/DocumentationTranslationFile.md)
 
 ## Project Status
 

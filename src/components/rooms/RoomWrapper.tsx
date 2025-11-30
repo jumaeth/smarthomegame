@@ -13,6 +13,7 @@ import {RoomNames} from "@/objects/RoomNames";
 import {MapKey} from "@/types/maps";
 import {SmartDevice} from "@/objects/SmartDevice";
 import {InteractiveType} from "@/types/InteractiveType.ts";
+import {DeviceNames, deviceNameToEnum} from "@/objects/DeviceNames.ts";
 
 interface RoomWrapperProps {
   roomName: RoomNames;
@@ -23,14 +24,7 @@ interface RoomWrapperProps {
   onMapChangeOverride?: (newMap: MapKey) => boolean | void;
 }
 
-export const RoomWrapper = ({
-                              roomName,
-                              interactiveElements,
-                              deviceComponents,
-                              autoComplete,
-                              autoUnlock,
-                              onMapChangeOverride
-                            }: RoomWrapperProps) => {
+export const RoomWrapper = ({ roomName, interactiveElements, deviceComponents, autoComplete, autoUnlock, onMapChangeOverride }: RoomWrapperProps) => {
   const gameService = useGameService();
   const smartDevices: SmartDevice[] = gameService.getDeviceForRoom(roomName);
 
@@ -41,10 +35,12 @@ export const RoomWrapper = ({
   const [canvasSize, setCanvasSize] = useState(calculateCanvasSize());
   const collisionMap = LEVEL_COLLISION_MAPS[roomName];
 
-  const handleDeviceOpen = (deviceName: string): void => {
+  const handleDeviceOpen = (deviceName: DeviceNames): void => {
     if (gameService.getDeviceByName(deviceName).getIsCompleted()) return;
-    if (tutorialActive.enabled && (deviceName !== "SmartTv")) return;
+    if (!tutorialActive.done && (deviceName !== DeviceNames.SMART_TV)) return;
     setActiveDevice(deviceName);
+    const smartDevice: SmartDevice = gameService.getDeviceByName(deviceName);
+    smartDevice.getStatBlock().startTimer();
     gameService.pauseGame();
   };
 
@@ -56,7 +52,9 @@ export const RoomWrapper = ({
   const smartDeviceCallback = (completed: boolean): void => {
     if (!activeDevice) return;
     const device = smartDevices.find((d) => d.name === activeDevice);
+    console.log(device)
     if (!device) return;
+    device.getStatBlock().stopTimer();
 
     if (completed) gameService.completeDevice(device.name);
     gameService.resumeGame();
@@ -73,7 +71,11 @@ export const RoomWrapper = ({
 
   const processedElements = interactiveElements.map((el) => {
     if (el.type === InteractiveType.SMART_DEVICE) {
-      return {...el, onInteract: () => handleDeviceOpen(el.name)};
+      const smartDevice = deviceNameToEnum(el.name);
+      if(!smartDevice){
+        throw new Error(`Smart device with name ${el.name} not found`);
+      }
+      return { ...el, onInteract: () => handleDeviceOpen(smartDevice) };
     }
     return el;
   });
@@ -96,7 +98,7 @@ export const RoomWrapper = ({
   }, [updateCanvasSize]);
 
   const handleMapChange = (): boolean => {
-    if (tutorialActive.enabled) return false;
+    if (!tutorialActive.done) return false;
     return gameService.leaveRoom(roomName);
   };
 

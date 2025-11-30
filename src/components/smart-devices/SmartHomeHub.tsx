@@ -2,6 +2,9 @@ import {Trans} from "@lingui/react/macro";
 import React, {useState} from 'react';
 import {DataSortingGame} from '../dataSortingGame/DataSortingGame';
 import Button from "@/components/general-ui/Button.tsx";
+import {SmartDevice} from "@/objects/SmartDevice.ts";
+import {useGameService} from "@/hooks/gameService/useGameService.tsx";
+import {DeviceNames} from "@/objects/DeviceNames.ts";
 
 
 interface SmartHomeHubProps {
@@ -9,10 +12,13 @@ interface SmartHomeHubProps {
 }
 
 export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({completeDevice}) => {
+  const gameService = useGameService();
   // Use a state to control the view: 0 = Intro, 1 = Game Modal
   const [frame, setFrame] = useState(0);
+  const smartHomeHubDevice:SmartDevice= gameService.getDeviceByName(DeviceNames.SMART_HOME_HUB)
 
-  const handleGameComplete = () => {
+  const handleGameComplete = (privacyPoints: number, comfortPoints:number) => {
+    smartHomeHubDevice.modifyScore(privacyPoints, comfortPoints);
     completeDevice?.(true);
   };
   const isGameModalOpen = frame === 1;
@@ -68,6 +74,10 @@ export const SmartHomeHub: React.FC<SmartHomeHubProps> = ({completeDevice}) => {
                       <h1 className="text-3xl text-center font-['LoResBold',sans-serif]">
                         <Trans>Data Sorting Challenge</Trans>
                       </h1>
+
+                      <p className="text-base text-center text-gray-300 mb-4 mt-2">
+                        <Trans>Drag and drop the datapoints to the correct category</Trans>
+                      </p>
 
                       <div className="p-[14px] px-[28px] mb-4">
                         <DataSortingGame onCompletion={handleGameComplete}/>

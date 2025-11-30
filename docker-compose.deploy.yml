@@ -1,0 +1,14 @@
+services:
+  web-dev:
+    image: ${CI_REGISTRY_IMAGE}:app_dev-latest
+    ports: ["8090:80"]
+    profiles: ["dev"]
+    container_name: Development
+    restart: unless-stopped
+
+  web-prod:
+    image: ${CI_REGISTRY_IMAGE}:app_prod-latest
+    ports: ["8080:80"]
+    profiles: ["prod"]
+    container_name: Production
+    restart: unless-stopped

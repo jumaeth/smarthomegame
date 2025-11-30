@@ -31,6 +31,7 @@ import {DoorFrame} from "@/pixi/levels/DoorFrame.tsx";
 import {getTexture} from "@/components/character/CharacterSelector.tsx";
 import {SpeechBubble, SpeechBubbleProps} from "@/pixi/components/SpeechBubble.tsx";
 import {InteractiveType} from "@/types/InteractiveType.ts";
+import {DeviceNames, deviceNameToEnum} from "@/objects/DeviceNames.ts";
 
 interface MainContainerProps {
   canvasSize: {
@@ -45,7 +46,7 @@ interface MainContainerProps {
   interactiveElements?: InteractivePixiElement[];
   gameService: GameService;
   room: RoomNames;
-  onDeviceOpen?: (deviceName: string) => void;
+  onDeviceOpen?: (deviceName: DeviceNames) => void;
 }
 
 export const MainContainer = ({
@@ -76,7 +77,7 @@ export const MainContainer = ({
     doorFrameFrontTexture, doorFrameBackTexture
   } = useLevelTextures(map);
   const {tile: characterTile} = useCharacterPosition();
-  const {enabled: tutorialActive, close: closeTutorial} = useTutorialActive();
+  const {done: tutorialDone, end: endTutorial} = useTutorialActive();
 
   const pixelSize = {
     width: TILE_SIZE * collisionMap[0].length,
@@ -134,7 +135,7 @@ export const MainContainer = ({
     const tileY = Math.floor(pos.y / TILE_SIZE);
     const transition = getMapTransition(map, tileX, tileY);
 
-    if (!transition || tutorialActive) {
+    if (!transition || !tutorialDone || characterPositionStore.getFacing() != transition.faceToEnter) {
       setBlockedDoorTo(null);
       return;
     }
@@ -181,10 +182,13 @@ export const MainContainer = ({
           return []
       }
     } else {
-      if (room === RoomNames.BATHROOM) {
-        return [back[0], back[1], back[2]]
-      } else {
-        return []
+      switch (room) {
+        case RoomNames.BATHROOM:
+          return [back[0], back[1], back[2]];
+        case RoomNames.BEDROOM:
+          return [back[3], back[4], back[5]];
+        default:
+          return [];
       }
     }
   }
@@ -207,7 +211,11 @@ export const MainContainer = ({
     if (!nearby) return;
 
     if (nearby.type === InteractiveType.SMART_DEVICE && onDeviceOpen) {
-      onDeviceOpen(nearby.name);
+      const smartDevice = deviceNameToEnum(nearby.name);
+      if(!smartDevice){
+        throw new Error(`Smart device with name ${nearby.name} not found`);
+      }
+      onDeviceOpen(smartDevice);
     } else if (nearby.type === InteractiveType.DUMMY) {
       showDummy({x: nearby.x, y: nearby.y, element: nearby.name});
     }
@@ -249,7 +257,7 @@ export const MainContainer = ({
                         setShouldSnapCamera(false);
                         setCameraSettled(true);
                       }}
-                      tutorialEnabled={tutorialActive}
+                      tutorialDone={!tutorialDone}
               >
                 {(assetsReady && cameraSettled) && (
                         <>
@@ -266,7 +274,7 @@ export const MainContainer = ({
                                   texture={characterTexture}
                                   onMove={handleCharacterMove}
                                   collisionMap={collisionMap}
-                                  isPaused={isPaused as boolean}
+                                  isPaused={isPaused as boolean || inTransition}
                                   onInteractCheck={handleInteraction}
                           />
                           <LevelOverlay pixelSize={pixelSize} texture={overlayTexture}/>
@@ -284,7 +292,7 @@ export const MainContainer = ({
                         </>
                 )}
               </Camera>
-              {!tutorialActive && (
+              {tutorialDone && (
                       <TransitionOverlay
                               width={canvasSize.width}
                               height={canvasSize.height}
@@ -314,11 +322,11 @@ export const MainContainer = ({
                       windowHeight={canvasSize.height}
                       gameService={gameService}
               />
-              {tutorialActive && <Tutorial
+              {!tutorialDone && <Tutorial
                       windowWidth={canvasSize.width}
                       windowHeight={canvasSize.height}
                       gameService={gameService}
-                      onClose={closeTutorial}
+                      onClose={endTutorial}
                       interactiveElements={interactiveElements as InteractivePixiElement[]}
               />}
             </Container>

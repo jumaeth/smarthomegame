@@ -170,7 +170,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
       return true;
     }
     return false;
-  },[interactiveElements, pos])
+  },[interactiveElements, pos, onDeviceOpen])
 
   useEffect(() => {
     if (ePressed && checkFoundSmartTV()){
@@ -238,6 +238,7 @@ export const More_Expl_SD: React.FC<PageProps> = ({
 
     const parent = backgroundRef.current;
     if (!parent)return;
+    parent.removeChildren()
     parent.addChild(bg);
   },[windowWidth, windowHeight])
 

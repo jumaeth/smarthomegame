@@ -41,7 +41,7 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
       next[imageIndex] = true; // or toggle if that’s desired: next[imageIndex] = !next[imageIndex];
       const isCorrect = next[imageIndex] === solutions[imageIndex].booleanSolution;
       setFeedbackMsgColor(isCorrect ? "green" : "red");
-      setFeedbackMsg(solutions[imageIndex].solutionMessage);
+      setFeedbackMsg( isCorrect ? solutions[imageIndex].solutionCorrectMessage : solutions[imageIndex].solutionWrongMessage);
       return next;
     });
     setImageGrid(prev => {
@@ -124,7 +124,7 @@ export const CaptchaComponent = ({pictureFolder, solutions, onComplete}: Captcha
             <div className="flex items-center gap-2">
               {feedbackMsg && (
                       <div className={`flex space-x-2 ${fadeOut ? 'transition-opacity duration-2000 opacity-0' : 'opacity-100'}`}>
-                        <p className={`mt-1 text-m ${feedbackMsgColor === "green" ? "text-green-600" : feedbackMsgColor === "red" ? "text-red-600" : "text-black"}`}>
+                        <p className={`mt-1 text-m ${feedbackMsgColor === "green" ? "text-green-600" : feedbackMsgColor === "red" ? "text-red-300" : "text-black"}`}>
                           {feedbackMsg}
                         </p>
                       </div>

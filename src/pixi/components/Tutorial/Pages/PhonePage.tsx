@@ -2,7 +2,13 @@ import React, {PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMe
 import {Container, Graphics, Sprite, Text} from "@pixi/react";
 import phoneImage from "@/assets/tutorial/phonePage/phone.png";
 import {loadTexture} from "@/utils/loadTexture.ts";
-import {Container as PixiContainer, Graphics as PixiGraphics, Sprite as PixiSprite, TextStyle} from "pixi.js";
+import {
+  Container as PixiContainer,
+  Graphics as PixiGraphics,
+  Rectangle,
+  Sprite as PixiSprite,
+  TextStyle
+} from "pixi.js";
 import {Pages} from "@/pixi/components/Tutorial/Pages/Pages.ts";
 import {growAnimation, GrowProps} from "@/pixi/components/Tutorial/anim/growAnimation.ts";
 import {PageProps} from "@/pixi/components/Tutorial/Pages/pageRegistry.ts";
@@ -42,15 +48,13 @@ export const PhonePage: React.FC<PageProps> = ({
 
 
   const textArr  = useMemo( () => [
-    t`The help app`,
-    t`Want to see this tutorial again or find out how to control the game? - Use the help app!`,
-    t``,
-    t``,
-    t`The settings`,
-    t`Use this app to change the settings, including language, sound or touch controls`,
-    t``,
-    t``,
-    t`The Phone`
+    t`The layout`,
+    t`Clicking on the phone opens the blueprint of the house. Here you can check where the different rooms are located.`,
+    t`The rooms`,
+    t`In every room, you’ll find some items – some of them are Smart Devices. Adjust their privacy settings and solve the mini-games to unlock your Smart Home! `,
+    t`You are here`,
+    t`This is where you start the game. Try not to get lost!`,
+    t`The Map`
 
 ], [])
 
@@ -136,12 +140,24 @@ export const PhonePage: React.FC<PageProps> = ({
 
 
   useEffect(() => {
-    const sprite = charRef.current
-    if(!sprite || animating)return;
-    sprite.x = growChar.endX
-    sprite.y = growChar.endY
-    sprite.scale.set(growChar.endS)
-  }, [windowWidth, windowHeight, animating, growChar.endS, growChar.endX, growChar.endY]);
+    const sprite = charRef.current;
+    if (!sprite || animating) return;
+
+    if (!introRun) {
+      sprite.x = growChar.startX;
+      sprite.y = growChar.startY;
+      sprite.scale.set(growChar.startS);
+    } else {
+      sprite.x = growChar.endX;
+      sprite.y = growChar.endY;
+      sprite.scale.set(growChar.endS);
+    }
+  }, [windowWidth, windowHeight, animating, growChar, introRun]);
+
+  const continueTutorial = useCallback(() => {
+    if (animating) return
+    setAnimation(Animations.SHRINK);
+  },[Animations.SHRINK, animating])
 
   //keyControls
   useEffect(() => {
@@ -150,7 +166,7 @@ export const PhonePage: React.FC<PageProps> = ({
     const onSpecialPressed = (e: globalThis.KeyboardEvent) => {
       switch (e.code) {
         case "Space":
-          setAnimation(Animations.SHRINK);
+          continueTutorial()
       }
     }
 
@@ -160,46 +176,34 @@ export const PhonePage: React.FC<PageProps> = ({
     return () => {
       events.forEach(func => window.removeEventListener("keydown", func));
     };
-  }, [keyControl, animating, Animations.SHRINK]);
+  }, [keyControl, animating, Animations.SHRINK, continueTutorial]);
 
   //setup graphics
   const textsData = useMemo<TextProps[]>( ()=> ([
-    { text: textArr[0], x: windowWidth*0.12,   y: windowHeight*0.2,  fontSize: 0.035, fontWeight: "bold"   },
-    { text: textArr[2], x: windowWidth*0.14, y: windowHeight*0.7,  fontSize: 0.035, fontWeight: "bold"   },
-    { text: textArr[4], x: windowWidth*0.725, y: windowHeight*0.3,  fontSize: 0.035, fontWeight: "bold"   },
-    { text: textArr[6], x: windowWidth*0.75, y: windowHeight*0.75,  fontSize: 0.035, fontWeight: "bold"   },
+    { text: textArr[0], x: windowWidth*0.05,   y: windowHeight*0.2,  fontSize: 0.035, fontWeight: "bold"   },
+    { text: textArr[2], x: windowWidth*0.4, y: windowHeight*0.7,  fontSize: 0.035, fontWeight: "bold"   },
+    { text: textArr[4], x: windowWidth*0.7, y: windowHeight*0.2,  fontSize: 0.035, fontWeight: "bold"   },
 
-    { text: textArr[1], x: windowWidth*0.188,   y: windowHeight*0.265,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.25},
-    { text: textArr[3], x: windowWidth*0.2, y: windowHeight*0.755,  fontSize: 0.025, fontWeight: "lighter"},
-    { text: textArr[5], x: windowWidth*0.785,   y: windowHeight*0.365,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.28},
-    { text: textArr[7], x: windowWidth*0.8125, y: windowHeight*0.815,  fontSize: 0.025, fontWeight: "lighter"},
+    { text: textArr[1], x: windowWidth*0.05,   y: windowHeight*0.25,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.25},
+    { text: textArr[3], x: windowWidth*0.4, y: windowHeight*0.75,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.25},
+    { text: textArr[5], x: windowWidth*0.7,   y: windowHeight*0.25,  fontSize: 0.025, fontWeight: "lighter", wrap: 0.28},
 
-    { text: textArr[8], x: windowWidth*0.5, y: windowHeight*0.125, fontSize: 0.06, fontWeight: "bold" },
-  ]),[textArr, windowWidth, windowHeight])
+    { text: textArr[6], x: windowWidth * 0.425,   y: windowHeight * 0.15, fontSize: 0.07, fontWeight: "bold" },
+  ]),[windowWidth, windowHeight, textArr])
 
   //define line properties
   const drawLines =  useCallback( (g: PixiGraphics) => {
     g.clear();
 
     //top left
-    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#135690", 1);
-    g.moveTo(windowWidth*0.4475, windowHeight*0.395);
-    g.lineTo(windowWidth*0.275, windowHeight*0.3);
-
-    //bottom left
-    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#1C557D", 1);
-    g.moveTo(windowWidth*0.45, windowHeight*0.46);
-    g.lineTo(windowWidth*0.225, windowHeight*0.675);
-
-    //bottom right
-    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#7CB3D3", 1);
-    g.moveTo(windowWidth*0.55, windowHeight*0.475);
-    g.lineTo(windowWidth*0.7, windowHeight*0.7);
+    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#00458f", 1);
+    g.moveTo(windowWidth*0.4, windowHeight*0.39);
+    g.lineTo(windowWidth*0.3, windowHeight*0.275);
 
     //top right
-    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#EB992E", 1);
-    g.moveTo(windowWidth*0.55, windowHeight*0.34);
-    g.lineTo(windowWidth*0.655, windowHeight*0.3);
+    g.lineStyle(Math.min(windowWidth, windowHeight) / 120, "#CC0000", 1);
+    g.moveTo(windowWidth*0.489, windowHeight*0.43);
+    g.lineTo(windowWidth*0.675, windowHeight*0.25);
 
   }, [windowWidth, windowHeight])
 
@@ -222,7 +226,6 @@ export const PhonePage: React.FC<PageProps> = ({
                               text={text.text}
                               x={text.x}
                               y={text.y}
-                              anchor={0.5}
                               style={new TextStyle({
                                 fontFamily: "LoResRegular",
                                 fontSize: Math.min(windowWidth, windowHeight) * text.fontSize,
@@ -241,12 +244,18 @@ export const PhonePage: React.FC<PageProps> = ({
 
   return (
       <>
-        {showChar && texture && <Sprite
-          texture={texture}
-          ref={charRef}
-        />}
-        {lines()}
-        {texts()}
+        <Container
+         eventMode="static"
+         hitArea={new Rectangle(0,0,windowWidth,windowHeight)}
+         pointertap={continueTutorial}
+        >
+          {showChar && texture && <Sprite
+                  texture={texture}
+                  ref={charRef}
+          />}
+          {lines()}
+          {texts()}
+        </Container>
       </>
   )
 };

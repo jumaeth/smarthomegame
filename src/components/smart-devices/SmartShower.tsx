@@ -1,11 +1,12 @@
 import {Trans} from "@lingui/react/macro";
 import {t} from "@lingui/core/macro";
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Button from "@/components/general-ui/Button";
 import {useGameService} from "@/hooks/gameService/useGameService";
 import {SmartDevice} from "@/objects/SmartDevice";
 import sceneImg from "@/assets/smart-shower/scene.png";
 import checkImg from "@/assets/smart-shower/check.png";
+import {DeviceNames} from "@/objects/DeviceNames.ts";
 
 function getShowerObjects(): ShowerObject[] {
   return [
@@ -17,8 +18,8 @@ function getShowerObjects(): ShowerObject[] {
       y: 20,
       width: 120,
       height: 80,
-      privacyScore: -3,
-      comfortScore: 3
+      privacyScore: -7,
+      comfortScore: 5
     },
     {
       id: "faucet",
@@ -28,8 +29,8 @@ function getShowerObjects(): ShowerObject[] {
       y: 200,
       width: 100,
       height: 80,
-      privacyScore: -2,
-      comfortScore: 4
+      privacyScore: -4,
+      comfortScore: 6.5
     },
     {
       id: "temperature",
@@ -39,8 +40,8 @@ function getShowerObjects(): ShowerObject[] {
       y: 180,
       width: 120,
       height: 100,
-      privacyScore: -3,
-      comfortScore: 3
+      privacyScore: -7,
+      comfortScore: 5
     },
     {
       id: "clock",
@@ -50,8 +51,8 @@ function getShowerObjects(): ShowerObject[] {
       y: 30,
       width: 100,
       height: 90,
-      privacyScore: -1,
-      comfortScore: 2
+      privacyScore: -2,
+      comfortScore: 3.5
     },
     {
       id: "soap",
@@ -99,22 +100,16 @@ interface ShowerObject {
 
 export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
   const gameService = useGameService();
-  const smartDevice: SmartDevice | undefined = gameService.getDeviceByName("SmartShower");
+  const smartDevice: SmartDevice | undefined = gameService.getDeviceByName(DeviceNames.SMART_SHOWER);
 
   const [frame, setFrame] = useState(0);
   const [selectedObject, setSelectedObject] = useState<ShowerObject | null>(null);
   const [completedObjects, setCompletedObjects] = useState<Set<string>>(new Set());
-  const totalPoints = useRef({ privacy: 0, comfort: 0 });
+  const totalPoints = useRef({ privacy: 20, comfort: 0 });
   const pointsApplied = useRef(false);
   const shouldCompleteOnUnmount = useRef(false);
 
   const showerObjects = getShowerObjects();
-
-  useEffect(() => {
-    if (smartDevice) {
-      smartDevice.getStatBlock().startTimer();
-    }
-  }, [smartDevice]);
 
   const isGameModalOpen = frame === 1;
 
@@ -132,8 +127,8 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
       return;
     }
 
-    const privacyDelta = granted ? selectedObject.privacyScore : -selectedObject.privacyScore;
-    const comfortDelta = granted ? selectedObject.comfortScore : -selectedObject.comfortScore;
+    const privacyDelta = granted ? selectedObject.privacyScore : 0;
+    const comfortDelta = granted ? selectedObject.comfortScore : 0;
 
     setCompletedObjects(prev => new Set([...prev, selectedObject.id]));
     totalPoints.current.privacy = (totalPoints.current.privacy || 0) + (privacyDelta || 0);
@@ -149,18 +144,12 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
     if (allCompleted && !pointsApplied.current) {
       pointsApplied.current = true;
 
-      const privacyScore = totalPoints.current.privacy || 0;
+      const privacyScore = totalPoints.current.privacy < 0? 0 : totalPoints.current.privacy ;
       const comfortScore = totalPoints.current.comfort || 0;
 
-      if (privacyScore) {
-        gameService.changeScore(privacyScore, 'privacy');
-      }
-      if (comfortScore) {
-        gameService.changeScore(comfortScore, 'comfort');
-      }
+      smartDevice.modifyScore(privacyScore,comfortScore);
 
-      smartDevice.getStatBlock().setValue("Smart Shower Points", privacyScore);
-      smartDevice.getStatBlock().stopTimer();
+      smartDevice.getStatBlock().setValue(t`Smart Shower Points`, privacyScore);
       shouldCompleteOnUnmount.current = true;
     }
   }, [allCompleted, smartDevice, gameService]);
@@ -198,7 +187,7 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
 
                       <div className="text-xl bg-white p-5 rounded-lg text-gray-700 w-full max-w-3xl mb-6">
                         <p className="leading-relaxed">
-                          <Trans>Configure your smart shower by clicking on objects and deciding which permissions to grant or services to enable.</Trans>
+                          <Trans>Your Smart Shower is designed to optimize water usage and help you consume wisely. It’s highly sustainable—but it may collect more data than necessary. Identify the smart gadgets within the Smart Shower and deactivate their data permissions if you believe they compromise your privacy.</Trans>
                         </p>
                       </div>
 
@@ -222,6 +211,10 @@ export const SmartShower: React.FC<SmartShowerProps> = ({completeDevice}) => {
                       <h1 className="text-3xl text-center font-['LoResBold',sans-serif] mb-4">
                         <Trans>Smart Shower Configuration</Trans>
                       </h1>
+
+                      <h2 className="text-base text-center">
+                        <Trans>Find the relevant objects for the smart shower. Think carefully about which features you want to enable or disable.</Trans>
+                      </h2>
 
                       <div className="flex-1 flex items-center justify-center p-4 relative">
                         {selectedObject && (

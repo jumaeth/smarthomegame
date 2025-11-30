@@ -15,7 +15,7 @@ interface IngredientsStageProps {
   setTotalPoints: RefObject<Map<Score, number>>;
 }
 
-export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, setTotalPoints}) => {
+export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, setTotalPoints }) => {
 
   const texturePaths= useMemo(() => ({
     recipeOpen: recipeOpenImg,
@@ -57,8 +57,8 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
   ];
 
   function shuffledRange(n: number): number[] {
-    return Array.from({length: n}, (_, i) => i + 1)
-            .sort(() => Math.random() - 0.5).map(i => i - 1);
+    return  Array.from({ length: n }, (_, i) => i + 1)
+            .sort(() => Math.random() - 0.5).map(i => i-1);
   }
 
   const qualityPoints = [
@@ -92,8 +92,8 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
   const {textures, loaded} = useLoadTextures(texturePaths);
   const [buttonTexts, setButtonTexts] = useState(btnTexts[1]);
   const [text, setText] = useState(explanations[0]);
-  const [page, setPage] = useState(1);
-  const [btnText, setBtnText] = useState("");
+  const [page, setPage] =useState(1);
+  const [btnText, setBtnText] =useState("");
   const [scores, setScores] = useState({
     quality: 0,
     time: 0,
@@ -101,7 +101,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
     privacy: 0
   });
   const [calcFinished, setCalcFinished] = useState(false);
-  const [instruction, setInstruction] = useState(instructions[0]);
+  const [instruction,setInstruction] = useState(instructions[0]);
   const offset = explanations.length;
   const [background, setBackground] = useState("book");
   const [buttonOrders] = useState(() => Array.from({length: btnTexts.length}, () => shuffledRange(4)));
@@ -113,12 +113,12 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
   }, [page]);
 
   useEffect(() => {
-    if (page > offset) {
-      setButtonTexts(btnTexts[page - offset - 1]);
+    if(page > offset){
+      setButtonTexts(btnTexts[page-offset-1]);
     }
   }, [page]);
 
-  const btnAction = (btnId: number) =>
+  const btnAction = (btnId : number) =>
           () => {
             setScores(prev => ({
               ...prev,
@@ -136,7 +136,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
 
   useEffect(() => {
     if (calcFinished) {
-      setPage(page + 1);
+      setPage(page+1);
     }
   }, [scores.quality, calcFinished]);
 
@@ -177,7 +177,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
 
   const assembleSummaryText = () => {
     const assembled = finalMessage
-            .map((msg, i) => msg + " " + (evalChoices[i]?.[choices[i]] ?? ''))
+            .map((msg, i) => msg + " "+(evalChoices[i]?.[choices[i]] ?? ''))
             .join(' ');
 
     return assembled;
@@ -187,7 +187,7 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
   const retry = () => {
     setButtonTexts(btnTexts[1]);
     setInstruction(instructions[0]);
-    setScores({quality: 0, time: 0, price: 0, privacy: 0});
+    setScores({ quality: 0, time: 0, price: 0 , privacy: 0});
     setCalcFinished(false);
     setPage(3);
 
@@ -195,11 +195,12 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
 
 
   const action = () => {
-    if (page < offset + btnTexts.length) {
-      setPage(page + 1);
-    } else if (choices[3] === 2) {
+    if(page < offset + btnTexts.length){
+      setPage(page+1);
+    }
+    else if(choices[3] === 2){
       retry();
-    } else {
+    }else{
       const setPoints = setTotalPoints.current;
       if (setPoints) {
         setPoints.set(Score.Privacy, totalPrivacy);
@@ -210,53 +211,50 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
   };
 
   useEffect(() => {
-  }, [loaded]);
-
-  useEffect(() => {
     if (page === offset + 1 + btnTexts.length) {
       setText(assembleSummaryText());
     }
   }, [page]);
 
 
-  const texts = () => {
-    if (page < offset + 1) {
-      if (background != "book") {
-        setBackground("book");
-      }
-      return <>
-        <Text
-                text={text.toUpperCase()}
-                x={85}
-                y={65}
-                style={
-                  new TextStyle({
-                    fontFamily: 'LoResRegular',
-                    fontSize: 24,
-                    wordWrap: true,
-                    wordWrapWidth: 400,
-                  })}
-                anchor={{x: 0, y: 0}}
-        />
+  const texts =  () => {
+      if (page < offset+1) {
+        if(background != "book"){
+          setBackground("book");
+        }
+        return <>
+          <Text
+                  text={text.toUpperCase()}
+                  x={85}
+                  y={65}
+                  style={
+                    new TextStyle({
+                      fontFamily:'LoResRegular',
+                      fontSize:24,
+                      wordWrap:true,
+                      wordWrapWidth: 400,
+                    })}
+                  anchor={{x: 0, y: 0}}
+          />
 
-        <Button
-                x={375}
-                y={275}
-                color={0xdcc08e}
-                lineColor={0x5d3c1a}
-                width={90}
-                height={35}
-                label={"Weiter"}
-                action={action}
-        />
-      </>
-    }
+                  <Button
+                          x={375}
+                          y={275}
+                          color={0xdcc08e}
+                          lineColor={0x5d3c1a}
+                          width={90}
+                          height={35}
+                          label={t`Continue`}
+                          action={action}
+                  />
+        </>
+      }
   };
 
   const buttons = () => {
-    const order = buttonOrders[page - offset - 1];
+    const order = buttonOrders[page-offset-1];
     if (page >= offset + 1 && page <= offset + btnTexts.length) {
-      if (background != "market") {
+      if(background != "market"){
         setBackground("market");
       }
       const btns = [];
@@ -282,13 +280,13 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
                 y={30}
                 style={
                   new TextStyle({
-                    fontFamily: 'LoResRegular',
-                    fontSize: 20,
-                    wordWrap: true,
+                    fontFamily:'LoResRegular',
+                    fontSize:20,
+                    wordWrap:true,
                     wordWrapWidth: 400,
                     fill: 0xEEEEEE
                   })}
-                anchor={{x: 0.5, y: 0.5}}
+                anchor={{ x: 0.5, y: 0.5 }}
         />}
         {btns}
       </>;
@@ -296,9 +294,9 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
   };
 
 
-  const summary = () => {
+  const summary =  () => {
     if (page === offset + 1 + btnTexts.length) {
-      if (background != "book") {
+      if(background != "book"){
         setBackground("book");
       }
       return <>
@@ -308,31 +306,31 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
                 y={65}
                 style={
                   new TextStyle({
-                    fontFamily: 'LoResRegular',
-                    fontSize: 24,
-                    wordWrap: true,
-                    wordWrapWidth: 400,
+                    fontFamily:'LoResRegular',
+                    fontSize:24,
+                    wordWrap:true,
+                    wordWrapWidth:400,
                   })}
                 anchor={{x: 0, y: 0}}
         />}
 
-        <Button
-                x={235}
-                y={275}
-                width={100}
-                height={35}
-                color={0xdcc08e}
-                lineColor={0x5d3c1a}
-                label={btnText}
-                action={action}
-        />
+                <Button
+                        x={235}
+                        y={275}
+                        width={100}
+                        height={35}
+                        color={0xdcc08e}
+                        lineColor={0x5d3c1a}
+                        label={btnText}
+                        action={action}
+                />
       </>
     }
   };
 
   const backgrounds = () => {
-    if (loaded) {
-      if (background === "book") {
+    if(loaded){
+      if(background === "book"){
         return (
                 <Sprite
                         anchor={0.5}
@@ -343,24 +341,24 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({setStage, set
                         y={210}
                 />
         )
-      } else if (background === "market") {
+      }else if(background === "market"){
         return (
                 <>
-                  <Sprite
-                          eventMode={'static'}
-                          scale={0.6}
-                          texture={textures.marketBackground}
-                          x={0}
-                          y={-200}
-                  />
-                  <Sprite
-                          anchor={0.5}
-                          eventMode={'static'}
-                          scale={0.45}
-                          texture={textures.market}
-                          x={272}
-                          y={170}
-                  />
+                <Sprite
+                        eventMode={'static'}
+                        scale={0.6}
+                        texture={textures.marketBackground}
+                        x={0}
+                        y={-200}
+                />
+                <Sprite
+                        anchor={0.5}
+                        eventMode={'static'}
+                        scale={0.45}
+                        texture={textures.market}
+                        x={272}
+                        y={170}
+                />
                 </>
         )
       }
