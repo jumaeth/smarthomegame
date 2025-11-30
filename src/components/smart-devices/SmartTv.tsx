@@ -18,7 +18,7 @@ interface SmartTvProps {
   onCompletion?: (isCompleted: boolean) => void;
 }
 
-export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
+export const SmartTv: React.FC<SmartTvProps> = ({onCompletion}) => {
   const gameService = useGameService();
   const smartTvDevice: SmartDevice = gameService.getDeviceByName(DeviceNames.SMART_TV);
   const [showDialogue, setShowDialogue] = useState(true);
@@ -33,7 +33,7 @@ export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
       label: t`Face ID activated`,
       checked: true,
       warning: t`If you opt out of Face ID, you'll need to use a PIN or password to verify purchases or access TV settings, which may be less convenient.`,
-      privacyScore: -5,
+      privacyScore: -2.4,
       comfortScore: 1
     },
     {
@@ -41,31 +41,31 @@ export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
       label: t`Logged in with Google Account`,
       checked: true,
       warning: t`If you opt out of Google Account sync, you won't be able to access your personalized content, recommendations, and purchased apps.`,
-      privacyScore: -1,
-      comfortScore: 5
+      privacyScore: -0.4,
+      comfortScore: 4
     },
     {
       id: "healthApp",
       label: t`Synced with Health App`,
       checked: true,
       warning: t`If you opt out of the Health App, Smart TV cannot track your screen time anymore and send Health Alerts.`,
-      privacyScore: -5,
-      comfortScore: 0
+      privacyScore: -2.4,
+      comfortScore: 1
     },
     {
       id: "smartHomeHub",
       label: t`Synced with Smart Home Hub`,
       checked: true,
       warning: t`If you opt out of Smart Home Hub sync, your TV won't be able to control other smart devices or respond to home automation.`,
-      privacyScore: -1,
-      comfortScore: 5
+      privacyScore: -0.4,
+      comfortScore: 4
     },
     {
       id: "smartHomeApp",
       label: t`Synced with Smart Home App`,
       checked: true,
       warning: t`If you opt out of Smart Home App sync, you won't be able to control your TV remotely or receive notifications.`,
-      privacyScore: -1,
+      privacyScore: -0.4,
       comfortScore: 3
     },
     {
@@ -73,7 +73,7 @@ export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
       label: t`Microphone On`,
       checked: true,
       warning: t`If you opt out of microphone access, voice commands and voice search will not work.`,
-      privacyScore: -3,
+      privacyScore: -1.2,
       comfortScore: 2
     },
     {
@@ -81,7 +81,7 @@ export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
       label: t`Voice recognition on`,
       checked: true,
       warning: t`If you opt out of voice recognition, the TV won't be able to learn your voice patterns for better accuracy.`,
-      privacyScore: -10,
+      privacyScore: -4,
       comfortScore: 1
     },
     {
@@ -89,7 +89,7 @@ export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
       label: t`Camera On`,
       checked: true,
       warning: t`If you opt out of camera access, gesture controls and video calling features will not work.`,
-      privacyScore: -10,
+      privacyScore: -4,
       comfortScore: 1
     },
     {
@@ -97,15 +97,15 @@ export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
       label: t`Location Services`,
       checked: true,
       warning: t`If you opt out of location services, local content and weather information may not be accurate.`,
-      privacyScore: -5,
-      comfortScore: 0
+      privacyScore: -2.4,
+      comfortScore: 1
     },
     {
       id: "analytics",
       label: t`Usage Analytics`,
       checked: true,
       warning: t`If you opt out of usage analytics, the TV won't be able to provide personalized recommendations.`,
-      privacyScore: -5,
+      privacyScore: -2.4,
       comfortScore: 2
     }
   ]);
@@ -123,27 +123,23 @@ export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
 
   const handleSubmit = () => {
     // Calculate score based on individual option scores
-    const totalPrivacyScore = options.reduce((total: number, opt: SmartTvOption) => {
+    let totalPrivacyScore = options.reduce((total: number, opt: SmartTvOption) => {
       return total + (opt.checked ? opt.privacyScore : 0);
-    }, 0);
+    }, 20);
+    totalPrivacyScore =20-totalPrivacyScore;
 
     const totalComfortScore = options.reduce((total: number, opt: SmartTvOption) => {
       return total + (opt.checked ? opt.comfortScore : 0);
     }, 0);
 
-    setCalculatedScores({privacy: totalPrivacyScore, comfort: totalComfortScore});
 
     // Check if privacy loss is higher than comfort gain
-    const privacyLoss = Math.abs(totalPrivacyScore); // Convert negative to positive
-    if (privacyLoss > totalComfortScore) {
+    if (totalPrivacyScore < totalComfortScore) {
       setShowReconfigureWarning(true);
     } else {
       // Privacy loss is lower than comfort gain, configure instantly
-      smartTvDevice.modifyScore(totalPrivacyScore, totalComfortScore);
-      setShowSuccessMessage(true);
+      handleConfirmSettings();
     }
-    smartTvDevice.getStatBlock().setValue(t`Smart TV Comfort Score`, totalComfortScore);
-    smartTvDevice.getStatBlock().setValue(t`Smart TV Privacy Score`, totalPrivacyScore);
   };
 
   const handleReconfigure = () => {
@@ -152,9 +148,21 @@ export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
   };
 
   const handleConfirmSettings = () => {
+    let totalPrivacyScore = options.reduce((total: number, opt: SmartTvOption) => {
+      return total + (opt.checked ? opt.privacyScore : 0);
+    }, 20);
+    totalPrivacyScore = Math.round(10 * totalPrivacyScore) / 10; // Round to one decimal place
+
+    const totalComfortScore = options.reduce((total: number, opt: SmartTvOption) => {
+      return total + (opt.checked ? opt.comfortScore : 0);
+    }, 0);
+    setCalculatedScores({privacy: totalPrivacyScore, comfort: totalComfortScore});
     setShowReconfigureWarning(false);
     // User confirms the settings despite privacy loss
-    smartTvDevice.modifyScore(calculatedScores.privacy, calculatedScores.comfort);
+    smartTvDevice.getStatBlock().setValue(t`Smart TV Comfort Score`, totalComfortScore);
+    smartTvDevice.getStatBlock().setValue(t`Smart TV Privacy Score`, totalPrivacyScore);
+    smartTvDevice.modifyScore(totalPrivacyScore, totalComfortScore);
+
     setShowSuccessMessage(true);
   };
 
@@ -193,36 +201,37 @@ export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
   return (
 
           <div className="text-2xl text-white px-[30px] py-[12px] w-[800px]">
-            <h1 className="text-center text-3xl mb-4 font-['LoResBold',sans-serif] "><Trans>Smart TV Settings</Trans></h1>
+            <h1 className="text-center text-3xl mb-4 font-['LoResBold',sans-serif] "><Trans>Smart TV Settings</Trans>
+            </h1>
 
             <div className="text-xl px-[5px]">
               <p><Trans>Select which features you want to enable for your Smart TV:</Trans></p>
 
-            <div className="max-h-[400px] overflow-y-auto mb-5">
-              {options.map((option: SmartTvOption) => (
-                      <div key={option.id} className="mt-2.5 mb-3 p-3 border border-grey-400 rounded-md">
-                        <label className="flex items-center cursor-pointer">
-                          <input
-                                  type="checkbox"
-                                  checked={option.checked}
-                                  onChange={(e) => handleOptionChange(option.id, e.target.checked)}
-                                  className="mr-5 scale-[1.8] accent-[#37a820]"
-                          />
-                          <span>{option.label}</span>
-                        </label>
-                      </div>
-              ))}
-            </div>
+              <div className="max-h-[400px] overflow-y-auto mb-5">
+                {options.map((option: SmartTvOption) => (
+                        <div key={option.id} className="mt-2.5 mb-3 p-3 border border-grey-400 rounded-md">
+                          <label className="flex items-center cursor-pointer">
+                            <input
+                                    type="checkbox"
+                                    checked={option.checked}
+                                    onChange={(e) => handleOptionChange(option.id, e.target.checked)}
+                                    className="mr-5 scale-[1.8] accent-[#37a820]"
+                            />
+                            <span>{option.label}</span>
+                          </label>
+                        </div>
+                ))}
+              </div>
 
-            <button
-                    onClick={handleSubmit}
-                    className="px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
+              <button
+                      onClick={handleSubmit}
+                      className="px-8 py-[10px] text-lg font-semibold bg-blue-600 hover:bg-blue-700
                               rounded-[30px] shadow-md transition-colors cursor-pointer text-white
                               mx-auto block w-full max-w-[30%] mb-2"
-            >
-              <Trans>Send answer</Trans>
-            </button>
-          </div>
+              >
+                <Trans>Send answer</Trans>
+              </button>
+            </div>
 
             {showWarning && (
                     <div className="absolute text-xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 rounded-lg
@@ -270,7 +279,7 @@ export const SmartTv: React.FC<SmartTvProps> = ({ onCompletion }) => {
                     shadow-md z-10 text-center text-[#222222] bg-[#d1fae5]">
                       <h3 className="text-2xl font-bold mb-2"><Trans>Device Configured ✅ </Trans></h3>
                       <p className="mb-4 text-xl">
-                        {calculatedScores.privacy < 0 && Math.abs(calculatedScores.privacy) > calculatedScores.comfort
+                        {calculatedScores.privacy < 10 && (20-calculatedScores.privacy) > calculatedScores.comfort
                                 ? <Trans>Your Smart TV has been configured with your chosen settings.</Trans>
                                 : <Trans>Your Smart TV has been configured with a good balance of privacy and
                                   comfort!</Trans>}
