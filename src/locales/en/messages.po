@@ -88,11 +88,11 @@ msgstr "Account-level encryption, shared with fashion partners."
 msgid "achieve better results."
 msgstr "achieve better results."
 
-#: src/components/smart-devices/SmartLights.tsx:40
+#: src/components/smart-devices/SmartLights.tsx:41
 msgid "Activate Bluetooth"
 msgstr "Activate Bluetooth"
 
-#: src/components/smart-devices/SmartLights.tsx:41
+#: src/components/smart-devices/SmartLights.tsx:42
 msgid "Activate WiFi"
 msgstr "Activate WiFi"
 
@@ -116,7 +116,7 @@ msgstr "AI image recognition"
 msgid "Alerts"
 msgstr "Alerts"
 
-#: src/components/smart-devices/SmartMirror.tsx:304
+#: src/components/smart-devices/SmartMirror.tsx:300
 msgid "All apps configured!"
 msgstr "All apps configured!"
 
@@ -139,6 +139,10 @@ msgstr "Am I an easter egg?"
 #: src/components/smart-devices/SmartMirror.tsx:100
 msgid "Anonymized telemetry data; private browsing mode."
 msgstr "Anonymized telemetry data; private browsing mode."
+
+#: src/components/smart-devices/SmartMirror.tsx:111
+msgid "Anonymized usage data"
+msgstr "Anonymized usage data"
 
 #: src/components/smart-devices/SmartMirror.tsx:100
 msgid "Anonymous analytics: kept 60 days."
@@ -184,11 +188,11 @@ msgstr "Bedroom"
 msgid "Biometric data like fingerprints are unique characteristics of a person and cannot be changed, so they need special protection, as they are closely tied to fundamental rights such as privacy and personal identity."
 msgstr "Biometric data like fingerprints are unique characteristics of a person and cannot be changed, so they need special protection, as they are closely tied to fundamental rights such as privacy and personal identity."
 
-#: src/components/smart-devices/SmartLights.tsx:33
+#: src/components/smart-devices/SmartLights.tsx:34
 msgid "Bluetooth brings great functionality"
 msgstr "Bluetooth brings great functionality"
 
-#: src/components/smart-devices/SmartLights.tsx:33
+#: src/components/smart-devices/SmartLights.tsx:34
 msgid "Bluetooth isn't dangerous for your device"
 msgstr "Bluetooth isn't dangerous for your device"
 
@@ -196,7 +200,7 @@ msgstr "Bluetooth isn't dangerous for your device"
 msgid "Browser choice"
 msgstr "Browser choice"
 
-#: src/pages/HomePage.tsx:71
+#: src/pages/HomePage.tsx:70
 msgid "Button."
 msgstr "Button."
 
@@ -221,6 +225,7 @@ msgid "by using our website, you agree to the use of cookies in accordance with 
 msgstr "by using our website, you agree to the use of cookies in accordance with our "
 
 #: src/components/smart-devices/SmartMirror.tsx:77
+#: src/components/smart-devices/SmartMirror.tsx:110
 msgid "Calendar"
 msgstr "Calendar"
 
@@ -232,7 +237,7 @@ msgstr "Camera"
 msgid "Camera On"
 msgstr "Camera On"
 
-#: src/components/smart-devices/SmartLights.tsx:36
+#: src/components/smart-devices/SmartLights.tsx:37
 msgid "Can be an access point for intruders"
 msgstr "Can be an access point for intruders"
 
@@ -240,11 +245,11 @@ msgstr "Can be an access point for intruders"
 msgid "Can I pet that dog?"
 msgstr "Can I pet that dog?"
 
-#: src/components/smart-devices/SmartMirror.tsx:289
+#: src/components/smart-devices/SmartMirror.tsx:285
 msgid "Choose"
 msgstr "Choose"
 
-#: src/components/smart-devices/SmartMirror.tsx:234
+#: src/components/smart-devices/SmartMirror.tsx:230
 msgid "Choose an app on the left to view its providers."
 msgstr "Choose an app on the left to view its providers."
 
@@ -267,7 +272,7 @@ msgstr "Clock"
 #: src/components/dataSortingGame/DataSortingGame.tsx:376
 #: src/components/dataSortingGame/DataSortingGame.tsx:433
 #: src/components/general-ui/HelpButton.tsx:41
-#: src/components/mini-game/CaptchaComponent.tsx:153
+#: src/components/mini-game/CaptchaComponent.tsx:151
 msgid "Close"
 msgstr "Close"
 
@@ -307,7 +312,7 @@ msgstr "Configure your smart shower by clicking on objects and choosing which pe
 msgid "Congrats on solving the Smart Home Challenge! Your progress can be reset with the 'Restart' button."
 msgstr "Congrats on solving the Smart Home Challenge! Your progress can be reset with the 'Restart' button."
 
-#: src/components/smart-devices/SmartLights.tsx:43
+#: src/components/smart-devices/SmartLights.tsx:44
 msgid "Connect to Smart App"
 msgstr "Connect to Smart App"
 
@@ -320,10 +325,10 @@ msgstr "continue"
 #: src/components/cookingGame/IngredientsStage.tsx:56
 #: src/components/cookingGame/IngredientsStage.tsx:247
 #: src/components/cookingGame/ServeStage.tsx:326
-#: src/components/mini-game/MultipleChoiceComponent.tsx:114
+#: src/components/mini-game/MultipleChoiceComponent.tsx:110
 #: src/components/smart-devices/SmartHomeHub.tsx:61
-#: src/components/smart-devices/SmartLights.tsx:64
-#: src/components/smart-devices/SmartMirror.tsx:186
+#: src/components/smart-devices/SmartLights.tsx:65
+#: src/components/smart-devices/SmartMirror.tsx:182
 #: src/components/smart-devices/SmartShower.tsx:202
 #: src/components/smart-devices/SmartTv.tsx:192
 #: src/components/smart-devices/SmartTv.tsx:242
@@ -347,7 +352,7 @@ msgstr "Cookie Banner"
 msgid "Copy of my fingerprint scan for unlocking my laptop"
 msgstr "Copy of my fingerprint scan for unlocking my laptop"
 
-#: src/components/smart-devices/SmartLights.tsx:35
+#: src/components/smart-devices/SmartLights.tsx:36
 msgid "Correct, adds to much permissions"
 msgstr "Correct, adds to much permissions"
 
@@ -391,7 +396,7 @@ msgstr "Correct, the hallway is not a privacy risk"
 msgid "Correct, this is needed to stream the view"
 msgstr "Correct, this is needed to stream the view"
 
-#: src/components/smart-devices/SmartLights.tsx:36
+#: src/components/smart-devices/SmartLights.tsx:37
 msgid "Correct, this isn't a must"
 msgstr "Correct, this isn't a must"
 
@@ -431,11 +436,11 @@ msgstr "Dad's phone nr: 00 12 567 890"
 msgid "Daily insights"
 msgstr "Daily insights"
 
-#: src/pages/HomePage.tsx:197
+#: src/pages/HomePage.tsx:196
 msgid "Data Privacy Policy"
 msgstr "Data Privacy Policy"
 
-#: src/components/smart-devices/SmartMirror.tsx:275
+#: src/components/smart-devices/SmartMirror.tsx:271
 msgid "Data retention period"
 msgstr "Data retention period"
 
@@ -536,21 +541,13 @@ msgstr "End"
 msgid "Energy"
 msgstr "Energy"
 
-#: src/components/smart-devices/SmartMirror.tsx:250
+#: src/components/smart-devices/SmartMirror.tsx:246
 msgid "Expand"
 msgstr "Expand"
 
 #: src/pixi/components/Tutorial/Pages/Explanations/Decision.tsx:79
 msgid "Explore yourself"
 msgstr "Explore yourself"
-
-#: src/components/smart-devices/SmartMirror.tsx:90
-msgid "Export only"
-msgstr "Export only"
-
-#: src/components/smart-devices/SmartMirror.tsx:101
-msgid "Exports the cart"
-msgstr "Exports the cart"
 
 #: src/components/smart-devices/SmartTv.tsx:33
 msgid "Face ID activated"
@@ -580,7 +577,7 @@ msgstr "fast."
 msgid "Faucet"
 msgstr "Faucet"
 
-#: src/components/smart-devices/SmartMirror.tsx:265
+#: src/components/smart-devices/SmartMirror.tsx:261
 msgid "Features"
 msgstr "Features"
 
@@ -588,7 +585,7 @@ msgstr "Features"
 msgid "Find the relevant objects for your Smart Shower. Think carefully about which features you want to enable or disable."
 msgstr "Find the relevant objects for your Smart Shower. Think carefully about which features you want to enable or disable."
 
-#: src/pages/HomePage.tsx:63
+#: src/pages/HomePage.tsx:62
 msgid "Find the smart gadgets, unlock your home!"
 msgstr "Find the smart gadgets, unlock your home!"
 
@@ -688,11 +685,11 @@ msgstr "Heart rate"
 msgid "Hey, you should reposition your surveillance cameras. The Smart Home has already made a preliminary selection. Do you agree with this? Select the camera placements you think are suitable."
 msgstr "Hey, you should reposition your surveillance cameras. The Smart Home has already made a preliminary selection. Do you agree with this? Select the camera placements you think are suitable."
 
-#: src/components/smart-devices/SmartMirror.tsx:250
+#: src/components/smart-devices/SmartMirror.tsx:246
 msgid "Hide"
 msgstr "Hide"
 
-#: src/pages/HomePage.tsx:127
+#: src/pages/HomePage.tsx:126
 msgid "Hide info"
 msgstr "Hide info"
 
@@ -704,6 +701,7 @@ msgstr ""
 "Hm, still no pizza in sight...\n"
 "You cannot focus on an empty stomach... Let's make a simple dish before we continue to set up our Smart Home!"
 
+#: src/components/smart-devices/SmartMirror.tsx:110
 #: src/components/smart-devices/SmartMirror.tsx:111
 msgid "Hourly charts"
 msgstr "Hourly charts"
@@ -800,12 +798,12 @@ msgstr "James Smart , Best Avenue 1, 12345 San Smartico"
 msgid "Kitchen"
 msgstr "Kitchen"
 
-#: src/pages/HomePage.tsx:129
+#: src/pages/HomePage.tsx:128
 msgid "Legal & info"
 msgstr "Legal & info"
 
-#: src/pages/HomePage.tsx:169
-#: src/pages/HomePage.tsx:189
+#: src/pages/HomePage.tsx:168
+#: src/pages/HomePage.tsx:188
 msgid "Legal Notice"
 msgstr "Legal Notice"
 
@@ -850,6 +848,7 @@ msgid "LocalStylist"
 msgstr "LocalStylist"
 
 #: src/components/smart-devices/SmartMirror.tsx:78
+#: src/components/smart-devices/SmartMirror.tsx:99
 #: src/components/smart-devices/SmartMirror.tsx:110
 msgid "Location"
 msgstr "Location"
@@ -874,7 +873,7 @@ msgstr "Logged in with Google Account"
 msgid "Looking good today!"
 msgstr "Looking good today!"
 
-#: src/components/smart-devices/SmartLights.tsx:77
+#: src/components/smart-devices/SmartLights.tsx:78
 msgid "Manage permissions:"
 msgstr "Manage permissions:"
 
@@ -906,6 +905,7 @@ msgstr "Minimal tracking; all metrics processed locally."
 msgid "MinimalCare"
 msgstr "MinimalCare"
 
+#: src/components/smart-devices/SmartMirror.tsx:88
 #: src/components/smart-devices/SmartMirror.tsx:89
 msgid "Motion"
 msgstr "Motion"
@@ -935,6 +935,7 @@ msgid "Name and address are personal data that can lead to the identification of
 msgstr "Name and address are personal data that can lead to the identification of a natural person."
 
 #: src/components/smart-devices/SmartMirror.tsx:100
+#: src/components/smart-devices/SmartMirror.tsx:110
 #: src/components/smart-devices/SmartMirror.tsx:111
 msgid "Network"
 msgstr "Network"
@@ -954,10 +955,6 @@ msgstr "No"
 #: src/components/smart-devices/SmartMirror.tsx:111
 msgid "No account needed; no transmission of usage data."
 msgstr "No account needed; no transmission of usage data."
-
-#: src/components/smart-devices/SmartMirror.tsx:79
-msgid "No cloud"
-msgstr "No cloud"
 
 #: src/components/smart-devices/SmartMirror.tsx:79
 msgid "No cloud logs. Local preferences rotate weekly."
@@ -987,7 +984,7 @@ msgstr "No network communication."
 msgid "No vendor link; you confirm orders manually."
 msgstr "No vendor link; you confirm orders manually."
 
-#: src/components/smart-devices/SmartLights.tsx:34
+#: src/components/smart-devices/SmartLights.tsx:35
 msgid "No Wifi, fancy coloured lamp"
 msgstr "No Wifi, fancy coloured lamp"
 
@@ -1008,7 +1005,7 @@ msgstr "normal"
 msgid "not angry with"
 msgstr "not angry with"
 
-#: src/components/smart-devices/SmartLights.tsx:35
+#: src/components/smart-devices/SmartLights.tsx:36
 msgid "Not needed to switch the light on and of"
 msgstr "Not needed to switch the light on and of"
 
@@ -1042,7 +1039,7 @@ msgstr ""
 msgid "Oh no! All your settings have been deleted. <0/>Time to set them up again:"
 msgstr "Oh no! All your settings have been deleted. <0/>Time to set them up again:"
 
-#: src/components/smart-devices/SmartLights.tsx:54
+#: src/components/smart-devices/SmartLights.tsx:55
 msgid "Oh no! Your smart lamp is corrupted as well. Even though it is nice to change colours, you surely don't want to have a disco lamp running all day long. Luckily, there is an easy solution: toggle the right permissions to regain control. But think carefully! Restrictive settings might lose you a lot of comfort. Try to figure out the right balance between comfort and privacy."
 msgstr "Oh no! Your smart lamp is corrupted as well. Even though it is nice to change colours, you surely don't want to have a disco lamp running all day long. Luckily, there is an easy solution: toggle the right permissions to regain control. But think carefully! Restrictive settings might lose you a lot of comfort. Try to figure out the right balance between comfort and privacy."
 
@@ -1102,7 +1099,7 @@ msgstr "PCI-DSS compliant; tokenized payments."
 msgid "Perfect Balance: Yippie! You struck the perfect balance. Your Smart Home unlocks smoothly, you ordered your pizza through a secure app, and your friends will arrive soon for a chill night with encrypted Wi-Fi, biometric locks, and good movies. Even your smart TV compliments you on your data ethics."
 msgstr "Perfect Balance: Yippie! You struck the perfect balance. Your Smart Home unlocks smoothly, you ordered your pizza through a secure app, and your friends will arrive soon for a chill night with encrypted Wi-Fi, biometric locks, and good movies. Even your smart TV compliments you on your data ethics."
 
-#: src/components/smart-devices/SmartMirror.tsx:257
+#: src/components/smart-devices/SmartMirror.tsx:253
 msgid "Permissions"
 msgstr "Permissions"
 
@@ -1134,7 +1131,7 @@ msgstr "PHI safeguards, regional data centers."
 msgid "Phone numbers are personal data that can be used for identification and contact purposes."
 msgstr "Phone numbers are personal data that can be used for identification and contact purposes."
 
-#: src/components/smart-devices/SmartMirror.tsx:306
+#: src/components/smart-devices/SmartMirror.tsx:302
 msgid "Pick a provider for all four apps"
 msgstr "Pick a provider for all four apps"
 
@@ -1150,7 +1147,7 @@ msgstr "Population of San Smartico by district 2024"
 msgid "Press space to advance"
 msgstr "Press space to advance"
 
-#: src/components/smart-devices/SmartMirror.tsx:100
+#: src/components/smart-devices/SmartMirror.tsx:99
 msgid "Price alerts"
 msgstr "Price alerts"
 
@@ -1162,7 +1159,7 @@ msgstr "Privacy First, Comfort Second: You’ve managed to block third-party acc
 msgid "privacy policy"
 msgstr "privacy policy"
 
-#: src/pages/HomePage.tsx:177
+#: src/pages/HomePage.tsx:176
 msgid "Privacy Policy"
 msgstr "Privacy Policy"
 
@@ -1198,6 +1195,7 @@ msgstr "Publicly accessible data"
 msgid "Publicly accessible data belongs to the green field. This data is visible to anyone and usually does not contain any personal information. It can be shared freely, as it does not raise any privacy concerns."
 msgstr "Publicly accessible data belongs to the green field. This data is visible to anyone and usually does not contain any personal information. It can be shared freely, as it does not raise any privacy concerns."
 
+#: src/components/smart-devices/SmartMirror.tsx:77
 #: src/components/smart-devices/SmartMirror.tsx:78
 #: src/components/smart-devices/SmartMirror.tsx:99
 msgid "Purchase history"
@@ -1235,7 +1233,7 @@ msgstr "Rain alerts"
 msgid "Reconfigure"
 msgstr "Reconfigure"
 
-#: src/components/smart-devices/SmartLights.tsx:42
+#: src/components/smart-devices/SmartLights.tsx:43
 msgid "Record energy consumption"
 msgstr "Record energy consumption"
 
@@ -1255,7 +1253,7 @@ msgstr "Religious beliefs are particularly worthy of protection as they may lead
 msgid "Religious denomination: Buddhism"
 msgstr "Religious denomination: Buddhism"
 
-#: src/components/smart-devices/SmartMirror.tsx:89
+#: src/components/smart-devices/SmartMirror.tsx:88
 msgid "Reminders"
 msgstr "Reminders"
 
@@ -1291,7 +1289,7 @@ msgstr "Saves your preferences and prepared dishes"
 msgid "Scopes limited; location data anonymized."
 msgstr "Scopes limited; location data anonymized."
 
-#: src/components/smart-devices/SmartMirror.tsx:279
+#: src/components/smart-devices/SmartMirror.tsx:275
 msgid "Security"
 msgstr "Security"
 
@@ -1304,8 +1302,8 @@ msgstr "Security Camera"
 msgid "Select the features you want to enable on your Smart TV:"
 msgstr "Select the features you want to enable on your Smart TV:"
 
-#: src/components/mini-game/CaptchaComponent.tsx:148
-#: src/components/mini-game/MultipleChoiceComponent.tsx:109
+#: src/components/mini-game/CaptchaComponent.tsx:146
+#: src/components/mini-game/MultipleChoiceComponent.tsx:105
 #: src/components/smart-devices/SmartTv.tsx:229
 msgid "Send answer"
 msgstr "Send answer"
@@ -1322,7 +1320,7 @@ msgstr "Sensor-only"
 msgid "Showerhead"
 msgstr "Showerhead"
 
-#: src/pages/HomePage.tsx:90
+#: src/pages/HomePage.tsx:89
 msgid "Skip the intro and jump straight into the game"
 msgstr "Skip the intro and jump straight into the game"
 
@@ -1351,7 +1349,7 @@ msgstr "Smart Kitchen"
 msgid "Smart Kitchen Points"
 msgstr "Smart Kitchen Points"
 
-#: src/components/smart-devices/SmartLights.tsx:73
+#: src/components/smart-devices/SmartLights.tsx:74
 msgid "Smart Lighting"
 msgstr "Smart Lighting"
 
@@ -1359,15 +1357,15 @@ msgstr "Smart Lighting"
 msgid "Smart Lights"
 msgstr "Smart Lights"
 
-#: src/components/smart-devices/SmartLights.tsx:29
+#: src/components/smart-devices/SmartLights.tsx:25
 msgid "Smart Lights Comfort Score"
 msgstr "Smart Lights Comfort Score"
 
-#: src/components/smart-devices/SmartLights.tsx:28
+#: src/components/smart-devices/SmartLights.tsx:24
 msgid "Smart Lights Privacy Score"
 msgstr "Smart Lights Privacy Score"
 
-#: src/components/smart-devices/SmartLights.tsx:51
+#: src/components/smart-devices/SmartLights.tsx:52
 msgid "Smart Lights Setup"
 msgstr "Smart Lights Setup"
 
@@ -1375,11 +1373,15 @@ msgstr "Smart Lights Setup"
 msgid "Smart Mirror"
 msgstr "Smart Mirror"
 
-#: src/components/smart-devices/SmartMirror.tsx:152
-msgid "Smart Mirror Points"
-msgstr "Smart Mirror Points"
+#: src/components/smart-devices/SmartMirror.tsx:146
+msgid "Smart Mirror Comfort Score"
+msgstr "Smart Mirror Comfort Score"
 
-#: src/components/smart-devices/SmartMirror.tsx:177
+#: src/components/smart-devices/SmartMirror.tsx:145
+msgid "Smart Mirror Privacy Score"
+msgstr "Smart Mirror Privacy Score"
+
+#: src/components/smart-devices/SmartMirror.tsx:173
 msgid "Smart Mirror Setup"
 msgstr "Smart Mirror Setup"
 
@@ -1432,8 +1434,8 @@ msgstr "Soap"
 msgid "Start a new game"
 msgstr "Start a new game"
 
-#: src/pages/HomePage.tsx:67
-#: src/pages/HomePage.tsx:78
+#: src/pages/HomePage.tsx:66
+#: src/pages/HomePage.tsx:77
 msgid "Start game"
 msgstr "Start game"
 
@@ -1624,6 +1626,7 @@ msgstr "Timetable for bus route 10"
 msgid "Trade union membership is particularly worthy of protection as it can reveal your political or ideological alignment. Such information may be misused for retaliation, profiling or discrimination."
 msgstr "Trade union membership is particularly worthy of protection as it can reveal your political or ideological alignment. Such information may be misused for retaliation, profiling or discrimination."
 
+#: src/components/smart-devices/SmartMirror.tsx:77
 #: src/components/smart-devices/SmartMirror.tsx:78
 msgid "Trend alerts"
 msgstr "Trend alerts"
@@ -1734,7 +1737,7 @@ msgstr ""
 " 2. Prepare and cook the dish \n"
 " 3. Serve the dish"
 
-#: src/pages/HomePage.tsx:58
+#: src/pages/HomePage.tsx:57
 msgid "Welcome to the Smart Home Challenge!"
 msgstr "Welcome to the Smart Home Challenge!"
 
@@ -1750,7 +1753,7 @@ msgstr "WellTrack"
 msgid "What do you want to do?"
 msgstr "What do you want to do?"
 
-#: src/components/smart-devices/SmartLights.tsx:34
+#: src/components/smart-devices/SmartLights.tsx:35
 msgid "Wifi is needed to control the lamp"
 msgstr "Wifi is needed to control the lamp"
 
@@ -1832,7 +1835,7 @@ msgstr ""
 "\n"
 "Be careful about using your data to "
 
-#: src/components/smart-devices/SmartMirror.tsx:180
+#: src/components/smart-devices/SmartMirror.tsx:176
 msgid "You want to check yourself in the mirror, but it’s still frosted — it won’t work until you set it up. Choose a provider for each app, compare the options, and decide what matters more to you: privacy, or sustainability and comfort. Once all apps are set up, the mirror will clear and you can use it."
 msgstr "You want to check yourself in the mirror, but it’s still frosted — it won’t work until you set it up. Choose a provider for each app, compare the options, and decide what matters more to you: privacy, or sustainability and comfort. Once all apps are set up, the mirror will clear and you can use it."
 
