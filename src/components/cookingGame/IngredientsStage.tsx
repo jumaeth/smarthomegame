@@ -61,32 +61,36 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
       .sort(() => Math.random() - 0.5).map(i => i - 1);
   }
 
+
+  // max points for this stage: 40
+  //each decision can give up to 10 points --> best answer gives 10 points, others less
+
   const qualityPoints = [
-    [1.0, 0.5, 2.0, -0.5], //Spaghetti
-    [2.0, 1.0, -0.5, -1.0], //Tomato
-    [0.0, 1.0, 1.0, 1.5], //Spices
-    [2.0, 1.5, 1.0, 1.0] // Cheese
+    [3, 2, 6, -2], //Spaghetti
+    [6, 3, -2, -3], //Tomato
+    [0, 3, 3, 4], //Spices
+    [6, 4, 3, 3] // Cheese
   ];
 
   const pricePoints = [
-    [1.0, 0.5, -1.0, 1.5], //Spaghetti
-    [1.0, -0.5, 3.0, 0.5], //Tomato
-    [2.0, -0.5, 2.0, -0.5], //Spices
-    [1.0, 1.5, 1.0, 1.0] // Cheese
+    [3, 2, -3, 4], //Spaghetti
+    [3, -2, 10, 2], //Tomato
+    [10, -2, 6, -2], //Spices
+    [3, 4, 3, 3] // Cheese
   ];
 
   const timePoints = [
-    [-0.5, 1.0, -1.0, 2.0], //Spaghetti
-    [-0.5, 2.0, 1.0, 1.0], //Tomato
-    [2.0, 1.0, -1.0, 0.0], //Spices
-    [-3.0, -0.5, 0.0, 1.0] // Cheese
+    [-2, 3, -3, 10], //Spaghetti
+    [-2, 6, 3, 3], //Tomato
+    [6, 3, -3, 0], //Spices
+    [-10, -2, 0, 3] // Cheese
   ];
 
   const privacyPoints = [
-    [1, -2, 0, 0], //Spaghetti
-    [2, -1, 1, 2], //Tomato
-    [2, -1, 2, 1], //Spices
-    [2, 0, 1, -1] // Cheese
+    [3, -6, 0, 0], //Spaghetti
+    [6, -3, 3, 6], //Tomato
+    [6, -3, 10, 3], //Spices
+    [6, 0, 3, -3] // Cheese
   ];
 
   const { textures, loaded } = useLoadTextures(texturePaths);
@@ -315,9 +319,9 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
         />}
 
         <Button
-          x={235}
-          y={275}
-          width={100}
+          x={365}
+          y={285}
+          width={110}
           height={35}
           color={0xdcc08e}
           lineColor={0x5d3c1a}
