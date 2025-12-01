@@ -186,10 +186,15 @@ export const CookingStage: React.FC<CookingStageProps> = ({ setStage, setTotalPo
         }
     }, [hoveredId]);
 
+
+    // max points for this stage: 30
+    // stars are valued accordingly (stars * (30 / achievable stars))
+    // i. e. privacy is calculated from 2 star categories --> (achieved stars * (30 / (2 * 5))) as 5 is the max for each start rating
+
     const endGame = () => {
         const setPoints = setTotalPoints.current;
-        const comfort = ((stars[selected][3] - 3) + (stars[selected][2]) - 3) / 2;
-        const privacy = stars[selected][1] - 3
+        const comfort = ((stars[selected][3]) + (stars[selected][2])) * 3;
+        const privacy = stars[selected][1] * 6
         if (setPoints) {
             setPoints.set(Score.Privacy, (setPoints.get(Score.Privacy) ?? 0) + privacy);
             setPoints.set(Score.Comfort, (setPoints.get(Score.Comfort) ?? 0) + comfort);

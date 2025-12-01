@@ -37,6 +37,7 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
   const gameService = useGameService();
   const device:SmartDevice = gameService.getDeviceByName(DeviceNames.SMART_KITCHEN);
 
+  const maxPoints = 20;
 
   const secureSetStage= (stage : Stages) =>{
     if(stage==Stages.GAME) {
@@ -44,13 +45,15 @@ export const CookingGameComponent: React.FC<CookingGameComponentProps> = ({ onCo
     }else if(stage === Stages.END){
       const points = totalPoints.current;
       if(totalPoints.current){
-        const privacy = points.get(Score.Privacy);
-        const comfort = points.get(Score.Comfort);
-        if (privacy)gameService.changeScore(privacy, "privacy");
-        if (comfort)gameService.changeScore(comfort, "comfort");
+        const privacy = Math.round((points.get(Score.Privacy) ?? 0)  / 100 * maxPoints);
+        const comfort = Math.round((points.get(Score.Comfort) ?? 0) / 100 * maxPoints);
+        if (privacy) device.modifyScore(privacy,  0);
+        if (comfort) device.modifyScore(0, comfort);
       }
-      const statsScore:number = points.get(Score.Privacy) ?? 0;
-      device.getStatBlock().setValue(t`Smart Kitchen Points`,statsScore);
+      const statsPrivacy:number = (points.get(Score.Privacy) ?? 0) / 100 * maxPoints;
+      const statsComfort:number = (points.get(Score.Comfort) ?? 0) / 100 * maxPoints;
+      device.getStatBlock().setValue(t`Smart Kitchen Privacy Score`, statsPrivacy);
+      device.getStatBlock().setValue(t`Smart Kitchen Comfort Score`, statsComfort);
       onCompletion();
     }else if(stage === nextStage){
       setNextStage(prev=>prev+1);

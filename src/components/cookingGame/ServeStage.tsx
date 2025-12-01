@@ -274,11 +274,15 @@ export const ServeStage: React.FC<ServeStageProps> = ({ setStage, dimensions, se
         });
       }, 700);
 
+
+      // max points for this stage: 30
+      // each wrong placement reduces the score by 3 points
+
       setTimeout(() => {
         const setPoints = setTotalPoints.current;
         if (setPoints) {
-          setPoints.set(Score.Privacy, (setPoints.get(Score.Privacy) ?? 0));
-          setPoints.set(Score.Comfort, (setPoints.get(Score.Comfort) ?? 0) - points);
+          setPoints.set(Score.Privacy, (setPoints.get(Score.Privacy)?? 0) + 30);
+          setPoints.set(Score.Comfort, (setPoints.get(Score.Comfort) ?? 0) + 30 - points);
         }
         setStage(Stages.OUTRO);
       }, 1300);
