@@ -102,7 +102,7 @@ msgid "Aggregated usage: retained 90 days."
 msgstr ""
 
 #: src/components/smart-devices/SmartMirror.tsx:89
-msgid "Aggregates before upload; opt-out analytics."
+msgid "Aggregates data before upload; opt-out analytics."
 msgstr ""
 
 #: src/components/cameraGame/SecurityCameraGame.tsx:23

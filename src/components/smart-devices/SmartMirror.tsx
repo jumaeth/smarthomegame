@@ -86,7 +86,7 @@ export const SmartMirror: React.FC<SmartMirrorProps> = ({ completeDevice }) => {
       icon: heartImg,
       providers: [
         { name: t`FitPulse`, permissions: [t`Heart rate`, t`Temperature`, t`Motion`], features: [t`Trend charts`, t`Alerts`, t`Reminders`], description: t`Comprehensive performance metrics with cloud syncing and actionable insights.`, retention: t`Health metrics retained 12 months for comparisons.`, security: t`PHI safeguards, regional data centers.` },
-        { name: t`WellTrack`, permissions: [t`Motion`, t`Sleep data`], features: [t`Daily insights`], description: t`Lifestyle-focused with habit reminders and gentle nudges.`, retention: t`Aggregated usage: retained 90 days.`, security: t`Aggregates before upload; opt-out analytics.` },
+        { name: t`WellTrack`, permissions: [t`Motion`, t`Sleep data`], features: [t`Daily insights`], description: t`Lifestyle-focused with habit reminders and gentle nudges.`, retention: t`Aggregated usage: retained 90 days.`, security: t`Aggregates data before upload; opt-out analytics.` },
         { name: t`MinimalCare`, permissions: [t`Anonymous statistics`], features: [t`Local processing`], description: t`Minimal tracking; all metrics processed locally.`, retention: t`No cloud storage. Exports only when you trigger it.`, security: t`Local-only, sandboxed.` }
       ],
     },
