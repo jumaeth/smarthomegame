@@ -1,6 +1,7 @@
 import {Container, Sprite} from "@pixi/react";
 import React, {  useMemo, useRef } from 'react';
 import {Texture, Rectangle} from "@pixi/core";
+import type { FederatedPointerEvent } from "pixi.js";
 
 interface PixiTexturedButtonProps {
   x: number;
@@ -23,6 +24,18 @@ export const PixiTexturedButton: React.FC<PixiTexturedButtonProps> = ({
                                                                       }: PixiTexturedButtonProps) => {
   const holdInterval = useRef<NodeJS.Timeout | null>(null);
 
+  const preventTouchDefaults = (event: FederatedPointerEvent) => {
+    // stop propagation inside the PIXI event system
+    event.stopPropagation?.();
+
+    // prevent browser default (selection / long-press menu)
+    const original = event.data?.originalEvent as Event | undefined;
+    if (original && typeof original.preventDefault === 'function') {
+      original.preventDefault();
+    }
+  };
+
+
   const handlePointerDown = () => {
     if (onHold) {
       holdInterval.current = setInterval(() => {
@@ -32,6 +45,18 @@ export const PixiTexturedButton: React.FC<PixiTexturedButtonProps> = ({
   };
 
   const handlePointerUp = () => {
+    if (holdInterval.current) {
+      clearInterval(holdInterval.current);
+      holdInterval.current = null;
+    }
+
+    if (onClick) {
+      onClick();
+    }
+  };
+
+  const handlePointerCancel = (event: FederatedPointerEvent) => {
+    preventTouchDefaults(event);
     if (holdInterval.current) {
       clearInterval(holdInterval.current);
       holdInterval.current = null;
@@ -55,6 +80,7 @@ export const PixiTexturedButton: React.FC<PixiTexturedButtonProps> = ({
                   pointerdown={handlePointerDown}
                   pointerup={handlePointerUp}
                   pointerupoutside={handlePointerUp}
+                  pointercancel={handlePointerCancel}
                   hitArea={hitArea}
           >
             <Sprite

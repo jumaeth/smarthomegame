@@ -20,7 +20,7 @@ import {GameService} from "@/services/GameService.ts";
 import {Tutorial} from "@/pixi/components/Tutorial/Tutorial.tsx";
 import {characterPositionStore, useCharacterPosition} from "@/utils/character/characterPosition.ts";
 import {useTutorialActive} from "@/hooks/gameService/useTutorialActive.ts";
-import {MovementButtons} from "@/components/general-ui/MovementButtons.tsx";
+import {MovementButtons} from "@/pixi/components/MovementButtons.tsx";
 import {ProximityHighlight} from "@/pixi/components/ProximityHighlight.tsx";
 import {RoomNames, roomNameToEnum} from "@/objects/RoomNames.ts";
 import {Camera} from "@/pixi/camera/Camera.tsx";

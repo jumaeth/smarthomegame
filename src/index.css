@@ -1,5 +1,18 @@
 @import "../node_modules/tailwindcss";
 
+:root {
+  -webkit-touch-callout: none; /* disable iOS callout on long press */
+}
+
+canvas,
+#root,
+body {
+  touch-action: none; /* prevent default touch gestures (panning/zoom/selection) */
+  -webkit-user-select: none; /* prevent selection on iOS */
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
 #root {
   height: 100%;
   padding: 0;
