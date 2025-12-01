@@ -319,9 +319,9 @@ export const IngredientsStage: React.FC<IngredientsStageProps> = ({ setStage, se
         />}
 
         <Button
-          x={235}
-          y={275}
-          width={100}
+          x={365}
+          y={285}
+          width={110}
           height={35}
           color={0xdcc08e}
           lineColor={0x5d3c1a}

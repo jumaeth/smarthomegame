@@ -31,8 +31,8 @@ export const ProximityHighlight = forwardRef(({
     // Only check if the position actually changed
     if (
             lastPos.current &&
-            lastPos.current.x === pos.x &&
-            lastPos.current.y === pos.y
+            lastPos.current?.x === pos.x &&
+            lastPos.current?.y === pos.y
     ) {
       return;
     }
@@ -56,12 +56,14 @@ export const ProximityHighlight = forwardRef(({
   if (interactive?.name) {
     const deviceName = deviceNameToEnum(interactive.name);
     if (deviceName) {
-      isCompleted = !gameService.getDeviceByName(deviceName).getIsCompleted()
+      isCompleted = gameService.getDeviceByName(deviceName).getIsCompleted()
+    }else{
+      isCompleted = false
     }
   }
   return (
           <>
-            {isCompleted && getPosition().x != 0 && interactive && getHighlightPosition(interactive, getPosition())}
+            {!isCompleted && getPosition().x != 0 && interactive && getHighlightPosition(interactive, getPosition())}
           </>
   );
 })
